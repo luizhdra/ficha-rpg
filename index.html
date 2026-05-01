@@ -4,234 +4,294 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Ficha de Personagem</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg-deep:#0a0404;--bg-dark:#120707;--bg-card:#1a0a0a;--bg-inner:#0f0505;--red-deep:#4a0a0a;--red-mid:#7a1a1a;--red-bright:#c0392b;--red-light:#e05a4a;--gold:#c8963c;--gold-light:#e8b85a;--text-main:#d4a97a;--text-muted:#8a6040;--text-dim:#5a3828;--border:#3d1010;--border-mid:#5a1a1a;--blue-bright:#4a7cdc;}
+:root{
+  --bg:#1c1c1e;--bg2:#2a2a2e;--bg3:#333338;--bg4:#3e3e44;
+  --border:#404048;--border2:#555560;
+  --red:#e05252;--red2:#c03030;--red3:#ff6b6b;
+  --gold:#d4a84b;--gold2:#f0c060;
+  --blue:#5b8dd9;--blue2:#7aaeff;
+  --green:#4caf50;--green2:#66bb6a;
+  --purple:#9c6dd6;
+  --txt:#e8e4dc;--txt2:#b0aaaa;--txt3:#706a6a;
+  --hp-red:#e05252;--pe-blue:#5b8dd9;
+}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg-deep);background-image:repeating-linear-gradient(0deg,transparent,transparent 40px,rgba(139,32,32,.03) 40px,rgba(139,32,32,.03) 41px),repeating-linear-gradient(90deg,transparent,transparent 40px,rgba(139,32,32,.03) 40px,rgba(139,32,32,.03) 41px);min-height:100vh;padding:16px 12px 48px;font-family:'Crimson Text',Georgia,serif;color:var(--text-main);}
+body{background:var(--bg);min-height:100vh;padding:12px 10px 48px;font-family:'Inter',sans-serif;color:var(--txt);font-size:13px}
 .page{display:none}.page.active{display:block}
-.nav-bar{max-width:1000px;margin:0 auto 10px;display:flex;gap:6px;flex-wrap:wrap}
-.nav-btn{background:var(--red-deep);border:1px solid var(--red-mid);color:var(--gold);font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;padding:7px 14px;border-radius:3px;cursor:pointer;text-transform:uppercase;transition:all .2s;white-space:nowrap}
-.nav-btn:hover{background:var(--red-mid);border-color:var(--gold)}
-.nav-btn.active{background:var(--red-mid);border-color:var(--gold);color:var(--gold-light)}
-.sheet{max-width:1000px;margin:0 auto;background:var(--bg-dark);border:2px solid var(--red-mid);border-radius:4px;padding:18px;position:relative;box-shadow:0 0 40px rgba(192,57,43,.15)}
-.sheet::before,.sheet::after{content:'';position:absolute;width:16px;height:16px;border-color:var(--gold);border-style:solid}
-.sheet::before{top:5px;left:5px;border-width:2px 0 0 2px}.sheet::after{top:5px;right:5px;border-width:2px 2px 0 0}
-.cbl,.cbr{position:absolute;width:16px;height:16px;border-color:var(--gold);border-style:solid}
-.cbl{bottom:5px;left:5px;border-width:0 0 2px 2px}.cbr{bottom:5px;right:5px;border-width:0 2px 2px 0}
-.sheet-header{text-align:center;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--red-mid)}
-.sheet-header h1{font-family:'Cinzel',serif;font-size:20px;font-weight:700;color:var(--red-bright);letter-spacing:4px;text-transform:uppercase}
-.header-deco{color:var(--gold);font-size:11px;letter-spacing:3px;margin-top:2px;opacity:.7}
-.official-bar{display:flex;align-items:center;gap:10px;background:var(--bg-card);border:1px solid var(--border-mid);border-radius:4px;padding:8px 12px;margin-bottom:10px;flex-wrap:wrap}
-.official-bar label{font-family:'Cinzel',serif;font-size:9px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:6px}
-.official-bar input[type=checkbox]{width:14px;height:14px;accent-color:var(--red-bright);cursor:pointer;flex-shrink:0}
-.badge{font-family:'Cinzel',serif;font-size:9px;background:var(--red-deep);border:1px solid var(--red-mid);border-radius:3px;padding:3px 9px;letter-spacing:1px;display:none}
-.badge.show{display:inline-block}.badge.warn{border-color:var(--red-bright);color:var(--red-bright)}.badge.ok{border-color:var(--gold);color:var(--gold)}
+.nav-bar{max-width:1060px;margin:0 auto 10px;display:flex;gap:5px;flex-wrap:wrap}
+.nav-btn{background:var(--bg2);border:1px solid var(--border);color:var(--txt2);font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:.5px;padding:7px 14px;border-radius:6px;cursor:pointer;transition:all .15s;white-space:nowrap}
+.nav-btn:hover{background:var(--bg3);border-color:var(--border2);color:var(--txt)}
+.nav-btn.active{background:var(--red2);border-color:var(--red);color:#fff}
+.sheet{max-width:1060px;margin:0 auto;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px;position:relative}
+.card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px}
+.card-title{font-family:'Cinzel',serif;font-size:10px;color:var(--txt3);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.card-title::after{content:'';flex:1;height:1px;background:var(--border)}
 .field{display:flex;flex-direction:column;gap:3px}
-.field label{font-family:'Cinzel',serif;font-size:8px;color:var(--red-bright);letter-spacing:3px;text-transform:uppercase}
-input[type=text],input[type=number],textarea,select{background:var(--bg-inner);border:1px solid var(--border-mid);border-radius:3px;color:var(--text-main);padding:5px 8px;font-family:'Crimson Text',serif;font-size:14px;width:100%;transition:border-color .2s}
+.field label,.flbl{font-size:10px;font-weight:500;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px}
+input[type=text],input[type=number],textarea,select{background:var(--bg4);border:1px solid var(--border);border-radius:5px;color:var(--txt);padding:6px 8px;font-family:'Inter',sans-serif;font-size:13px;width:100%;transition:border-color .15s}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--red)}
+input[type=number]{-moz-appearance:textfield}
+input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
 select{cursor:pointer}
-input[type=text]:focus,input[type=number]:focus,textarea:focus,select:focus{outline:none;border-color:var(--red-bright)}
-input[type=number]{-moz-appearance:textfield}input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
-.top-row{display:grid;grid-template-columns:1fr 130px;gap:12px;margin-bottom:10px;align-items:start}
+select option{background:var(--bg3)}
+.top-row{display:grid;grid-template-columns:1fr 110px;gap:12px;margin-bottom:10px;align-items:start}
 .identity{display:flex;flex-direction:column;gap:8px}
 .level-row{display:flex;align-items:center;gap:6px}
-.level-row input{width:58px;text-align:center;font-size:16px;font-weight:600;color:var(--gold)}
-.lvl-btn{background:var(--red-deep);border:1px solid var(--red-mid);color:var(--red-bright);width:26px;height:26px;border-radius:3px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:background .15s;font-family:'Cinzel',serif;flex-shrink:0}
-.lvl-btn:hover{background:var(--red-mid)}.lvl-btn:active{transform:scale(.95)}
+.level-row input{width:54px;text-align:center;font-size:16px;font-weight:600;color:var(--gold)}
+.lvl-btn{background:var(--bg4);border:1px solid var(--border2);color:var(--txt2);width:26px;height:26px;border-radius:5px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
+.lvl-btn:hover{background:var(--red2);border-color:var(--red);color:#fff}
 .photo-box{display:flex;flex-direction:column;align-items:center;gap:4px}
-.photo-frame{width:115px;height:138px;background:var(--bg-inner);border:2px solid var(--red-mid);border-radius:3px;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer;transition:border-color .2s}
-.photo-frame:hover{border-color:var(--red-bright)}.photo-frame img{width:100%;height:100%;object-fit:cover;display:none}
-.photo-ph{text-align:center;color:var(--text-dim);font-family:'Cinzel',serif;font-size:9px;letter-spacing:1px;padding:6px;line-height:1.8}
-.photo-ph span{font-size:22px;display:block;margin-bottom:4px;opacity:.5}
+.photo-frame{width:100px;height:120px;background:var(--bg4);border:2px dashed var(--border2);border-radius:8px;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer;transition:border-color .15s}
+.photo-frame:hover{border-color:var(--red);border-style:solid}
+.photo-frame img{width:100%;height:100%;object-fit:cover;display:none}
+.photo-ph{text-align:center;color:var(--txt3);font-size:10px;line-height:1.8;padding:6px}
+.photo-ph span{font-size:20px;display:block;margin-bottom:4px;opacity:.5}
 input[type=file]{display:none}
-.photo-hint{font-family:'Cinzel',serif;font-size:8px;color:var(--text-dim);letter-spacing:1px;cursor:pointer;transition:color .2s;text-align:center}
-.photo-hint:hover{color:var(--red-bright)}
+.photo-hint{font-size:9px;color:var(--txt3);cursor:pointer;text-align:center}
+.photo-hint:hover{color:var(--red)}
+.official-bar{display:flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:8px 12px;margin-bottom:10px;flex-wrap:wrap}
+.official-bar label{font-size:11px;font-weight:500;color:var(--gold);cursor:pointer;display:flex;align-items:center;gap:6px}
+.official-bar input[type=checkbox]{width:14px;height:14px;accent-color:var(--red);cursor:pointer;flex-shrink:0}
+.badge{font-size:10px;background:var(--bg4);border:1px solid var(--border);border-radius:4px;padding:3px 9px;display:none}
+.badge.show{display:inline-block}
+.badge.warn{border-color:var(--red);color:var(--red)}
+.badge.ok{border-color:var(--green);color:var(--green)}
 .combat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
-.combat-card{background:var(--bg-card);border:1px solid var(--border-mid);border-radius:4px;padding:8px 10px;text-align:center}
-.combat-lbl{font-family:'Cinzel',serif;font-size:8px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px}
-.combat-card input{text-align:center;font-size:18px;font-weight:600;color:var(--gold);border-color:var(--border)}
-.combat-base{font-size:9px;color:var(--text-dim);font-family:'Cinzel',serif;margin-top:2px;letter-spacing:.5px}
-.vitals-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
-.vital-card{background:var(--bg-card);border:1px solid var(--border-mid);border-radius:4px;padding:10px 12px}
-.vital-title{font-family:'Cinzel',serif;font-size:9px;color:var(--gold);letter-spacing:3px;text-transform:uppercase;text-align:center;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border)}
-.vital-fields{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px}
-.vro{color:var(--red-bright)!important;font-weight:600;cursor:default!important}
-.vrb{color:var(--blue-bright)!important;font-weight:600;cursor:default!important}
-.bar-wrap{background:var(--bg-inner);border:1px solid var(--border);border-radius:3px;height:17px;overflow:hidden;position:relative;margin-bottom:3px}
-.bar-fill{height:100%;border-radius:2px;transition:width .45s,background .45s}
-.bar-lbl{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Cinzel',serif;font-size:9px;letter-spacing:1px;color:rgba(255,255,255,.9);pointer-events:none}
-.weight-row{display:flex;align-items:center;gap:7px;margin-top:6px}
-.weight-lbl{font-family:'Cinzel',serif;font-size:8px;color:var(--text-muted);letter-spacing:2px;text-transform:uppercase;white-space:nowrap}
-.weight-val{font-family:'Cinzel',serif;font-size:12px;color:var(--gold);white-space:nowrap;min-width:40px}
-.weight-bar-wrap{flex:1;background:var(--bg-inner);border:1px solid var(--border);border-radius:3px;height:10px;overflow:hidden}
-.weight-bar{height:100%;background:var(--gold);border-radius:2px;transition:width .3s,background .3s}
-.money-row{display:flex;align-items:center;gap:8px;margin-top:6px;padding-top:6px;border-top:1px solid var(--border)}
-.money-lbl{font-family:'Cinzel',serif;font-size:8px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;white-space:nowrap}
-.money-row input{width:90px;text-align:center;font-size:14px;font-weight:600;color:var(--gold-light);border-color:var(--border)}
-.pe-col{display:flex;flex-direction:column;gap:10px}
-.exh-card{background:var(--bg-card);border:1px solid var(--border-mid);border-radius:4px;padding:10px 12px}
-.exh-title{font-family:'Cinzel',serif;font-size:9px;color:var(--gold);letter-spacing:3px;text-transform:uppercase;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border)}
-.exh-body{display:grid;grid-template-columns:50px 1fr 70px;align-items:center;gap:8px}
-.exh-num{font-family:'Cinzel',serif;font-size:36px;font-weight:700;color:var(--gold);text-align:center;transition:color .3s}
-.exh-desc{font-size:12px;color:var(--text-muted);line-height:1.5}.exh-desc strong{color:var(--text-main)}
-.usos-box{display:flex;flex-direction:column;align-items:center;gap:3px}
-.usos-box label{font-family:'Cinzel',serif;font-size:7px;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase;text-align:center;line-height:1.4}
-.usos-box input{width:48px;text-align:center;font-size:16px;font-weight:600;color:var(--red-light);border-color:var(--red-deep)}
-/* ARMAS EQUIPADAS (ficha) */
-.equipped-weapons-card{background:var(--bg-card);border:1px solid var(--border-mid);border-radius:4px;padding:10px 12px;margin-bottom:10px}
-.eq-wep-title{font-family:'Cinzel',serif;font-size:9px;color:var(--gold);letter-spacing:3px;text-transform:uppercase;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border)}
-.eq-wep-slot{background:var(--bg-inner);border:1px solid var(--border);border-radius:3px;padding:8px 10px;margin-bottom:6px}
-.eq-wep-slot-lbl{font-family:'Cinzel',serif;font-size:8px;color:var(--text-dim);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px}
-.eq-wep-name{font-size:14px;color:var(--gold);font-weight:600;margin-bottom:4px}
-.eq-wep-stats{font-size:11px;color:var(--text-muted);line-height:1.6}
-.eq-wep-empty{font-size:12px;color:var(--text-dim);font-style:italic}
-/* ATTRS */
-.attrs-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:10px}
-.attr-block{background:var(--bg-card);border:1px solid var(--border-mid);border-radius:4px;padding:11px 9px}
-.attr-head{text-align:center;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--red-deep)}
-.attr-name{font-family:'Cinzel',serif;font-size:11px;color:var(--red-bright);letter-spacing:3px;text-transform:uppercase;font-weight:700}
-.attr-icon{font-size:15px;margin-bottom:3px;opacity:.8}
-.attr-val-row{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:6px}
-.attr-val-lbl{font-size:9px;color:var(--text-muted);letter-spacing:1px;font-family:'Cinzel',serif}
-.attr-val-inp{width:50px!important;text-align:center;font-size:16px!important;font-weight:600;color:var(--gold)!important;border-color:var(--red-mid)!important}
-.skill-sec-lbl{font-family:'Cinzel',serif;font-size:8px;color:var(--text-dim);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px}
-.skill-warn{font-size:9px;color:var(--red-bright);font-family:'Cinzel',serif;letter-spacing:1px;text-align:center;margin-bottom:3px;min-height:12px}
-.sk-header{display:grid;grid-template-columns:1fr 28px 32px 28px 32px;gap:2px;align-items:end;margin-bottom:2px;padding:0 2px}
-.sk-col-lbl{font-family:'Cinzel',serif;font-size:7px;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase;text-align:center}
+.stat-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center}
+.stat-card-lbl{font-size:9px;font-weight:600;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+.stat-card input{text-align:center;font-size:20px;font-weight:700;color:var(--gold);border:none;background:transparent;padding:0;pointer-events:none}
+.stat-card input.editable{pointer-events:auto;border:1px solid var(--border)}
+.stat-sub{font-size:9px;color:var(--txt3);margin-top:3px}
+.hppe-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.hppe-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px}
+.hppe-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.hppe-title{font-weight:600;font-size:13px}
+.hppe-title.hp{color:var(--hp-red)}
+.hppe-title.pe{color:var(--pe-blue)}
+.hppe-big{display:flex;align-items:center;gap:6px;margin-bottom:8px}
+.hppe-cur{font-size:36px;font-weight:700;min-width:54px;text-align:center;background:transparent;border:none;padding:0}
+.hppe-cur.hp{color:var(--hp-red)}
+.hppe-cur.pe{color:var(--pe-blue)}
+.hppe-sep{font-size:22px;color:var(--txt3)}
+.hppe-max{font-size:20px;font-weight:600;color:var(--txt2)}
+.bar-big{height:14px;background:var(--bg4);border-radius:7px;overflow:hidden;margin-bottom:6px;position:relative;border:1px solid var(--border)}
+.bar-big-fill{height:100%;border-radius:7px;transition:width .4s,background .4s}
+.hppe-inputs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;font-size:11px}
+.hppe-inputs .field label{font-size:9px}
+.hppe-inputs input{font-size:12px;padding:4px 6px;text-align:center}
+.exh-inline{display:flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:10px}
+.exh-num{font-family:'Cinzel',serif;font-size:32px;font-weight:700;color:var(--gold);min-width:44px;text-align:center;transition:color .3s}
+.exh-info{flex:1}
+.exh-label{font-size:12px;font-weight:600;color:var(--txt);margin-bottom:2px}
+.exh-sub{font-size:11px;color:var(--txt3)}
+.usos-mini{display:flex;align-items:center;gap:5px}
+.usos-mini label{font-size:10px;color:var(--txt3);white-space:nowrap}
+.usos-mini input{width:52px;text-align:center;font-size:14px;font-weight:600;color:var(--red3);border-color:var(--red2)}
+.money-weight-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.money-card,.weight-card{background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:9px 11px;display:flex;align-items:center;gap:8px}
+.money-icon,.weight-icon{font-size:18px;flex-shrink:0}
+.money-label,.weight-label{font-size:10px;color:var(--txt3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.money-card input{font-size:16px;font-weight:700;color:var(--gold2);border:none;background:transparent;padding:0;width:80px}
+.weight-val{font-size:14px;font-weight:700;color:var(--gold)}
+.weight-bar-sm{flex:1;background:var(--bg4);border-radius:4px;height:8px;overflow:hidden;border:1px solid var(--border)}
+.weight-bar-sm-fill{height:100%;background:var(--gold);border-radius:4px;transition:width .3s}
+.eq-wep-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.eq-wep-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px}
+.eq-wep-slot-lbl{font-size:9px;font-weight:600;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+.eq-wep-name{font-size:13px;font-weight:600;color:var(--gold);margin-bottom:4px}
+.eq-wep-stats{font-size:11px;color:var(--txt2);line-height:1.6}
+.eq-wep-empty{font-size:11px;color:var(--txt3);font-style:italic}
+.attrs-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+.attr-block{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px}
+.attr-head{display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.attr-icon{font-size:16px}
+.attr-name{font-family:'Cinzel',serif;font-size:11px;color:var(--red);letter-spacing:2px;font-weight:600;flex:1}
+.attr-val-inp{width:48px!important;text-align:center;font-size:17px!important;font-weight:700;color:var(--gold)!important;padding:4px!important}
+.skill-warn{font-size:10px;color:var(--red);margin-bottom:4px;min-height:13px}
+.sk-header{display:grid;grid-template-columns:1fr 24px 30px 26px 30px;gap:2px;padding:0 2px;margin-bottom:3px}
+.sk-col-lbl{font-size:8px;font-weight:600;color:var(--txt3);text-align:center;text-transform:uppercase;letter-spacing:.5px}
 .sk-col-lbl:first-child{text-align:left}
-.skill-row{display:grid;grid-template-columns:1fr 28px 32px 28px 32px;gap:2px;align-items:center;margin-bottom:3px;padding:2px;border-radius:3px;transition:background .15s}
-.skill-row:hover{background:rgba(139,32,32,.12)}.skill-row.hidden-sk{display:none}
-.skill-name{font-size:11px;color:var(--text-main);line-height:1.2}
-.maestria-dots{display:flex;flex-direction:column;gap:3px;align-items:center}
-.maestria-dot{width:9px;height:9px;border-radius:50%;border:1.5px solid var(--gold);background:transparent;cursor:pointer;transition:background .15s;flex-shrink:0}
-.maestria-dot.filled{background:var(--gold)}.maestria-dot:hover{border-color:var(--gold-light)}
-.sk-inp{width:100%!important;text-align:center;font-size:11px!important;padding:2px!important;border-color:var(--border)!important;color:var(--gold)!important;font-weight:600}
-.sk-inp.overlimit{border-color:#c0392b!important;background:#2a0808!important;color:var(--red-light)!important}
-.sk-bon{width:100%!important;text-align:center;font-size:11px!important;padding:2px!important;border-color:var(--border)!important;color:var(--blue-bright)!important}
-.sk-total{font-family:'Cinzel',serif;font-size:11px;color:var(--text-main);text-align:center;font-weight:600}
-.saiba-mais{font-family:'Cinzel',serif;font-size:8px;color:var(--text-dim);letter-spacing:1px;cursor:pointer;text-align:center;padding:3px 0;transition:color .2s;display:none}
-.saiba-mais:hover{color:var(--red-bright)}.saiba-mais.show{display:block}
+.skill-row{display:grid;grid-template-columns:1fr 24px 30px 26px 30px;gap:2px;align-items:center;padding:2px;border-radius:4px;transition:background .12s}
+.skill-row:hover{background:var(--bg4)}
+.skill-row.hidden-sk{display:none}
+.skill-name{font-size:11px;color:var(--txt);line-height:1.2}
+.maestria-dots{display:flex;flex-direction:column;gap:2px;align-items:center}
+.maestria-dot{width:9px;height:9px;border-radius:50%;border:1.5px solid var(--border2);background:transparent;cursor:pointer;transition:all .12s;flex-shrink:0}
+.maestria-dot.filled{background:var(--gold);border-color:var(--gold)}
+.maestria-dot:hover{border-color:var(--gold2)}
+.sk-inp{width:100%!important;text-align:center;font-size:11px!important;padding:2px!important;color:var(--gold)!important;font-weight:600}
+.sk-inp.overlimit{border-color:var(--red)!important;background:#3a1515!important;color:var(--red3)!important}
+.sk-bon{width:100%!important;text-align:center;font-size:11px!important;padding:2px!important;color:var(--blue2)!important}
+.sk-total{font-size:11px;color:var(--txt);text-align:center;font-weight:600}
+.saiba-mais{font-size:9px;color:var(--txt3);cursor:pointer;text-align:center;padding:3px 0;transition:color .15s;display:none}
+.saiba-mais:hover{color:var(--red)}.saiba-mais.show{display:block}
+.sk-bon-d4{font-size:9px;color:var(--green2);text-align:center;font-weight:600;border-radius:3px;background:#1a2d1a;border:1px solid var(--green)}
 .save-bar{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:14px;padding-top:12px;border-top:1px solid var(--border)}
-.save-btn{background:var(--red-deep);border:1px solid var(--red-mid);color:var(--gold);font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;padding:7px 22px;border-radius:3px;cursor:pointer;text-transform:uppercase;transition:all .2s}
-.save-btn:hover{background:var(--red-mid);border-color:var(--gold)}.save-btn:active{transform:scale(.97)}
-.save-msg{font-size:10px;color:var(--gold);font-family:'Cinzel',serif;letter-spacing:2px;opacity:0;transition:opacity .4s}
-/* EQUIP PAGE */
-.equip-tabs{display:flex;gap:6px;margin-bottom:12px;border-bottom:1px solid var(--border-mid);padding-bottom:8px}
-.equip-tab{font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:6px 14px;border-radius:3px 3px 0 0;cursor:pointer;border:1px solid var(--border-mid);color:var(--text-muted);background:var(--bg-inner);transition:all .2s}
-.equip-tab.active{background:var(--red-mid);border-color:var(--gold);color:var(--gold-light)}
+.save-btn{background:var(--red2);border:1px solid var(--red);color:#fff;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;padding:8px 24px;border-radius:7px;cursor:pointer;transition:all .15s}
+.save-btn:hover{background:var(--red)}.save-btn:active{transform:scale(.97)}
+.save-msg{font-size:11px;color:var(--green2);opacity:0;transition:opacity .4s}
+/* ITENS */
+.equip-tabs{display:flex;gap:5px;margin-bottom:10px}
+.equip-tab{font-size:11px;font-weight:500;letter-spacing:.3px;padding:6px 14px;border-radius:6px;cursor:pointer;border:1px solid var(--border);color:var(--txt2);background:var(--bg3);transition:all .15s}
+.equip-tab.active{background:var(--red2);border-color:var(--red);color:#fff}
 .equip-panel{display:none}.equip-panel.active{display:block}
-.equip-layout{display:grid;grid-template-columns:220px 1fr;gap:16px;align-items:start}
-.mannequin-title{font-family:'Cinzel',serif;font-size:9px;color:var(--gold);letter-spacing:3px;text-transform:uppercase;margin-bottom:5px;text-align:center}
-.mannequin-svg{width:200px}
+.equip-layout{display:grid;grid-template-columns:190px 1fr;gap:14px;align-items:start}
+.mannequin-title{font-size:9px;color:var(--txt3);text-align:center;margin-bottom:5px;text-transform:uppercase;letter-spacing:1px}
+.mannequin-svg{width:180px}
 .mslot{cursor:pointer}.mslot:hover .sf{opacity:.75}
-.mslot.equipped .sf{fill:#3d0a0a;stroke:#c0392b;stroke-width:1.5}
-.sf{fill:#1a0a0a;stroke:#3d1010;stroke-width:1;transition:fill .2s,stroke .2s}
-.slbl{font-family:'Cinzel',serif;font-size:8px;fill:#5a3828;pointer-events:none}
-.stag{font-family:'Cinzel',serif;font-size:7px;fill:#c8963c;pointer-events:none}
-.slots-panel{display:flex;flex-direction:column;gap:8px}
-.slot-card{background:var(--bg-card);border:1px solid var(--border-mid);border-radius:4px;padding:8px 10px}
+.mslot.equipped .sf{fill:#3a1a1a;stroke:var(--red);stroke-width:1.5}
+.sf{fill:#2a2a2e;stroke:#404048;stroke-width:1;transition:fill .2s,stroke .2s}
+.slbl{font-family:'Inter',sans-serif;font-size:8px;fill:#706a6a;pointer-events:none}
+.stag{font-family:'Inter',sans-serif;font-size:7px;fill:var(--gold);pointer-events:none}
+.slots-panel{display:flex;flex-direction:column;gap:7px}
+.slot-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:9px 11px}
 .slot-card-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
-.slot-card-name{font-family:'Cinzel',serif;font-size:10px;color:var(--gold);letter-spacing:2px;text-transform:uppercase}
-.slot-eq-info{font-size:12px;color:var(--text-muted);font-style:italic;margin-bottom:4px}
-.slot-eq-info.has-item{color:var(--text-main);font-style:normal}
-.inv-item-row{display:flex;align-items:center;gap:6px;margin-bottom:3px;padding:4px 7px;background:var(--bg-inner);border:1px solid var(--border);border-radius:3px;flex-wrap:wrap}
-.inv-item-row.eq-row{border-color:var(--red-mid)}
-.inv-item-name{flex:1;font-size:12px;min-width:80px}
-.inv-item-stats{font-size:10px;color:var(--text-dim);font-family:'Cinzel',serif;white-space:nowrap}
-.dur-row{display:flex;align-items:center;gap:5px;margin-top:3px;flex-wrap:wrap}
-.dur-lbl{font-family:'Cinzel',serif;font-size:8px;color:var(--text-dim);letter-spacing:1px}
+.slot-card-name{font-size:11px;font-weight:600;color:var(--gold);text-transform:uppercase;letter-spacing:.5px}
+.slot-eq-info{font-size:12px;color:var(--txt3);font-style:italic;margin-bottom:3px}
+.slot-eq-info.has-item{color:var(--txt);font-style:normal}
+.inv-item-row{display:flex;align-items:center;gap:5px;margin-bottom:3px;padding:4px 7px;background:var(--bg4);border:1px solid var(--border);border-radius:5px;flex-wrap:wrap}
+.inv-item-row.eq-row{border-color:var(--red)}
+.inv-item-name{flex:1;font-size:12px;min-width:70px}
+.dur-row{display:flex;align-items:center;gap:4px;margin-top:3px;flex-wrap:wrap}
+.dur-lbl{font-size:9px;color:var(--txt3)}
 .dur-dots{display:flex;gap:3px}
-.dur-dot{width:10px;height:10px;border-radius:2px;border:1.5px solid var(--border-mid);background:#2e7d32;cursor:default}
-.dur-dot.dmg{background:var(--red-bright);border-color:var(--red-bright)}
-.action-btn{background:var(--red-deep);border:1px solid var(--red-mid);color:var(--gold);font-family:'Cinzel',serif;font-size:7px;letter-spacing:1px;padding:3px 7px;border-radius:2px;cursor:pointer;text-transform:uppercase;transition:all .2s;white-space:nowrap}
-.action-btn:hover{background:var(--red-mid)}
-.destroy-btn{background:#2a0505;border:1px solid var(--red-mid);color:var(--red-bright);font-family:'Cinzel',serif;font-size:7px;letter-spacing:1px;padding:3px 7px;border-radius:2px;cursor:pointer;text-transform:uppercase;transition:all .2s;white-space:nowrap}
-.destroy-btn:hover{background:var(--red-mid);color:var(--gold-light)}
-.repair-btn{background:#0a2a0a;border:1px solid #2e7d32;color:#4caf50;font-family:'Cinzel',serif;font-size:7px;letter-spacing:1px;padding:3px 7px;border-radius:2px;cursor:pointer;text-transform:uppercase;transition:all .2s;white-space:nowrap}
-.repair-btn:hover{background:#1a4a1a}
-.remove-btn{background:var(--bg-card);border:1px solid var(--border-mid);color:var(--text-muted);font-family:'Cinzel',serif;font-size:7px;letter-spacing:1px;padding:3px 7px;border-radius:2px;cursor:pointer;text-transform:uppercase;transition:all .2s;white-space:nowrap}
-.remove-btn:hover{color:var(--text-main);border-color:var(--text-muted)}
-.delete-btn{background:#2a0505;border:1px solid #5a0a0a;color:#a04040;font-family:'Cinzel',serif;font-size:7px;letter-spacing:1px;padding:3px 7px;border-radius:2px;cursor:pointer;text-transform:uppercase;transition:all .2s;white-space:nowrap}
-.delete-btn:hover{background:var(--red-deep);color:var(--red-bright)}
-/* WEAPON INVENTORY (equip page) */
-.weapon-inv-card{background:var(--bg-card);border:1px solid var(--border-mid);border-radius:4px;padding:10px 12px;margin-bottom:8px}
-.weapon-inv-name{font-family:'Cinzel',serif;font-size:11px;color:var(--gold);letter-spacing:2px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px}
-.weapon-inv-stats{font-size:12px;color:var(--text-muted);line-height:1.7;margin-bottom:6px}
-.weapon-inv-stats span{color:var(--text-main);font-weight:600}
-.weapon-slot-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:6px;padding-top:6px;border-top:1px solid var(--border)}
-.weapon-slot-lbl{font-family:'Cinzel',serif;font-size:8px;color:var(--text-dim);letter-spacing:1.5px;text-transform:uppercase;white-space:nowrap}
-.weapon-equipped-badge{font-family:'Cinzel',serif;font-size:8px;padding:2px 8px;border-radius:2px;letter-spacing:1px}
-.wep-equipped1{background:#1a2a0a;border:1px solid #4a7a1a;color:#8aaf50}
-.wep-equipped2{background:#0a1a2a;border:1px solid #1a4a7a;color:#508aaf}
+.dur-dot{width:9px;height:9px;border-radius:2px;background:var(--green);border:none}
+.dur-dot.dmg{background:var(--red)}
+.btn{font-family:'Inter',sans-serif;font-size:10px;font-weight:500;padding:3px 8px;border-radius:4px;cursor:pointer;transition:all .15s;white-space:nowrap;border:1px solid}
+.btn-red{background:#3a1515;border-color:var(--red2);color:var(--red3)}.btn-red:hover{background:var(--red2);color:#fff}
+.btn-green{background:#152a15;border-color:#2e7d32;color:var(--green2)}.btn-green:hover{background:#2e7d32;color:#fff}
+.btn-gray{background:var(--bg4);border-color:var(--border2);color:var(--txt2)}.btn-gray:hover{color:var(--txt);border-color:var(--txt3)}
+.btn-gold{background:#2a2010;border-color:var(--gold);color:var(--gold2)}.btn-gold:hover{background:var(--gold);color:#1a1a1a}
+.btn-delete{background:transparent;border-color:#444;color:#666}.btn-delete:hover{background:#2a0808;border-color:var(--red2);color:var(--red)}
+.weapon-inv-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:7px}
+.weapon-inv-name{font-size:13px;font-weight:600;color:var(--gold);margin-bottom:5px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px}
+.weapon-inv-stats{font-size:11px;color:var(--txt2);line-height:1.7;margin-bottom:6px}
+.weapon-inv-stats b{color:var(--txt);font-weight:600}
+.weapon-slot-row{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-top:5px;padding-top:5px;border-top:1px solid var(--border)}
+.wep-badge{font-size:9px;font-weight:600;padding:2px 8px;border-radius:3px;letter-spacing:.5px}
+.wep-badge-1{background:#1a2d0a;border:1px solid #4a7a1a;color:#8aaf50}
+.wep-badge-2{background:#0a1a2d;border:1px solid #1a4a7a;color:#508aaf}
 /* LOJA */
-.loja-cats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
-.loja-cat-card{background:var(--bg-card);border:2px solid var(--border-mid);border-radius:6px;padding:16px 8px;text-align:center;cursor:pointer;transition:all .2s}
-.loja-cat-card:hover{border-color:var(--gold);background:#1f0c0c}
-.loja-cat-card.open{border-color:var(--red-bright);background:#1f0c0c}
-.loja-cat-icon{font-size:28px;margin-bottom:6px}
-.loja-cat-title{font-family:'Cinzel',serif;font-size:10px;color:var(--gold);letter-spacing:2px;text-transform:uppercase}
-.loja-cat-sub{font-size:10px;color:var(--text-dim);margin-top:3px;line-height:1.4}
-.loja-cat-arrow{font-size:10px;color:var(--text-dim);margin-top:5px;display:block;transition:transform .2s}
-.loja-cat-card.open .loja-cat-arrow{transform:rotate(180deg);color:var(--gold)}
-.loja-section{display:none;margin-bottom:14px}.loja-section.open{display:block}
-.loja-section-title{font-family:'Cinzel',serif;font-size:11px;color:var(--gold);letter-spacing:3px;text-transform:uppercase;margin-bottom:10px;padding-bottom:7px;border-bottom:1px solid var(--border-mid)}
-.loja-category{margin-bottom:14px}
-.loja-cat-name{font-family:'Cinzel',serif;font-size:10px;color:var(--red-bright);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
-.loja-tbl{width:100%;border:1px solid var(--border-mid);border-radius:4px;overflow:hidden;border-collapse:collapse}
-.loja-tbl th{font-family:'Cinzel',serif;font-size:8px;color:var(--text-dim);letter-spacing:1.5px;text-transform:uppercase;background:var(--bg-card);padding:6px 8px;border-bottom:1px solid var(--border-mid);text-align:center;white-space:nowrap}
+.loja-cats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.loja-cat-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px 8px;text-align:center;cursor:pointer;transition:all .15s}
+.loja-cat-card:hover{border-color:var(--border2);background:var(--bg4)}
+.loja-cat-card.open{border-color:var(--red);background:var(--bg4)}
+.loja-cat-icon{font-size:26px;margin-bottom:5px}
+.loja-cat-title{font-size:11px;font-weight:600;color:var(--txt)}
+.loja-cat-sub{font-size:10px;color:var(--txt3);margin-top:2px;line-height:1.4}
+.loja-cat-arrow{font-size:10px;color:var(--txt3);margin-top:4px;display:block;transition:transform .2s}
+.loja-cat-card.open .loja-cat-arrow{transform:rotate(180deg);color:var(--red)}
+.loja-section{display:none;margin-bottom:12px}.loja-section.open{display:block}
+.loja-sec-title{font-family:'Cinzel',serif;font-size:11px;color:var(--txt2);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.loja-category{margin-bottom:12px}
+.loja-cat-name{font-size:11px;font-weight:600;color:var(--red);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.loja-tbl{width:100%;border:1px solid var(--border);border-radius:6px;overflow:hidden;border-collapse:collapse}
+.loja-tbl th{font-size:9px;font-weight:600;color:var(--txt3);background:var(--bg3);padding:5px 8px;border-bottom:1px solid var(--border);text-align:center;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
 .loja-tbl th:first-child{text-align:left}
-.loja-tbl td{font-size:12px;color:var(--text-main);padding:6px 8px;border-bottom:1px solid var(--border);background:var(--bg-inner);text-align:center;vertical-align:middle}
-.loja-tbl td:first-child{text-align:left;font-weight:600}
-.loja-tbl tr:last-child td{border-bottom:none}.loja-tbl tr:hover td{background:#1a0808}
-.loja-tbl td.stat{color:var(--gold);font-family:'Cinzel',serif;font-size:11px}
-.loja-tbl td.price{color:var(--gold-light);font-family:'Cinzel',serif;font-size:11px}
-.buy-btn{background:var(--red-deep);border:1px solid var(--red-mid);color:var(--gold);font-family:'Cinzel',serif;font-size:8px;letter-spacing:1px;padding:5px 10px;border-radius:3px;cursor:pointer;text-transform:uppercase;transition:all .2s;white-space:nowrap;width:100%}
-.buy-btn:hover{background:var(--red-mid);border-color:var(--gold)}
-.owned-tag{font-family:'Cinzel',serif;font-size:9px;color:var(--gold);letter-spacing:1px}
-/* WEAPON CUSTOMIZATION */
-.wep-custom-box{background:var(--bg-card);border:1px solid var(--border-mid);border-radius:4px;padding:12px;margin-top:10px}
-.wep-custom-title{font-family:'Cinzel',serif;font-size:9px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
-.wep-custom-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.wep-custom-group{display:flex;flex-direction:column;gap:4px}
-.wep-custom-lbl{font-family:'Cinzel',serif;font-size:8px;color:var(--text-dim);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:2px}
-.wep-custom-select{font-size:12px;padding:4px 6px;background:var(--bg-inner);border:1px solid var(--border-mid);color:var(--text-main);border-radius:3px;cursor:pointer}
-.wep-custom-select option{background:var(--bg-dark)}
-.wep-preview{background:var(--bg-inner);border:1px solid var(--border-mid);border-radius:3px;padding:10px 12px;margin-top:10px}
-.wep-preview-title{font-family:'Cinzel',serif;font-size:8px;color:var(--text-dim);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
-.wep-preview-stats{font-size:12px;color:var(--text-muted);line-height:1.8}
-.wep-preview-stats b{color:var(--gold)}
-.wep-preview-price{font-family:'Cinzel',serif;font-size:13px;color:var(--gold-light);margin-top:6px}
+.loja-tbl td{font-size:12px;color:var(--txt);padding:6px 8px;border-bottom:1px solid var(--border);background:var(--bg4);text-align:center;vertical-align:middle}
+.loja-tbl td:first-child{text-align:left;font-weight:500}
+.loja-tbl tr:last-child td{border-bottom:none}
+.loja-tbl tr:hover td{background:#383840}
+.loja-tbl td.stat{color:var(--gold);font-size:11px;font-weight:600}
+.buy-btn{background:var(--red2);border:1px solid var(--red);color:#fff;font-family:'Inter',sans-serif;font-size:10px;font-weight:600;padding:5px 10px;border-radius:5px;cursor:pointer;transition:all .15s;white-space:nowrap;width:100%}
+.buy-btn:hover{background:var(--red)}
+.wep-custom-box{background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:11px;margin-top:8px}
+.wep-custom-title{font-size:10px;font-weight:600;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:9px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.wep-custom-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.wep-custom-group{display:flex;flex-direction:column;gap:3px}
+.wep-custom-group label{font-size:9px;font-weight:600;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px}
+.wep-custom-group select{font-size:12px;padding:4px 6px}
+.wep-preview{background:var(--bg4);border:1px solid var(--border);border-radius:5px;padding:9px;margin-bottom:8px}
+.wep-preview-title{font-size:9px;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;font-weight:600}
+.wep-preview-stats{font-size:12px;color:var(--txt2);line-height:1.8}
+.wep-preview-stats b{color:var(--txt)}
+.wep-preview-price{font-size:14px;font-weight:700;color:var(--gold2);margin-top:5px}
+/* SKILL TREE */
+.skill-tree-layout{display:flex;flex-direction:column;gap:16px}
+.tree-class-card{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px;overflow:hidden}
+.tree-class-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;cursor:pointer}
+.tree-class-name{font-family:'Cinzel',serif;font-size:14px;color:var(--gold);letter-spacing:2px;font-weight:600}
+.tree-class-squares{display:flex;gap:6px;align-items:center}
+.tree-class-sq{width:16px;height:16px;border:2px solid var(--border2);border-radius:3px;cursor:pointer;transition:all .15s;flex-shrink:0}
+.tree-class-sq.filled{background:var(--gold);border-color:var(--gold2)}
+.tree-class-sq:hover{border-color:var(--gold)}
+.tree-class-content{display:none}
+.tree-class-card.open .tree-class-content{display:block}
+.tree-paths{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+.tree-path-card{background:var(--bg4);border:1px solid var(--border);border-radius:8px;padding:10px;cursor:pointer;transition:all .15s}
+.tree-path-card:hover{border-color:var(--border2);background:#3c3c44}
+.tree-path-name{font-size:12px;font-weight:600;color:var(--txt);margin-bottom:4px}
+.tree-xp-lbl{font-size:9px;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;margin-top:6px;margin-bottom:4px}
+/* FOMENTO CORPORAL SKILL TREE */
+.fc-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:2000;padding:16px}
+.fc-overlay.open{display:flex}
+.fc-modal{background:var(--bg2);border:1px solid var(--border2);border-radius:12px;width:100%;max-width:780px;max-height:90vh;overflow-y:auto;padding:20px}
+.fc-modal-title{font-family:'Cinzel',serif;font-size:16px;font-weight:700;color:var(--gold);text-align:center;margin-bottom:4px;letter-spacing:2px}
+.fc-modal-sub{font-size:10px;color:var(--txt3);text-align:center;margin-bottom:18px;letter-spacing:1px;text-transform:uppercase}
+.fc-close{position:absolute;top:14px;right:14px;background:var(--bg4);border:1px solid var(--border2);color:var(--txt2);width:28px;height:28px;border-radius:6px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}
+.fc-close:hover{background:var(--red2);border-color:var(--red);color:#fff}
+.fc-modal-inner{position:relative}
+/* tree layout */
+.fc-tree{display:flex;flex-direction:column;gap:0;align-items:center}
+.fc-row{display:flex;justify-content:center;gap:16px;position:relative;margin-bottom:0}
+.fc-connector-v{width:2px;height:28px;background:var(--border2);margin:0 auto}
+.fc-connector-h-wrap{display:flex;align-items:center;justify-content:center;margin-bottom:0;position:relative;width:100%}
+.fc-connector-branch{display:flex;align-items:flex-start;justify-content:center;gap:0;width:100%}
+.fc-node{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:9px 12px;cursor:pointer;transition:all .2s;min-width:130px;max-width:180px;text-align:center;position:relative}
+.fc-node:hover{border-color:var(--gold);background:var(--bg4)}
+.fc-node.root-node{border-color:var(--red);background:#2a1a1a;min-width:160px}
+.fc-node.root-node:hover{border-color:var(--red3)}
+.fc-node-name{font-size:12px;font-weight:600;color:var(--txt);line-height:1.3}
+.fc-node.root-node .fc-node-name{color:var(--red3)}
+.fc-node-grade{font-size:9px;color:var(--txt3);margin-top:3px;text-transform:uppercase;letter-spacing:.5px}
+.fc-node-stars{display:flex;justify-content:center;gap:2px;margin-top:5px}
+.fc-star{font-size:12px;color:var(--border2);cursor:pointer;transition:color .15s;line-height:1}
+.fc-star.lit{color:var(--gold2)}
+.fc-star:hover{color:var(--gold)}
+/* connector lines SVG approach */
+.fc-lines{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+/* description tooltip card */
+.fc-desc-card{background:var(--bg3);border:1px solid var(--gold);border-radius:8px;padding:12px 14px;margin-top:16px;display:none}
+.fc-desc-card.show{display:block}
+.fc-desc-title{font-family:'Cinzel',serif;font-size:12px;color:var(--gold);margin-bottom:6px;font-weight:600}
+.fc-desc-grade{font-size:9px;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.fc-desc-level{margin-bottom:6px;padding:6px 8px;background:var(--bg4);border-radius:5px;border-left:2px solid var(--red)}
+.fc-desc-level-num{font-size:9px;font-weight:600;color:var(--red3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.fc-desc-level-txt{font-size:12px;color:var(--txt);line-height:1.5}
 /* MODAL */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;z-index:1000;padding:16px}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:1000;padding:16px}
 .modal-overlay.open{display:flex}
-.modal{background:var(--bg-dark);border:2px solid var(--red-mid);border-radius:4px;padding:22px;max-width:420px;width:100%;text-align:center;box-shadow:0 0 40px rgba(192,57,43,.3);max-height:90vh;overflow-y:auto}
-.modal h3{font-family:'Cinzel',serif;font-size:13px;color:var(--red-bright);letter-spacing:3px;margin-bottom:10px}
-.modal p{font-size:14px;color:var(--text-main);margin-bottom:16px;line-height:1.6}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:20px;max-width:420px;width:100%;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.4);max-height:90vh;overflow-y:auto}
+.modal h3{font-family:'Cinzel',serif;font-size:13px;color:var(--red3);letter-spacing:2px;margin-bottom:10px}
+.modal-body{font-size:13px;color:var(--txt);margin-bottom:16px;line-height:1.6;text-align:left}
+.modal-body b{color:var(--gold)}
 .modal-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
-.modal-ok{background:var(--red-deep);border:1px solid var(--red-mid);color:var(--gold);font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;padding:8px 18px;border-radius:3px;cursor:pointer;text-transform:uppercase;transition:all .2s}
-.modal-ok:hover{background:var(--red-mid)}
-.modal-cancel{background:var(--bg-card);border:1px solid var(--border-mid);color:var(--text-muted);font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;padding:8px 18px;border-radius:3px;cursor:pointer;text-transform:uppercase;transition:all .2s}
-.modal-cancel:hover{color:var(--text-main);border-color:var(--text-muted)}
+.modal-ok{background:var(--red2);border:1px solid var(--red);color:#fff;font-size:11px;font-weight:600;padding:8px 18px;border-radius:6px;cursor:pointer;transition:all .15s}
+.modal-ok:hover{background:var(--red)}
+.modal-cancel{background:var(--bg4);border:1px solid var(--border2);color:var(--txt2);font-size:11px;font-weight:600;padding:8px 18px;border-radius:6px;cursor:pointer;transition:all .15s}
+.modal-cancel:hover{color:var(--txt);border-color:var(--txt3)}
 @media(max-width:600px){
   .loja-tbl thead{display:none}
   .loja-tbl,.loja-tbl tbody,.loja-tbl tr,.loja-tbl td{display:block;width:100%}
-  .loja-tbl tr{margin-bottom:10px;border:1px solid var(--border-mid);border-radius:4px;overflow:hidden;background:var(--bg-inner)}
-  .loja-tbl td{display:flex;justify-content:space-between;align-items:center;padding:7px 10px;border-bottom:1px solid var(--border);text-align:right;font-size:12px}
-  .loja-tbl td:first-child{background:var(--bg-card);font-size:13px;font-weight:600;text-align:left;justify-content:flex-start;border-bottom:1px solid var(--border-mid)}
-  .loja-tbl td::before{content:attr(data-label);font-family:'Cinzel',serif;font-size:8px;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase;text-align:left;margin-right:8px;flex-shrink:0}
+  .loja-tbl tr{margin-bottom:8px;border:1px solid var(--border);border-radius:6px;overflow:hidden}
+  .loja-tbl td{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;border-bottom:1px solid var(--border);text-align:right}
+  .loja-tbl td:first-child{background:var(--bg3);font-size:13px;text-align:left;justify-content:flex-start;border-bottom:1px solid var(--border2)}
+  .loja-tbl td::before{content:attr(data-label);font-size:9px;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;text-align:left;margin-right:8px;flex-shrink:0}
   .loja-tbl td:first-child::before{display:none}
   .loja-tbl tr:last-child td:last-child{border-bottom:none}
-  .buy-btn{width:100%;padding:8px;font-size:10px}
+  .buy-btn{width:100%;padding:8px}
   .loja-cats{grid-template-columns:1fr 1fr}
-  .top-row,.vitals-row,.combat-row,.equip-layout{grid-template-columns:1fr}
-  .attrs-row{grid-template-columns:1fr}
-  .exh-body{grid-template-columns:50px 1fr;grid-template-rows:auto auto}
-  .usos-box{grid-column:1/3;flex-direction:row;justify-content:center;gap:8px}
+  .top-row,.hppe-row,.combat-row,.equip-layout,.eq-wep-row,.money-weight-row{grid-template-columns:1fr}
+  .attrs-row,.tree-paths{grid-template-columns:1fr}
   .wep-custom-grid{grid-template-columns:1fr}
+  .exh-inline{flex-wrap:wrap}
+  .fc-tree{gap:0}
+  .tree-paths{grid-template-columns:1fr}
 }
 @media(min-width:601px) and (max-width:850px){.attrs-row{grid-template-columns:1fr 1fr}}
-::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg-deep)}::-webkit-scrollbar-thumb{background:var(--red-deep);border-radius:3px}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:3px}
 </style>
 </head>
 <body>
@@ -239,147 +299,166 @@ input[type=file]{display:none}
   <button class="nav-btn active" id="nav-ficha" onclick="showPage('ficha')">⚔ Ficha</button>
   <button class="nav-btn" id="nav-equip" onclick="showPage('equip')">🛡 Itens</button>
   <button class="nav-btn" id="nav-loja" onclick="showPage('loja')">🪙 Loja</button>
+  <button class="nav-btn" id="nav-arvore" onclick="showPage('arvore')">🌳 Árvore</button>
 </div>
+
+<!-- FOMENTO CORPORAL OVERLAY -->
+<div class="fc-overlay" id="fc-overlay" onclick="closeFCOverlay(event)">
+  <div class="fc-modal" id="fc-modal">
+    <div class="fc-modal-inner">
+      <button class="fc-close" onclick="closeFCOverlayDirect()">✕</button>
+      <div class="fc-modal-title">Fomento Corporal</div>
+      <div class="fc-modal-sub">Árvore de Habilidades — O Especialista</div>
+      <div id="fc-tree-container"></div>
+      <div class="fc-desc-card" id="fc-desc-card">
+        <div class="fc-desc-title" id="fc-desc-title"></div>
+        <div class="fc-desc-grade" id="fc-desc-grade"></div>
+        <div id="fc-desc-levels"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="modal-overlay">
   <div class="modal">
     <h3 id="modal-title">Confirmar</h3>
-    <div id="modal-body"></div>
-    <div class="modal-btns" style="margin-top:14px">
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-btns">
       <button class="modal-ok" id="modal-ok-btn" onclick="modalConfirm()">Confirmar</button>
       <button class="modal-cancel" onclick="closeModal()">Cancelar</button>
     </div>
   </div>
 </div>
+
 <!-- FICHA -->
 <div class="page active" id="page-ficha">
 <div class="sheet">
-  <div class="cbl"></div><div class="cbr"></div>
-  <div class="sheet-header"><h1>⚔ Ficha de Personagem ⚔</h1><div class="header-deco">— Dark Fantasy Chronicle —</div></div>
   <div class="official-bar">
-    <label><input type="checkbox" id="chk-official" onchange="onOfficialChange()"> Estou usando a versão oficial do sistema</label>
-    <span class="badge" id="badge-attr">Atributos: <span id="attr-pts-left">14</span> / 14</span>
+    <label><input type="checkbox" id="chk-official" onchange="onOfficialChange()"> Versão Oficial do Sistema</label>
+    <span class="badge" id="badge-attr">Atributos: <span id="attr-pts-left">14</span>/14</span>
     <span class="badge" id="badge-sk">Perícias: <span id="sk-pts-left">60</span> pts disponíveis</span>
   </div>
   <div class="top-row">
     <div class="identity">
-      <div class="field"><label>Nome do Personagem</label><input type="text" id="f-nome" placeholder="O nome pelo qual os bardos te cantam..."></div>
-      <div class="field">
-        <label>Nível</label>
-        <div class="level-row">
-          <button class="lvl-btn" onclick="changeLevel(-1)">−</button>
-          <input type="number" id="f-nivel" value="1" min="1" max="99" oninput="onLevelChange()">
-          <button class="lvl-btn" onclick="changeLevel(1)">+</button>
-          <span style="font-size:10px;color:var(--text-muted);margin-left:4px;font-family:'Cinzel',serif;letter-spacing:1px">nível</span>
+      <div class="field"><label>Nome</label><input type="text" id="f-nome" placeholder="Nome do personagem..."></div>
+      <div style="display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:end">
+        <div class="field">
+          <label>Nível</label>
+          <div class="level-row">
+            <button class="lvl-btn" onclick="changeLevel(-1)">−</button>
+            <input type="number" id="f-nivel" value="1" min="1" max="99" oninput="onLevelChange()">
+            <button class="lvl-btn" onclick="changeLevel(1)">+</button>
+          </div>
         </div>
+        <div class="field"><label>Raça</label><input type="text" id="f-raca" placeholder="Raça..."></div>
       </div>
-      <div class="field"><label>Raça</label><input type="text" id="f-raca" placeholder="Ex: Humano, Elfo..."></div>
     </div>
     <div class="photo-box">
-      <div class="photo-frame" onclick="document.getElementById('pf').click()"><img id="char-img" alt=""><div class="photo-ph" id="photo-ph"><span>🗡</span>RETRATO<br>DO HERÓI</div></div>
+      <div class="photo-frame" onclick="document.getElementById('pf').click()"><img id="char-img" alt=""><div class="photo-ph" id="photo-ph"><span>🗡</span>Foto</div></div>
       <input type="file" id="pf" accept="image/*" onchange="loadPhoto(event)">
-      <div class="photo-hint" onclick="document.getElementById('pf').click()">↑ Carregar imagem</div>
+      <div class="photo-hint" onclick="document.getElementById('pf').click()">↑ Imagem</div>
     </div>
+  </div>
+  <div class="hppe-row">
+    <div class="hppe-card">
+      <div class="hppe-header"><span class="hppe-title hp">♥ Pontos de Vida</span></div>
+      <div class="hppe-big">
+        <input class="hppe-cur hp" type="number" id="f-hpatual" placeholder="—" readonly>
+        <span class="hppe-sep">/</span>
+        <span class="hppe-max" id="hp-max-display">—</span>
+      </div>
+      <div class="bar-big"><div class="bar-big-fill" id="bar-hp" style="width:0%;background:var(--hp-red)"></div></div>
+      <div class="hppe-inputs">
+        <div class="field"><label>HP Máx</label><input type="number" id="f-hpmax" placeholder="0" min="0" oninput="updateHP()"></div>
+        <div class="field"><label>Dano</label><input type="number" id="f-hpdano" placeholder="0" min="0" oninput="updateHP()"></div>
+        <div class="field"><label>HP Temp</label><input type="number" id="f-hptemp" placeholder="0" min="0" oninput="updateHP()" style="border-color:var(--green)!important;color:var(--green2)!important"></div>
+      </div>
+    </div>
+    <div class="hppe-card">
+      <div class="hppe-header"><span class="hppe-title pe">✦ Pontos de Esforço</span></div>
+      <div class="hppe-big">
+        <input class="hppe-cur pe" type="number" id="f-peatual" placeholder="—" readonly>
+        <span class="hppe-sep">/</span>
+        <span class="hppe-max" id="pe-max-display">—</span>
+      </div>
+      <div class="bar-big"><div class="bar-big-fill" id="bar-pe" style="width:0%;background:var(--pe-blue)"></div></div>
+      <div class="hppe-inputs">
+        <div class="field"><label>PE Máx</label><input type="number" id="f-pemax" placeholder="0" min="0" oninput="updatePE()"></div>
+        <div class="field"><label>PE Gasto</label><input type="number" id="f-pegasto" placeholder="0" min="0" oninput="updatePE()"></div>
+        <div class="field"><label>PE Temp</label><input type="number" id="f-petemp" placeholder="0" min="0" oninput="updatePE()" style="border-color:var(--green)!important;color:var(--green2)!important"></div>
+      </div>
+    </div>
+  </div>
+  <div class="exh-inline">
+    <div class="exh-num" id="exh-val">0</div>
+    <div class="exh-info">
+      <div class="exh-label" id="exh-label">Descansado</div>
+      <div class="exh-sub" id="exh-sub">PE acima de 50%</div>
+    </div>
+    <div class="usos-mini"><label>Usos após 0:</label><input type="number" id="f-usos0" value="0" min="0" max="99" oninput="updatePE()"></div>
+  </div>
+  <div class="money-weight-row">
+    <div class="money-card"><span class="money-icon">🪙</span><div style="flex:1"><div class="money-label">Dinheiro</div><input type="number" id="f-money" placeholder="0" min="0" value="0" oninput="autoSave()"></div></div>
+    <div class="weight-card"><span class="weight-icon">⚖</span><div class="weight-label">Peso</div><span class="weight-val" id="weight-display">0/10</span><div class="weight-bar-sm"><div class="weight-bar-sm-fill" id="weight-bar" style="width:0%"></div></div></div>
   </div>
   <div class="combat-row">
-    <div class="combat-card"><div class="combat-lbl">🛡 Defesa Geral</div><input type="number" id="f-defesa" placeholder="0" readonly class="vro" style="font-size:18px;font-weight:600"><div class="combat-base" id="defesa-detail">armadura: 0</div></div>
-    <div class="combat-card"><div class="combat-lbl">⚖ Penalidade Geral</div><input type="number" id="f-penalidade" placeholder="0" readonly style="font-size:18px;font-weight:600;color:var(--red-light);cursor:default"><div class="combat-base" id="penalidade-detail">armadura: 0</div></div>
-    <div class="combat-card"><div class="combat-lbl">👣 Movimento</div><input type="number" id="f-movimento" placeholder="0"></div>
+    <div class="stat-card"><div class="stat-card-lbl">🛡 Defesa</div><input type="number" id="f-defesa" readonly><div class="stat-sub" id="defesa-detail">armadura: 0</div></div>
+    <div class="stat-card"><div class="stat-card-lbl">⚖ Penalidade</div><input type="number" id="f-penalidade" readonly style="color:var(--red3)!important"><div class="stat-sub" id="penalidade-detail">armadura: 0</div></div>
+    <div class="stat-card"><div class="stat-card-lbl">👣 Movimento</div><input type="number" id="f-movimento" class="editable" placeholder="0"></div>
   </div>
-  <!-- ARMAS EQUIPADAS na ficha -->
-  <div class="equipped-weapons-card">
-    <div class="eq-wep-title">⚔ Armas Equipadas</div>
-    <div id="ficha-weapon-slot-1">
-      <div class="eq-wep-slot-lbl">Mão 1 / Principal</div>
-      <div class="eq-wep-empty" id="ficha-wep1-content">Nenhuma arma equipada</div>
-    </div>
-    <div id="ficha-weapon-slot-2" style="margin-top:8px">
-      <div class="eq-wep-slot-lbl">Mão 2 / Secundária</div>
-      <div class="eq-wep-empty" id="ficha-wep2-content">Nenhuma arma equipada</div>
-    </div>
-  </div>
-  <div class="vitals-row">
-    <div class="vital-card">
-      <div class="vital-title">♥ Pontos de Vida</div>
-      <div class="vital-fields">
-        <div class="field"><label>HP Máximo</label><input type="number" id="f-hpmax" placeholder="0" min="0" oninput="updateHP()"></div>
-        <div class="field"><label>Dano Recebido</label><input type="number" id="f-hpdano" placeholder="0" min="0" oninput="updateHP()"></div>
-        <div class="field"><label>HP Atual</label><input type="number" id="f-hpatual" placeholder="—" readonly class="vro"></div>
-      </div>
-      <div class="bar-wrap"><div class="bar-fill" id="bar-hp" style="width:0%;background:#c0392b"></div><div class="bar-lbl" id="bar-hp-lbl">— / —</div></div>
-      <div class="weight-row"><span class="weight-lbl">Peso</span><span class="weight-val" id="weight-display">0 / 10</span><div class="weight-bar-wrap"><div class="weight-bar" id="weight-bar" style="width:0%"></div></div></div>
-      <div class="money-row"><span class="money-lbl">🪙 Dinheiro</span><input type="number" id="f-money" placeholder="0" min="0" value="0" oninput="autoSave()"></div>
-    </div>
-    <div class="pe-col">
-      <div class="vital-card">
-        <div class="vital-title">✦ Pontos de Esforço</div>
-        <div class="vital-fields">
-          <div class="field"><label>PE Máximo</label><input type="number" id="f-pemax" placeholder="0" min="0" oninput="updatePE()"></div>
-          <div class="field"><label>PE Gasto</label><input type="number" id="f-pegasto" placeholder="0" min="0" oninput="updatePE()"></div>
-          <div class="field"><label>PE Atual</label><input type="number" id="f-peatual" placeholder="—" readonly class="vrb"></div>
-        </div>
-        <div class="bar-wrap"><div class="bar-fill" id="bar-pe" style="width:0%;background:#4a7cdc"></div><div class="bar-lbl" id="bar-pe-lbl">— / —</div></div>
-      </div>
-      <div class="exh-card">
-        <div class="exh-title">💀 Exaustão</div>
-        <div class="exh-body">
-          <div class="exh-num" id="exh-val">0</div>
-          <div class="exh-desc" id="exh-desc"><strong>Descansado</strong><br>PE acima de 50%</div>
-          <div class="usos-box"><label>Usos depois do 0</label><input type="number" id="f-usos0" value="0" min="0" max="99" oninput="updatePE()"></div>
-        </div>
-      </div>
-    </div>
+  <div class="eq-wep-row">
+    <div class="eq-wep-card"><div class="eq-wep-slot-lbl">⚔ Mão 1 / Principal</div><div id="ficha-wep1-content"><div class="eq-wep-empty">Nenhuma arma equipada</div></div></div>
+    <div class="eq-wep-card"><div class="eq-wep-slot-lbl">⚔ Mão 2 / Secundária</div><div id="ficha-wep2-content"><div class="eq-wep-empty">Nenhuma arma equipada</div></div></div>
   </div>
   <div class="attrs-row">
     <div class="attr-block">
-      <div class="attr-head"><div class="attr-icon">⚔</div><div class="attr-name">Físico</div><div class="attr-val-row"><span class="attr-val-lbl">Valor:</span><input type="number" class="attr-val-inp" id="atr-fisico" placeholder="0" min="0" oninput="onAttrChange('fisico')"></div></div>
-      <div class="skill-sec-lbl">Perícias</div><div class="skill-warn" id="warn-fisico"></div>
-      <div class="sk-header"><span class="sk-col-lbl">Nome</span><span class="sk-col-lbl">MAS</span><span class="sk-col-lbl">PER</span><span class="sk-col-lbl">BÔN</span><span class="sk-col-lbl">TOTAL</span></div>
+      <div class="attr-head"><span class="attr-icon">⚔</span><span class="attr-name">Físico</span><input type="number" class="attr-val-inp" id="atr-fisico" placeholder="0" min="0" oninput="onAttrChange('fisico')"></div>
+      <div class="skill-warn" id="warn-fisico"></div>
+      <div class="sk-header"><span class="sk-col-lbl">Perícia</span><span class="sk-col-lbl">MAS</span><span class="sk-col-lbl">PER</span><span class="sk-col-lbl">BÔN</span><span class="sk-col-lbl">TOT</span></div>
       <div id="skills-fisico"></div><div class="saiba-mais" id="sm-fisico" onclick="toggleHidden('fisico')"></div>
     </div>
     <div class="attr-block">
-      <div class="attr-head"><div class="attr-icon">📖</div><div class="attr-name">Intelecto</div><div class="attr-val-row"><span class="attr-val-lbl">Valor:</span><input type="number" class="attr-val-inp" id="atr-intelecto" placeholder="0" min="0" oninput="onAttrChange('intelecto')"></div></div>
-      <div class="skill-sec-lbl">Perícias</div><div class="skill-warn" id="warn-intelecto"></div>
-      <div class="sk-header"><span class="sk-col-lbl">Nome</span><span class="sk-col-lbl">MAS</span><span class="sk-col-lbl">PER</span><span class="sk-col-lbl">BÔN</span><span class="sk-col-lbl">TOTAL</span></div>
+      <div class="attr-head"><span class="attr-icon">📖</span><span class="attr-name">Intelecto</span><input type="number" class="attr-val-inp" id="atr-intelecto" placeholder="0" min="0" oninput="onAttrChange('intelecto')"></div>
+      <div class="skill-warn" id="warn-intelecto"></div>
+      <div class="sk-header"><span class="sk-col-lbl">Perícia</span><span class="sk-col-lbl">MAS</span><span class="sk-col-lbl">PER</span><span class="sk-col-lbl">BÔN</span><span class="sk-col-lbl">TOT</span></div>
       <div id="skills-intelecto"></div><div class="saiba-mais" id="sm-intelecto" onclick="toggleHidden('intelecto')"></div>
     </div>
     <div class="attr-block">
-      <div class="attr-head"><div class="attr-icon">✦</div><div class="attr-name">Poder</div><div class="attr-val-row"><span class="attr-val-lbl">Valor:</span><input type="number" class="attr-val-inp" id="atr-poder" placeholder="0" min="0" oninput="onAttrChange('poder')"></div></div>
-      <div class="skill-sec-lbl">Perícias</div><div class="skill-warn" id="warn-poder"></div>
-      <div class="sk-header"><span class="sk-col-lbl">Nome</span><span class="sk-col-lbl">MAS</span><span class="sk-col-lbl">PER</span><span class="sk-col-lbl">BÔN</span><span class="sk-col-lbl">TOTAL</span></div>
+      <div class="attr-head"><span class="attr-icon">✦</span><span class="attr-name">Poder</span><input type="number" class="attr-val-inp" id="atr-poder" placeholder="0" min="0" oninput="onAttrChange('poder')"></div>
+      <div class="skill-warn" id="warn-poder"></div>
+      <div class="sk-header"><span class="sk-col-lbl">Perícia</span><span class="sk-col-lbl">MAS</span><span class="sk-col-lbl">PER</span><span class="sk-col-lbl">BÔN</span><span class="sk-col-lbl">TOT</span></div>
       <div id="skills-poder"></div><div class="saiba-mais" id="sm-poder" onclick="toggleHidden('poder')"></div>
     </div>
   </div>
-  <div class="save-bar"><button class="save-btn" onclick="saveSheet()">⚑ Salvar Ficha</button><span class="save-msg" id="save-msg">✓ Salvo</span></div>
+  <div class="save-bar"><button class="save-btn" onclick="saveSheet()">💾 Salvar</button><span class="save-msg" id="save-msg">✓ Salvo</span></div>
 </div>
 </div>
+
 <!-- ITENS -->
 <div class="page" id="page-equip">
 <div class="sheet">
-  <div class="cbl"></div><div class="cbr"></div>
-  <div class="sheet-header"><h1>🛡 Itens 🛡</h1><div class="header-deco">— Armadura &amp; Armas —</div></div>
   <div class="equip-tabs">
-    <button class="equip-tab active" onclick="switchEquipTab('armadura')">🛡 Armadura</button>
-    <button class="equip-tab" onclick="switchEquipTab('armas')">⚔ Armas</button>
+    <button class="equip-tab active" onclick="switchEquipTab('armadura',this)">🛡 Armadura</button>
+    <button class="equip-tab" onclick="switchEquipTab('armas',this)">⚔ Armas</button>
   </div>
-  <!-- ARMADURA TAB -->
   <div class="equip-panel active" id="equip-panel-armadura">
     <div class="equip-layout">
       <div>
-        <div class="mannequin-title">Clique numa peça para gerenciar</div>
+        <div class="mannequin-title">Clique para gerenciar</div>
         <svg class="mannequin-svg" viewBox="0 0 200 340" xmlns="http://www.w3.org/2000/svg">
           <g class="mslot" id="mslot-capacete" onclick="scrollToSlot('capacete')">
             <ellipse cx="100" cy="32" rx="25" ry="27" class="sf"/>
-            <rect x="88" y="25" width="24" height="13" rx="3" fill="#0f0505" opacity=".6"/>
-            <line x1="88" y1="31" x2="112" y2="31" stroke="#3d1010" stroke-width="1"/>
+            <rect x="88" y="25" width="24" height="13" rx="3" fill="#1c1c1e" opacity=".7"/>
+            <line x1="88" y1="31" x2="112" y2="31" stroke="#404048" stroke-width="1"/>
             <text class="slbl" x="100" y="67" text-anchor="middle">CAPACETE</text>
             <text class="stag" id="stag-capacete" x="100" y="76" text-anchor="middle"></text>
           </g>
-          <rect x="93" y="58" width="14" height="11" rx="2" fill="#120707" stroke="#3d1010" stroke-width="1"/>
+          <rect x="93" y="58" width="14" height="11" rx="2" fill="#1c1c1e" stroke="#404048" stroke-width="1"/>
           <g class="mslot" id="mslot-peitoral" onclick="scrollToSlot('peitoral')">
             <rect x="68" y="69" width="64" height="68" rx="5" class="sf"/>
-            <line x1="100" y1="69" x2="100" y2="137" stroke="#3d1010" stroke-width="1"/>
-            <line x1="68" y1="93" x2="132" y2="93" stroke="#3d1010" stroke-width="1"/>
-            <line x1="68" y1="115" x2="132" y2="115" stroke="#3d1010" stroke-width="1"/>
+            <line x1="100" y1="69" x2="100" y2="137" stroke="#404048" stroke-width="1"/>
+            <line x1="68" y1="93" x2="132" y2="93" stroke="#404048" stroke-width="1"/>
+            <line x1="68" y1="115" x2="132" y2="115" stroke="#404048" stroke-width="1"/>
             <text class="slbl" x="100" y="132" text-anchor="middle">PEITORAL</text>
             <text class="stag" id="stag-peitoral" x="100" y="141" text-anchor="middle"></text>
           </g>
@@ -405,42 +484,51 @@ input[type=file]{display:none}
             <text class="slbl" x="100" y="258" text-anchor="middle">BOTAS</text>
             <text class="stag" id="stag-botas" x="100" y="268" text-anchor="middle"></text>
           </g>
-          <text x="100" y="295" text-anchor="middle" font-family="Cinzel,serif" font-size="7" fill="#3d1010" letter-spacing="1">Clique para gerenciar</text>
         </svg>
       </div>
       <div class="slots-panel" id="slots-panel"></div>
     </div>
   </div>
-  <!-- ARMAS TAB -->
   <div class="equip-panel" id="equip-panel-armas">
     <div id="weapon-inv-panel"></div>
   </div>
-  <div class="save-bar"><button class="save-btn" onclick="saveSheet()">⚑ Salvar</button><span class="save-msg" id="save-msg2">✓ Salvo</span></div>
+  <div class="save-bar"><button class="save-btn" onclick="saveSheet()">💾 Salvar</button><span class="save-msg" id="save-msg2">✓ Salvo</span></div>
 </div>
 </div>
+
 <!-- LOJA -->
 <div class="page" id="page-loja">
 <div class="sheet">
-  <div class="cbl"></div><div class="cbr"></div>
-  <div class="sheet-header"><h1>🪙 Loja 🪙</h1><div class="header-deco">— Equipamentos &amp; Mercadorias —</div></div>
   <div class="loja-cats">
-    <div class="loja-cat-card" id="cat-btn-protecoes" onclick="toggleCat('protecoes')"><div class="loja-cat-icon">🛡</div><div class="loja-cat-title">Proteções</div><div class="loja-cat-sub">Capacetes, Peitorais<br>Calças, Botas, Luvas</div><span class="loja-cat-arrow">▼</span></div>
+    <div class="loja-cat-card" id="cat-btn-protecoes" onclick="toggleCat('protecoes')"><div class="loja-cat-icon">🛡</div><div class="loja-cat-title">Proteções</div><div class="loja-cat-sub">Capacetes, Luvas<br>Peitorais, etc.</div><span class="loja-cat-arrow">▼</span></div>
     <div class="loja-cat-card" id="cat-btn-armas" onclick="toggleCat('armas')"><div class="loja-cat-icon">⚔</div><div class="loja-cat-title">Armas</div><div class="loja-cat-sub">Corpo a corpo<br>À distância</div><span class="loja-cat-arrow">▼</span></div>
     <div class="loja-cat-card" id="cat-btn-utilitarios" onclick="toggleCat('utilitarios')"><div class="loja-cat-icon">🧪</div><div class="loja-cat-title">Utilitários</div><div class="loja-cat-sub">Poções, Ferramentas</div><span class="loja-cat-arrow">▼</span></div>
     <div class="loja-cat-card" id="cat-btn-aprimoramentos" onclick="toggleCat('aprimoramentos')"><div class="loja-cat-icon">✨</div><div class="loja-cat-title">Aprimoramentos</div><div class="loja-cat-sub">Em breve</div><span class="loja-cat-arrow">▼</span></div>
   </div>
   <div id="loja-protecoes" class="loja-section"></div>
   <div id="loja-armas" class="loja-section"></div>
-  <div id="loja-utilitarios" class="loja-section"><div class="loja-section-title">🧪 Utilitários</div><div style="font-family:'Cinzel',serif;font-size:10px;color:var(--text-dim);letter-spacing:2px;padding:20px;text-align:center">EM BREVE</div></div>
-  <div id="loja-aprimoramentos" class="loja-section"><div class="loja-section-title">✨ Aprimoramentos</div><div style="font-family:'Cinzel',serif;font-size:10px;color:var(--text-dim);letter-spacing:2px;padding:20px;text-align:center">EM BREVE</div></div>
-  <div class="save-bar"><button class="save-btn" onclick="saveSheet()">⚑ Salvar</button><span class="save-msg" id="save-msg3">✓ Salvo</span></div>
+  <div id="loja-utilitarios" class="loja-section"><div class="loja-sec-title">🧪 Utilitários</div><div style="font-size:11px;color:var(--txt3);padding:16px;text-align:center">EM BREVE</div></div>
+  <div id="loja-aprimoramentos" class="loja-section"><div class="loja-sec-title">✨ Aprimoramentos</div><div style="font-size:11px;color:var(--txt3);padding:16px;text-align:center">EM BREVE</div></div>
+  <div class="save-bar"><button class="save-btn" onclick="saveSheet()">💾 Salvar</button><span class="save-msg" id="save-msg3">✓ Salvo</span></div>
 </div>
 </div>
+
+<!-- ÁRVORE -->
+<div class="page" id="page-arvore">
+<div class="sheet">
+  <div style="font-family:'Cinzel',serif;font-size:18px;font-weight:700;color:var(--gold);text-align:center;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)">🌳 Árvore de Habilidades</div>
+  <div class="skill-tree-layout" id="skill-tree-root"></div>
+  <div class="save-bar"><button class="save-btn" onclick="saveSheet()">💾 Salvar</button><span class="save-msg" id="save-msg4">✓ Salvo</span></div>
+</div>
+</div>
+
 <script>
+// ══ DATA ══
 const SKILLS={fisico:['Atletismo','Armas Brancas','Artes Marciais','Bloquear Físico','Destruir','Esquivar','Fortitude','Furtividade','Iniciativa','Prestidigitação','Resistir','Segurar'],intelecto:['Adestrar Animais','Arcanismo','Atuação','Charme','Conhecimento','Diplomacia','Dirigir','Intimidação','Intuição','Investigação','Línguas','Medicina','Mentiras','Natureza','Percepção','Pontaria','Sobrevivência','Tecnologia','Vontade'],poder:['Atacar','Adaptar','Bloquear Mágico','Detectar','Restaurar']};
 const SLOTS=['capacete','peitoral','luvas','calca','botas'];
 const SLOT_NAMES={capacete:'Capacete',peitoral:'Peitoral',luvas:'Luvas',calca:'Calça',botas:'Botas'};
 const SLOT_ICONS={capacete:'🪖',peitoral:'🛡',luvas:'🤜',calca:'🦵',botas:'🥾'};
+
 const ARMOR={
   capacete:[{name:'Capacete Parcial',defesa:2,pen:0,dur:1,price:2},{name:'Capacete Reduzido',defesa:3,pen:0,dur:1,price:4},{name:'Capacete Comum',defesa:4,pen:1,dur:2,price:8},{name:'Capacete Reforçado',defesa:5,pen:2,dur:2,price:12},{name:'Capacete Tático',defesa:6,pen:4,dur:3,price:16},{name:'Capacete Blindado',defesa:7,pen:6,dur:3,price:20}],
   peitoral:[{name:'Peitoral Parcial',defesa:3,pen:0,dur:1,price:6},{name:'Peitoral Reduzido',defesa:6,pen:0,dur:1,price:12},{name:'Peitoral Comum',defesa:7,pen:1,dur:2,price:24},{name:'Peitoral Reforçado',defesa:8,pen:2,dur:2,price:36},{name:'Peitoral Tático',defesa:9,pen:4,dur:3,price:48},{name:'Peitoral Blindado',defesa:10,pen:6,dur:3,price:60}],
@@ -449,7 +537,9 @@ const ARMOR={
   luvas:[{name:'Luvas Parciais',defesa:1,pen:0,dur:1,price:2},{name:'Luvas Reduzidas',defesa:2,pen:0,dur:1,price:4},{name:'Luvas Comuns',defesa:3,pen:1,dur:2,price:8},{name:'Luvas Reforçadas',defesa:4,pen:2,dur:2,price:12},{name:'Luvas Táticas',defesa:5,pen:4,dur:3,price:16},{name:'Luvas Blindadas',defesa:6,pen:6,dur:3,price:20}]
 };
 const ARMOR_CAT_NAMES={capacete:'Capacetes',peitoral:'Peitorais',calca:'Calças',botas:'Botas',luvas:'Luvas'};
-// isRanged: bow/gun category
+
+const GLOVES_AS_WEAPON_BASE={id:'luva_atk',name:'Luvas (Ataque)',danoS:'d6+FIS',danoDP:'—',crit:'20',critMul:2,critEff:'Atordoar',alcance:1,tipo:'Impacto',isRanged:false};
+
 const WEAPONS_BASE=[
   {id:'lamina',name:'Lâmina',danoS:'6',danoDP:'10',crit:'19',critMul:2,critEff:'Sangramento',alcance:1,tipo:'Cortante',weight:1,dur:1,price:8,isRanged:false},
   {id:'machado',name:'Machado',danoS:'6',danoDP:'10',crit:'19',critMul:3,critEff:'Decepar / Sangramento',alcance:1,tipo:'Cortante',weight:2,dur:2,price:10,isRanged:false},
@@ -459,8 +549,7 @@ const WEAPONS_BASE=[
   {id:'taco',name:'Taco',danoS:'6',danoDP:'10',crit:'20',critMul:3,critEff:'Atordoar',alcance:1,tipo:'Impacto',weight:1,dur:1,price:4,isRanged:false},
   {id:'chicote',name:'Chicote',danoS:'6',danoDP:'—',crit:'18',critMul:3,critEff:'Agarrar',alcance:3,tipo:'Cortante',weight:1,dur:1,price:10,isRanged:false},
   {id:'serra',name:'Serra',danoS:'8',danoDP:'14',crit:'17',critMul:2,critEff:'Decepar / Sangramento',alcance:1,tipo:'Cortante',weight:1,dur:1,price:10,isRanged:false},
-  {id:'escudo',name:'Escudo',danoS:'4',danoDP:'5',crit:'20',critMul:2,critEff:'Atordoamento',alcance:1,tipo:'Impacto',weight:0,dur:0,price:0,isRanged:false,isShield:true,
-    variants:[{name:'Escudo Comum',defesa:10,pen:1,weight:2,dur:2,price:8},{name:'Escudo Tático',defesa:15,pen:4,weight:3,dur:3,price:32},{name:'Escudo Blindado',defesa:20,pen:6,weight:3,dur:3,price:40}]},
+  {id:'escudo',name:'Escudo',danoS:'4',danoDP:'5',crit:'20',critMul:2,critEff:'Atordoamento',alcance:1,tipo:'Impacto',weight:0,dur:0,price:0,isRanged:false,isShield:true,variants:[{name:'Escudo Comum',defesa:10,pen:1,weight:2,dur:2,price:8},{name:'Escudo Tático',defesa:15,pen:4,weight:3,dur:3,price:32},{name:'Escudo Blindado',defesa:20,pen:6,weight:3,dur:3,price:40}]},
   {id:'arco',name:'Arco e Flecha',danoS:'—',danoDP:'12',crit:'19',critMul:2,critEff:'Perfurar',alcance:36,tipo:'Perfurante',weight:1,dur:1,price:8,isRanged:true},
   {id:'besta',name:'Besta',danoS:'—',danoDP:'12',crit:'18',critMul:2,critEff:'Perfurar',alcance:18,tipo:'Perfurante',weight:2,dur:2,price:10,isRanged:true},
   {id:'revolver',name:'Revólver',danoS:'10',danoDP:'—',crit:'18',critMul:2,critEff:'Perfurar',alcance:36,tipo:'Perfurante',weight:1,dur:1,price:12,isRanged:true},
@@ -470,47 +559,65 @@ const WEAPONS_BASE=[
   {id:'lancador',name:'Lançador',danoS:'—',danoDP:'16',crit:'20',critMul:4,critEff:'Perfurar',alcance:54,tipo:'Perfurante',weight:3,dur:3,price:16,isRanged:true}
 ];
 
-// Customization options
-const CUSTOM_CARACTERISTICA=[
-  {id:'none',name:'Nenhuma',mod:0},
-  {id:'leve',name:'Leve (−0.2)',mod:-0.2},
-  {id:'pesada',name:'Pesada (+1.0)',mod:1.0},
-  {id:'rapida',name:'Rápida (+0.3)',mod:0.3},
-  {id:'lenta',name:'Lenta (−0.1)',mod:-0.1},
-  {id:'pequena',name:'Pequena (+0.2)',mod:0.2},
-  {id:'grande',name:'Grande (+0.5)',mod:0.5}
+const CUSTOM_CAR=[{id:'none',name:'Nenhuma',mod:0},{id:'leve',name:'Leve (−0.2)',mod:-0.2},{id:'pesada',name:'Pesada (+1.0)',mod:1.0},{id:'rapida',name:'Rápida (+0.3)',mod:0.3},{id:'lenta',name:'Lenta (−0.1)',mod:-0.1},{id:'pequena',name:'Pequena (+0.2)',mod:0.2},{id:'grande',name:'Grande (+0.5)',mod:0.5}];
+const CUSTOM_MAN=[{id:'versatil',name:'Versátil (+0)',mod:0},{id:'duas_maos',name:'Duas Mãos (+0)',mod:0},{id:'acoplada',name:'Acoplada (+0.2)',mod:0.2}];
+const CUSTOM_REC_MELEE=[{id:'nenhuma',name:'Nenhuma',mod:0},{id:'arremessavel',name:'Arremessável (−0.1)',mod:-0.1}];
+const CUSTOM_REC_RANGED=[{id:'municao',name:'Munição (+0)',mod:0}];
+const CUSTOM_TEC=[{id:'none',name:'Nenhuma',mod:0},{id:'energizada',name:'Energizada (+0.3)',mod:0.3},{id:'carregar',name:'Carregar (+0.7)',mod:0.7},{id:'polarizado',name:'Polarizado (+1.0)',mod:1.0}];
+const CUSTOM_MAT=[{id:'none',name:'Nenhum',mod:0},{id:'reforcado',name:'Reforçado (+1.5)',mod:1.5},{id:'composto',name:'Composto (+1.0)',mod:1.0},{id:'fraco',name:'Fraco (−0.2)',mod:-0.2},{id:'fragil',name:'Frágil (−0.1)',mod:-0.1}];
+const ARMOR_CUSTOM_CAR=[{id:'none',name:'Nenhuma',mod:0},{id:'leve',name:'Leve (−0.2)',mod:-0.2},{id:'pesada',name:'Pesada (+1.0)',mod:1.0},{id:'rapida',name:'Rápida (+0.3)',mod:0.3},{id:'lenta',name:'Lenta (−0.1)',mod:-0.1},{id:'pequena',name:'Pequena (+0.2)',mod:0.2},{id:'grande',name:'Grande (+0.5)',mod:0.5}];
+const ARMOR_CUSTOM_MAN=[{id:'versatil',name:'Versátil (+0)',mod:0},{id:'duas_maos',name:'Duas Mãos (+0)',mod:0},{id:'acoplada',name:'Acoplada (+0.2)',mod:0.2}];
+const ARMOR_CUSTOM_TEC=[{id:'none',name:'Nenhuma',mod:0},{id:'energizada',name:'Energizada (+0.3)',mod:0.3},{id:'carregar',name:'Carregar (+0.7)',mod:0.7},{id:'polarizado',name:'Polarizado (+1.0)',mod:1.0}];
+const ARMOR_CUSTOM_MAT=[{id:'none',name:'Nenhum',mod:0},{id:'reforcado',name:'Reforçado (+1.5)',mod:1.5},{id:'composto',name:'Composto (+1.0)',mod:1.0},{id:'fraco',name:'Fraco (−0.2)',mod:-0.2},{id:'fragil',name:'Frágil (−0.1)',mod:-0.1}];
+
+// SKILL TREE DATA — sem links de homebrew
+const SKILL_TREE=[
+  {id:'batedor',name:'O Batedor',paths:[{name:'Caminho da Mão Nua'},{name:'Trilha do Armado'},{name:'Módulo do Atirador'},{name:'Passo do Assassino'},{name:'Técnicas de Suporte'},{name:'Fúria'}]},
+  {id:'especialista',name:'O Especialista',paths:[{name:'Fomento Corporal',hasFCTree:true},{name:'Acrobata'},{name:'Medicina'}]},
+  {id:'arcanista',name:'O Arcanista',paths:[{name:'Círculo do Espírito'},{name:'Círculo dos Elementos'},{name:'Círculo do Corpo'}]}
 ];
-const CUSTOM_MANUSEIO=[
-  {id:'versatil',name:'Versátil (+0)',mod:0},
-  {id:'duas_maos',name:'Duas Mãos (+0)',mod:0},
-  {id:'acoplada',name:'Acoplada (+0.2)',mod:0.2}
+
+// FOMENTO CORPORAL TREE DATA
+const FC_NODES=[
+  {id:'fomento',name:'Fomento Corporal',grade:1,maxLevels:1,stars:false,levels:[
+    {n:1,txt:'Você ganha Maestria em Perícia: Fortitude, Perícia: Vontade ou Perícia: Resistir.'}
+  ]},
+  {id:'vitalidade',name:'Vitalidade',grade:3,maxLevels:2,stars:true,levels:[
+    {n:1,txt:'A cada nível que passa após obter esta habilidade, você ganha +2 PV.'},
+    {n:2,txt:'Você ganha um bônus de +2 em rolagens de teste com a Perícia: Fortitude.'}
+  ]},
+  {id:'cascagrossa',name:'Casca Grossa',grade:4,maxLevels:2,stars:true,levels:[
+    {n:1,txt:'Você pode adicionar o valor de seu Atributo: Físico em sua defesa. Além disso, ganha maestria em 2 propriedades de proteção a sua escolha.'},
+    {n:2,txt:'Quando você estiver com menos da metade dos seus PV totais, recebe um bônus de +5 em defesa. Este efeito acaba se você ficar com mais da metade dos seus PV totais.'}
+  ]},
+  {id:'determinacao',name:'Determinação',grade:3,maxLevels:2,stars:true,levels:[
+    {n:1,txt:'A cada nível que passa após obter esta habilidade, você ganha +2 PE.'},
+    {n:2,txt:'Você ganha um bônus de +2 em rolagens de teste com a Perícia: Vontade.'}
+  ]},
+  {id:'resistencia',name:'Resistência',grade:3,maxLevels:3,stars:true,levels:[
+    {n:1,txt:'Você ganha R1 em um tipo de dano a sua escolha.'},
+    {n:2,txt:'Você pode escolher entre: Ganhar R1 em um tipo de dano a sua escolha; ou Aumentar uma resistência já existente em 1 nível.'},
+    {n:3,txt:'Você pode escolher entre: Ganhar R1 em um tipo de dano a sua escolha; ou Aumentar uma resistência já existente em 1 nível.'}
+  ]}
 ];
-const CUSTOM_RECARGA_MELEE=[{id:'arremessavel',name:'Arremessável (−0.1)',mod:-0.1},{id:'nenhuma',name:'Nenhuma',mod:0}];
-const CUSTOM_RECARGA_RANGED=[{id:'municao',name:'Munição (+0)',mod:0}];
-const CUSTOM_TECNOLOGIA=[
-  {id:'none',name:'Nenhuma',mod:0},
-  {id:'energizada',name:'Energizada (+0.3)',mod:0.3},
-  {id:'carregar',name:'Carregar (+0.7)',mod:0.7},
-  {id:'polarizado',name:'Polarizado (+1.0)',mod:1.0}
-];
-const CUSTOM_MATERIAL=[
-  {id:'none',name:'Nenhum',mod:0},
-  {id:'reforcado',name:'Reforçado (+1.5)',mod:1.5},
-  {id:'composto',name:'Composto (+1.0)',mod:1.0},
-  {id:'fraco',name:'Fraco (−0.2)',mod:-0.2},
-  {id:'fragil',name:'Frágil (−0.1)',mod:-0.1}
-];
+
+// tree layout: root -> [vitalidade, determinacao, resistencia] -> cascagrossa (from vitalidade)
+// fomento(root) -> vitalidade, determinacao, resistencia (all 3 branch from root)
+// vitalidade -> cascagrossa
 
 // State
 let inventory={capacete:[],peitoral:[],luvas:[],calca:[],botas:[],weapon:[]};
 let equipped={capacete:null,peitoral:null,luvas:null,calca:null,botas:null};
-let equippedWeapons={slot1:null,slot2:null}; // indices into inventory.weapon
+let equippedWeapons={slot1:null,slot2:null};
 let itemDamage={};
 let pendingAction=null;
-// Per-weapon customization state in the shop (reset each time shop opens)
 let shopWepCustom={};
+let shopArmorCustom={};
+let treeData={};
+let fcNodeLevels={}; // {nodeId: currentLevelCount}
+let fcActiveDesc=null;
 
-// SKILL BUILD
+// ── SKILL BUILD ──
 const hiddenState={fisico:true,intelecto:true,poder:true};
 function skId(a,n){return 'sk-'+a+'-'+n.replace(/\s+/g,'_').toLowerCase();}
 function mdId(a,n,i){return 'md-'+a+'-'+n.replace(/\s+/g,'_').toLowerCase()+'-'+i;}
@@ -520,20 +627,29 @@ function buildSkills(attr,names){
   const c=document.getElementById('skills-'+attr);
   names.forEach(name=>{
     const id=skId(attr,name);const row=document.createElement('div');row.className='skill-row hidden-sk';row.id='row-'+id;
-    row.innerHTML='<span class="skill-name">'+name+'</span><div class="maestria-dots"><div class="maestria-dot" id="'+mdId(attr,name,0)+'" onclick="toggleMaestria(\''+attr+'\',\''+name+'\',0)"></div><div class="maestria-dot" id="'+mdId(attr,name,1)+'" onclick="toggleMaestria(\''+attr+'\',\''+name+'\',1)"></div></div><input type="number" class="sk-inp" id="'+id+'" placeholder="0" min="0" oninput="onSkillInput(this,\''+attr+'\',\''+name+'\')"><input type="number" class="sk-bon" id="'+bnId(attr,name)+'" placeholder="0" oninput="calcTotal(\''+attr+'\',\''+name+'\')"><span class="sk-total" id="'+ttId(attr,name)+'">0</span>';
+    row.innerHTML='<span class="skill-name">'+name+'</span><div class="maestria-dots"><div class="maestria-dot" id="'+mdId(attr,name,0)+'" onclick="toggleMaestria(\''+attr+'\',\''+name+'\',0)"></div><div class="maestria-dot" id="'+mdId(attr,name,1)+'" onclick="toggleMaestria(\''+attr+'\',\''+name+'\',1)"></div></div><input type="number" class="sk-inp" id="'+id+'" placeholder="0" min="0" oninput="onSkillInput(this,\''+attr+'\',\''+name+'\')"><div id="'+bnId(attr,name)+'-wrap"><input type="number" class="sk-bon" id="'+bnId(attr,name)+'" placeholder="0" oninput="calcTotal(\''+attr+'\',\''+name+'\')"></div><span class="sk-total" id="'+ttId(attr,name)+'">0</span>';
     c.appendChild(row);
   });
 }
 Object.entries(SKILLS).forEach(([a,n])=>buildSkills(a,n));
-function calcTotal(a,n){const p=parseInt(document.getElementById(skId(a,n)).value)||0;const b=parseInt(document.getElementById(bnId(a,n)).value)||0;document.getElementById(ttId(a,n)).textContent=p+b;}
-function toggleMaestria(a,n,i){document.getElementById(mdId(a,n,i)).classList.toggle('filled');autoSave();}
+
+function hasDualMaestria(attr,name){return document.getElementById(mdId(attr,name,0))?.classList.contains('filled')&&document.getElementById(mdId(attr,name,1))?.classList.contains('filled');}
+function calcTotal(attr,name){
+  const per=parseInt(document.getElementById(skId(attr,name)).value)||0;
+  const bonWrap=document.getElementById(bnId(attr,name)+'-wrap');
+  const dual=hasDualMaestria(attr,name);
+  if(dual){bonWrap.innerHTML='<div class="sk-bon-d4">+d4</div>';}
+  else{if(!bonWrap.querySelector('.sk-bon'))bonWrap.innerHTML='<input type="number" class="sk-bon" id="'+bnId(attr,name)+'" placeholder="0" oninput="calcTotal(\''+attr+'\',\''+name+'\')">';}
+  const bon=dual?0:(parseInt(document.getElementById(bnId(attr,name))?.value)||0);
+  document.getElementById(ttId(attr,name)).textContent=dual?(per+'+d4'):per+bon;
+  autoSave();
+}
+function toggleMaestria(attr,name,idx){document.getElementById(mdId(attr,name,idx)).classList.toggle('filled');calcTotal(attr,name);autoSave();}
 function updateSkillVisibility(attr){
   let hc=0;SKILLS[attr].forEach(name=>{const p=parseInt(document.getElementById(skId(attr,name)).value)||0;const r=document.getElementById('row-'+skId(attr,name));const v=p>0||!hiddenState[attr];r.classList.toggle('hidden-sk',!v);if(p===0)hc++;});
   const sm=document.getElementById('sm-'+attr);if(hc>0){sm.classList.add('show');sm.textContent=hiddenState[attr]?'▼ Saiba mais ('+hc+' ocultas)':'▲ Ocultar zeradas';}else sm.classList.remove('show');
 }
 function toggleHidden(attr){hiddenState[attr]=!hiddenState[attr];updateSkillVisibility(attr);}
-
-// OFFICIAL
 function isOfficial(){return document.getElementById('chk-official').checked;}
 function skPtsBudget(){const lvl=Math.max(1,parseInt(document.getElementById('f-nivel').value)||1);return 60+(lvl-1)*2;}
 function totalSkUsed(){let t=0;Object.entries(SKILLS).forEach(([a,ns])=>ns.forEach(n=>{t+=Math.max(0,parseInt(document.getElementById(skId(a,n)).value)||0);}));return t;}
@@ -544,40 +660,60 @@ function onAttrChange(attr){updateAttrPtsLeft();validateSkills(attr);autoSave();
 function onLevelChange(){updateSkPtsLeft();['fisico','intelecto','poder'].forEach(a=>validateSkills(a));autoSave();}
 function onSkillInput(el,attr,name){const cap=parseInt(document.getElementById('atr-'+attr).value)||0;const v=parseInt(el.value)||0;el.classList.toggle('overlimit',(cap>0&&v>cap)||(isOfficial()&&v>60));calcTotal(attr,name);refreshWarn(attr);updateSkPtsLeft();updateSkillVisibility(attr);autoSave();}
 function validateSkills(attr){const cap=parseInt(document.getElementById('atr-'+attr).value)||0;SKILLS[attr].forEach(name=>{const el=document.getElementById(skId(attr,name));if(!el)return;const v=parseInt(el.value)||0;el.classList.toggle('overlimit',(cap>0&&v>cap)||(isOfficial()&&v>60));calcTotal(attr,name);});refreshWarn(attr);updateSkPtsLeft();updateSkillVisibility(attr);}
-function refreshWarn(attr){const any=SKILLS[attr].some(n=>document.getElementById(skId(attr,n))?.classList.contains('overlimit'));document.getElementById('warn-'+attr).textContent=any?'⚠ Perícia excede o limite':'';}
+function refreshWarn(attr){const any=SKILLS[attr].some(n=>document.getElementById(skId(attr,n))?.classList.contains('overlimit'));document.getElementById('warn-'+attr).textContent=any?'⚠ Alguma perícia excede o limite':'';}
 
 // HP/PE
-function updateHP(){const max=Math.max(0,parseInt(document.getElementById('f-hpmax').value)||0);const dano=Math.max(0,parseInt(document.getElementById('f-hpdano').value)||0);const cur=max>0?Math.max(0,max-dano):0;document.getElementById('f-hpatual').value=max>0?cur:'';const pct=max>0?Math.min(100,Math.round(cur/max*100)):0;const bar=document.getElementById('bar-hp');bar.style.width=pct+'%';bar.style.background=pct>50?'#2e7d32':pct>25?'#e65100':'#c0392b';document.getElementById('bar-hp-lbl').textContent=max>0?cur+' / '+max:'— / —';autoSave();}
-function updatePE(){const max=Math.max(0,parseInt(document.getElementById('f-pemax').value)||0);const gasto=Math.max(0,parseInt(document.getElementById('f-pegasto').value)||0);const usos0=Math.max(0,parseInt(document.getElementById('f-usos0').value)||0);const cur=max>0?Math.max(0,max-gasto):0;document.getElementById('f-peatual').value=max>0?cur:'';const pct=max>0?cur/max*100:101;const bpct=max>0?Math.min(100,Math.round(pct)):0;const bar=document.getElementById('bar-pe');bar.style.width=bpct+'%';bar.style.background=bpct>50?'#1565c0':bpct>25?'#6a1fa0':'#7b1fa2';document.getElementById('bar-pe-lbl').textContent=max>0?cur+' / '+max:'— / —';let exh=0;if(max>0){if(cur===0)exh=3;else if(pct<=25)exh=2;else if(pct<=50)exh=1;}exh+=usos0;const ev=document.getElementById('exh-val');ev.textContent=exh;ev.style.color=exh===0?'var(--gold)':exh===1?'#e8b85a':exh<=3?'#c0392b':'#ff4444';const lbls=[['Descansado','PE acima de 50%'],['Cansado','PE em 50% ou menos'],['Exausto','PE em 25% ou menos'],['No limite','PE zerado']];const[title,sub]=usos0>0?['Além do Limite',usos0+' uso(s) após o 0']:lbls[Math.min(3,exh)];document.getElementById('exh-desc').innerHTML='<strong>'+title+'</strong><br>'+sub;autoSave();}
-function updateWeight(){let w=0;inventory.weapon.forEach((it,i)=>{const dk='weapon__'+i;const dmg=itemDamage[dk]||0;if(dmg<(it.dur||1))w+=it.weight||0;});const pct=Math.min(100,Math.round(w/10*100));document.getElementById('weight-display').textContent=w+' / 10';const bar=document.getElementById('weight-bar');bar.style.width=pct+'%';bar.style.background=pct>80?'#c0392b':pct>50?'#e65100':'var(--gold)';}
+function updateHP(){
+  const max=Math.max(0,parseInt(document.getElementById('f-hpmax').value)||0);
+  const temp=Math.max(0,parseInt(document.getElementById('f-hptemp').value)||0);
+  const dano=Math.max(0,parseInt(document.getElementById('f-hpdano').value)||0);
+  const maxTotal=max+temp;const cur=maxTotal>0?Math.max(0,maxTotal-dano):0;
+  document.getElementById('f-hpatual').value=maxTotal>0?cur:'';
+  document.getElementById('hp-max-display').textContent=maxTotal>0?maxTotal:'—';
+  const pct=maxTotal>0?Math.min(100,Math.round(cur/maxTotal*100)):0;
+  const bar=document.getElementById('bar-hp');bar.style.width=pct+'%';bar.style.background=pct>50?'#3d8a3d':pct>25?'#c07020':'var(--hp-red)';
+  autoSave();
+}
+function updatePE(){
+  const max=Math.max(0,parseInt(document.getElementById('f-pemax').value)||0);
+  const temp=Math.max(0,parseInt(document.getElementById('f-petemp').value)||0);
+  const gasto=Math.max(0,parseInt(document.getElementById('f-pegasto').value)||0);
+  const usos0=Math.max(0,parseInt(document.getElementById('f-usos0').value)||0);
+  const maxTotal=max+temp;const cur=maxTotal>0?Math.max(0,maxTotal-gasto):0;
+  document.getElementById('f-peatual').value=maxTotal>0?cur:'';
+  document.getElementById('pe-max-display').textContent=maxTotal>0?maxTotal:'—';
+  const pct=maxTotal>0?cur/maxTotal*100:101;
+  const bpct=maxTotal>0?Math.min(100,Math.round(pct)):0;
+  const bar=document.getElementById('bar-pe');bar.style.width=bpct+'%';bar.style.background=bpct>50?'#1565c0':bpct>25?'#6a1fa0':'#7b1fa2';
+  let exh=0;if(maxTotal>0){if(cur===0)exh=3;else if(pct<=25)exh=2;else if(pct<=50)exh=1;}exh+=usos0;
+  const ev=document.getElementById('exh-val');ev.textContent=exh;ev.style.color=exh===0?'var(--green2)':exh===1?'var(--gold)':exh<=3?'var(--red3)':'#ff4444';
+  const lbls=[['Descansado','PE acima de 50%'],['Cansado','PE em 50% ou menos'],['Exausto','PE em 25% ou menos'],['No limite','PE zerado']];
+  const[title,sub]=usos0>0?['Além do Limite',usos0+' uso(s) após o 0']:lbls[Math.min(3,exh)];
+  document.getElementById('exh-label').textContent=title;document.getElementById('exh-sub').textContent=sub;
+  autoSave();
+}
+function updateWeight(){let w=0;inventory.weapon.forEach((it,i)=>{const dk='weapon__'+i;const dmg=itemDamage[dk]||0;if(dmg<(it.dur||1))w+=it.weight||0;});const pct=Math.min(100,Math.round(w/10*100));document.getElementById('weight-display').textContent=w+'/10';document.getElementById('weight-bar').style.width=pct+'%';document.getElementById('weight-bar').style.background=pct>80?'var(--red)':pct>60?'#c07020':'var(--gold)';}
 function recalcCombat(){let def=0,pen=0;SLOTS.forEach(s=>{const eq=equipped[s];if(eq){def+=eq.defesa||0;pen+=eq.pen||0;}});document.getElementById('f-defesa').value=def||'';document.getElementById('f-penalidade').value=pen||'';document.getElementById('defesa-detail').textContent='armadura: +'+def;document.getElementById('penalidade-detail').textContent='armadura: '+pen;}
 function changeLevel(d){const el=document.getElementById('f-nivel');el.value=Math.max(1,Math.min(99,(parseInt(el.value)||1)+d));onLevelChange();}
 function loadPhoto(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{const img=document.getElementById('char-img');img.src=ev.target.result;img.style.display='block';document.getElementById('photo-ph').style.display='none';try{localStorage.setItem('rpg-photo',ev.target.result);}catch(_){}};r.readAsDataURL(f);}
-
-// ── WEAPON EQUIPPED DISPLAY (ficha page) ──
 function renderFichaWeapons(){
-  const w1=equippedWeapons.slot1!==null?inventory.weapon[equippedWeapons.slot1]:null;
-  const w2=equippedWeapons.slot2!==null?inventory.weapon[equippedWeapons.slot2]:null;
-  function wepHtml(w){if(!w)return '<div class="eq-wep-empty">Nenhuma arma equipada</div>';return '<div class="eq-wep-name">'+w.displayName+'</div><div class="eq-wep-stats">Dano S: <span>'+w.danoS+'</span> &nbsp;|&nbsp; Dano DP: <span>'+w.danoDP+'</span> &nbsp;|&nbsp; Crítico: <span>'+w.crit+'x'+w.critMul+'</span> ('+w.critEff+')<br>Alcance: <span>'+w.alcance+'m</span> &nbsp;|&nbsp; Tipo: <span>'+w.tipo+'</span> &nbsp;|&nbsp; Manuseio: <span>'+w.manuseio+'</span></div>';}
-  document.getElementById('ficha-wep1-content').innerHTML=wepHtml(w1);
-  document.getElementById('ficha-wep2-content').innerHTML=wepHtml(w2);
+  const w1=equippedWeapons.slot1!==null&&equippedWeapons.slot1<inventory.weapon.length?inventory.weapon[equippedWeapons.slot1]:null;
+  const w2=equippedWeapons.slot2!==null&&equippedWeapons.slot2<inventory.weapon.length?inventory.weapon[equippedWeapons.slot2]:null;
+  function wHtml(w){if(!w)return '<div class="eq-wep-empty">Nenhuma arma equipada</div>';return '<div class="eq-wep-name">'+w.displayName+'</div><div class="eq-wep-stats">Dano S: <b>'+w.danoS+'</b> &nbsp;Dano DP: <b>'+w.danoDP+'</b><br>Crítico: <b>'+w.crit+'x'+w.critMul+'</b> ('+w.critEff+')<br>Alcance: <b>'+w.alcance+'m</b> &nbsp;Tipo: <b>'+w.tipo+'</b><br>Manuseio: <b>'+w.manuseio+'</b>'+(w.customTags&&w.customTags.length?' &nbsp;['+w.customTags.join(', ')+']':'')+'</div>';}
+  document.getElementById('ficha-wep1-content').innerHTML=wHtml(w1);
+  document.getElementById('ficha-wep2-content').innerHTML=wHtml(w2);
 }
-
-// ── EQUIP PAGE TABS ──
-function switchEquipTab(tab){
+function switchEquipTab(tab,btn){
   document.querySelectorAll('.equip-tab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.equip-panel').forEach(p=>p.classList.remove('active'));
-  event.target.classList.add('active');
-  document.getElementById('equip-panel-'+tab).classList.add('active');
-  if(tab==='armas')renderWeaponInvPanel();
-  if(tab==='armadura')renderSlotsPanel();
+  btn.classList.add('active');document.getElementById('equip-panel-'+tab).classList.add('active');
+  if(tab==='armas')renderWeaponInvPanel();if(tab==='armadura')renderSlotsPanel();
 }
-
-// ── ARMADURA PANEL ──
 function dKey(slot,name){return slot+'__'+name.replace(/\s/g,'_');}
 function scrollToSlot(slot){
   showPage('equip');
-  switchEquipTab('armadura');
+  document.querySelectorAll('.equip-tab').forEach((t,i)=>{if(i===0)t.classList.add('active');else t.classList.remove('active');});
+  document.querySelectorAll('.equip-panel').forEach((p,i)=>{if(i===0)p.classList.add('active');else p.classList.remove('active');});
   setTimeout(()=>{const el=document.getElementById('slot-card-'+slot);if(el)el.scrollIntoView({behavior:'smooth',block:'center'});},150);
 }
 function renderSlotsPanel(){
@@ -585,70 +721,76 @@ function renderSlotsPanel(){
   SLOTS.forEach(slot=>{
     const eq=equipped[slot];const inv=inventory[slot]||[];
     const card=document.createElement('div');card.className='slot-card';card.id='slot-card-'+slot;
-    let html='<div class="slot-card-hdr"><span class="slot-card-name">'+SLOT_ICONS[slot]+' '+SLOT_NAMES[slot]+'</span>'+(eq?'<span style="font-family:Cinzel,serif;font-size:9px;color:var(--gold)">+'+eq.defesa+'DEF'+(eq.pen>0?' −'+eq.pen+'PEN':'')+'</span>':'')+'</div>';
-    html+='<div class="slot-eq-info'+(eq?' has-item':'')+'>'+(eq?eq.name:'Nenhum item equipado')+'</div>';
+    let html='<div class="slot-card-hdr"><span class="slot-card-name">'+SLOT_ICONS[slot]+' '+SLOT_NAMES[slot]+'</span>'+(eq?'<span style="font-size:10px;color:var(--gold);font-weight:600">+'+eq.defesa+'DEF'+(eq.pen>0?' −'+eq.pen+'PEN':'')+'</span>':'')+'</div>';
+    html+='<div class="slot-eq-info'+(eq?' has-item':'')+'>'+(eq?eq.displayName||eq.name:'Nenhum item equipado')+'</div>';
     if(eq){
       const dk=dKey(slot,eq.name);const dmg=itemDamage[dk]||0;const maxDur=eq.dur||1;const broken=dmg>=maxDur;
       let dots='';for(let i=0;i<maxDur;i++)dots+='<div class="dur-dot'+(i<dmg?' dmg':'')+'"></div>';
-      html+='<div class="dur-row"><span class="dur-lbl">Durabilidade:</span><div class="dur-dots">'+dots+'</div>';
-      if(!broken)html+='<button class="destroy-btn" onclick="applyDestroy(\''+slot+'\',\''+eq.name+'\','+maxDur+','+eq.price+')">💥 Destruir</button>';
-      if(broken)html+='<button class="repair-btn" onclick="repairArmor(\''+slot+'\',\''+eq.name+'\','+eq.price+')">🔧 Reparar ('+Math.ceil(eq.price/2)+'🪙)</button>';
-      html+='<button class="remove-btn" onclick="unequipSlot(\''+slot+'\')">Tirar</button></div>';
+      html+='<div class="dur-row"><span class="dur-lbl">Dur:</span><div class="dur-dots">'+dots+'</div>';
+      if(!broken)html+='<button class="btn btn-red" onclick="applyDestroy(\''+slot+'\',\''+eq.name+'\','+maxDur+','+eq.price+')">💥</button>';
+      if(broken)html+='<button class="btn btn-green" onclick="repairArmor(\''+slot+'\',\''+eq.name+'\','+eq.price+')">🔧 '+Math.ceil(eq.price/2)+'🪙</button>';
+      html+='<button class="btn btn-gray" onclick="unequipSlot(\''+slot+'\')">Tirar</button></div>';
+      if(slot==='luvas'&&!broken){html+='<button class="btn btn-gold" style="margin-top:5px;width:100%" onclick="equipGlovesAsWeapon()">⚔ Usar como Arma (d6+FIS)</button>';}
     }
     if(inv.length>0){
-      html+='<div style="margin-top:7px;font-family:Cinzel,serif;font-size:8px;color:var(--text-dim);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px">Itens disponíveis</div>';
+      html+='<div style="margin-top:6px;font-size:9px;color:var(--txt3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Inventário</div>';
       inv.forEach((item,idx)=>{
         const isEq=eq&&eq.name===item.name;const dk=dKey(slot,item.name);const dmg=itemDamage[dk]||0;const broken=dmg>=(item.dur||1);
-        html+='<div class="inv-item-row'+(isEq?' eq-row':'')+'"><span class="inv-item-name" style="color:'+(broken?'var(--text-dim)':isEq?'var(--gold-light)':'var(--text-main)')+'">'+item.name+(isEq?' ✓':'')+(broken?' 💔':'')+'</span><span class="inv-item-stats">+'+item.defesa+'DEF'+(item.pen>0?' −'+item.pen+'PEN':'')+'</span>';
-        if(!broken&&!isEq)html+='<button class="action-btn" onclick="equipItem(\''+slot+'\','+idx+')">Vestir</button>';
-        if(broken)html+='<button class="repair-btn" onclick="repairArmor(\''+slot+'\',\''+item.name+'\','+item.price+')">🔧 '+Math.ceil(item.price/2)+'🪙</button>';
-        html+='<button class="delete-btn" onclick="deleteArmorItem(\''+slot+'\','+idx+')">🗑</button>';
-        html+='</div>';
+        html+='<div class="inv-item-row'+(isEq?' eq-row':'')+'"><span class="inv-item-name" style="color:'+(broken?'var(--txt3)':isEq?'var(--gold)':'var(--txt)')+'">'+((item.displayName||item.name)+(isEq?' ✓':'')+(broken?' 💔':''))+'</span>';
+        if(!broken&&!isEq)html+='<button class="btn btn-gold" onclick="equipItem(\''+slot+'\','+idx+')">Vestir</button>';
+        if(broken)html+='<button class="btn btn-green" onclick="repairArmor(\''+slot+'\',\''+item.name+'\','+item.price+')">🔧 '+Math.ceil(item.price/2)+'🪙</button>';
+        html+='<button class="btn btn-delete" onclick="deleteArmorItem(\''+slot+'\','+idx+')">🗑</button></div>';
       });
     }
     card.innerHTML=html;panel.appendChild(card);
   });
-  SLOTS.forEach(s=>{document.getElementById('mslot-'+s).classList.toggle('equipped',!!equipped[s]);const t=document.getElementById('stag-'+s);if(t)t.textContent=equipped[s]?equipped[s].name.substring(0,14):'';});
+  SLOTS.forEach(s=>{document.getElementById('mslot-'+s).classList.toggle('equipped',!!equipped[s]);const t=document.getElementById('stag-'+s);if(t)t.textContent=equipped[s]?(equipped[s].displayName||equipped[s].name).substring(0,14):'';});
 }
 function equipItem(slot,idx){equipped[slot]=JSON.parse(JSON.stringify(inventory[slot][idx]));renderSlotsPanel();recalcCombat();autoSave();}
 function unequipSlot(slot){equipped[slot]=null;renderSlotsPanel();recalcCombat();autoSave();}
 function applyDestroy(slot,itemName,maxDur,price){const dk=dKey(slot,itemName);const cur=itemDamage[dk]||0;if(cur>=maxDur){showToast('Item já destruído!');return;}itemDamage[dk]=cur+1;if(itemDamage[dk]>=maxDur){if(equipped[slot]&&equipped[slot].name===itemName){equipped[slot]=null;recalcCombat();}showToast('💔 Item destruído!');}else{showToast('💥 Destruir: '+itemDamage[dk]+'/'+maxDur);}renderSlotsPanel();autoSave();}
-function repairArmor(slot,itemName,origPrice){const cost=Math.ceil(origPrice/2);const money=parseInt(document.getElementById('f-money').value)||0;if(money<cost){showToast('Dinheiro insuficiente para reparar! ('+cost+'🪙)');return;}pendingAction={type:'repair',slot,itemName,cost};showModal('🔧 Reparar','Reparar <strong>'+itemName+'</strong> por <strong>'+cost+' 🪙</strong>?','Reparar');}
-function deleteArmorItem(slot,idx){const item=inventory[slot][idx];pendingAction={type:'deleteArmor',slot,idx,itemName:item.name};showModal('🗑 Excluir Item','Excluir <strong>'+item.name+'</strong> do inventário? Esta ação não pode ser desfeita.','Excluir');}
-
-// ── WEAPON INVENTORY PANEL ──
+function repairArmor(slot,itemName,origPrice){const cost=Math.ceil(origPrice/2);const money=parseInt(document.getElementById('f-money').value)||0;pendingAction={type:'repair',slot,itemName,cost};showModal('🔧 Reparar','Reparar <strong>'+itemName+'</strong> por <strong>'+cost+' 🪙</strong>?<br><small style="color:var(--txt2)">Dinheiro atual: '+money+'🪙</small>','Reparar');}
+function deleteArmorItem(slot,idx){const item=inventory[slot][idx];pendingAction={type:'deleteArmor',slot,idx,itemName:item.displayName||item.name};showModal('🗑 Excluir','Excluir <strong>'+(item.displayName||item.name)+'</strong>?','Excluir');}
+function equipGlovesAsWeapon(){
+  const eq=equipped.luvas;if(!eq)return;
+  const obj={...GLOVES_AS_WEAPON_BASE,displayName:'Luvas: '+(eq.displayName||eq.name),manuseio:'Versátil',customTags:['Mão Nua','d6+FIS'],dur:eq.dur,weight:0,price:eq.price,finalPrice:eq.price,isGloveWeapon:true};
+  inventory.weapon.push(obj);renderWeaponInvPanel();updateWeight();showToast('⚔ Luvas adicionadas como arma!');autoSave();
+}
 function renderWeaponInvPanel(){
   const panel=document.getElementById('weapon-inv-panel');
-  if(inventory.weapon.length===0){panel.innerHTML='<div style="font-family:Cinzel,serif;font-size:10px;color:var(--text-dim);letter-spacing:2px;padding:20px;text-align:center">Nenhuma arma no inventário</div>';return;}
+  if(inventory.weapon.length===0){panel.innerHTML='<div style="font-size:11px;color:var(--txt3);padding:20px;text-align:center">Nenhuma arma no inventário</div>';return;}
   let html='';
   inventory.weapon.forEach((w,idx)=>{
     const dk='weapon__'+idx;const dmg=itemDamage[dk]||0;const broken=dmg>=(w.dur||1);
     const isSlot1=equippedWeapons.slot1===idx;const isSlot2=equippedWeapons.slot2===idx;
     const manuseio=w.manuseio||'Versátil';
-    const canEquip1=!broken&&!isSlot1&&!isSlot2;
-    const canEquip2=!broken&&!isSlot2&&!isSlot1&&(manuseio==='Versátil');
-    let dots='';for(let i=0;i<(w.dur||1);i++)dots+='<span style="display:inline-block;width:9px;height:9px;border-radius:2px;border:1.5px solid '+(i<dmg?'var(--red-bright)':'#2e7d32')+';background:'+(i<dmg?'var(--red-bright)':'#2e7d32')+';margin-right:3px"></span>';
-    html+='<div class="weapon-inv-card"><div class="weapon-inv-name"><span>'+w.displayName+'</span><div style="display:flex;gap:5px;align-items:center">'+dots+(broken?'<span style="font-family:Cinzel,serif;font-size:8px;color:var(--red-bright)">DESTRUÍDA</span>':'')+'</div></div>';
-    html+='<div class="weapon-inv-stats">Dano S: <span>'+w.danoS+'</span> &nbsp;|&nbsp; Dano DP: <span>'+w.danoDP+'</span> &nbsp;|&nbsp; Crítico: <span>'+w.crit+'x'+w.critMul+'</span> ('+w.critEff+')<br>Alcance: <span>'+w.alcance+'m</span> &nbsp;|&nbsp; Tipo: <span>'+w.tipo+'</span> &nbsp;|&nbsp; Peso: <span>'+w.weight+'</span> &nbsp;|&nbsp; Manuseio: <span>'+manuseio+'</span>';
-    if(w.customTags&&w.customTags.length)html+='<br>Propriedades: <span>'+w.customTags.join(', ')+'</span>';
-    html+='</div>';
-    html+='<div class="weapon-slot-row"><span class="weapon-slot-lbl">Equipar:</span>';
-    if(isSlot1)html+='<span class="weapon-equipped-badge wep-equipped1">✓ Mão 1</span><button class="remove-btn" onclick="unequipWeapon(1)">Tirar</button>';
-    else if(isSlot2)html+='<span class="weapon-equipped-badge wep-equipped2">✓ Mão 2</span><button class="remove-btn" onclick="unequipWeapon(2)">Tirar</button>';
-    else{
-      if(!broken){
-        if(manuseio==='Duas mãos'||manuseio==='Grande'){
-          const occupying=equippedWeapons.slot1!==null||equippedWeapons.slot2!==null;
-          if(!occupying)html+='<button class="action-btn" onclick="equipWeapon('+idx+',\'duas\')">Equipar (2 mãos)</button>';
-          else html+='<span style="font-family:Cinzel,serif;font-size:9px;color:var(--text-dim)">Desequipe outra arma primeiro</span>';
-        } else {
-          if(equippedWeapons.slot1===null)html+='<button class="action-btn" onclick="equipWeapon('+idx+',1)">Mão 1</button>';
-          if(equippedWeapons.slot2===null&&manuseio==='Versátil')html+='<button class="action-btn" onclick="equipWeapon('+idx+',2)">Mão 2</button>';
-        }
+    let dots='';for(let i=0;i<(w.dur||1);i++)dots+='<span style="display:inline-block;width:9px;height:9px;border-radius:2px;background:'+(i<dmg?'var(--red)':'var(--green)')+';margin-right:2px"></span>';
+    html+='<div class="weapon-inv-card">';
+    html+='<div class="weapon-inv-name"><span>'+w.displayName+(broken?' <span style="color:var(--red);font-size:10px">💔 DESTRUÍDA</span>':'')+'</span><div>'+dots+'</div></div>';
+    html+='<div class="weapon-inv-stats">Dano S: <b>'+w.danoS+'</b> &nbsp;DP: <b>'+w.danoDP+'</b> &nbsp;Crit: <b>'+w.crit+'x'+w.critMul+'</b> ('+w.critEff+')<br>Alcance: <b>'+w.alcance+'m</b> &nbsp;Tipo: <b>'+w.tipo+'</b> &nbsp;Manuseio: <b>'+manuseio+'</b>'+(w.customTags&&w.customTags.length?'<br>Propriedades: <b>'+w.customTags.join(', ')+'</b>':'')+'</div>';
+    html+='<div class="weapon-slot-row"><span style="font-size:9px;color:var(--txt3);font-weight:600;text-transform:uppercase;letter-spacing:.5px">Equipar:</span>';
+    if(isSlot1){html+='<span class="wep-badge wep-badge-1">✓ Mão 1</span><button class="btn btn-gray" onclick="unequipWeapon(1)">Tirar</button>';}
+    else if(isSlot2){html+='<span class="wep-badge wep-badge-2">✓ Mão 2</span><button class="btn btn-gray" onclick="unequipWeapon(2)">Tirar</button>';}
+    else if(!broken){
+      const isDual=manuseio==='Duas mãos'||manuseio==='Acoplada'||(w.customTags&&w.customTags.includes('Grande'));
+      const has1=equippedWeapons.slot1!==null;const has2=equippedWeapons.slot2!==null;
+      const eqW1=has1?inventory.weapon[equippedWeapons.slot1]:null;
+      const eqW2=has2?inventory.weapon[equippedWeapons.slot2]:null;
+      const slot1IsDual=eqW1&&(eqW1.manuseio==='Duas mãos'||(eqW1.customTags&&eqW1.customTags.includes('Grande')));
+      const slot2IsDual=eqW2&&(eqW2.manuseio==='Duas mãos'||(eqW2.customTags&&eqW2.customTags.includes('Grande')));
+      const anyDualEquipped=slot1IsDual||slot2IsDual;
+      if(anyDualEquipped){html+='<span style="font-size:10px;color:var(--txt3)">Desequipe arma de 2 mãos primeiro</span>';}
+      else if(isDual){
+        if(!has1&&!has2)html+='<button class="btn btn-gold" onclick="equipWeapon('+idx+',\'duas\')">Equipar (2 mãos)</button>';
+        else html+='<span style="font-size:10px;color:var(--txt3)">Desequipe outra arma primeiro</span>';
+      } else {
+        if(!has1)html+='<button class="btn btn-gold" onclick="equipWeapon('+idx+',1)">Mão 1</button>';
+        if(!has2&&manuseio==='Versátil')html+='<button class="btn btn-gold" onclick="equipWeapon('+idx+',2)">Mão 2</button>';
       }
     }
-    if(!broken)html+='<button class="destroy-btn" onclick="applyWeaponDestroy('+idx+')">💥 Destruir</button>';
-    html+='<button class="delete-btn" onclick="deleteWeapon('+idx+')">🗑 Excluir</button>';
+    if(!broken)html+='<button class="btn btn-red" onclick="applyWeaponDestroy('+idx+')">💥</button>';
+    if(broken)html+='<button class="btn btn-green" onclick="repairWeapon('+idx+')">🔧 '+Math.ceil((w.finalPrice||w.price||0)/2)+'🪙</button>';
+    html+='<button class="btn btn-delete" onclick="deleteWeapon('+idx+')">🗑</button>';
     html+='</div></div>';
   });
   panel.innerHTML=html;
@@ -659,50 +801,39 @@ function equipWeapon(idx,slot){
   else if(slot===2){equippedWeapons.slot2=idx;}
   renderWeaponInvPanel();renderFichaWeapons();autoSave();
 }
-function unequipWeapon(slot){
-  if(slot===1)equippedWeapons.slot1=null;
-  else if(slot===2)equippedWeapons.slot2=null;
-  renderWeaponInvPanel();renderFichaWeapons();autoSave();
-}
-function applyWeaponDestroy(idx){const dk='weapon__'+idx;const w=inventory.weapon[idx];const cur=itemDamage[dk]||0;const maxDur=w.dur||1;if(cur>=maxDur){showToast('Arma já destruída!');return;}itemDamage[dk]=cur+1;if(itemDamage[dk]>=maxDur){if(equippedWeapons.slot1===idx){equippedWeapons.slot1=null;}if(equippedWeapons.slot2===idx){equippedWeapons.slot2=null;}showToast('💔 Arma destruída!');}else{showToast('💥 Destruir: '+itemDamage[dk]+'/'+maxDur);}renderWeaponInvPanel();renderFichaWeapons();autoSave();}
-function deleteWeapon(idx){pendingAction={type:'deleteWeapon',idx,name:inventory.weapon[idx].displayName};showModal('🗑 Excluir Arma','Excluir <strong>'+inventory.weapon[idx].displayName+'</strong>? Esta ação não pode ser desfeita.','Excluir');}
+function unequipWeapon(slot){if(slot===1)equippedWeapons.slot1=null;else equippedWeapons.slot2=null;renderWeaponInvPanel();renderFichaWeapons();autoSave();}
+function applyWeaponDestroy(idx){const dk='weapon__'+idx;const w=inventory.weapon[idx];const cur=itemDamage[dk]||0;const maxDur=w.dur||1;if(cur>=maxDur){showToast('Arma já destruída!');return;}itemDamage[dk]=cur+1;if(itemDamage[dk]>=maxDur){if(equippedWeapons.slot1===idx)equippedWeapons.slot1=null;if(equippedWeapons.slot2===idx)equippedWeapons.slot2=null;showToast('💔 Arma destruída!');}else showToast('💥 Destruir: '+itemDamage[dk]+'/'+maxDur);renderWeaponInvPanel();renderFichaWeapons();autoSave();}
+function repairWeapon(idx){const w=inventory.weapon[idx];const cost=Math.ceil((w.finalPrice||w.price||1)/2);const money=parseInt(document.getElementById('f-money').value)||0;pendingAction={type:'repairWeapon',idx,cost};showModal('🔧 Reparar','Reparar <strong>'+w.displayName+'</strong> por <strong>'+cost+' 🪙</strong>?<br><small style="color:var(--txt2)">Dinheiro atual: '+money+'🪙</small>','Reparar');}
+function deleteWeapon(idx){pendingAction={type:'deleteWeapon',idx,name:inventory.weapon[idx].displayName};showModal('🗑 Excluir','Excluir <strong>'+inventory.weapon[idx].displayName+'</strong>?','Excluir');}
 
-// ── WEAPON CUSTOMIZATION ──
+// CUSTOMIZATION
 function applyCustomToWeapon(base,custom){
-  const w=JSON.parse(JSON.stringify(base));
-  let mulMod=0;
-  const tags=[];
-  // Característica
+  const w=JSON.parse(JSON.stringify(base));let mulMod=0;const tags=[];
   if(custom.car==='leve'){w.weight=Math.max(1,w.weight-1);w.dur=Math.max(1,w.dur-1);if(w.danoS!=='—')w.danoS=String(Math.max(1,Math.round(parseInt(w.danoS)/2)));if(w.danoDP!=='—')w.danoDP=String(Math.max(1,Math.round(parseInt(w.danoDP)/2)));mulMod-=0.2;tags.push('Leve');}
   else if(custom.car==='pesada'){w.weight+=1;if(w.danoS!=='—')w.danoS=String(Math.round(parseInt(w.danoS)*1.5));if(w.danoDP!=='—')w.danoDP=String(Math.round(parseInt(w.danoDP)*1.5));mulMod+=1.0;tags.push('Pesada');}
   else if(custom.car==='rapida'){mulMod+=0.3;tags.push('Rápida');}
   else if(custom.car==='lenta'){mulMod-=0.1;tags.push('Lenta');}
-  else if(custom.car==='pequena'){w.alcance=Math.max(1,Math.round(w.alcance/2));w.manuseio='Versátil';mulMod+=0.2;tags.push('Pequena','Versátil');}
-  else if(custom.car==='grande'){w.alcance=w.alcance*2;w.manuseio='Duas mãos';mulMod+=0.5;tags.push('Grande');}
-  // Manuseio
+  else if(custom.car==='pequena'){w.alcance=Math.max(1,Math.round(w.alcance/2));tags.push('Pequena','Versátil');custom.man='versatil';mulMod+=0.2;}
+  else if(custom.car==='grande'){w.alcance=w.alcance*2;custom.man='duas_maos';tags.push('Grande');mulMod+=0.5;}
   if(!tags.includes('Versátil')&&!tags.includes('Duas mãos')&&!tags.includes('Grande')){
-    if(custom.man==='versatil'){w.manuseio='Versátil';}
+    if(custom.man==='versatil')w.manuseio='Versátil';
     else if(custom.man==='duas_maos'){w.manuseio='Duas mãos';}
     else if(custom.man==='acoplada'){w.manuseio='Acoplada';mulMod+=0.2;tags.push('Acoplada');}
-  }
+  } else if(tags.includes('Grande')){w.manuseio='Duas mãos';}
+  else if(tags.includes('Versátil')){w.manuseio='Versátil';}
   if(!w.manuseio)w.manuseio='Versátil';
-  // Recarga
-  if(base.isRanged){tags.push('Munição');}
+  if(base.isRanged)tags.push('Munição');
   else if(custom.rec==='arremessavel'){mulMod-=0.1;tags.push('Arremessável');}
-  // Tecnologia
   if(custom.tec==='energizada'){mulMod+=0.3;tags.push('Energizada');}
   else if(custom.tec==='carregar'){mulMod+=0.7;tags.push('Carregar');}
   else if(custom.tec==='polarizado'){mulMod+=1.0;tags.push('Polarizado');}
-  // Material
   if(custom.mat==='reforcado'){w.critMul+=1;mulMod+=1.5;tags.push('Reforçado');}
-  else if(custom.mat==='composto'){w.weight=Math.max(1,w.weight-1);w.dur=Math.max(1,w.dur-1);mulMod+=1.0;tags.push('Composto');}
+  else if(custom.mat==='composto'){w.weight+=1;w.dur+=1;mulMod+=1.0;tags.push('Composto');}
   else if(custom.mat==='fraco'){w.critMul=Math.max(1,w.critMul-1);mulMod-=0.2;tags.push('Fraco');}
   else if(custom.mat==='fragil'){w.weight=Math.max(1,w.weight-1);w.dur=Math.max(1,w.dur-1);mulMod-=0.1;tags.push('Frágil');}
-  // Final price
   const finalMul=Math.max(0.1,1.0+mulMod);
   w.finalPrice=Math.max(1,Math.round(w.price*finalMul));
-  w.customTags=tags;
-  w.displayName=w.name+(tags.length?' ('+tags.join(', ')+')':'');
+  w.customTags=tags;w.displayName=w.name+(tags.length?' ('+tags.join(', ')+')':'');
   return w;
 }
 
@@ -714,150 +845,417 @@ function toggleCat(cat){
   if(!isOpen){sec.classList.add('open');btn.classList.add('open');if(cat==='protecoes'&&!lojaBuilt.protecoes){buildLojaProtecoes();lojaBuilt.protecoes=true;}if(cat==='armas'&&!lojaBuilt.armas){buildLojaArmas();lojaBuilt.armas=true;}}
 }
 
-function mkBuyBtnArmor(cat,idx){const item=ARMOR[cat][idx];const slot=cat;const count=(inventory[slot]||[]).filter(i=>i.name===item.name).length;return '<button class="buy-btn" onclick="askBuyArmor(\''+cat+'\','+idx+')">'+item.price+'🪙'+(count>0?' ('+count+')':'')+'</button>';}
 function buildLojaProtecoes(){
-  const container=document.getElementById('loja-protecoes');container.innerHTML='<div class="loja-section-title">🛡 Proteções</div>';
-  Object.entries(ARMOR).forEach(([cat,items])=>{
-    const div=document.createElement('div');div.className='loja-category';div.innerHTML='<div class="loja-cat-name">'+ARMOR_CAT_NAMES[cat]+'</div>';
-    const tbl=document.createElement('table');tbl.className='loja-tbl';
-    tbl.innerHTML='<thead><tr><th>Item</th><th>Defesa</th><th>Penalidade</th><th>Dur.</th><th>Preço</th></tr></thead><tbody>'+
-      items.map((item,idx)=>'<tr><td data-label="">'+item.name+'</td><td data-label="Defesa" class="stat">+'+item.defesa+'</td><td data-label="Penalidade" class="stat">'+(item.pen>0?'−'+item.pen:'—')+'</td><td data-label="Durabilidade" class="stat">'+item.dur+'</td><td data-label="Preço / Comprar" id="ab-'+cat+'-'+idx+'"></td></tr>').join('')+
-    '</tbody>';
-    div.appendChild(tbl);container.appendChild(div);
-    items.forEach((_,idx)=>{const el=document.getElementById('ab-'+cat+'-'+idx);if(el)el.innerHTML=mkBuyBtnArmor(cat,idx);});
+  const container=document.getElementById('loja-protecoes');
+  container.innerHTML='<div class="loja-sec-title">🛡 Proteções</div>';
+  // Build non-luvas categories first (capacete, peitoral, calca, botas) then luvas
+  const ORDER=['capacete','peitoral','calca','botas','luvas'];
+  ORDER.forEach(cat=>{
+    const items=ARMOR[cat];
+    const isLuvas=(cat==='luvas');
+    const div=document.createElement('div');
+    div.className='loja-category';
+    div.innerHTML='<div class="loja-cat-name">'+ARMOR_CAT_NAMES[cat]+'</div>';
+    if(isLuvas){
+      items.forEach((item,idx)=>{
+        const wrapDiv=document.createElement('div');wrapDiv.style.marginBottom='12px';
+        const cKey='armor_luvas_'+idx;
+        if(!shopArmorCustom[cKey])shopArmorCustom[cKey]={car:'none',man:'versatil',tec:'none',mat:'none'};
+        const baseInfo=document.createElement('div');
+        baseInfo.style.cssText='font-size:11px;color:var(--txt2);padding:6px 8px;background:var(--bg3);border-radius:5px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px';
+        baseInfo.innerHTML='<b style="color:var(--txt)">'+item.name+'</b><span>+'+item.defesa+' DEF &nbsp;|&nbsp; '+(item.pen>0?'−'+item.pen+' PEN':'Sem pen.')+' &nbsp;|&nbsp; Dur. '+item.dur+' &nbsp;|&nbsp; '+item.price+'🪙</span>';
+        wrapDiv.appendChild(baseInfo);
+        const box=document.createElement('div');box.className='wep-custom-box';
+        box.innerHTML='<div class="wep-custom-title">Personalizações para combate (mão nua)</div>'+
+          '<div class="wep-custom-grid">'+
+          '<div class="wep-custom-group"><label>Característica</label><select onchange="onArmorGlovesCustom('+idx+',\'car\',this.value)">'+ARMOR_CUSTOM_CAR.map(o=>'<option value="'+o.id+'"'+(shopArmorCustom[cKey].car===o.id?' selected':'')+'>'+o.name+'</option>').join('')+'</select></div>'+
+          '<div class="wep-custom-group"><label>Manuseio</label><select onchange="onArmorGlovesCustom('+idx+',\'man\',this.value)">'+ARMOR_CUSTOM_MAN.map(o=>'<option value="'+o.id+'"'+(shopArmorCustom[cKey].man===o.id?' selected':'')+'>'+o.name+'</option>').join('')+'</select></div>'+
+          '<div class="wep-custom-group"><label>Tecnologia</label><select onchange="onArmorGlovesCustom('+idx+',\'tec\',this.value)">'+ARMOR_CUSTOM_TEC.map(o=>'<option value="'+o.id+'"'+(shopArmorCustom[cKey].tec===o.id?' selected':'')+'>'+o.name+'</option>').join('')+'</select></div>'+
+          '<div class="wep-custom-group"><label>Material</label><select onchange="onArmorGlovesCustom('+idx+',\'mat\',this.value)">'+ARMOR_CUSTOM_MAT.map(o=>'<option value="'+o.id+'"'+(shopArmorCustom[cKey].mat===o.id?' selected':'')+'>'+o.name+'</option>').join('')+'</select></div>'+
+          '</div>'+
+          '<div class="wep-preview" id="glove-preview-'+idx+'"></div>'+
+          '<div style="text-align:center;margin-top:8px"><button class="buy-btn" style="width:auto;padding:7px 18px" onclick="askBuyGloves('+idx+')">Comprar</button></div>';
+        wrapDiv.appendChild(box);div.appendChild(wrapDiv);
+        updateGlovesPreview(idx,item,cKey);
+      });
+    } else {
+      // Standard table with inline buy buttons using data attributes to avoid closure issues
+      const tbl=document.createElement('table');
+      tbl.className='loja-tbl';
+      let tbodyHtml='<thead><tr><th>Item</th><th>Defesa</th><th>Pen.</th><th>Dur.</th><th>Preço</th></tr></thead><tbody>';
+      items.forEach((item,idx)=>{
+        tbodyHtml+='<tr>'+
+          '<td data-label="">'+item.name+'</td>'+
+          '<td data-label="Defesa" class="stat">+'+item.defesa+'</td>'+
+          '<td data-label="Pen." class="stat">'+(item.pen>0?'−'+item.pen:'—')+'</td>'+
+          '<td data-label="Dur." class="stat">'+item.dur+'</td>'+
+          '<td data-label="Preço"><button class="buy-btn" data-cat="'+cat+'" data-idx="'+idx+'">'+item.price+'🪙</button></td>'+
+          '</tr>';
+      });
+      tbodyHtml+='</tbody>';
+      tbl.innerHTML=tbodyHtml;
+      // Attach events after insertion
+      div.appendChild(tbl);
+      container.appendChild(div);
+      // Use event delegation on tbl
+      tbl.addEventListener('click',function(e){
+        const btn=e.target.closest('.buy-btn[data-cat]');
+        if(btn){askBuyArmor(btn.dataset.cat,parseInt(btn.dataset.idx));}
+      });
+      return; // already appended
+    }
+    container.appendChild(div);
   });
 }
-function refreshArmorBtn(cat,idx){const el=document.getElementById('ab-'+cat+'-'+idx);if(el)el.innerHTML=mkBuyBtnArmor(cat,idx);}
-function askBuyArmor(cat,idx){const item=ARMOR[cat][idx];const money=parseInt(document.getElementById('f-money').value)||0;pendingAction={type:'armor',cat,idx};showModal('Confirmar Compra','Comprar <strong>'+item.name+'</strong> por <strong>'+item.price+' 🪙</strong>?<br><span style="font-size:12px;color:var(--text-muted)">+'+item.defesa+' Defesa &nbsp;|&nbsp; '+(item.pen>0?'−'+item.pen+' Penalidade':'Sem penalidade')+' &nbsp;|&nbsp; Dur. '+item.dur+'</span><br><span style="font-size:12px;color:'+(money<item.price?'var(--red-bright)':'var(--gold)')+'">Dinheiro: '+money+' 🪙'+(money<item.price?' ⚠ insuficiente':'')+'</span>','Comprar');}
+
+function onArmorGlovesCustom(idx,field,val){const cKey='armor_luvas_'+idx;if(!shopArmorCustom[cKey])shopArmorCustom[cKey]={car:'none',man:'versatil',tec:'none',mat:'none'};shopArmorCustom[cKey][field]=val;updateGlovesPreview(idx,ARMOR.luvas[idx],cKey);}
+function updateGlovesPreview(idx,baseItem,cKey){
+  const el=document.getElementById('glove-preview-'+idx);if(!el)return;
+  const c=shopArmorCustom[cKey];
+  let mulMod=0;const tags=[];
+  const car=ARMOR_CUSTOM_CAR.find(x=>x.id===c.car);if(car)mulMod+=car.mod;
+  if(c.man==='acoplada'){mulMod+=0.2;tags.push('Acoplada');}
+  const tec=ARMOR_CUSTOM_TEC.find(x=>x.id===c.tec);if(tec&&c.tec!=='none'){mulMod+=tec.mod;tags.push(tec.name.split(' ')[0]);}
+  if(c.mat==='reforcado'){mulMod+=1.5;tags.push('Reforçado');}
+  else if(c.mat==='composto'){mulMod+=1.0;tags.push('Composto');}
+  else if(c.mat==='fraco'){mulMod-=0.2;tags.push('Fraco');}
+  else if(c.mat==='fragil'){mulMod-=0.1;tags.push('Frágil');}
+  const durBonus=c.mat==='composto'?'+1':'';
+  const finalPrice=Math.max(1,Math.round(baseItem.price*Math.max(0.1,1.0+mulMod)));
+  let manuseio='Versátil';if(c.man==='duas_maos')manuseio='Duas mãos';else if(c.car==='grande')manuseio='Duas mãos';
+  el.innerHTML='<div class="wep-preview-title">Prévia</div><div class="wep-preview-stats">Defesa: <b>+'+baseItem.defesa+'</b> &nbsp;|&nbsp; Dano (Mão Nua): <b>d6+FIS</b><br>Manuseio: <b>'+manuseio+'</b>'+(tags.length?' &nbsp;|&nbsp; <b>'+tags.join(', ')+'</b>':'')+(durBonus?' &nbsp;|&nbsp; Durabilidade: <b>'+baseItem.dur+durBonus+'</b>':'')+'</div><div class="wep-preview-price">Preço: '+finalPrice+' 🪙</div>';
+}
+function askBuyGloves(idx){
+  const baseItem=ARMOR.luvas[idx];const cKey='armor_luvas_'+idx;const c=shopArmorCustom[cKey]||{car:'none',man:'versatil',tec:'none',mat:'none'};
+  let mulMod=0;const tags=[];
+  const car=ARMOR_CUSTOM_CAR.find(x=>x.id===c.car);if(car)mulMod+=car.mod;
+  if(c.man==='acoplada'){mulMod+=0.2;tags.push('Acoplada');}
+  const tec=ARMOR_CUSTOM_TEC.find(x=>x.id===c.tec);if(tec&&c.tec!=='none'){mulMod+=tec.mod;tags.push(tec.name.split(' ')[0]);}
+  if(c.mat==='reforcado'){mulMod+=1.5;tags.push('Reforçado');}
+  else if(c.mat==='composto'){mulMod+=1.0;tags.push('Composto');}
+  else if(c.mat==='fraco'){mulMod-=0.2;tags.push('Fraco');}
+  else if(c.mat==='fragil'){mulMod-=0.1;tags.push('Frágil');}
+  let manuseio='Versátil';if(c.man==='duas_maos')manuseio='Duas mãos';else if(c.car==='grande')manuseio='Duas mãos';
+  const finalPrice=Math.max(1,Math.round(baseItem.price*Math.max(0.1,1.0+mulMod)));
+  const money=parseInt(document.getElementById('f-money').value)||0;
+  const itemCopy=JSON.parse(JSON.stringify(baseItem));
+  if(c.mat==='composto'){itemCopy.dur+=1;}
+  if(c.mat==='fragil'||c.mat==='fraco'){itemCopy.dur=Math.max(1,itemCopy.dur-1);}
+  itemCopy.manuseio=manuseio;itemCopy.customTags=tags;itemCopy.displayName=baseItem.name+(tags.length?' ('+tags.join(', ')+')':'');itemCopy.price=finalPrice;itemCopy.finalPrice=finalPrice;
+  pendingAction={type:'gloves',slot:'luvas',item:itemCopy};
+  showModal('Confirmar Compra','Comprar <strong>'+itemCopy.displayName+'</strong> por <strong>'+finalPrice+' 🪙</strong>?<br><small style="color:'+(money<finalPrice?'var(--red3)':'var(--green2)')+'">Dinheiro: '+money+'🪙'+(money<finalPrice?' ⚠ insuficiente':'')+'</small>','Comprar');
+}
+function askBuyArmor(cat,idx){
+  const item=ARMOR[cat][idx];
+  const money=parseInt(document.getElementById('f-money').value)||0;
+  pendingAction={type:'armor',cat,idx};
+  showModal('Confirmar Compra','Comprar <strong>'+item.name+'</strong> por <strong>'+item.price+' 🪙</strong>?<br><small style="color:'+(money<item.price?'var(--red3)':'var(--green2)')+'">Dinheiro: '+money+'🪙'+(money<item.price?' ⚠ insuficiente':'')+'</small>','Comprar');
+}
 
 function buildLojaArmas(){
-  const container=document.getElementById('loja-armas');container.innerHTML='<div class="loja-section-title">⚔ Armas</div>';
+  const container=document.getElementById('loja-armas');container.innerHTML='<div class="loja-sec-title">⚔ Armas</div>';
   WEAPONS_BASE.forEach((w,wIdx)=>{
     if(w.isShield){
-      const div=document.createElement('div');div.className='loja-category';div.innerHTML='<div class="loja-cat-name">'+w.name+'</div>';
-      const info=document.createElement('div');info.style.cssText='font-size:11px;color:var(--text-muted);font-style:italic;margin-bottom:6px;padding:5px 8px;background:var(--bg-inner);border-radius:3px';
-      info.textContent='Dano S: '+w.danoS+' | Dano DP: '+w.danoDP+' | Crítico: '+w.crit+'x'+w.critMul+' ('+w.critEff+') | Alcance: '+w.alcance+'m | Tipo: '+w.tipo;
-      div.appendChild(info);
+      const div=document.createElement('div');div.className='loja-category';
+      div.innerHTML='<div class="loja-cat-name">'+w.name+'</div><div style="font-size:11px;color:var(--txt2);font-style:italic;padding:5px 8px;background:var(--bg3);border-radius:4px;margin-bottom:7px">Dano S: '+w.danoS+' | Dano DP: '+w.danoDP+' | Crit: '+w.crit+'x'+w.critMul+' ('+w.critEff+') | Alcance: '+w.alcance+'m | Tipo: '+w.tipo+'</div>';
       const tbl=document.createElement('table');tbl.className='loja-tbl';
-      tbl.innerHTML='<thead><tr><th>Variante</th><th>Proteção</th><th>Pen.</th><th>Dur.</th><th>Preço</th></tr></thead><tbody>'+
-        w.variants.map((v,vi)=>'<tr><td data-label="">'+v.name+'</td><td data-label="Proteção" class="stat">+'+v.defesa+'</td><td data-label="Penalidade" class="stat">'+(v.pen>0?'−'+v.pen:'—')+'</td><td data-label="Durabilidade" class="stat">'+v.dur+'</td><td data-label="Comprar" id="wb-'+wIdx+'-'+vi+'"></td></tr>').join('')+'</tbody>';
-      div.appendChild(tbl);container.appendChild(div);
-      w.variants.forEach((_,vi)=>{const el=document.getElementById('wb-'+wIdx+'-'+vi);if(el)el.innerHTML=mkBuyBtnWeapon(wIdx,vi);});
-      return;
+      let th='<thead><tr><th>Variante</th><th>Proteção</th><th>Pen.</th><th>Dur.</th><th>Preço</th></tr></thead><tbody>';
+      w.variants.forEach((v,vi)=>{
+        th+='<tr><td data-label="">'+v.name+'</td><td data-label="Proteção" class="stat">+'+v.defesa+'</td><td data-label="Pen." class="stat">'+(v.pen>0?'−'+v.pen:'—')+'</td><td data-label="Dur." class="stat">'+v.dur+'</td><td data-label="Comprar"><button class="buy-btn" data-widx="'+wIdx+'" data-vidx="'+vi+'">'+v.price+'🪙</button></td></tr>';
+      });
+      th+='</tbody>';tbl.innerHTML=th;
+      tbl.addEventListener('click',function(e){const btn=e.target.closest('.buy-btn[data-widx]');if(btn)askBuyShield(parseInt(btn.dataset.widx),parseInt(btn.dataset.vidx));});
+      div.appendChild(tbl);container.appendChild(div);return;
     }
-    // Regular weapon with customization
-    const div=document.createElement('div');div.className='loja-category';
-    const cKey='w'+wIdx;
-    if(!shopWepCustom[cKey])shopWepCustom[cKey]={car:'none',man:'versatil',rec:w.isRanged?'municao':'nenhuma',tec:'none',mat:'none'};
-    div.innerHTML='<div class="loja-cat-name">'+w.name+'</div>';
-    const baseInfo=document.createElement('div');baseInfo.style.cssText='font-size:11px;color:var(--text-muted);font-style:italic;padding:5px 8px;background:var(--bg-inner);border-radius:3px;margin-bottom:8px';
-    baseInfo.textContent='Base — Dano S: '+w.danoS+' | Dano DP: '+w.danoDP+' | Crítico: '+w.crit+'x'+w.critMul+' ('+w.critEff+') | Alcance: '+w.alcance+'m | Tipo: '+w.tipo+' | Peso/Dur: '+w.weight+'/'+w.dur+' | '+w.price+'🪙';
+    const div=document.createElement('div');div.className='loja-category';div.innerHTML='<div class="loja-cat-name">'+w.name+'</div>';
+    const cKey='w'+wIdx;if(!shopWepCustom[cKey])shopWepCustom[cKey]={car:'none',man:'versatil',rec:w.isRanged?'municao':'nenhuma',tec:'none',mat:'none'};
+    const baseInfo=document.createElement('div');baseInfo.style.cssText='font-size:11px;color:var(--txt2);padding:5px 8px;background:var(--bg3);border-radius:4px;margin-bottom:7px';
+    baseInfo.textContent='Base — S:'+w.danoS+' DP:'+w.danoDP+' Crit:'+w.crit+'x'+w.critMul+' ('+w.critEff+') Alcance:'+w.alcance+'m Tipo:'+w.tipo+' Peso/Dur:'+w.weight+'/'+w.dur+' '+w.price+'🪙';
     div.appendChild(baseInfo);
-    // Custom box
-    const box=document.createElement('div');box.className='wep-custom-box';box.id='wcbox-'+wIdx;
-    const makeSelect=(id,label,opts,cKey,field)=>{
-      return '<div class="wep-custom-group"><div class="wep-custom-lbl">'+label+'</div><select class="wep-custom-select" onchange="onWepCustomChange('+wIdx+',\''+cKey+'\',\''+field+'\',this.value)">'+opts.map(o=>'<option value="'+o.id+'"'+( shopWepCustom[cKey][field]===o.id?' selected':'')+'>'+o.name+'</option>').join('')+'</select></div>';
-    };
-    let selHtml='<div class="wep-custom-grid">';
-    selHtml+=makeSelect('','Característica',CUSTOM_CARACTERISTICA,cKey,'car');
-    selHtml+=makeSelect('','Manuseio',CUSTOM_MANUSEIO,cKey,'man');
-    selHtml+=makeSelect('','Recarga',w.isRanged?CUSTOM_RECARGA_RANGED:CUSTOM_RECARGA_MELEE,cKey,'rec');
-    selHtml+=makeSelect('','Tecnologia',CUSTOM_TECNOLOGIA,cKey,'tec');
-    selHtml+=makeSelect('','Material',CUSTOM_MATERIAL,cKey,'mat');
-    selHtml+='</div>';
-    selHtml+='<div class="wep-preview" id="wpreview-'+wIdx+'"></div>';
-    selHtml+='<div style="margin-top:10px;text-align:center"><button class="buy-btn" style="width:auto;padding:7px 20px" id="wbuy-'+wIdx+'" onclick="askBuyWeapon('+wIdx+')">Comprar</button></div>';
-    box.innerHTML=selHtml;
-    div.appendChild(box);
-    container.appendChild(div);
-    updateWepPreview(wIdx);
+    const box=document.createElement('div');box.className='wep-custom-box';
+    box.innerHTML='<div class="wep-custom-title">Personalização</div><div class="wep-custom-grid">'+
+      '<div class="wep-custom-group"><label>Característica</label><select onchange="onWepCust('+wIdx+',\'car\',this.value)">'+CUSTOM_CAR.map(o=>'<option value="'+o.id+'">'+o.name+'</option>').join('')+'</select></div>'+
+      '<div class="wep-custom-group"><label>Manuseio</label><select onchange="onWepCust('+wIdx+',\'man\',this.value)">'+CUSTOM_MAN.map(o=>'<option value="'+o.id+'">'+o.name+'</option>').join('')+'</select></div>'+
+      '<div class="wep-custom-group"><label>Recarga</label><select onchange="onWepCust('+wIdx+',\'rec\',this.value)">'+(w.isRanged?CUSTOM_REC_RANGED:CUSTOM_REC_MELEE).map(o=>'<option value="'+o.id+'">'+o.name+'</option>').join('')+'</select></div>'+
+      '<div class="wep-custom-group"><label>Tecnologia</label><select onchange="onWepCust('+wIdx+',\'tec\',this.value)">'+CUSTOM_TEC.map(o=>'<option value="'+o.id+'">'+o.name+'</option>').join('')+'</select></div>'+
+      '<div class="wep-custom-group"><label>Material</label><select onchange="onWepCust('+wIdx+',\'mat\',this.value)">'+CUSTOM_MAT.map(o=>'<option value="'+o.id+'">'+o.name+'</option>').join('')+'</select></div>'+
+      '</div><div class="wep-preview" id="wpreview-'+wIdx+'"></div>'+
+      '<div style="text-align:center;margin-top:8px"><button class="buy-btn" style="width:auto;padding:7px 18px" onclick="askBuyWeapon('+wIdx+')">Comprar</button></div>';
+    div.appendChild(box);container.appendChild(div);updateWepPreview(wIdx);
   });
 }
-
-function onWepCustomChange(wIdx,cKey,field,val){shopWepCustom[cKey][field]=val;updateWepPreview(wIdx);}
+function onWepCust(wIdx,field,val){const cKey='w'+wIdx;if(!shopWepCustom[cKey])shopWepCustom[cKey]={car:'none',man:'versatil',rec:'nenhuma',tec:'none',mat:'none'};shopWepCustom[cKey][field]=val;updateWepPreview(wIdx);}
 function updateWepPreview(wIdx){
   const cKey='w'+wIdx;const c=shopWepCustom[cKey];if(!c)return;
   const base=WEAPONS_BASE[wIdx];const w=applyCustomToWeapon(base,c);
   const el=document.getElementById('wpreview-'+wIdx);if(!el)return;
-  el.innerHTML='<div class="wep-preview-title">Prévia Final</div><div class="wep-preview-stats">Dano S: <b>'+w.danoS+'</b> &nbsp;|&nbsp; Dano DP: <b>'+w.danoDP+'</b> &nbsp;|&nbsp; Crítico: <b>'+w.crit+'x'+w.critMul+'</b> ('+w.critEff+')<br>Alcance: <b>'+w.alcance+'m</b> &nbsp;|&nbsp; Tipo: <b>'+w.tipo+'</b> &nbsp;|&nbsp; Peso: <b>'+w.weight+'</b> &nbsp;|&nbsp; Durabilidade: <b>'+w.dur+'</b><br>Manuseio: <b>'+w.manuseio+'</b>'+(w.customTags.length?' &nbsp;|&nbsp; Propriedades: <b>'+w.customTags.join(', ')+'</b>':'')+'</div><div class="wep-preview-price">Preço: '+w.finalPrice+' 🪙</div>';
-}
-
-function mkBuyBtnWeapon(wIdx,vIdx){
-  const w=WEAPONS_BASE[wIdx];
-  if(w.isShield){const v=w.variants[vIdx];const count=(inventory.weapon||[]).filter(i=>i.name===v.name).length;return '<button class="buy-btn" onclick="askBuyWeaponShield('+wIdx+','+vIdx+')">'+v.price+'🪙'+(count>0?' ('+count+')':'')+'</button>';}
-  return '';
-}
-function askBuyWeaponShield(wIdx,vIdx){
-  const w=WEAPONS_BASE[wIdx];const v=w.variants[vIdx];const money=parseInt(document.getElementById('f-money').value)||0;
-  pendingAction={type:'weaponShield',wIdx,vIdx};
-  showModal('Confirmar Compra','Comprar <strong>'+v.name+'</strong> por <strong>'+v.price+' 🪙</strong>?<br><span style="font-size:12px;color:'+(money<v.price?'var(--red-bright)':'var(--gold)')+'">Dinheiro: '+money+' 🪙'+(money<v.price?' ⚠ insuficiente':'')+'</span>','Comprar');
+  el.innerHTML='<div class="wep-preview-title">Prévia Final</div><div class="wep-preview-stats">Dano S: <b>'+w.danoS+'</b> &nbsp;DP: <b>'+w.danoDP+'</b> &nbsp;Crit: <b>'+w.crit+'x'+w.critMul+'</b> ('+w.critEff+')<br>Alcance: <b>'+w.alcance+'m</b> &nbsp;Tipo: <b>'+w.tipo+'</b> &nbsp;Peso: <b>'+w.weight+'</b> &nbsp;Dur: <b>'+w.dur+'</b><br>Manuseio: <b>'+w.manuseio+'</b>'+(w.customTags.length?' &nbsp;[<b>'+w.customTags.join(', ')+'</b>]':'')+'</div><div class="wep-preview-price">Preço Final: '+w.finalPrice+' 🪙</div>';
 }
 function askBuyWeapon(wIdx){
   const cKey='w'+wIdx;const c=shopWepCustom[cKey]||{car:'none',man:'versatil',rec:'nenhuma',tec:'none',mat:'none'};
   const base=WEAPONS_BASE[wIdx];const w=applyCustomToWeapon(base,c);
   const money=parseInt(document.getElementById('f-money').value)||0;
   pendingAction={type:'weapon',wIdx,customized:w};
-  showModal('Confirmar Compra','Comprar <strong>'+w.displayName+'</strong> por <strong>'+w.finalPrice+' 🪙</strong>?<br><span style="font-size:12px;color:'+(money<w.finalPrice?'var(--red-bright)':'var(--gold)')+'">Dinheiro: '+money+' 🪙'+(money<w.finalPrice?' ⚠ insuficiente':'')+'</span>','Comprar');
+  showModal('Confirmar Compra','Comprar <strong>'+w.displayName+'</strong> por <strong>'+w.finalPrice+' 🪙</strong>?<br><small style="color:'+(money<w.finalPrice?'var(--red3)':'var(--green2)')+'">Dinheiro: '+money+'🪙'+(money<w.finalPrice?' ⚠ insuficiente':'')+'</small>','Comprar');
+}
+function askBuyShield(wIdx,vIdx){
+  const w=WEAPONS_BASE[wIdx];const v=w.variants[vIdx];const money=parseInt(document.getElementById('f-money').value)||0;
+  pendingAction={type:'weaponShield',wIdx,vIdx};
+  showModal('Confirmar Compra','Comprar <strong>'+v.name+'</strong> por <strong>'+v.price+' 🪙</strong>?<br><small style="color:'+(money<v.price?'var(--red3)':'var(--green2)')+'">Dinheiro: '+money+'🪙'+(money<v.price?' ⚠ insuficiente':'')+'</small>','Comprar');
 }
 
 function modalConfirm(){
   if(!pendingAction)return;const{type}=pendingAction;
+  const money=parseInt(document.getElementById('f-money').value)||0;
   if(type==='armor'){
-    const{cat,idx}=pendingAction;const item=ARMOR[cat][idx];const money=parseInt(document.getElementById('f-money').value)||0;
+    const{cat,idx}=pendingAction;const item=ARMOR[cat][idx];
     if(money<item.price){showToast('Dinheiro insuficiente!');closeModal();return;}
     if(!inventory[cat])inventory[cat]=[];inventory[cat].push(JSON.parse(JSON.stringify(item)));
-    document.getElementById('f-money').value=money-item.price;refreshArmorBtn(cat,idx);renderSlotsPanel();
+    document.getElementById('f-money').value=money-item.price;renderSlotsPanel();
+  } else if(type==='gloves'){
+    const{item}=pendingAction;
+    if(money<item.price){showToast('Dinheiro insuficiente!');closeModal();return;}
+    if(!inventory.luvas)inventory.luvas=[];inventory.luvas.push(JSON.parse(JSON.stringify(item)));
+    document.getElementById('f-money').value=money-item.price;renderSlotsPanel();
   } else if(type==='weapon'){
-    const{wIdx,customized}=pendingAction;const money=parseInt(document.getElementById('f-money').value)||0;
+    const{customized}=pendingAction;
     if(money<customized.finalPrice){showToast('Dinheiro insuficiente!');closeModal();return;}
     inventory.weapon.push(customized);document.getElementById('f-money').value=money-customized.finalPrice;
     updateWeight();renderWeaponInvPanel();
   } else if(type==='weaponShield'){
-    const{wIdx,vIdx}=pendingAction;const w=WEAPONS_BASE[wIdx];const v=w.variants[vIdx];const money=parseInt(document.getElementById('f-money').value)||0;
+    const{wIdx,vIdx}=pendingAction;const w=WEAPONS_BASE[wIdx];const v=w.variants[vIdx];
     if(money<v.price){showToast('Dinheiro insuficiente!');closeModal();return;}
-    const obj={name:v.name,displayName:v.name,danoS:w.danoS,danoDP:w.danoDP,crit:w.crit,critMul:w.critMul,critEff:w.critEff,alcance:w.alcance,tipo:w.tipo,weight:v.weight,dur:v.dur,price:v.price,manuseio:'Versátil',isShield:true,defesa:v.defesa,pen:v.pen,customTags:['Escudo']};
-    inventory.weapon.push(obj);document.getElementById('f-money').value=money-v.price;
-    const el=document.getElementById('wb-'+wIdx+'-'+vIdx);if(el)el.innerHTML=mkBuyBtnWeapon(wIdx,vIdx);
-    updateWeight();renderWeaponInvPanel();
+    const obj={name:v.name,displayName:v.name,danoS:w.danoS,danoDP:w.danoDP,crit:w.crit,critMul:w.critMul,critEff:w.critEff,alcance:w.alcance,tipo:w.tipo,weight:v.weight,dur:v.dur,price:v.price,finalPrice:v.price,manuseio:'Versátil',isShield:true,defesa:v.defesa,pen:v.pen,customTags:['Escudo']};
+    inventory.weapon.push(obj);document.getElementById('f-money').value=money-v.price;updateWeight();renderWeaponInvPanel();
   } else if(type==='repair'){
-    const{slot,itemName,cost}=pendingAction;const money=parseInt(document.getElementById('f-money').value)||0;
+    const{slot,itemName,cost}=pendingAction;
     if(money<cost){showToast('Dinheiro insuficiente!');closeModal();return;}
     const dk=dKey(slot,itemName);itemDamage[dk]=0;document.getElementById('f-money').value=money-cost;
     showToast('🔧 Item reparado!');renderSlotsPanel();
+  } else if(type==='repairWeapon'){
+    const{idx,cost}=pendingAction;
+    if(money<cost){showToast('Dinheiro insuficiente!');closeModal();return;}
+    itemDamage['weapon__'+idx]=0;document.getElementById('f-money').value=money-cost;
+    showToast('🔧 Arma reparada!');renderWeaponInvPanel();renderFichaWeapons();
   } else if(type==='deleteArmor'){
     const{slot,idx,itemName}=pendingAction;
     if(equipped[slot]&&equipped[slot].name===itemName){equipped[slot]=null;recalcCombat();}
     const dk=dKey(slot,itemName);delete itemDamage[dk];
-    inventory[slot].splice(idx,1);renderSlotsPanel();showToast('🗑 Item excluído.');
+    inventory[slot].splice(idx,1);renderSlotsPanel();showToast('🗑 Excluído.');
   } else if(type==='deleteWeapon'){
     const{idx}=pendingAction;
-    if(equippedWeapons.slot1===idx){equippedWeapons.slot1=null;}
-    if(equippedWeapons.slot2===idx){equippedWeapons.slot2=null;}
-    // Fix indices
+    if(equippedWeapons.slot1===idx)equippedWeapons.slot1=null;
+    if(equippedWeapons.slot2===idx)equippedWeapons.slot2=null;
+    const newDmg={};Object.entries(itemDamage).forEach(([k,v])=>{if(k.startsWith('weapon__')){const i=parseInt(k.split('__')[1]);if(i<idx)newDmg[k]=v;else if(i>idx)newDmg['weapon__'+(i-1)]=v;}else newDmg[k]=v;});itemDamage=newDmg;
     if(equippedWeapons.slot1!==null&&equippedWeapons.slot1>idx)equippedWeapons.slot1--;
     if(equippedWeapons.slot2!==null&&equippedWeapons.slot2>idx)equippedWeapons.slot2--;
-    const dk='weapon__'+idx;delete itemDamage[dk];
-    // Rebuild weapon damage keys
-    const newDmg={};Object.entries(itemDamage).forEach(([k,v])=>{if(k.startsWith('weapon__')){const i=parseInt(k.split('__')[1]);if(i<idx)newDmg[k]=v;else if(i>idx)newDmg['weapon__'+(i-1)]=v;}else newDmg[k]=v;});
-    itemDamage=newDmg;
-    inventory.weapon.splice(idx,1);
-    renderWeaponInvPanel();renderFichaWeapons();updateWeight();showToast('🗑 Arma excluída.');
+    inventory.weapon.splice(idx,1);renderWeaponInvPanel();renderFichaWeapons();updateWeight();showToast('🗑 Excluído.');
   }
   autoSave();closeModal();
 }
 
+// ── SKILL TREE (main) ──
+function buildSkillTree(){
+  const root=document.getElementById('skill-tree-root');root.innerHTML='';
+  SKILL_TREE.forEach(cls=>{
+    if(!treeData[cls.id])treeData[cls.id]={squares:[false,false,false],paths:{}};
+    const card=document.createElement('div');card.className='tree-class-card';card.id='tree-card-'+cls.id;
+    const sq=treeData[cls.id].squares;
+    const sqHtml=sq.map((_,i)=>'<div class="tree-class-sq'+(sq[i]?' filled':'')+'" onclick="toggleClassSq(\''+cls.id+'\','+i+')"></div>').join('');
+    let pathsHtml='<div class="tree-paths">';
+    cls.paths.forEach(p=>{
+      const xp=treeData[cls.id].paths[p.name]||0;
+      if(p.hasFCTree){
+        pathsHtml+='<div class="tree-path-card" onclick="openFCOverlay()" style="border-color:var(--gold);cursor:pointer">'+
+          '<div class="tree-path-name" style="color:var(--gold)">'+p.name+' 🌿</div>'+
+          '<div style="font-size:10px;color:var(--txt3);margin-top:2px">Clique para ver a árvore</div>'+
+          '<div style="margin-top:8px;display:flex;align-items:center;gap:6px"><span style="font-size:10px;color:var(--txt3)">XP Investido:</span><input type="number" style="width:60px;font-size:12px;padding:3px 5px;text-align:center" value="'+xp+'" min="0" onclick="event.stopPropagation()" onchange="setPathXP(\''+cls.id+'\',\''+p.name+'\',this.value)"></div>'+
+          '</div>';
+      } else {
+        pathsHtml+='<div class="tree-path-card">'+
+          '<div class="tree-path-name">'+p.name+'</div>'+
+          '<div style="margin-top:8px;display:flex;align-items:center;gap:6px"><span style="font-size:10px;color:var(--txt3)">XP Investido:</span><input type="number" style="width:60px;font-size:12px;padding:3px 5px;text-align:center" value="'+xp+'" min="0" onchange="setPathXP(\''+cls.id+'\',\''+p.name+'\',this.value)"></div>'+
+          '</div>';
+      }
+    });
+    pathsHtml+='</div>';
+    card.innerHTML='<div class="tree-class-header" onclick="toggleTreeCard(\''+cls.id+'\')"><span class="tree-class-name">'+cls.name+'</span><div class="tree-class-squares">'+sqHtml+'<span style="font-size:11px;color:var(--txt3);margin-left:4px">▼</span></div></div><div class="tree-class-content"><div class="tree-xp-lbl">Caminhos</div>'+pathsHtml+'</div>';
+    root.appendChild(card);
+  });
+}
+function toggleTreeCard(id){document.getElementById('tree-card-'+id).classList.toggle('open');}
+function toggleClassSq(classId,idx){if(!treeData[classId])treeData[classId]={squares:[false,false,false],paths:{}};treeData[classId].squares[idx]=!treeData[classId].squares[idx];buildSkillTree();autoSave();}
+function setPathXP(classId,pathName,val){if(!treeData[classId])treeData[classId]={squares:[false,false,false],paths:{}};treeData[classId].paths[pathName]=parseInt(val)||0;autoSave();}
+
+// ── FOMENTO CORPORAL TREE ──
+function openFCOverlay(){
+  document.getElementById('fc-overlay').classList.add('open');
+  buildFCTree();
+  // reset desc
+  document.getElementById('fc-desc-card').classList.remove('show');
+}
+function closeFCOverlay(e){if(e.target===document.getElementById('fc-overlay'))closeFCOverlayDirect();}
+function closeFCOverlayDirect(){document.getElementById('fc-overlay').classList.remove('open');}
+
+function buildFCTree(){
+  const container=document.getElementById('fc-tree-container');
+  // Layout:
+  // Row 0: Fomento Corporal (root)
+  // connector down
+  // Row 1: Vitalidade | Determinação | Resistência
+  // connector down (from Vitalidade only)
+  // Row 2: Casca Grossa (below Vitalidade)
+
+  let html='<div class="fc-tree">';
+
+  // Root node
+  html+=renderFCNode('fomento',true);
+
+  // Vertical connector from root
+  html+='<div style="display:flex;justify-content:center"><div class="fc-connector-v"></div></div>';
+
+  // Horizontal bar connecting 3 branches
+  // We use a flex row with connectors
+  html+='<div style="display:flex;justify-content:center;align-items:flex-start;gap:0;width:100%;position:relative">';
+  // left branch line: vitalidade
+  html+='<div style="display:flex;flex-direction:column;align-items:center;flex:1">';
+  html+='<div style="height:1px;background:var(--border2);width:100%;margin-top:0"></div>';
+  html+='<div class="fc-connector-v" style="height:16px"></div>';
+  html+=renderFCNode('vitalidade',false);
+  html+='</div>';
+
+  // center branch: determinacao
+  html+='<div style="display:flex;flex-direction:column;align-items:center;flex:1">';
+  html+='<div style="height:1px;background:var(--border2);width:100%;margin-top:0"></div>';
+  html+='<div class="fc-connector-v" style="height:16px"></div>';
+  html+=renderFCNode('determinacao',false);
+  html+='</div>';
+
+  // right branch: resistencia
+  html+='<div style="display:flex;flex-direction:column;align-items:center;flex:1">';
+  html+='<div style="height:1px;background:var(--border2);width:100%;margin-top:0"></div>';
+  html+='<div class="fc-connector-v" style="height:16px"></div>';
+  html+=renderFCNode('resistencia',false);
+  html+='</div>';
+
+  html+='</div>'; // end branch row
+
+  // Casca Grossa hangs off Vitalidade (left branch = flex:1 index 0)
+  // Place it below the left section
+  html+='<div style="display:flex;justify-content:flex-start;align-items:flex-start;width:100%">';
+  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
+  html+='<div class="fc-connector-v" style="height:20px"></div>';
+  html+=renderFCNode('cascagrossa',false);
+  html+='</div>';
+  html+='<div style="flex:2"></div>';
+  html+='</div>';
+
+  html+='</div>'; // end fc-tree
+  container.innerHTML=html;
+}
+
+function renderFCNode(id,isRoot){
+  const node=FC_NODES.find(n=>n.id===id);
+  if(!node)return '';
+  const levels=fcNodeLevels[id]||0;
+  let starsHtml='';
+  if(node.stars){
+    starsHtml='<div class="fc-node-stars">';
+    for(let i=0;i<node.maxLevels;i++){
+      starsHtml+='<span class="fc-star'+(i<levels?' lit':'')+'" onclick="fcToggleStar(\''+id+'\','+i+',event)">★</span>';
+    }
+    starsHtml+='</div>';
+  }
+  return '<div class="fc-node'+(isRoot?' root-node':'')+'" onclick="fcShowDesc(\''+id+'\')" id="fc-node-'+id+'">'+
+    '<div class="fc-node-name">'+node.name+'</div>'+
+    '<div class="fc-node-grade">Grau '+node.grade+(isRoot?' · Raiz':'')+'</div>'+
+    starsHtml+
+    '</div>';
+}
+
+function fcToggleStar(id,idx,e){
+  e.stopPropagation();
+  const node=FC_NODES.find(n=>n.id===id);
+  if(!node)return;
+  const cur=fcNodeLevels[id]||0;
+  // clicking a filled star: reduce to that level; clicking unfilled: set to idx+1
+  if(idx<cur){fcNodeLevels[id]=idx;}
+  else{fcNodeLevels[id]=Math.min(idx+1,node.maxLevels);}
+  buildFCTree();
+  fcShowDesc(id); // refresh desc
+  autoSave();
+}
+
+function fcShowDesc(id){
+  const node=FC_NODES.find(n=>n.id===id);if(!node)return;
+  fcActiveDesc=id;
+  document.getElementById('fc-desc-title').textContent=node.name;
+  document.getElementById('fc-desc-grade').textContent='Habilidade de Grau '+node.grade+(node.grade===1?' (Raiz)':'');
+  let lvHtml='';
+  node.levels.forEach(lv=>{
+    lvHtml+='<div class="fc-desc-level"><div class="fc-desc-level-num">Nível '+lv.n+'</div><div class="fc-desc-level-txt">'+lv.txt+'</div></div>';
+  });
+  document.getElementById('fc-desc-levels').innerHTML=lvHtml;
+  document.getElementById('fc-desc-card').classList.add('show');
+}
+
+// ── MODAL / TOAST ──
 function showModal(title,body,okLabel){document.getElementById('modal-title').textContent=title;document.getElementById('modal-body').innerHTML=body;document.getElementById('modal-ok-btn').textContent=okLabel||'Confirmar';document.getElementById('modal-overlay').classList.add('open');}
 function closeModal(){document.getElementById('modal-overlay').classList.remove('open');pendingAction=null;}
 document.getElementById('modal-overlay').addEventListener('click',function(e){if(e.target===this)closeModal();});
-function showToast(msg){let t=document.getElementById('_toast');if(!t){t=document.createElement('div');t.id='_toast';t.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a0a0a;border:1px solid #7a1a1a;color:#d4a97a;font-family:Cinzel,serif;font-size:11px;letter-spacing:2px;padding:10px 20px;border-radius:4px;z-index:2000;opacity:0;transition:opacity .3s;pointer-events:none';document.body.appendChild(t);}t.textContent=msg;t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',2200);}
+function showToast(msg){let t=document.getElementById('_toast');if(!t){t=document.createElement('div');t.id='_toast';t.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--border2);color:var(--txt);font-size:12px;font-weight:500;padding:10px 18px;border-radius:8px;z-index:3000;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap';document.body.appendChild(t);}t.textContent=msg;t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',2200);}
 
-function showPage(page){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+page).classList.add('active');document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));document.getElementById('nav-'+page).classList.add('active');if(page==='equip')renderSlotsPanel();}
+// ── PAGE NAV ──
+function showPage(page){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+page).classList.add('active');document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));document.getElementById('nav-'+page).classList.add('active');if(page==='equip')renderSlotsPanel();if(page==='arvore')buildSkillTree();}
 
-function gatherData(){const d={};document.querySelectorAll('input[id^="f-"],textarea[id^="f-"]').forEach(el=>{if(!el.readOnly)d[el.id]=el.value;});['fisico','intelecto','poder'].forEach(a=>{d['atr-'+a]=document.getElementById('atr-'+a).value;});d['chk-official']=document.getElementById('chk-official').checked;Object.entries(SKILLS).forEach(([a,ns])=>ns.forEach(n=>{d[skId(a,n)]=document.getElementById(skId(a,n)).value||'';d[bnId(a,n)]=document.getElementById(bnId(a,n)).value||'';[0,1].forEach(i=>{d[mdId(a,n,i)]=document.getElementById(mdId(a,n,i))?.classList.contains('filled')||false;});}));d._inv=JSON.stringify(inventory);d._eq=JSON.stringify(equipped);d._eqw=JSON.stringify(equippedWeapons);d._dmg=JSON.stringify(itemDamage);return d;}
+// ── SAVE / LOAD ──
+function gatherData(){
+  const d={};
+  document.querySelectorAll('input[id^="f-"],textarea[id^="f-"]').forEach(el=>{if(!el.readOnly)d[el.id]=el.value;});
+  ['fisico','intelecto','poder'].forEach(a=>{d['atr-'+a]=document.getElementById('atr-'+a).value;});
+  d['chk-official']=document.getElementById('chk-official').checked;
+  Object.entries(SKILLS).forEach(([a,ns])=>ns.forEach(n=>{
+    d[skId(a,n)]=document.getElementById(skId(a,n)).value||'';
+    try{d[bnId(a,n)]=document.getElementById(bnId(a,n))?.value||'';}catch(_){}
+    [0,1].forEach(i=>{d[mdId(a,n,i)]=document.getElementById(mdId(a,n,i))?.classList.contains('filled')||false;});
+  }));
+  d._inv=JSON.stringify(inventory);d._eq=JSON.stringify(equipped);d._eqw=JSON.stringify(equippedWeapons);
+  d._dmg=JSON.stringify(itemDamage);d._tree=JSON.stringify(treeData);d._fcnl=JSON.stringify(fcNodeLevels);
+  return d;
+}
 function saveSheet(){try{localStorage.setItem('rpg-sheet',JSON.stringify(gatherData()));document.querySelectorAll('.save-msg').forEach(m=>{m.style.opacity='1';setTimeout(()=>m.style.opacity='0',2000);});}catch(_){}}
-function loadSheet(){try{const raw=localStorage.getItem('rpg-sheet');if(raw){const d=JSON.parse(raw);if(d['chk-official']!==undefined)document.getElementById('chk-official').checked=d['chk-official'];Object.entries(d).forEach(([id,val])=>{if(['chk-official','_inv','_eq','_eqw','_dmg'].includes(id))return;const el=document.getElementById(id);if(!el||el.readOnly)return;if(id.startsWith('md-')){val?el.classList.add('filled'):el.classList.remove('filled');}else el.value=val;});if(d._inv)try{const inv=JSON.parse(d._inv);Object.assign(inventory,inv);}catch(_){}if(d._eq)try{const eq=JSON.parse(d._eq);SLOTS.forEach(s=>{equipped[s]=eq[s]||null;});}catch(_){}if(d._eqw)try{Object.assign(equippedWeapons,JSON.parse(d._eqw));}catch(_){}if(d._dmg)try{Object.assign(itemDamage,JSON.parse(d._dmg));}catch(_){};}const ph=localStorage.getItem('rpg-photo');if(ph){const img=document.getElementById('char-img');img.src=ph;img.style.display='block';document.getElementById('photo-ph').style.display='none';}}catch(_){}updateHP();updatePE();updateWeight();SLOTS.forEach(s=>document.getElementById('mslot-'+s).classList.toggle('equipped',!!equipped[s]));recalcCombat();['fisico','intelecto','poder'].forEach(a=>validateSkills(a));onOfficialChange();renderFichaWeapons();}
+function loadSheet(){
+  try{
+    const raw=localStorage.getItem('rpg-sheet');
+    if(raw){
+      const d=JSON.parse(raw);
+      if(d['chk-official']!==undefined)document.getElementById('chk-official').checked=d['chk-official'];
+      Object.entries(d).forEach(([id,val])=>{
+        if(['chk-official','_inv','_eq','_eqw','_dmg','_tree','_fcnl'].includes(id))return;
+        const el=document.getElementById(id);if(!el||el.readOnly)return;
+        if(id.startsWith('md-')){val?el.classList.add('filled'):el.classList.remove('filled');}
+        else el.value=val;
+      });
+      if(d._inv)try{const inv=JSON.parse(d._inv);Object.assign(inventory,inv);}catch(_){}
+      if(d._eq)try{const eq=JSON.parse(d._eq);SLOTS.forEach(s=>{equipped[s]=eq[s]||null;});}catch(_){}
+      if(d._eqw)try{Object.assign(equippedWeapons,JSON.parse(d._eqw));}catch(_){}
+      if(d._dmg)try{Object.assign(itemDamage,JSON.parse(d._dmg));}catch(_){}
+      if(d._tree)try{Object.assign(treeData,JSON.parse(d._tree));}catch(_){}
+      if(d._fcnl)try{Object.assign(fcNodeLevels,JSON.parse(d._fcnl));}catch(_){}
+    }
+    const ph=localStorage.getItem('rpg-photo');
+    if(ph){const img=document.getElementById('char-img');img.src=ph;img.style.display='block';document.getElementById('photo-ph').style.display='none';}
+  }catch(_){}
+  updateHP();updatePE();updateWeight();
+  SLOTS.forEach(s=>{const el=document.getElementById('mslot-'+s);if(el)el.classList.toggle('equipped',!!equipped[s]);});
+  recalcCombat();['fisico','intelecto','poder'].forEach(a=>validateSkills(a));onOfficialChange();renderFichaWeapons();
+}
 let _t;function autoSave(){clearTimeout(_t);_t=setTimeout(saveSheet,800);}
-document.addEventListener('input',e=>{const el=e.target;const skip=['f-hpmax','f-hpdano','f-pemax','f-pegasto','f-usos0','atr-fisico','atr-intelecto','atr-poder','f-nivel'];if((el.tagName==='INPUT'||el.tagName==='TEXTAREA')&&!skip.includes(el.id)&&!el.classList.contains('sk-inp')&&!el.classList.contains('sk-bon'))autoSave();});
+document.addEventListener('input',e=>{
+  const el=e.target;
+  const skip=['f-hpmax','f-hpdano','f-hptemp','f-pemax','f-pegasto','f-petemp','f-usos0','atr-fisico','atr-intelecto','atr-poder','f-nivel'];
+  if((el.tagName==='INPUT'||el.tagName==='TEXTAREA')&&!skip.includes(el.id)&&!el.classList.contains('sk-inp')&&!el.classList.contains('sk-bon'))autoSave();
+});
 loadSheet();
 </script>
 </body>
