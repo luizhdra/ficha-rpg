@@ -359,6 +359,38 @@ input[type=file]{display:none}
     </div>
   </div>
 </div>
+<div class="fc-overlay" id="mn-overlay" onclick="closeMNOverlay(event)">
+  <div class="fc-modal">
+    <div class="fc-modal-inner">
+      <button class="fc-close" onclick="closeMNOverlayDirect()">✕</button>
+      <div class="fc-modal-title">Caminho da Mão Nua</div>
+      <div class="fc-modal-sub">Árvore de Habilidades — O Batedor</div>
+      <div class="fc-sp-bar" id="mn-sp-bar"></div>
+      <div id="mn-tree-container"></div>
+      <div class="fc-desc-card" id="mn-desc-card">
+        <div class="fc-desc-title" id="mn-desc-title"></div>
+        <div class="fc-desc-grade" id="mn-desc-grade"></div>
+        <div id="mn-desc-levels"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="fc-overlay" id="med-overlay" onclick="closeMedOverlay(event)">
+  <div class="fc-modal">
+    <div class="fc-modal-inner">
+      <button class="fc-close" onclick="closeMedOverlayDirect()">✕</button>
+      <div class="fc-modal-title">Medicina</div>
+      <div class="fc-modal-sub">Árvore de Habilidades — O Especialista</div>
+      <div class="fc-sp-bar" id="med-sp-bar"></div>
+      <div id="med-tree-container"></div>
+      <div class="fc-desc-card" id="med-desc-card">
+        <div class="fc-desc-title" id="med-desc-title"></div>
+        <div class="fc-desc-grade" id="med-desc-grade"></div>
+        <div id="med-desc-levels"></div>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="fc-overlay" id="ar-overlay" onclick="closeAROverlay(event)">
   <div class="fc-modal">
     <div class="fc-modal-inner">
@@ -599,7 +631,7 @@ input[type=file]{display:none}
 
 <script>
 // ══ DATA ══
-const SKILLS={fisico:['Atletismo','Armas Brancas','Artes Marciais','Bloquear Físico','Destruir','Esquivar','Fortitude','Furtividade','Iniciativa','Prestidigitação','Resistir','Segurar'],intelecto:['Adestrar Animais','Arcanismo','Atuação','Charme','Conhecimento','Diplomacia','Dirigir','Intimidação','Intuição','Investigação','Línguas','Medicina','Mentiras','Natureza','Percepção','Pontaria','Sobrevivência','Tecnologia','Vontade'],poder:['Atacar','Adaptar','Bloquear Mágico','Detectar','Restaurar']};
+const SKILLS={fisico:['Acrobacia','Atletismo','Armas Brancas','Artes Marciais','Bloquear Físico','Destruir','Esquivar','Fortitude','Furtividade','Iniciativa','Prestidigitação','Resistir','Segurar'],intelecto:['Adestrar Animais','Arcanismo','Atuação','Charme','Conhecimento','Diplomacia','Dirigir','Intimidação','Intuição','Investigação','Línguas','Medicina','Mentiras','Natureza','Percepção','Pontaria','Sobrevivência','Tecnologia','Vontade'],poder:['Atacar','Adaptar','Bloquear Mágico','Detectar','Restaurar']};
 const SLOTS=['capacete','peitoral','luvas','calca','botas'];
 const SLOT_NAMES={capacete:'Capacete',peitoral:'Peitoral',luvas:'Luvas',calca:'Calça',botas:'Botas'};
 const SLOT_ICONS={capacete:'🪖',peitoral:'🛡',luvas:'🤜',calca:'🦵',botas:'🥾'};
@@ -641,14 +673,15 @@ const ARMOR_CUSTOM_MAN=[{id:'versatil',name:'Versátil (+0)',mod:0},{id:'duas_ma
 const ARMOR_CUSTOM_TEC=[{id:'none',name:'Nenhuma',mod:0},{id:'energizada',name:'Energizada (+0.3)',mod:0.3},{id:'carregar',name:'Carregar (+0.7)',mod:0.7},{id:'polarizado',name:'Polarizado (+1.0)',mod:1.0}];
 const ARMOR_CUSTOM_MAT=[{id:'none',name:'Nenhum',mod:0},{id:'reforcado',name:'Reforçado (+1.5)',mod:1.5},{id:'composto',name:'Composto (+1.0)',mod:1.0},{id:'fraco',name:'Fraco (−0.2)',mod:-0.2},{id:'fragil',name:'Frágil (−0.1)',mod:-0.1}];
 const SKILL_TREE=[
-  {id:'batedor',name:'O Batedor',paths:[{name:'Caminho da Mão Nua'},{name:'Trilha do Armado',hasARTree:true},{name:'Módulo do Atirador'},{name:'Passo do Assassino',hasPATree:true},{name:'Técnicas de Suporte'},{name:'Fúria'}]},
-  {id:'especialista',name:'O Especialista',paths:[{name:'Fomento Corporal',hasFCTree:true},{name:'Acrobata',hasACTree:true},{name:'Medicina'}]},
+  {id:'batedor',name:'O Batedor',paths:[{name:'Caminho da Mão Nua',hasMNTree:true},{name:'Trilha do Armado',hasARTree:true},{name:'Módulo do Atirador'},{name:'Passo do Assassino',hasPATree:true},{name:'Técnicas de Suporte'},{name:'Fúria'}]},
+  {id:'especialista',name:'O Especialista',paths:[{name:'Fomento Corporal',hasFCTree:true},{name:'Acrobata',hasACTree:true},{name:'Medicina',hasMedTree:true}]},
   {id:'arcanista',name:'O Arcanista',paths:[{name:'Círculo do Espírito'},{name:'Círculo dos Elementos'},{name:'Círculo do Corpo'}]}
 ];
 const FC_NODES=[
-  {id:'fomento',name:'Fomento Corporal',grade:1,maxLevels:1,stars:false,levels:[{n:1,txt:'Você ganha Maestria em Perícia: Fortitude, Perícia: Vontade ou Perícia: Resistir.'}]},
+  {id:'fomento',name:'Fomento Corporal',grade:1,maxLevels:1,stars:false,levels:[{n:1,txt:'Você ganha Maestria em Perícia: Fortitude, Perícia: Vontade ou Perícia: Resistir.',hasChoice:true,choiceSkills:[{attr:'fisico',name:'Fortitude'},{attr:'intelecto',name:'Vontade'},{attr:'fisico',name:'Resistir'}]}]},
   {id:'vitalidade',name:'Vitalidade',grade:3,maxLevels:2,stars:true,levels:[{n:1,txt:'A cada nível que passa após obter esta habilidade, você ganha +2 PV.'},{n:2,txt:'Você ganha um bônus de +2 em rolagens de teste com a Perícia: Fortitude.'}]},
   {id:'cascagrossa',name:'Casca Grossa',grade:4,maxLevels:2,stars:true,levels:[{n:1,txt:'Você pode adicionar o valor de seu Atributo: Físico em sua defesa. Além disso, ganha maestria em 2 propriedades de proteção a sua escolha.'},{n:2,txt:'Quando você estiver com menos da metade dos seus PV totais, recebe um bônus de +5 em defesa. Este efeito acaba se você ficar com mais da metade dos seus PV totais.'}]},
+  {id:'atletico',name:'Atlético',grade:4,maxLevels:1,stars:true,levels:[{n:1,txt:'Você ganha um bônus de +3 em rolagens de teste com a Perícia: Atletismo. Além disso, pode andar +3 metros extra.'}]},
   {id:'determinacao',name:'Determinação',grade:3,maxLevels:2,stars:true,levels:[{n:1,txt:'A cada nível que passa após obter esta habilidade, você ganha +2 PE.'},{n:2,txt:'Você ganha um bônus de +2 em rolagens de teste com a Perícia: Vontade.'}]},
   {id:'resistencia',name:'Resistência',grade:3,maxLevels:3,stars:true,levels:[{n:1,txt:'Você ganha R1 (50%) em um tipo de dano a sua escolha.'},{n:2,txt:'Você pode escolher entre: Ganhar R1 em um novo tipo de dano; ou Aumentar uma resistência existente em mais 50% (máx 100%).'},{n:3,txt:'Você pode escolher entre: Ganhar R1 em um novo tipo de dano; ou Aumentar uma resistência existente em mais 50% (máx 100%).'}]}
 ];
@@ -663,11 +696,21 @@ const PA_NODES=[
   {id:'maisUm',name:'Mais Um!',grade:4,maxLevels:1,stars:true,levels:[{n:1,txt:'Ao atacar, quando uma criatura estiver com as seguintes condições: Atordoado, Desprevenido, Exposto ou Paralisado, você pode realizar um ataque extra como Ação Secundária.'}]},
   {id:'apunhalar',name:'Apunhalar',grade:4,maxLevels:2,stars:true,levels:[{n:1,txt:'Ao acertar uma criatura pelas costas, você ganha +3 de bônus no acerto e dano.'},{n:2,txt:'O bônus anterior aumenta para +5 caso esteja utilizando uma arma de Propriedade: Arma do Assassino.'}]}
 ];
+const MN_NODES=[
+  {id:'maonua',name:'Caminho da Mão Nua',grade:1,maxLevels:1,stars:false,isRoot:true,levels:[{n:1,txt:'Você ganha Maestria em Perícia: Artes Marciais ou Perícia: Atletismo.',hasChoice:true,choiceSkills:[{attr:'fisico',name:'Artes Marciais'},{attr:'fisico',name:'Atletismo'}]}]},
+  {id:'poseCombate',name:'Pose de Combate',grade:2,maxLevels:1,stars:true,levels:[{n:1,txt:'Gastando 7 PE, você pode ativar a Pose de Combate. Você só pode usar uma pose por turno e a cada turno ativo gasta 3 PE. Enquanto ativa, ganha: +2 de bônus em Artes Marciais, Atletismo, Fortitude e Dano Físico.'}]},
+  {id:'posturaMamifero',name:'Postura do Mamífero',grade:4,maxLevels:2,stars:true,levels:[{n:1,txt:'Você aprende a variação Pose de Combate: Postura do Mamífero. Além dos benefícios da Pose de Combate, concede: +3 de Dano Físico, +3 metros de movimento e +3 pontos em Defesa.'},{n:2,txt:'Todos os benefícios da Postura do Mamífero aumentam de +3 para +5.'}]}
+];
+const MED_NODES=[
+  {id:'medicina',name:'Medicina',grade:2,maxLevels:1,stars:false,isRoot:true,levels:[{n:1,txt:'Você ganha Maestria em Perícia: Medicina, Perícia: Restaurar ou Perícia: Resistir.',hasChoice:true,choiceSkills:[{attr:'intelecto',name:'Medicina'},{attr:'poder',name:'Restaurar'},{attr:'fisico',name:'Resistir'}]}]},
+  {id:'curaGentil',name:'Cura Gentil',grade:3,maxLevels:1,stars:true,levels:[{n:1,txt:'Você adiciona o valor de seu Atributo: Intelecto ao seu dado de cura.'}]},
+  {id:'enfermeiro',name:'Enfermeiro',grade:4,maxLevels:1,stars:true,levels:[{n:1,txt:'Sua cura excedente se transforma em pontos de vida temporários para a criatura. Esse benefício dura por até 2 cenas.'}]}
+];
 const AR_NODES=[
   {id:'armado',name:'Trilha do Armado',grade:2,maxLevels:1,stars:false,isRoot:true,levels:[{n:1,txt:'Você ganha Maestria em Perícia: Armas Brancas ou Perícia: Pontaria.',hasChoice:true,choiceSkills:[{attr:'fisico',name:'Armas Brancas'},{attr:'intelecto',name:'Pontaria'}]}]},
   {id:'focoArmas',name:'Foco em Armas',grade:3,maxLevels:1,stars:true,levels:[{n:1,txt:'Escolha três categorias da tabela de armas. Você ganha Bônus de Maestria quando as empunha para realizar um ataque.',hasTripleArmaChoice:true}]},
-  {id:'especializacao',name:'Especialização',grade:4,maxLevels:1,stars:true,levels:[{n:1,txt:'Escolha uma arma à qual seu personagem possui maestria. O dano base atual dela é aumentado em +3 e o multiplicador de crítico aumenta em +1.'}]},
-  {id:'ultraMaestria',name:'Ultra Maestria',grade:5,maxLevels:1,stars:true,levels:[{n:1,txt:'Escolha uma arma à qual seu personagem possui maestria. Você ganha +1 em todos os bônus de dados (ex: uma arma que causa 8+2d6+1d8 de dano passará a causar 8+3d6+2d8).'}]},
+  {id:'especializacao',name:'Especialização',grade:4,maxLevels:1,stars:true,levels:[{n:1,txt:'Escolha uma das categorias de armas do seu Foco em Armas. O dano base dela é aumentado em +3 e o multiplicador de crítico aumenta em +1.',hasFocoArmaChoice:true}]},
+  {id:'ultraMaestria',name:'Ultra Maestria',grade:5,maxLevels:1,stars:true,levels:[{n:1,txt:'Escolha uma das categorias de armas do seu Foco em Armas. Você ganha +1 em todos os bônus de dados dessa arma (ex: 8+2d6+1d8 passa a ser 8+3d6+2d8).',hasFocoArmaChoice:true}]},
   {id:'combateDefensivo',name:'Combate Defensivo',grade:3,maxLevels:1,stars:true,levels:[{n:1,txt:'Se você estiver usando um escudo: não poderá ser flanqueado e ganha cobertura parcial.'}]},
   {id:'segurarEscudo',name:'Segurar Escudo',grade:3,maxLevels:1,stars:true,levels:[{n:1,txt:'Se você terminar seu turno adjacente a um aliado, pode conceder um bônus de +3 de Perícia: Bloquear a ele (sem que você mesmo o perca). Seu aliado perde o bônus se não estiver mais adjacente a você. O efeito funciona como bônus adicional, ultrapassando limites máximos de defesa.'}]},
   {id:'treinoManuseio',name:'Treino de Manuseio',grade:3,maxLevels:1,stars:true,levels:[{n:1,txt:'Você escolhe um tipo de empunhadura: Versátil, Singular (Uma Mão) ou Dupla (Duas Mãos). Armas que possuem a empunhadura escolhida ganham +1 ponto de dano.',hasEmpunhaduraChoice:true}]},
@@ -694,6 +737,7 @@ let resRows=[];   // [{tipo:'',pct:'',src:'manual'|'fc'}]
 let vulnRows=[];  // [{tipo:'',pct:''}]
 let lojaBuilt={protecoes:false,armas:false};
 let fcActiveNode=null;
+let fcMaestriaChoice=null; // skill choice for fomento root
 // AC (Acrobata) state
 let acOwned={}; // {nodeId: levelsOwned}
 let acActiveNode=null;
@@ -703,16 +747,26 @@ let paOwned={}; // {nodeId: levelsOwned}
 let paActiveNode=null;
 let paArmaChoice=null; // arma choice for Passo root
 
+// MN (Mão Nua) state
+let mnOwned={}; // {nodeId: levelsOwned}
+let mnActiveNode=null;
+let mnMaestriaChoice=null;
+// MED (Medicina) state
+let medOwned={}; // {nodeId: levelsOwned}
+let medActiveNode=null;
+let medMaestriaChoice=null;
 // AR (Trilha do Armado) state
 let arOwned={}; // {nodeId: levelsOwned}
 let arActiveNode=null;
 let arMaestriaChoice=null; // skill choice for root
 let arFocoArmas=[]; // up to 3 weapon categories
 let arEmpunhaduraChoice=null; // empunhadura choice for treinoManuseio
+let arEspecChoice=null; // weapon category choice for Especialização
+let arUltraChoice=null; // weapon category choice for Ultra Maestria
 
 // ── SP ──
 function spBudget(){const lvl=Math.max(1,parseInt(document.getElementById('f-nivel').value)||1);return 8+(lvl-1);}
-function spUsed(){let u=0;Object.values(fcOwned).forEach(v=>u+=v);Object.values(acOwned).forEach(v=>u+=v);Object.values(paOwned).forEach(v=>u+=v);Object.values(arOwned).forEach(v=>u+=v);return u;}
+function spUsed(){let u=0;Object.values(fcOwned).forEach(v=>u+=v);Object.values(acOwned).forEach(v=>u+=v);Object.values(paOwned).forEach(v=>u+=v);Object.values(arOwned).forEach(v=>u+=v);Object.values(mnOwned).forEach(v=>u+=v);Object.values(medOwned).forEach(v=>u+=v);return u;}
 function spLeft(){return spBudget()-spUsed();}
 function updateSPBadge(){
   const el=document.getElementById('sp-badge');
@@ -1163,6 +1217,16 @@ function buildSkillTree(){
           '<div class="tree-path-name" style="color:var(--red3)">'+p.name+' 🗡</div>'+
           '<div style="font-size:10px;color:var(--txt3);margin-top:2px">Clique para ver a árvore</div>'+
           '<div style="margin-top:8px;display:flex;align-items:center;gap:6px"><span style="font-size:10px;color:var(--txt3)">XP Investido:</span><input type="number" style="width:60px;font-size:12px;padding:3px 5px;text-align:center" value="'+xp+'" min="0" onclick="event.stopPropagation()" onchange="setPathXP(\''+cls.id+'\',\''+p.name+'\',this.value)"></div></div>';
+      } else if(p.hasMNTree){
+        pathsHtml+='<div class="tree-path-card" onclick="openMNOverlay()" style="border-color:#c084fc">'+
+          '<div class="tree-path-name" style="color:#c084fc">'+p.name+' 🥊</div>'+
+          '<div style="font-size:10px;color:var(--txt3);margin-top:2px">Clique para ver a árvore</div>'+
+          '<div style="margin-top:8px;display:flex;align-items:center;gap:6px"><span style="font-size:10px;color:var(--txt3)">XP Investido:</span><input type="number" style="width:60px;font-size:12px;padding:3px 5px;text-align:center" value="'+xp+'" min="0" onclick="event.stopPropagation()" onchange="setPathXP(\''+cls.id+'\',\''+p.name+'\',this.value)"></div></div>';
+      } else if(p.hasMedTree){
+        pathsHtml+='<div class="tree-path-card" onclick="openMedOverlay()" style="border-color:#34d399">'+
+          '<div class="tree-path-name" style="color:#34d399">'+p.name+' 🩺</div>'+
+          '<div style="font-size:10px;color:var(--txt3);margin-top:2px">Clique para ver a árvore</div>'+
+          '<div style="margin-top:8px;display:flex;align-items:center;gap:6px"><span style="font-size:10px;color:var(--txt3)">XP Investido:</span><input type="number" style="width:60px;font-size:12px;padding:3px 5px;text-align:center" value="'+xp+'" min="0" onclick="event.stopPropagation()" onchange="setPathXP(\''+cls.id+'\',\''+p.name+'\',this.value)"></div></div>';
       } else if(p.hasARTree){
         pathsHtml+='<div class="tree-path-card" onclick="openAROverlay()" style="border-color:var(--green)">'+
           '<div class="tree-path-name" style="color:var(--green2)">'+p.name+' ⚔</div>'+
@@ -1226,6 +1290,44 @@ function renderPlayerTree(){
       let extra='<span style="font-size:9px;color:var(--red3);margin-left:4px">[Assassino]</span>';
       if(id==='passo'&&paArmaChoice)extra+=' <span style="font-size:9px;color:var(--green2)">→ Arma: '+paArmaChoice+'</span>';
       div.innerHTML='<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><span class="pt-node-name">'+node.name+'<span class="pt-node-lv">Nv'+lv+'</span></span>'+extra+'</div>'+'<button class="pt-sell-btn" onclick="sellPALevel(\''+id+'\','+lv+')">↩ Vender (+1pt)</button>';
+      list.appendChild(div);
+    }
+  });
+  // MN nodes
+  const allMN=Object.entries(mnOwned).filter(([,v])=>v>0);
+  allMN.forEach(([id,lvls])=>{
+    const node=MN_NODES.find(n=>n.id===id);if(!node)return;
+    for(let lv=1;lv<=lvls;lv++){
+      const div=document.createElement('div');div.className='pt-node';
+      let extra='<span style="font-size:9px;color:#c084fc;margin-left:4px">[Mão Nua]</span>';
+      if(id==='maonua'&&mnMaestriaChoice)extra+=' <span style="font-size:9px;color:var(--green2)">→ Maestria: '+mnMaestriaChoice.name+'</span>';
+      div.innerHTML='<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><span class="pt-node-name">'+node.name+'<span class="pt-node-lv">Nv'+lv+'</span></span>'+extra+'</div>'+'<button class="pt-sell-btn" onclick="sellMNLevel(\''+id+'\','+lv+')">↩ Vender (+1pt)</button>';
+      list.appendChild(div);
+    }
+  });
+  // MED nodes
+  const allMed=Object.entries(medOwned).filter(([,v])=>v>0);
+  allMed.forEach(([id,lvls])=>{
+    const node=MED_NODES.find(n=>n.id===id);if(!node)return;
+    for(let lv=1;lv<=lvls;lv++){
+      const div=document.createElement('div');div.className='pt-node';
+      let extra='<span style="font-size:9px;color:#34d399;margin-left:4px">[Medicina]</span>';
+      if(id==='medicina'&&medMaestriaChoice)extra+=' <span style="font-size:9px;color:var(--green2)">→ Maestria: '+medMaestriaChoice.name+'</span>';
+      div.innerHTML='<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><span class="pt-node-name">'+node.name+'<span class="pt-node-lv">Nv'+lv+'</span></span>'+extra+'</div>'+'<button class="pt-sell-btn" onclick="sellMedLevel(\''+id+'\','+lv+')">↩ Vender (+1pt)</button>';
+      list.appendChild(div);
+    }
+  });
+  // AR nodes
+  const allAR=Object.entries(arOwned).filter(([,v])=>v>0);
+  allAR.forEach(([id,lvls])=>{
+    const node=AR_NODES.find(n=>n.id===id);if(!node)return;
+    for(let lv=1;lv<=lvls;lv++){
+      const div=document.createElement('div');div.className='pt-node';
+      let extra='<span style="font-size:9px;color:var(--green2);margin-left:4px">[Armado]</span>';
+      if(id==='armado'&&arMaestriaChoice)extra+=' <span style="font-size:9px;color:var(--green2)">→ Maestria: '+arMaestriaChoice.name+'</span>';
+      if(id==='focoArmas'&&arFocoArmas.length>0)extra+=' <span style="font-size:9px;color:var(--green2)">→ '+arFocoArmas.join(', ')+'</span>';
+      if(id==='treinoManuseio'&&arEmpunhaduraChoice)extra+=' <span style="font-size:9px;color:var(--green2)">→ '+arEmpunhaduraChoice+'</span>';
+      div.innerHTML='<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><span class="pt-node-name">'+node.name+'<span class="pt-node-lv">Nv'+lv+'</span></span>'+extra+'</div>'+'<button class="pt-sell-btn" onclick="sellARLevel(\''+id+'\','+lv+')">↩ Vender (+1pt)</button>';
       list.appendChild(div);
     }
   });
@@ -1338,6 +1440,14 @@ function fcCheckPrereq(id,lv){
 function fcBuyLevel(id,lv){
   if(!fcCheckPrereq(id,lv)){showToast('Pré-requisito não atendido!');return;}
   if(isOfficial()&&spLeft()<1){showToast('Sem pontos de habilidade!');return;}
+  if(id==='fomento'&&lv===1){
+    const sel=document.getElementById('fc-maestria-sel');
+    if(sel){const parts=sel.value.split('|');const attr=parts[0];const name=parts[1];
+      fcMaestriaChoice={attr,name};
+      const dot0=document.getElementById(mdId(attr,name,0));
+      if(dot0&&!dot0.classList.contains('filled')){dot0.classList.add('filled');calcTotal(attr,name);autoSave();}
+    }
+  }
   fcOwned[id]=(fcOwned[id]||0)+1;
   const curLvl=parseInt(document.getElementById('f-nivel').value)||1;
   if(id==='vitalidade'&&lv===1&&fcVitalLvlBought===null)fcVitalLvlBought=curLvl;
@@ -1364,6 +1474,13 @@ function fcBuyResistencia(lv){
 }
 
 function sellFCLevel(id,lv){
+  if(id==='fomento'&&lv===1&&fcMaestriaChoice){
+    const{attr,name}=fcMaestriaChoice;
+    const dot0=document.getElementById(mdId(attr,name,0));
+    if(dot0)dot0.classList.remove('filled');
+    calcTotal(attr,name);
+    fcMaestriaChoice=null;
+  }
   const owned=fcOwned[id]||0;
   if(lv!==owned){showToast('Só pode vender o nível mais alto!');return;}
   fcOwned[id]=Math.max(0,owned-1);
@@ -1595,6 +1712,227 @@ function sellPALevel(id,lv){
 }
 
 
+
+// ── CAMINHO DA MÃO NUA (MN) OVERLAY ──
+function openMNOverlay(){document.getElementById('mn-overlay').classList.add('open');buildMNTree();document.getElementById('mn-desc-card').classList.remove('show');}
+function closeMNOverlay(e){if(e.target===document.getElementById('mn-overlay'))closeMNOverlayDirect();}
+function closeMNOverlayDirect(){document.getElementById('mn-overlay').classList.remove('open');}
+
+function buildMNTree(){
+  const spEl=document.getElementById('mn-sp-bar');
+  if(isOfficial()){const left=spLeft();const total=spBudget();const used=spUsed();spEl.innerHTML='<span style="font-size:12px;font-weight:600;color:'+(left<0?'var(--red3)':'var(--green2)')+'">✦ '+left+' pts disponíveis</span><span style="font-size:10px;color:var(--txt3);margin-left:10px">'+used+' usados / '+total+' total</span>';}
+  else{spEl.innerHTML='<span style="font-size:10px;color:var(--txt3)">Ative "Versão Oficial" para comprar habilidades com pontos</span>';}
+  const container=document.getElementById('mn-tree-container');
+  let html='<div class="fc-tree">';
+  html+=buildMNNodeHTML('maonua',true);
+  html+='<div style="display:flex;justify-content:center"><div class="fc-cv"></div></div>';
+  html+='<div style="display:flex;justify-content:center;align-items:flex-start;width:100%">';
+  ['poseCombate'].forEach(id=>{
+    html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
+    html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
+    html+='<div class="fc-cv" style="height:16px"></div>';
+    html+=buildMNNodeHTML(id,false);
+    html+='</div>';
+  });
+  html+='</div>';
+  html+='<div style="display:flex;justify-content:center;width:100%;margin-top:4px">';
+  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
+  html+='<div class="fc-cv" style="height:20px"></div>';
+  html+=buildMNNodeHTML('posturaMamifero',false);
+  html+='</div></div>';
+  html+='</div>';
+  container.innerHTML=html;
+}
+function buildMNNodeHTML(id,isRoot){
+  const node=MN_NODES.find(n=>n.id===id);if(!node)return '';
+  const owned=mnOwned[id]||0;
+  let starsHtml='';
+  if(node.stars){starsHtml='<div class="fc-stars">';for(let i=0;i<node.maxLevels;i++)starsHtml+='<span class="fc-star'+(i<owned?' lit':'')+'">★</span>';starsHtml+='</div>';}
+  const badge=owned>0?'<div class="fc-owned-badge">✓ Nv'+owned+'/'+node.maxLevels+'</div>':'';
+  return '<div class="fc-node'+(isRoot?' root-node':'')+(owned>0?' owned':'')+'" onclick="mnShowDesc(\''+id+'\')" id="mnn-'+id+'">'+
+    '<div class="fc-node-name">'+node.name+'</div>'+
+    '<div class="fc-node-grade">Grau '+node.grade+(isRoot?' · Raiz':'')+'</div>'+
+    starsHtml+badge+'</div>';
+}
+function mnShowDesc(id){
+  const node=MN_NODES.find(n=>n.id===id);if(!node)return;
+  mnActiveNode=id;
+  document.getElementById('mn-desc-title').textContent=node.name;
+  document.getElementById('mn-desc-grade').textContent='Habilidade de Grau '+node.grade+(node.isRoot?' (Raiz)':'');
+  const owned=mnOwned[id]||0;
+  let html='';
+  node.levels.forEach(lv=>{
+    const isOwned=lv.n<=owned;const isBuyable=lv.n===owned+1;
+    let cls='fc-desc-lv';if(isOwned)cls+=' owned-lv';else if(isBuyable)cls+=' buyable-lv';
+    html+='<div class="'+cls+'"><div class="fc-desc-lv-num">'+(isOwned?'✓ ':'')+'Nível '+lv.n+'</div><div class="fc-desc-lv-txt">'+lv.txt+'</div>';
+    if(isBuyable){
+      const prereqOk=mnCheckPrereq(id,lv.n);const spOk=spLeft()>0||!isOfficial();const canBuy=prereqOk&&spOk;
+      const btnLabel=canBuy?'Comprar Nv'+lv.n+' (1pt)':(!prereqOk?'Pré-requisito não atendido':'Sem pts disponíveis');
+      if(lv.hasChoice){
+        html+='<div class="fc-res-picker"><label>Escolha a Perícia:</label><select id="mn-maestria-sel">';
+        lv.choiceSkills.forEach(sk=>{html+='<option value="'+sk.attr+'|'+sk.name+'">'+sk.name+'</option>';});
+        html+='</select>';
+        if(mnMaestriaChoice)html+='<div style="font-size:10px;color:var(--green2);margin:4px 0">✓ Maestria aplicada em: '+mnMaestriaChoice.name+'</div>';
+        html+='<button class="fc-buy-btn" '+(canBuy?'':'disabled')+' onclick="mnBuyLevel(\'maonua\',1)">'+btnLabel+'</button></div>';
+      } else {
+        html+='<button class="fc-buy-btn" '+(canBuy?'':'disabled')+' onclick="mnBuyLevel(\''+id+'\','+lv.n+')">'+btnLabel+'</button>';
+      }
+    } else if(isOwned&&id==='maonua'&&mnMaestriaChoice){
+      html+='<div style="font-size:10px;color:var(--green2);margin:4px 0">✓ Maestria: '+mnMaestriaChoice.name+'</div>';
+    }
+    html+='</div>';
+  });
+  document.getElementById('mn-desc-levels').innerHTML=html;
+  document.getElementById('mn-desc-card').classList.add('show');
+}
+function mnCheckPrereq(id,lv){
+  if(id==='maonua')return true;
+  if((mnOwned['maonua']||0)<1)return false;
+  if(id==='posturaMamifero'&&(mnOwned['poseCombate']||0)<1)return false;
+  if(lv>1&&(mnOwned[id]||0)<lv-1)return false;
+  return true;
+}
+function mnBuyLevel(id,lv){
+  if(!mnCheckPrereq(id,lv)){showToast('Pré-requisito não atendido!');return;}
+  if(isOfficial()&&spLeft()<1){showToast('Sem pontos de habilidade!');return;}
+  if(id==='maonua'&&lv===1){
+    const sel=document.getElementById('mn-maestria-sel');
+    if(sel){const parts=sel.value.split('|');const attr=parts[0];const name=parts[1];
+      mnMaestriaChoice={attr,name};
+      const dot0=document.getElementById(mdId(attr,name,0));
+      if(dot0&&!dot0.classList.contains('filled')){dot0.classList.add('filled');calcTotal(attr,name);autoSave();}
+    }
+  }
+  mnOwned[id]=(mnOwned[id]||0)+1;
+  updateSPBadge();buildMNTree();mnShowDesc(id);renderPlayerTree();autoSave();
+  showToast('✓ Habilidade comprada!');
+}
+function sellMNLevel(id,lv){
+  const owned=mnOwned[id]||0;
+  if(lv!==owned){showToast('Só pode vender o nível mais alto!');return;}
+  mnOwned[id]=Math.max(0,owned-1);
+  if(id==='maonua'&&lv===1&&mnMaestriaChoice){
+    const{attr,name}=mnMaestriaChoice;
+    const dot0=document.getElementById(mdId(attr,name,0));
+    if(dot0)dot0.classList.remove('filled');
+    calcTotal(attr,name);mnMaestriaChoice=null;
+  }
+  updateSPBadge();buildMNTree();
+  if(mnActiveNode===id)mnShowDesc(id);
+  renderPlayerTree();autoSave();
+  showToast('↩ Habilidade vendida (+1pt)');
+}
+
+// ── MEDICINA (MED) OVERLAY ──
+function openMedOverlay(){document.getElementById('med-overlay').classList.add('open');buildMedTree();document.getElementById('med-desc-card').classList.remove('show');}
+function closeMedOverlay(e){if(e.target===document.getElementById('med-overlay'))closeMedOverlayDirect();}
+function closeMedOverlayDirect(){document.getElementById('med-overlay').classList.remove('open');}
+
+function buildMedTree(){
+  const spEl=document.getElementById('med-sp-bar');
+  if(isOfficial()){const left=spLeft();const total=spBudget();const used=spUsed();spEl.innerHTML='<span style="font-size:12px;font-weight:600;color:'+(left<0?'var(--red3)':'var(--green2)')+'">✦ '+left+' pts disponíveis</span><span style="font-size:10px;color:var(--txt3);margin-left:10px">'+used+' usados / '+total+' total</span>';}
+  else{spEl.innerHTML='<span style="font-size:10px;color:var(--txt3)">Ative "Versão Oficial" para comprar habilidades com pontos</span>';}
+  const container=document.getElementById('med-tree-container');
+  let html='<div class="fc-tree">';
+  html+=buildMedNodeHTML('medicina',true);
+  html+='<div style="display:flex;justify-content:center"><div class="fc-cv"></div></div>';
+  html+='<div style="display:flex;justify-content:center;align-items:flex-start;width:100%">';
+  ['curaGentil'].forEach(id=>{
+    html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
+    html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
+    html+='<div class="fc-cv" style="height:16px"></div>';
+    html+=buildMedNodeHTML(id,false);
+    html+='</div>';
+  });
+  html+='</div>';
+  html+='<div style="display:flex;justify-content:center;width:100%;margin-top:4px">';
+  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
+  html+='<div class="fc-cv" style="height:20px"></div>';
+  html+=buildMedNodeHTML('enfermeiro',false);
+  html+='</div></div>';
+  html+='</div>';
+  container.innerHTML=html;
+}
+function buildMedNodeHTML(id,isRoot){
+  const node=MED_NODES.find(n=>n.id===id);if(!node)return '';
+  const owned=medOwned[id]||0;
+  let starsHtml='';
+  if(node.stars){starsHtml='<div class="fc-stars">';for(let i=0;i<node.maxLevels;i++)starsHtml+='<span class="fc-star'+(i<owned?' lit':'')+'">★</span>';starsHtml+='</div>';}
+  const badge=owned>0?'<div class="fc-owned-badge">✓ Nv'+owned+'/'+node.maxLevels+'</div>':'';
+  return '<div class="fc-node'+(isRoot?' root-node':'')+(owned>0?' owned':'')+'" onclick="medShowDesc(\''+id+'\')" id="medn-'+id+'">'+
+    '<div class="fc-node-name">'+node.name+'</div>'+
+    '<div class="fc-node-grade">Grau '+node.grade+(isRoot?' · Raiz':'')+'</div>'+
+    starsHtml+badge+'</div>';
+}
+function medShowDesc(id){
+  const node=MED_NODES.find(n=>n.id===id);if(!node)return;
+  medActiveNode=id;
+  document.getElementById('med-desc-title').textContent=node.name;
+  document.getElementById('med-desc-grade').textContent='Habilidade de Grau '+node.grade+(node.isRoot?' (Raiz)':'');
+  const owned=medOwned[id]||0;
+  let html='';
+  node.levels.forEach(lv=>{
+    const isOwned=lv.n<=owned;const isBuyable=lv.n===owned+1;
+    let cls='fc-desc-lv';if(isOwned)cls+=' owned-lv';else if(isBuyable)cls+=' buyable-lv';
+    html+='<div class="'+cls+'"><div class="fc-desc-lv-num">'+(isOwned?'✓ ':'')+'Nível '+lv.n+'</div><div class="fc-desc-lv-txt">'+lv.txt+'</div>';
+    if(isBuyable){
+      const prereqOk=medCheckPrereq(id,lv.n);const spOk=spLeft()>0||!isOfficial();const canBuy=prereqOk&&spOk;
+      const btnLabel=canBuy?'Comprar Nv'+lv.n+' (1pt)':(!prereqOk?'Pré-requisito não atendido':'Sem pts disponíveis');
+      if(lv.hasChoice){
+        html+='<div class="fc-res-picker"><label>Escolha a Perícia:</label><select id="med-maestria-sel">';
+        lv.choiceSkills.forEach(sk=>{html+='<option value="'+sk.attr+'|'+sk.name+'">'+sk.name+'</option>';});
+        html+='</select>';
+        if(medMaestriaChoice)html+='<div style="font-size:10px;color:var(--green2);margin:4px 0">✓ Maestria aplicada em: '+medMaestriaChoice.name+'</div>';
+        html+='<button class="fc-buy-btn" '+(canBuy?'':'disabled')+' onclick="medBuyLevel(\'medicina\',1)">'+btnLabel+'</button></div>';
+      } else {
+        html+='<button class="fc-buy-btn" '+(canBuy?'':'disabled')+' onclick="medBuyLevel(\''+id+'\','+lv.n+')">'+btnLabel+'</button>';
+      }
+    } else if(isOwned&&id==='medicina'&&medMaestriaChoice){
+      html+='<div style="font-size:10px;color:var(--green2);margin:4px 0">✓ Maestria: '+medMaestriaChoice.name+'</div>';
+    }
+    html+='</div>';
+  });
+  document.getElementById('med-desc-levels').innerHTML=html;
+  document.getElementById('med-desc-card').classList.add('show');
+}
+function medCheckPrereq(id,lv){
+  if(id==='medicina')return true;
+  if((medOwned['medicina']||0)<1)return false;
+  if(id==='enfermeiro'&&(medOwned['curaGentil']||0)<1)return false;
+  if(lv>1&&(medOwned[id]||0)<lv-1)return false;
+  return true;
+}
+function medBuyLevel(id,lv){
+  if(!medCheckPrereq(id,lv)){showToast('Pré-requisito não atendido!');return;}
+  if(isOfficial()&&spLeft()<1){showToast('Sem pontos de habilidade!');return;}
+  if(id==='medicina'&&lv===1){
+    const sel=document.getElementById('med-maestria-sel');
+    if(sel){const parts=sel.value.split('|');const attr=parts[0];const name=parts[1];
+      medMaestriaChoice={attr,name};
+      const dot0=document.getElementById(mdId(attr,name,0));
+      if(dot0&&!dot0.classList.contains('filled')){dot0.classList.add('filled');calcTotal(attr,name);autoSave();}
+    }
+  }
+  medOwned[id]=(medOwned[id]||0)+1;
+  updateSPBadge();buildMedTree();medShowDesc(id);renderPlayerTree();autoSave();
+  showToast('✓ Habilidade comprada!');
+}
+function sellMedLevel(id,lv){
+  const owned=medOwned[id]||0;
+  if(lv!==owned){showToast('Só pode vender o nível mais alto!');return;}
+  medOwned[id]=Math.max(0,owned-1);
+  if(id==='medicina'&&lv===1&&medMaestriaChoice){
+    const{attr,name}=medMaestriaChoice;
+    const dot0=document.getElementById(mdId(attr,name,0));
+    if(dot0)dot0.classList.remove('filled');
+    calcTotal(attr,name);medMaestriaChoice=null;
+  }
+  updateSPBadge();buildMedTree();
+  if(medActiveNode===id)medShowDesc(id);
+  renderPlayerTree();autoSave();
+  showToast('↩ Habilidade vendida (+1pt)');
+}
+
 // ── TRILHA DO ARMADO (AR) OVERLAY ──
 const AR_WEAPON_CATS=['Lâmina','Machado','Martelo','Lança','Bastão','Taco','Chicote','Serra','Arco e Flecha','Besta','Revólver','Escopeta','Fuzil','Rifle','Lançador'];
 function openAROverlay(){document.getElementById('ar-overlay').classList.add('open');buildARTree();document.getElementById('ar-desc-card').classList.remove('show');}
@@ -1614,9 +1952,9 @@ function buildARTree(){
   let html='<div class="fc-tree">';
   html+=buildARNodeHTML('armado',true);
   html+='<div style="display:flex;justify-content:center"><div class="fc-cv"></div></div>';
-  // Row 1: 4 branches from root
+  // Row 1: 3 branches from root
   html+='<div style="display:flex;justify-content:center;align-items:flex-start;width:100%">';
-  ['focoArmas','combateDefensivo','segurarEscudo','treinoManuseio'].forEach(id=>{
+  ['focoArmas','combateDefensivo','treinoManuseio'].forEach(id=>{
     html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
     html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
     html+='<div class="fc-cv" style="height:16px"></div>';
@@ -1624,25 +1962,22 @@ function buildARTree(){
     html+='</div>';
   });
   html+='</div>';
-  // Row 2: especializacao below focoArmas (leftmost), duasMaos below treinoManuseio (rightmost)
-  html+='<div style="display:flex;justify-content:space-between;width:100%;margin-top:4px">';
-  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-  html+='<div class="fc-cv" style="height:20px"></div>';
-  html+=buildARNodeHTML('especializacao',false);
-  html+='</div>';
-  html+='<div style="flex:2"></div>';
-  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-  html+='<div class="fc-cv" style="height:20px"></div>';
-  html+=buildARNodeHTML('duasMaos',false);
-  html+='</div>';
+  // Row 2: especializacao(col0) | segurarEscudo(col1) | duasMaos(col2)
+  html+='<div style="display:flex;width:100%;margin-top:4px">';
+  [['especializacao',0],['segurarEscudo',1],['duasMaos',2]].forEach(([nid,])=>{
+    html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
+    html+='<div class="fc-cv" style="height:20px"></div>';
+    html+=buildARNodeHTML(nid,false);
+    html+='</div>';
+  });
   html+='</div>';
   // Row 3: ultraMaestria below especializacao
-  html+='<div style="display:flex;justify-content:flex-start;width:100%;margin-top:4px">';
+  html+='<div style="display:flex;width:100%;margin-top:4px">';
   html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
   html+='<div class="fc-cv" style="height:20px"></div>';
   html+=buildARNodeHTML('ultraMaestria',false);
   html+='</div>';
-  html+='<div style="flex:3"></div>';
+  html+='<div style="flex:2"></div>';
   html+='</div>';
   html+='</div>';
   container.innerHTML=html;
@@ -1687,6 +2022,14 @@ function arShowDesc(id){
         html+='</select>';
         if(arFocoArmas.length>0)html+='<div style="font-size:10px;color:var(--green2);margin:4px 0">✓ Selecionadas: '+arFocoArmas.join(', ')+'</div>';
         html+='<button class="fc-buy-btn" '+(canBuy?'':'disabled')+' onclick="arBuyFoco()">'+btnLabel+'</button></div>';
+      } else if(lv.hasFocoArmaChoice){
+        const focoOptions=arFocoArmas.length>0?arFocoArmas:AR_WEAPON_CATS;
+        const curChoice=id==='especializacao'?arEspecChoice:arUltraChoice;
+        html+='<div class="fc-res-picker"><label>Escolha uma categoria do seu Foco em Armas:</label><select id="ar-foco-choice-sel">';
+        focoOptions.forEach(cat=>{const sel=curChoice===cat?' selected':'';html+='<option value="'+cat+'"'+sel+'>'+cat+'</option>';});
+        html+='</select>';
+        if(curChoice)html+='<div style="font-size:10px;color:var(--green2);margin:4px 0">✓ Escolha atual: '+curChoice+'</div>';
+        html+='<button class="fc-buy-btn" '+(canBuy?'':'disabled')+' onclick="arBuyFocoChoice(\''+id+'\','+lv.n+')">'+btnLabel+'</button></div>';
       } else if(lv.hasEmpunhaduraChoice){
         html+='<div class="fc-res-picker"><label>Escolha a empunhadura:</label><select id="ar-empunhadura-sel">';
         ['Versátil','Singular (Uma Mão)','Dupla (Duas Mãos)'].forEach(e=>{const sel=arEmpunhaduraChoice===e?' selected':'';html+='<option value="'+e+'"'+sel+'>'+e+'</option>';});
@@ -1700,6 +2043,8 @@ function arShowDesc(id){
       if(id==='armado'&&arMaestriaChoice)html+='<div style="font-size:10px;color:var(--green2);margin:4px 0">✓ Maestria: '+arMaestriaChoice.name+'</div>';
       if(id==='focoArmas'&&arFocoArmas.length>0)html+='<div style="font-size:10px;color:var(--green2);margin:4px 0">✓ Foco: '+arFocoArmas.join(', ')+'</div>';
       if(id==='treinoManuseio'&&arEmpunhaduraChoice)html+='<div style="font-size:10px;color:var(--green2);margin:4px 0">✓ Empunhadura: '+arEmpunhaduraChoice+'</div>';
+      if(id==='especializacao'&&arEspecChoice)html+='<div style="font-size:10px;color:var(--green2);margin:4px 0">✓ Especialização: '+arEspecChoice+'</div>';
+      if(id==='ultraMaestria'&&arUltraChoice)html+='<div style="font-size:10px;color:var(--green2);margin:4px 0">✓ Ultra Maestria: '+arUltraChoice+'</div>';
     }
     html+='</div>';
   });
@@ -1712,7 +2057,8 @@ function arCheckPrereq(id,lv){
   if((arOwned['armado']||0)<1)return false;
   if((id==='especializacao')&&(arOwned['focoArmas']||0)<1)return false;
   if((id==='ultraMaestria')&&(arOwned['especializacao']||0)<1)return false;
-  if((id==='duasMaos')&&(arOwned['treinoManuseio']||0)<1)return false;
+  if(id==='duasMaos'&&(arOwned['treinoManuseio']||0)<1)return false;
+  if(id==='segurarEscudo'&&(arOwned['combateDefensivo']||0)<1)return false;
   if(lv>1&&(arOwned[id]||0)<lv-1)return false;
   return true;
 }
@@ -1758,6 +2104,17 @@ function arBuyEmpunhadura(){
   showToast('✓ Treino de Manuseio comprado!');
 }
 
+function arBuyFocoChoice(id,lv){
+  if(!arCheckPrereq(id,lv)){showToast('Pré-requisito não atendido!');return;}
+  if(isOfficial()&&spLeft()<1){showToast('Sem pontos de habilidade!');return;}
+  const sel=document.getElementById('ar-foco-choice-sel');
+  if(!sel){showToast('Erro ao obter seleção!');return;}
+  if(id==='especializacao')arEspecChoice=sel.value;
+  else if(id==='ultraMaestria')arUltraChoice=sel.value;
+  arOwned[id]=(arOwned[id]||0)+1;
+  updateSPBadge();buildARTree();arShowDesc(id);renderPlayerTree();autoSave();
+  showToast('✓ Habilidade comprada!');
+}
 function sellARLevel(id,lv){
   const owned=arOwned[id]||0;
   if(lv!==owned){showToast('Só pode vender o nível mais alto!');return;}
@@ -1769,8 +2126,10 @@ function sellARLevel(id,lv){
     calcTotal(attr,name);
     arMaestriaChoice=null;
   }
-  if(id==='focoArmas'&&lv===1)arFocoArmas=[];
+  if(id==='focoArmas'&&lv===1){arFocoArmas=[];arEspecChoice=null;arUltraChoice=null;}
   if(id==='treinoManuseio'&&lv===1)arEmpunhaduraChoice=null;
+  if(id==='especializacao'&&lv===1)arEspecChoice=null;
+  if(id==='ultraMaestria'&&lv===1)arUltraChoice=null;
   updateSPBadge();buildARTree();
   if(arActiveNode===id)arShowDesc(id);
   renderPlayerTree();autoSave();
@@ -1803,6 +2162,11 @@ function gatherData(){
   d._fcRes=JSON.stringify(fcResChoices);d._resRows=JSON.stringify(resRows);d._vulnRows=JSON.stringify(vulnRows);
   d._acOwned=JSON.stringify(acOwned);d._acMC=acMaestriaChoice?JSON.stringify(acMaestriaChoice):null;
   d._paOwned=JSON.stringify(paOwned);d._paAC=paArmaChoice||null;
+  d._arOwned=JSON.stringify(arOwned);d._arMC=arMaestriaChoice?JSON.stringify(arMaestriaChoice):null;d._arFoco=JSON.stringify(arFocoArmas);d._arEmp=arEmpunhaduraChoice||null;
+  d._arEC=arEspecChoice||null;d._arUC=arUltraChoice||null;
+  d._mnOwned=JSON.stringify(mnOwned);d._mnMC=mnMaestriaChoice?JSON.stringify(mnMaestriaChoice):null;
+  d._medOwned=JSON.stringify(medOwned);d._medMC=medMaestriaChoice?JSON.stringify(medMaestriaChoice):null;
+  d._fcMC=fcMaestriaChoice?JSON.stringify(fcMaestriaChoice):null;
   return d;
 }
 function saveSheet(){try{localStorage.setItem('rpg-sheet',JSON.stringify(gatherData()));document.querySelectorAll('.save-msg').forEach(m=>{m.style.opacity='1';setTimeout(()=>m.style.opacity='0',2000);});}catch(_){}}
@@ -1812,7 +2176,7 @@ function loadSheet(){
     if(raw){
       const d=JSON.parse(raw);
       if(d['chk-official']!==undefined)document.getElementById('chk-official').checked=d['chk-official'];
-      const SKIP=['chk-official','_inv','_eq','_eqw','_dmg','_tree','_fcOwned','_fcVital','_fcDet','_fcRes','_resRows','_vulnRows','_acOwned','_acMC','_paOwned','_paAC'];
+      const SKIP=['chk-official','_inv','_eq','_eqw','_dmg','_tree','_fcOwned','_fcVital','_fcDet','_fcRes','_resRows','_vulnRows','_acOwned','_acMC','_paOwned','_paAC','_arOwned','_arMC','_arFoco','_arEmp','_arEC','_arUC','_mnOwned','_mnMC','_medOwned','_medMC','_fcMC'];
       Object.entries(d).forEach(([id,val])=>{
         if(SKIP.includes(id))return;
         const el=document.getElementById(id);if(!el||el.readOnly)return;
@@ -1833,6 +2197,17 @@ function loadSheet(){
       if(d._acMC)try{acMaestriaChoice=JSON.parse(d._acMC);}catch(_){}
       if(d._paOwned)try{Object.assign(paOwned,JSON.parse(d._paOwned));}catch(_){}
       if(d._paAC)paArmaChoice=d._paAC;
+      if(d._arOwned)try{Object.assign(arOwned,JSON.parse(d._arOwned));}catch(_){}
+      if(d._arMC)try{arMaestriaChoice=JSON.parse(d._arMC);}catch(_){}
+      if(d._arFoco)try{arFocoArmas=JSON.parse(d._arFoco);}catch(_){}
+      if(d._arEmp)arEmpunhaduraChoice=d._arEmp;
+      if(d._arEC)arEspecChoice=d._arEC;
+      if(d._arUC)arUltraChoice=d._arUC;
+      if(d._mnOwned)try{Object.assign(mnOwned,JSON.parse(d._mnOwned));}catch(_){}
+      if(d._mnMC)try{mnMaestriaChoice=JSON.parse(d._mnMC);}catch(_){}
+      if(d._medOwned)try{Object.assign(medOwned,JSON.parse(d._medOwned));}catch(_){}
+      if(d._medMC)try{medMaestriaChoice=JSON.parse(d._medMC);}catch(_){}
+      if(d._fcMC)try{fcMaestriaChoice=JSON.parse(d._fcMC);}catch(_){}
     }
     const ph=localStorage.getItem('rpg-photo');
     if(ph){const img=document.getElementById('char-img');img.src=ph;img.style.display='block';document.getElementById('photo-ph').style.display='none';}
