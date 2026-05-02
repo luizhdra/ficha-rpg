@@ -407,6 +407,40 @@ input[type=file]{display:none}
     </div>
   </div>
 </div>
+<!-- CÍRCULO DO ESPÍRITO (CE) OVERLAY -->
+<div class="fc-overlay" id="ce-overlay" onclick="closeCEOverlay(event)">
+  <div class="fc-modal">
+    <div class="fc-modal-inner">
+      <button class="fc-close" onclick="closeCEOverlayDirect()">✕</button>
+      <div class="fc-modal-title">Círculo do Espírito</div>
+      <div class="fc-modal-sub">Árvore de Habilidades — O Arcanista</div>
+      <div class="fc-sp-bar" id="ce-sp-bar"></div>
+      <div id="ce-tree-container"></div>
+      <div class="fc-desc-card" id="ce-desc-card">
+        <div class="fc-desc-title" id="ce-desc-title"></div>
+        <div class="fc-desc-grade" id="ce-desc-grade"></div>
+        <div id="ce-desc-levels"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- CÍRCULO DO CORPO (CC) OVERLAY -->
+<div class="fc-overlay" id="cc-overlay" onclick="closeCCOverlay(event)">
+  <div class="fc-modal">
+    <div class="fc-modal-inner">
+      <button class="fc-close" onclick="closeCCOverlayDirect()">✕</button>
+      <div class="fc-modal-title">Círculo do Corpo</div>
+      <div class="fc-modal-sub">Árvore de Habilidades — O Arcanista</div>
+      <div class="fc-sp-bar" id="cc-sp-bar"></div>
+      <div id="cc-tree-container"></div>
+      <div class="fc-desc-card" id="cc-desc-card">
+        <div class="fc-desc-title" id="cc-desc-title"></div>
+        <div class="fc-desc-grade" id="cc-desc-grade"></div>
+        <div id="cc-desc-levels"></div>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="modal-overlay" id="modal-overlay">
   <div class="modal">
     <h3 id="modal-title">Confirmar</h3>
@@ -675,7 +709,7 @@ const ARMOR_CUSTOM_MAT=[{id:'none',name:'Nenhum',mod:0},{id:'reforcado',name:'Re
 const SKILL_TREE=[
   {id:'batedor',name:'O Batedor',paths:[{name:'Caminho da Mão Nua',hasMNTree:true},{name:'Trilha do Armado',hasARTree:true},{name:'Módulo do Atirador'},{name:'Passo do Assassino',hasPATree:true},{name:'Técnicas de Suporte'},{name:'Fúria'}]},
   {id:'especialista',name:'O Especialista',paths:[{name:'Fomento Corporal',hasFCTree:true},{name:'Acrobata',hasACTree:true},{name:'Medicina',hasMedTree:true}]},
-  {id:'arcanista',name:'O Arcanista',paths:[{name:'Círculo do Espírito'},{name:'Círculo dos Elementos'},{name:'Círculo do Corpo'}]}
+  {id:'arcanista',name:'O Arcanista',paths:[{name:'Círculo do Espírito',hasCETree:true},{name:'Círculo dos Elementos'},{name:'Círculo do Corpo',hasCCTree:true}]}
 ];
 const FC_NODES=[
   {id:'fomento',name:'Fomento Corporal',grade:1,maxLevels:1,stars:false,levels:[{n:1,txt:'Você ganha Maestria em Perícia: Fortitude, Perícia: Vontade ou Perícia: Resistir.',hasChoice:true,choiceSkills:[{attr:'fisico',name:'Fortitude'},{attr:'intelecto',name:'Vontade'},{attr:'fisico',name:'Resistir'}]}]},
@@ -715,6 +749,44 @@ const AR_NODES=[
   {id:'segurarEscudo',name:'Segurar Escudo',grade:3,maxLevels:1,stars:true,levels:[{n:1,txt:'Se você terminar seu turno adjacente a um aliado, pode conceder um bônus de +3 de Perícia: Bloquear a ele (sem que você mesmo o perca). Seu aliado perde o bônus se não estiver mais adjacente a você. O efeito funciona como bônus adicional, ultrapassando limites máximos de defesa.'}]},
   {id:'treinoManuseio',name:'Treino de Manuseio',grade:3,maxLevels:1,stars:true,levels:[{n:1,txt:'Você escolhe um tipo de empunhadura: Versátil, Singular (Uma Mão) ou Dupla (Duas Mãos). Armas que possuem a empunhadura escolhida ganham +1 ponto de dano.',hasEmpunhaduraChoice:true}]},
   {id:'duasMaos',name:'Duas Mãos',grade:4,maxLevels:2,stars:true,levels:[{n:1,txt:'Quando estiver usando uma arma de empunhadura Dupla, você ganha +1d6 em seu acerto. Além disso, ganha +3 pontos de dano e +1d6 de acerto contra inimigos que usam armas de uma mão.'},{n:2,txt:'Quando você está usando uma arma com as duas mãos, pode gastar 7 PE após um ataque bem-sucedido para ignorar 10 pontos de defesa do alvo.'}]}
+];
+const CE_NODES=[
+  {id:'circulo_espirito',name:'Círculo do Espírito',grade:2,maxLevels:1,stars:false,isRoot:true,levels:[{n:1,txt:'Você se torna capaz de usar o Círculo do Espírito.'}]}
+];
+const CC_ADAPTATIONS=[
+  {id:'regeneracao_parcial',name:'Regeneração Parcial',
+   desc:'Seu personagem é capaz de curar o equivalente ao seu dado de cura todo fim de turno. Você gasta 3 PE para todo turno que esta habilidade esteja ativada. Como uma extensão de seu poder, você se torna capaz de regenerar órgãos externos.',
+   hasDadoCura:true,
+   evolucao:{id:'regeneracao_total',name:'Regeneração Total',desc:'Seu personagem é capaz de curar o equivalente ao resultado total do seu dado de cura todo fim de turno. Você gasta 5 PE para todo turno que esta habilidade esteja ativada. Como uma extensão de seu poder, você se torna capaz de regenerar órgãos externos e internos.'}},
+  {id:'corpo_preparado',name:'I - Corpo Preparado',
+   desc:'Você consegue ficar sem respirar por 8 horas seguidas.',
+   hasDadoCura:false,
+   evolucao:{id:'pulmao_de_ferro',name:'II - Pulmão de Ferro',desc:'Seu personagem pode ficar sem respirar por mais de 8 horas em ambientes sem ar antes de sofrer por sufocamento.',
+     evolucao:{id:'visao_aprimorada',name:'III - Visão Aprimorada',desc:'Você desenvolve visão no escuro. Além disso, pode visualizar os níveis de calor de uma criatura em até 36 metros de você.'}}},
+  {id:'corpo_reforcado',name:'I - Corpo Reforçado',
+   desc:'Você recebe Resistência R1 a todos os tipos de dano do tipo Físico.\n• Caso já possua resistência R1 em algum tipo de dano da categoria, ele aumenta para R2.\n• Em adição, caso possua vulnerabilidade em algum tipo de dano da categoria, ele diminui em 1.',
+   hasDadoCura:false,
+   affectsRes:true, resTipos:['Cortante','Impacto','Perfuração'],
+   evolucao:{id:'metabolismo_avancado',name:'II - Metabolismo Avançado',desc:'Para você, efeitos provenientes de exaustão são reduzidos pela metade.'}},
+  {id:'corpo_elemental',name:'I - Corpo Elemental',
+   desc:'Você recebe Resistência R1 a todos os tipos de dano do tipo Elemental.\n• Caso já possua resistência R1 em algum tipo de dano da categoria, ele aumenta para R2.\n• Em adição, caso possua vulnerabilidade em algum tipo de dano da categoria, ele diminui em 1.',
+   hasDadoCura:false,
+   affectsRes:true, resTipos:['Ígneo','Congelante','Sônico','Elétrico','Vento'],
+   evolucao:null}
+];
+const CC_NODES=[
+  {id:'circulo_corpo',name:'Círculo do Corpo',grade:2,maxLevels:1,stars:false,isRoot:true,levels:[{n:1,txt:'Você se torna capaz de manusear o Círculo do Corpo.'}]},
+  {id:'adaptacoes',name:'Adaptações',grade:3,maxLevels:8,stars:true,
+   levels:[
+     {n:1,txt:'Você aprende uma adaptação de nível 1 na lista de adaptações do círculo do corpo.',hasAdaptChoice:true},
+     {n:2,txt:'Você pode escolher ganhar um dos seguintes benefícios: +1 Nível em uma adaptação a sua escolha que já tenha aprendido, ou aprender +1 adaptação a sua escolha da lista de adaptações.',hasAdaptEvo:true},
+     {n:3,txt:'Você pode escolher ganhar um dos seguintes benefícios: +1 Nível em uma adaptação a sua escolha que já tenha aprendido, ou aprender +1 adaptação a sua escolha da lista de adaptações.',hasAdaptEvo:true},
+     {n:4,txt:'Você pode escolher ganhar um dos seguintes benefícios: +1 Nível em uma adaptação a sua escolha que já tenha aprendido, ou aprender +1 adaptação a sua escolha da lista de adaptações.',hasAdaptEvo:true},
+     {n:5,txt:'Você pode escolher ganhar um dos seguintes benefícios: +1 Nível em uma adaptação a sua escolha que já tenha aprendido, ou aprender +1 adaptação a sua escolha da lista de adaptações.',hasAdaptEvo:true},
+     {n:6,txt:'Você pode escolher ganhar um dos seguintes benefícios: +1 Nível em uma adaptação a sua escolha que já tenha aprendido, ou aprender +1 adaptação a sua escolha da lista de adaptações.',hasAdaptEvo:true},
+     {n:7,txt:'Você pode escolher ganhar um dos seguintes benefícios: +1 Nível em uma adaptação a sua escolha que já tenha aprendido, ou aprender +1 adaptação a sua escolha da lista de adaptações.',hasAdaptEvo:true},
+     {n:8,txt:'Você pode escolher ganhar um dos seguintes benefícios: +1 Nível em uma adaptação a sua escolha que já tenha aprendido, ou aprender +1 adaptação a sua escolha da lista de adaptações.',hasAdaptEvo:true}
+   ]}
 ];
 const DAMAGE_TYPES=['Cortante','Impacto','Perfuração','Tóxico','Ígneo','Congelante','Sônico','Elétrico','Vento','Radiante','Profano','Energético'];
 
@@ -764,9 +836,18 @@ let arEmpunhaduraChoice=null; // empunhadura choice for treinoManuseio
 let arEspecChoice=null; // weapon category choice for Especialização
 let arUltraChoice=null; // weapon category choice for Ultra Maestria
 
+// CE (Círculo do Espírito) state
+let ceOwned={};
+let ceActiveNode=null;
+// CC (Círculo do Corpo) state
+let ccOwned={};
+let ccActiveNode=null;
+let ccAdaptations=[]; // [{id,evoLevel}] list of learned adaptations and their evo level
+
+
 // ── SP ──
 function spBudget(){const lvl=Math.max(1,parseInt(document.getElementById('f-nivel').value)||1);return 8+(lvl-1);}
-function spUsed(){let u=0;Object.values(fcOwned).forEach(v=>u+=v);Object.values(acOwned).forEach(v=>u+=v);Object.values(paOwned).forEach(v=>u+=v);Object.values(arOwned).forEach(v=>u+=v);Object.values(mnOwned).forEach(v=>u+=v);Object.values(medOwned).forEach(v=>u+=v);return u;}
+function spUsed(){let u=0;Object.values(fcOwned).forEach(v=>u+=v);Object.values(acOwned).forEach(v=>u+=v);Object.values(paOwned).forEach(v=>u+=v);Object.values(arOwned).forEach(v=>u+=v);Object.values(mnOwned).forEach(v=>u+=v);Object.values(medOwned).forEach(v=>u+=v);Object.values(ceOwned).forEach(v=>u+=v);Object.values(ccOwned).forEach(v=>u+=v);return u;}
 function spLeft(){return spBudget()-spUsed();}
 function updateSPBadge(){
   const el=document.getElementById('sp-badge');
@@ -1232,6 +1313,16 @@ function buildSkillTree(){
           '<div class="tree-path-name" style="color:var(--green2)">'+p.name+' ⚔</div>'+
           '<div style="font-size:10px;color:var(--txt3);margin-top:2px">Clique para ver a árvore</div>'+
           '<div style="margin-top:8px;display:flex;align-items:center;gap:6px"><span style="font-size:10px;color:var(--txt3)">XP Investido:</span><input type="number" style="width:60px;font-size:12px;padding:3px 5px;text-align:center" value="'+xp+'" min="0" onclick="event.stopPropagation()" onchange="setPathXP(\''+cls.id+'\',\''+p.name+'\',this.value)"></div></div>';
+      } else if(p.hasCETree){
+        pathsHtml+='<div class="tree-path-card" onclick="openCEOverlay()" style="border-color:#a78bfa">'+
+          '<div class="tree-path-name" style="color:#c4b5fd">'+p.name+' 🔮</div>'+
+          '<div style="font-size:10px;color:var(--txt3);margin-top:2px">Clique para ver a árvore</div>'+
+          '<div style="margin-top:8px;display:flex;align-items:center;gap:6px"><span style="font-size:10px;color:var(--txt3)">XP Investido:</span><input type="number" style="width:60px;font-size:12px;padding:3px 5px;text-align:center" value="'+xp+'" min="0" onclick="event.stopPropagation()" onchange="setPathXP(\''+cls.id+'\',\''+p.name+'\',this.value)"></div></div>';
+      } else if(p.hasCCTree){
+        pathsHtml+='<div class="tree-path-card" onclick="openCCOverlay()" style="border-color:#f97316">'+
+          '<div class="tree-path-name" style="color:#fb923c">'+p.name+' 💪</div>'+
+          '<div style="font-size:10px;color:var(--txt3);margin-top:2px">Clique para ver a árvore</div>'+
+          '<div style="margin-top:8px;display:flex;align-items:center;gap:6px"><span style="font-size:10px;color:var(--txt3)">XP Investido:</span><input type="number" style="width:60px;font-size:12px;padding:3px 5px;text-align:center" value="'+xp+'" min="0" onclick="event.stopPropagation()" onchange="setPathXP(\''+cls.id+'\',\''+p.name+'\',this.value)"></div></div>';
       } else {
         pathsHtml+='<div class="tree-path-card"><div class="tree-path-name">'+p.name+'</div>'+
           '<div style="margin-top:8px;display:flex;align-items:center;gap:6px"><span style="font-size:10px;color:var(--txt3)">XP Investido:</span><input type="number" style="width:60px;font-size:12px;padding:3px 5px;text-align:center" value="'+xp+'" min="0" onchange="setPathXP(\''+cls.id+'\',\''+p.name+'\',this.value)"></div></div>';
@@ -1328,6 +1419,37 @@ function renderPlayerTree(){
       if(id==='focoArmas'&&arFocoArmas.length>0)extra+=' <span style="font-size:9px;color:var(--green2)">→ '+arFocoArmas.join(', ')+'</span>';
       if(id==='treinoManuseio'&&arEmpunhaduraChoice)extra+=' <span style="font-size:9px;color:var(--green2)">→ '+arEmpunhaduraChoice+'</span>';
       div.innerHTML='<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><span class="pt-node-name">'+node.name+'<span class="pt-node-lv">Nv'+lv+'</span></span>'+extra+'</div>'+'<button class="pt-sell-btn" onclick="sellARLevel(\''+id+'\','+lv+')">↩ Vender (+1pt)</button>';
+      list.appendChild(div);
+    }
+  });
+  // CE nodes
+  const allCE=Object.entries(ceOwned).filter(([,v])=>v>0);
+  allCE.forEach(([id,lvls])=>{
+    const node=CE_NODES.find(n=>n.id===id);if(!node)return;
+    for(let lv=1;lv<=lvls;lv++){
+      const div=document.createElement('div');div.className='pt-node';
+      let extra='<span style="font-size:9px;color:#c4b5fd;margin-left:4px">[Círculo do Espírito]</span>';
+      div.innerHTML='<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><span class="pt-node-name">'+node.name+'<span class="pt-node-lv">Nv'+lv+'</span></span>'+extra+'</div>'+'<button class="pt-sell-btn" onclick="sellCELevel(\''+id+'\','+lv+')">↩ Vender (+1pt)</button>';
+      list.appendChild(div);
+    }
+  });
+  // CC nodes
+  const allCC=Object.entries(ccOwned).filter(([,v])=>v>0);
+  allCC.forEach(([id,lvls])=>{
+    const node=CC_NODES.find(n=>n.id===id);if(!node)return;
+    for(let lv=1;lv<=lvls;lv++){
+      const div=document.createElement('div');div.className='pt-node';
+      let extra='<span style="font-size:9px;color:#fb923c;margin-left:4px">[Círculo do Corpo]</span>';
+      if(id==='adaptacoes'){
+        const learned=ccAdaptations.map(a=>{
+          const base=CC_ADAPTATIONS.find(x=>x.id===a.id);if(!base)return '';
+          let nm=base.name;
+          if(a.evoLevel>0){let ev=base.evolucao;for(let i=1;i<a.evoLevel;i++){ev=ev?.evolucao;}nm+=' \u2192 '+(ev?.name||'');}
+          return nm;
+        }).filter(Boolean).join(', ');
+        if(learned)extra+=' <span style="font-size:9px;color:var(--green2)">'+learned+'</span>';
+      }
+      div.innerHTML='<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><span class="pt-node-name">'+node.name+'<span class="pt-node-lv">Nv'+lv+'</span></span>'+extra+'</div>'+'<button class="pt-sell-btn" onclick="sellCCLevel(\''+id+'\','+lv+')">↩ Vender (+1pt)</button>';
       list.appendChild(div);
     }
   });
@@ -2136,6 +2258,312 @@ function sellARLevel(id,lv){
   showToast('↩ Habilidade vendida (+1pt)');
 }
 
+// ── CÍRCULO DO ESPÍRITO (CE) OVERLAY ──
+function openCEOverlay(){document.getElementById('ce-overlay').classList.add('open');buildCETree();document.getElementById('ce-desc-card').classList.remove('show');}
+function closeCEOverlay(e){if(e.target===document.getElementById('ce-overlay'))closeCEOverlayDirect();}
+function closeCEOverlayDirect(){document.getElementById('ce-overlay').classList.remove('open');}
+
+function buildCETree(){
+  const spEl=document.getElementById('ce-sp-bar');
+  if(isOfficial()){const left=spLeft();const total=spBudget();const used=spUsed();spEl.innerHTML='<span style="font-size:12px;font-weight:600;color:'+(left<0?'var(--red3)':'var(--green2)')+'">✦ '+left+' pts disponíveis</span><span style="font-size:10px;color:var(--txt3);margin-left:10px">'+used+' usados / '+total+' total</span>';}
+  else{spEl.innerHTML='<span style="font-size:10px;color:var(--txt3)">Ative "Versão Oficial" para comprar habilidades com pontos</span>';}
+  const container=document.getElementById('ce-tree-container');
+  let html='<div class="fc-tree">';
+  html+=buildCENodeHTML('circulo_espirito',true);
+  html+='</div>';
+  container.innerHTML=html;
+}
+function buildCENodeHTML(id,isRoot){
+  const node=CE_NODES.find(n=>n.id===id);if(!node)return '';
+  const owned=ceOwned[id]||0;
+  const badge=owned>0?'<div class="fc-owned-badge">✓ Nv'+owned+'/'+node.maxLevels+'</div>':'';
+  return '<div class="fc-node'+(isRoot?' root-node':'')+(owned>0?' owned':'')+'" onclick="ceShowDesc(\''+id+'\')" id="cen-'+id+'">'+
+    '<div class="fc-node-name">'+node.name+'</div>'+
+    '<div class="fc-node-grade">Grau '+node.grade+(isRoot?' · Raiz':'')+'</div>'+
+    badge+'</div>';
+}
+function ceShowDesc(id){
+  const node=CE_NODES.find(n=>n.id===id);if(!node)return;
+  ceActiveNode=id;
+  document.getElementById('ce-desc-title').textContent=node.name;
+  document.getElementById('ce-desc-grade').textContent='Habilidade de Grau '+node.grade+' (Raiz)';
+  const owned=ceOwned[id]||0;
+  let html='';
+  node.levels.forEach(lv=>{
+    const isOwned=lv.n<=owned;const isBuyable=lv.n===owned+1;
+    let cls='fc-desc-lv';if(isOwned)cls+=' owned-lv';else if(isBuyable)cls+=' buyable-lv';
+    html+='<div class="'+cls+'"><div class="fc-desc-lv-num">'+(isOwned?'✓ ':'')+'Nível '+lv.n+'</div><div class="fc-desc-lv-txt">'+lv.txt+'</div>';
+    if(isBuyable){
+      const spOk=spLeft()>0||!isOfficial();const canBuy=spOk;
+      html+='<button class="fc-buy-btn" '+(canBuy?'':'disabled')+' onclick="ceBuyLevel(\''+id+'\','+lv.n+')">'+(canBuy?'Comprar Nv'+lv.n+' (1pt)':'Sem pts disponíveis')+'</button>';
+    }
+    html+='</div>';
+  });
+  document.getElementById('ce-desc-levels').innerHTML=html;
+  document.getElementById('ce-desc-card').classList.add('show');
+}
+function ceBuyLevel(id,lv){
+  if(isOfficial()&&spLeft()<1){showToast('Sem pontos de habilidade!');return;}
+  ceOwned[id]=(ceOwned[id]||0)+1;
+  updateSPBadge();buildCETree();ceShowDesc(id);renderPlayerTree();autoSave();
+  showToast('✓ Habilidade comprada!');
+}
+function sellCELevel(id,lv){
+  const owned=ceOwned[id]||0;
+  if(lv!==owned){showToast('Só pode vender o nível mais alto!');return;}
+  ceOwned[id]=Math.max(0,owned-1);
+  updateSPBadge();buildCETree();
+  if(ceActiveNode===id)ceShowDesc(id);
+  renderPlayerTree();autoSave();
+  showToast('↩ Habilidade vendida (+1pt)');
+}
+
+// ── CÍRCULO DO CORPO (CC) OVERLAY ──
+function openCCOverlay(){document.getElementById('cc-overlay').classList.add('open');buildCCTree();document.getElementById('cc-desc-card').classList.remove('show');}
+function closeCCOverlay(e){if(e.target===document.getElementById('cc-overlay'))closeCCOverlayDirect();}
+function closeCCOverlayDirect(){document.getElementById('cc-overlay').classList.remove('open');}
+
+function buildCCTree(){
+  const spEl=document.getElementById('cc-sp-bar');
+  if(isOfficial()){const left=spLeft();const total=spBudget();const used=spUsed();spEl.innerHTML='<span style="font-size:12px;font-weight:600;color:'+(left<0?'var(--red3)':'var(--green2)')+'">✦ '+left+' pts disponíveis</span><span style="font-size:10px;color:var(--txt3);margin-left:10px">'+used+' usados / '+total+' total</span>';}
+  else{spEl.innerHTML='<span style="font-size:10px;color:var(--txt3)">Ative "Versão Oficial" para comprar habilidades com pontos</span>';}
+  const container=document.getElementById('cc-tree-container');
+  let html='<div class="fc-tree">';
+  html+=buildCCNodeHTML('circulo_corpo',true);
+  html+='<div style="display:flex;justify-content:center"><div class="fc-cv"></div></div>';
+  html+='<div style="display:flex;justify-content:center;align-items:flex-start;width:100%">';
+  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
+  html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
+  html+='<div class="fc-cv" style="height:16px"></div>';
+  html+=buildCCNodeHTML('adaptacoes',false);
+  html+='</div></div></div>';
+  container.innerHTML=html;
+}
+function buildCCNodeHTML(id,isRoot){
+  const node=CC_NODES.find(n=>n.id===id);if(!node)return '';
+  const owned=ccOwned[id]||0;
+  let starsHtml='';
+  if(node.stars){starsHtml='<div class="fc-stars">';for(let i=0;i<node.maxLevels;i++)starsHtml+='<span class="fc-star'+(i<owned?' lit':'')+'">\u2605</span>';starsHtml+='</div>';}
+  const badge=owned>0?'<div class="fc-owned-badge">✓ Nv'+owned+'/'+node.maxLevels+'</div>':'';
+  return '<div class="fc-node'+(isRoot?' root-node':'')+(owned>0?' owned':'')+'" onclick="ccShowDesc(\''+id+'\')" id="ccn-'+id+'">'+
+    '<div class="fc-node-name">'+node.name+'</div>'+
+    '<div class="fc-node-grade">Grau '+node.grade+(isRoot?' · Raiz':'')+'</div>'+
+    starsHtml+badge+'</div>';
+}
+
+function ccUpdateAdaptPreview(id){
+  const a=CC_ADAPTATIONS.find(x=>x.id===id);
+  const el=document.getElementById('cc-adapt-preview');
+  if(a&&el)el.innerHTML=a.desc.replace(/\n/g,'<br>');
+}
+function ccGetAdaptationOptions(){
+  // Returns base adaptations not yet learned
+  return CC_ADAPTATIONS.filter(a=>!ccAdaptations.find(x=>x.id===a.id));
+}
+function ccGetEvoOptions(){
+  // Returns {adapt, evoNode} pairs where a learned adaptation has an available evolution
+  const opts=[];
+  ccAdaptations.forEach(a=>{
+    const base=CC_ADAPTATIONS.find(x=>x.id===a.id);if(!base)return;
+    // navigate to current evo level
+    let ev=base.evolucao;
+    for(let i=0;i<a.evoLevel;i++){if(ev)ev=ev.evolucao;}
+    if(ev)opts.push({adaptId:a.id,baseName:base.name,evoName:ev.name,evoDesc:ev.desc});
+  });
+  return opts;
+}
+
+function ccShowDesc(id){
+  const node=CC_NODES.find(n=>n.id===id);if(!node)return;
+  ccActiveNode=id;
+  document.getElementById('cc-desc-title').textContent=node.name;
+  document.getElementById('cc-desc-grade').textContent='Habilidade de Grau '+node.grade+(node.isRoot?' (Raiz)':'');
+  const owned=ccOwned[id]||0;
+  let html='';
+  node.levels.forEach(lv=>{
+    const isOwned=lv.n<=owned;const isBuyable=lv.n===owned+1;
+    let cls='fc-desc-lv';if(isOwned)cls+=' owned-lv';else if(isBuyable)cls+=' buyable-lv';
+    html+='<div class="'+cls+'"><div class="fc-desc-lv-num">'+(isOwned?'✓ ':'')+'Nível '+lv.n+'</div><div class="fc-desc-lv-txt">'+lv.txt.replace(/\n/g,'<br>')+'</div>';
+    if(isBuyable){
+      const prereqOk=id==='circulo_corpo'||(ccOwned['circulo_corpo']||0)>=1;
+      const spOk=spLeft()>0||!isOfficial();const canBuy=prereqOk&&spOk;
+      const btnLabel=canBuy?'Comprar Nv'+lv.n+' (1pt)':(!prereqOk?'Pré-requisito não atendido':'Sem pts disponíveis');
+      if(lv.hasAdaptChoice){
+        const availBase=ccGetAdaptationOptions();
+        html+='<div class="fc-res-picker"><label>Escolha uma adaptação de nível 1:</label><select id="cc-adapt-sel" onchange="ccUpdateAdaptPreview(this.value)">';
+        availBase.forEach(a=>{html+='<option value="'+a.id+'">'+a.name+'</option>';});
+        html+='</select>';
+        // Show description of selected
+        if(availBase.length>0){
+          html+='<div style="margin-top:6px;font-size:11px;color:var(--txt2);background:var(--bg);padding:6px;border-radius:4px" id="cc-adapt-preview">'+availBase[0].desc.replace(/\n/g,'<br>')+'</div>';
+        }
+        html+='<button class="fc-buy-btn" '+(canBuy&&availBase.length>0?'':'disabled')+' onclick="ccBuyAdapt()">'+(availBase.length===0?'Todas as adaptações aprendidas':btnLabel)+'</button></div>';
+      } else if(lv.hasAdaptEvo){
+        const availBase=ccGetAdaptationOptions();
+        const evoOpts=ccGetEvoOptions();
+        html+='<div class="fc-res-picker"><label>Escolha uma opção de evolução:</label><select id="cc-evo-sel">';
+        availBase.forEach(a=>{html+='<option value="new|'+a.id+'">Aprender: '+a.name+'</option>';});
+        evoOpts.forEach(e=>{html+='<option value="up|'+e.adaptId+'">Evoluir: '+e.baseName+' → '+e.evoName+'</option>';});
+        html+='</select>';
+        const hasOpts=availBase.length>0||evoOpts.length>0;
+        html+='<button class="fc-buy-btn" '+(canBuy&&hasOpts?'':'disabled')+' onclick="ccBuyEvo()">'+(!hasOpts?'Nenhuma opção disponível':btnLabel)+'</button></div>';
+      } else {
+        html+='<button class="fc-buy-btn" '+(canBuy?'':'disabled')+' onclick="ccBuyLevel(\''+id+'\','+lv.n+')">'+btnLabel+'</button>';
+      }
+    } else if(isOwned&&id==='adaptacoes'&&ccAdaptations.length>0){
+      // Show learned adaptations summary
+      html+='<div style="margin-top:4px;font-size:10px;color:var(--green2)">';
+      ccAdaptations.forEach(a=>{
+        const base=CC_ADAPTATIONS.find(x=>x.id===a.id);if(!base)return;
+        html+='• '+base.name;
+        if(a.evoLevel>0){
+          let ev=base.evolucao;
+          for(let i=1;i<a.evoLevel;i++)ev=ev?.evolucao;
+          html+=' → '+(ev?.name||'');
+        }
+        html+='<br>';
+      });
+      html+='</div>';
+    }
+    html+='</div>';
+  });
+  // Also show current adaptations if on root node
+  if(id==='circulo_corpo'&&owned>0&&ccAdaptations.length>0){
+    html+='<div style="margin-top:8px;padding:8px;background:var(--bg4);border-radius:5px;font-size:11px;color:var(--txt2)"><b style="color:var(--txt)">Adaptações aprendidas:</b><br>';
+    ccAdaptations.forEach(a=>{
+      const base=CC_ADAPTATIONS.find(x=>x.id===a.id);if(!base)return;
+      html+='• '+base.name;
+      if(a.evoLevel>0){let ev=base.evolucao;for(let i=1;i<a.evoLevel;i++)ev=ev?.evolucao;html+=' → '+(ev?.name||'');}
+      html+='<br>';
+    });
+    html+='</div>';
+  }
+  document.getElementById('cc-desc-levels').innerHTML=html;
+  document.getElementById('cc-desc-card').classList.add('show');
+}
+
+function ccBuyLevel(id,lv){
+  if((id==='adaptacoes')&&(ccOwned['circulo_corpo']||0)<1){showToast('Pré-requisito não atendido!');return;}
+  if(isOfficial()&&spLeft()<1){showToast('Sem pontos de habilidade!');return;}
+  ccOwned[id]=(ccOwned[id]||0)+1;
+  updateSPBadge();buildCCTree();ccShowDesc(id);renderPlayerTree();autoSave();
+  showToast('✓ Habilidade comprada!');
+}
+
+function ccBuyAdapt(){
+  if((ccOwned['circulo_corpo']||0)<1){showToast('Pré-requisito não atendido!');return;}
+  if(isOfficial()&&spLeft()<1){showToast('Sem pontos de habilidade!');return;}
+  const sel=document.getElementById('cc-adapt-sel');if(!sel)return;
+  const adaptId=sel.value;
+  const adaptDef=CC_ADAPTATIONS.find(a=>a.id===adaptId);
+  if(!adaptDef){showToast('Selecione uma adaptação!');return;}
+  // Apply resistance effects if any
+  if(adaptDef.affectsRes&&adaptDef.resTipos){
+    adaptDef.resTipos.forEach(tipo=>{
+      const ex=resRows.findIndex(r=>r.tipo===tipo&&r.src==='fc');
+      if(ex>=0){
+        // already has FC resistance — bump from 50 to 100
+        resRows[ex].pct=Math.min(100,parseInt(resRows[ex].pct||0)+50);
+      } else {
+        // Check for vulnerability and reduce it
+        const vi=vulnRows.findIndex(r=>r.tipo===tipo);
+        if(vi>=0){
+          const newV=Math.max(0,parseInt(vulnRows[vi].pct||0)-50);
+          if(newV<=0)vulnRows.splice(vi,1);else vulnRows[vi].pct=newV;
+        } else {
+          resRows.push({tipo,pct:50,src:'fc'});
+        }
+      }
+    });
+    renderResPanel();
+  }
+  ccAdaptations.push({id:adaptId,evoLevel:0});
+  // Grant Dado de Cura field awareness (stored in ccAdaptations)
+  ccOwned['adaptacoes']=(ccOwned['adaptacoes']||0)+1;
+  updateSPBadge();buildCCTree();ccShowDesc('adaptacoes');renderPlayerTree();updateDadoCuraField();autoSave();
+  showToast('✓ Adaptação aprendida: '+adaptDef.name+'!');
+}
+
+function ccBuyEvo(){
+  if(isOfficial()&&spLeft()<1){showToast('Sem pontos de habilidade!');return;}
+  const sel=document.getElementById('cc-evo-sel');if(!sel)return;
+  const parts=sel.value.split('|');const action=parts[0];const adaptId=parts[1];
+  if(action==='new'){
+    // Learn new adaptation
+    const adaptDef=CC_ADAPTATIONS.find(a=>a.id===adaptId);
+    if(!adaptDef){showToast('Adaptação não encontrada!');return;}
+    if(adaptDef.affectsRes&&adaptDef.resTipos){
+      adaptDef.resTipos.forEach(tipo=>{
+        const ex=resRows.findIndex(r=>r.tipo===tipo&&r.src==='fc');
+        if(ex>=0){resRows[ex].pct=Math.min(100,parseInt(resRows[ex].pct||0)+50);}
+        else{const vi=vulnRows.findIndex(r=>r.tipo===tipo);if(vi>=0){const newV=Math.max(0,parseInt(vulnRows[vi].pct||0)-50);if(newV<=0)vulnRows.splice(vi,1);else vulnRows[vi].pct=newV;}else resRows.push({tipo,pct:50,src:'fc'});}
+      });
+      renderResPanel();
+    }
+    ccAdaptations.push({id:adaptId,evoLevel:0});
+    showToast('✓ Adaptação aprendida: '+adaptDef.name+'!');
+  } else {
+    // Evolve existing
+    const entry=ccAdaptations.find(a=>a.id===adaptId);
+    if(!entry){showToast('Adaptação não encontrada!');return;}
+    const base=CC_ADAPTATIONS.find(a=>a.id===adaptId);
+    let ev=base?.evolucao;for(let i=0;i<entry.evoLevel;i++)ev=ev?.evolucao;
+    if(!ev){showToast('Sem evolução disponível!');return;}
+    entry.evoLevel++;
+    showToast('✓ Adaptação evoluída: '+ev.name+'!');
+  }
+  ccOwned['adaptacoes']=(ccOwned['adaptacoes']||0)+1;
+  updateSPBadge();buildCCTree();ccShowDesc('adaptacoes');renderPlayerTree();updateDadoCuraField();autoSave();
+}
+
+function sellCCLevel(id,lv){
+  const owned=ccOwned[id]||0;
+  if(lv!==owned){showToast('Só pode vender o nível mais alto!');return;}
+  if(id==='adaptacoes'&&ccAdaptations.length>0){
+    // Remove last learned/evolved
+    const last=ccAdaptations[ccAdaptations.length-1];
+    if(last.evoLevel>0){last.evoLevel--; showToast('↩ Evolução revertida (+1pt)');}
+    else{
+      const base=CC_ADAPTATIONS.find(a=>a.id===last.id);
+      if(base?.affectsRes&&base.resTipos){
+        base.resTipos.forEach(tipo=>{
+          const ex=resRows.findIndex(r=>r.tipo===tipo&&r.src==='fc');
+          if(ex>=0){const newP=parseInt(resRows[ex].pct||0)-50;if(newP<=0)resRows.splice(ex,1);else resRows[ex].pct=newP;}
+        });
+        renderResPanel();
+      }
+      ccAdaptations.pop();
+      showToast('↩ Adaptação removida (+1pt)');
+    }
+  } else {
+    showToast('↩ Habilidade vendida (+1pt)');
+  }
+  ccOwned[id]=Math.max(0,owned-1);
+  updateSPBadge();buildCCTree();
+  if(ccActiveNode===id)ccShowDesc(id);
+  renderPlayerTree();updateDadoCuraField();autoSave();
+}
+
+function updateDadoCuraField(){
+  const hasRegen=ccAdaptations.some(a=>a.id==='regeneracao_parcial');
+  let el=document.getElementById('dado-cura-section');
+  if(hasRegen&&!el){
+    // Create the Dado de Cura section in the ficha page
+    const ficha=document.querySelector('#page-ficha .sheet .save-bar');
+    if(ficha){
+      const section=document.createElement('div');
+      section.id='dado-cura-section';
+      section.style.cssText='background:var(--bg3);border:1px solid var(--green);border-radius:8px;padding:10px 14px;margin-bottom:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap';
+      section.innerHTML='<span style="font-size:13px;color:var(--green2);font-weight:600">🌿 Dado de Cura</span>'+
+        '<span style="font-size:11px;color:var(--txt2)">(Nível do Personagem)d4 + Perícia Restaurar (se maestria)</span>'+
+        '<div style="flex:1;min-width:150px"><input type="text" id="dado-cura-val" placeholder="Ex: 3d4+5" oninput="autoSave()" style="font-size:13px;font-weight:600;color:var(--green2);border-color:var(--green)"></div>';
+      ficha.parentNode.insertBefore(section,ficha);
+    }
+  } else if(!hasRegen&&el){
+    el.remove();
+  }
+}
+
 // ── MODAL/TOAST ──
 function showModal(title,body,okLabel){document.getElementById('modal-title').textContent=title;document.getElementById('modal-body').innerHTML=body;document.getElementById('modal-ok-btn').textContent=okLabel||'Confirmar';document.getElementById('modal-overlay').classList.add('open');}
 function closeModal(){document.getElementById('modal-overlay').classList.remove('open');pendingAction=null;}
@@ -2167,6 +2595,9 @@ function gatherData(){
   d._mnOwned=JSON.stringify(mnOwned);d._mnMC=mnMaestriaChoice?JSON.stringify(mnMaestriaChoice):null;
   d._medOwned=JSON.stringify(medOwned);d._medMC=medMaestriaChoice?JSON.stringify(medMaestriaChoice):null;
   d._fcMC=fcMaestriaChoice?JSON.stringify(fcMaestriaChoice):null;
+  d._ceOwned=JSON.stringify(ceOwned);
+  d._ccOwned=JSON.stringify(ccOwned);d._ccAdapts=JSON.stringify(ccAdaptations);
+  const dadoCura=document.getElementById('dado-cura-val');if(dadoCura)d['dado-cura-val']=dadoCura.value;
   return d;
 }
 function saveSheet(){try{localStorage.setItem('rpg-sheet',JSON.stringify(gatherData()));document.querySelectorAll('.save-msg').forEach(m=>{m.style.opacity='1';setTimeout(()=>m.style.opacity='0',2000);});}catch(_){}}
@@ -2176,7 +2607,7 @@ function loadSheet(){
     if(raw){
       const d=JSON.parse(raw);
       if(d['chk-official']!==undefined)document.getElementById('chk-official').checked=d['chk-official'];
-      const SKIP=['chk-official','_inv','_eq','_eqw','_dmg','_tree','_fcOwned','_fcVital','_fcDet','_fcRes','_resRows','_vulnRows','_acOwned','_acMC','_paOwned','_paAC','_arOwned','_arMC','_arFoco','_arEmp','_arEC','_arUC','_mnOwned','_mnMC','_medOwned','_medMC','_fcMC'];
+      const SKIP=['chk-official','_inv','_eq','_eqw','_dmg','_tree','_fcOwned','_fcVital','_fcDet','_fcRes','_resRows','_vulnRows','_acOwned','_acMC','_paOwned','_paAC','_arOwned','_arMC','_arFoco','_arEmp','_arEC','_arUC','_mnOwned','_mnMC','_medOwned','_medMC','_fcMC','_ceOwned','_ccOwned','_ccAdapts','dado-cura-val'];
       Object.entries(d).forEach(([id,val])=>{
         if(SKIP.includes(id))return;
         const el=document.getElementById(id);if(!el||el.readOnly)return;
@@ -2208,6 +2639,9 @@ function loadSheet(){
       if(d._medOwned)try{Object.assign(medOwned,JSON.parse(d._medOwned));}catch(_){}
       if(d._medMC)try{medMaestriaChoice=JSON.parse(d._medMC);}catch(_){}
       if(d._fcMC)try{fcMaestriaChoice=JSON.parse(d._fcMC);}catch(_){}
+      if(d._ceOwned)try{Object.assign(ceOwned,JSON.parse(d._ceOwned));}catch(_){}
+      if(d._ccOwned)try{Object.assign(ccOwned,JSON.parse(d._ccOwned));}catch(_){}
+      if(d._ccAdapts)try{ccAdaptations=JSON.parse(d._ccAdapts);}catch(_){}
     }
     const ph=localStorage.getItem('rpg-photo');
     if(ph){const img=document.getElementById('char-img');img.src=ph;img.style.display='block';document.getElementById('photo-ph').style.display='none';}
@@ -2220,6 +2654,9 @@ function loadSheet(){
   SLOTS.forEach(s=>{const el=document.getElementById('mslot-'+s);if(el)el.classList.toggle('equipped',!!equipped[s]);});
   recalcCombat();['fisico','intelecto','poder'].forEach(a=>validateSkills(a));
   onOfficialChange();renderFichaWeapons();
+  updateDadoCuraField();
+  // restore dado-cura-val after field is created
+  try{const raw=localStorage.getItem('rpg-sheet');if(raw){const d=JSON.parse(raw);if(d['dado-cura-val']){const el=document.getElementById('dado-cura-val');if(el)el.value=d['dado-cura-val'];}}}catch(_){}
 }
 let _t;function autoSave(){clearTimeout(_t);_t=setTimeout(saveSheet,800);}
 document.addEventListener('input',e=>{
