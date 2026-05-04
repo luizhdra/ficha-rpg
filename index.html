@@ -93,6 +93,11 @@ input[type=file]{display:none}
 .eq-wep-name{font-size:13px;font-weight:600;color:var(--gold);margin-bottom:4px}
 .eq-wep-stats{font-size:11px;color:var(--txt2);line-height:1.6}
 .eq-wep-empty{font-size:11px;color:var(--txt3);font-style:italic}
+.eq-roll-row{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-top:7px;padding-top:7px;border-top:1px solid var(--border2)}
+.eq-roll-label{font-size:9px;color:var(--txt3);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.eq-roll-str{font-size:12px;font-weight:700;color:var(--green2);flex:1;min-width:100px}
+.eq-roll-copy{font-size:10px;padding:3px 8px;background:var(--bg4);border:1px solid var(--green);color:var(--green2);border-radius:4px;cursor:pointer;white-space:nowrap}
+.eq-roll-copy:hover{background:var(--green);color:#fff}
 /* RESISTÊNCIA PANEL */
 .res-section{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:10px}
 .res-section-title{font-family:'Cinzel',serif;font-size:10px;color:var(--txt3);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:6px}
@@ -125,6 +130,9 @@ input[type=file]{display:none}
 .maestria-dots{display:flex;flex-direction:column;gap:2px;align-items:center}
 .maestria-dot{width:9px;height:9px;border-radius:50%;border:1.5px solid var(--border2);background:transparent;cursor:pointer;transition:all .12s;flex-shrink:0}
 .maestria-dot.filled{background:var(--gold);border-color:var(--gold)}.maestria-dot:hover{border-color:var(--gold2)}
+.maestria-dot.ficha-dot{cursor:default;border-color:#a78bfa;border-style:dashed}
+.maestria-dot.ficha-dot.filled{background:#a78bfa;border-color:#a78bfa;border-style:solid}
+.maestria-dot.ficha-dot:hover{border-color:#a78bfa}
 .sk-inp{width:100%!important;text-align:center;font-size:11px!important;padding:2px!important;color:var(--gold)!important;font-weight:600}
 .sk-inp.overlimit{border-color:var(--red)!important;background:#3a1515!important;color:var(--red3)!important}
 .sk-bon{width:100%!important;text-align:center;font-size:11px!important;padding:2px!important;color:var(--blue2)!important}
@@ -233,6 +241,29 @@ input[type=file]{display:none}
 .pt-sell-btn{background:#2a1010;border:1px solid var(--red2);color:var(--red3);border-radius:4px;cursor:pointer;padding:3px 8px;font-size:10px;font-weight:500;transition:all .15s}
 .pt-sell-btn:hover{background:var(--red2);color:#fff}
 /* FC OVERLAY */
+.calc-section{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 12px}
+.calc-section-title{font-size:11px;font-weight:700;color:#c4b5fd;text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px}
+.calc-radio-grid{display:flex;flex-direction:column;gap:4px}
+.calc-radio{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--txt2);cursor:pointer;padding:3px 5px;border-radius:4px}
+.calc-radio:hover{background:var(--bg4);color:var(--txt)}
+.calc-radio input{accent-color:#a78bfa}
+.calc-check{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--txt2);cursor:pointer;padding:3px 5px;border-radius:4px}
+.calc-check:hover{background:var(--bg4);color:var(--txt)}
+.calc-check input{accent-color:#a78bfa}
+.calc-stepper-row{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--txt)}
+.calc-step-btn{width:24px;height:24px;border-radius:4px;border:1px solid var(--border2);background:var(--bg4);color:var(--txt);font-size:14px;cursor:pointer;line-height:1;display:flex;align-items:center;justify-content:center}
+.calc-step-btn:hover{background:#4c1d95;border-color:#a78bfa;color:#fff}
+.calc-out-row{display:flex;justify-content:space-between;align-items:flex-start;padding:4px 0;border-bottom:1px solid var(--border2);font-size:12px}
+.calc-out-row:last-child{border-bottom:none}
+.calc-out-label{color:var(--txt3)}
+.calc-out-val{color:var(--txt);font-weight:600;text-align:right;max-width:55%}
+.calc-out-total{display:flex;justify-content:space-between;margin-top:10px;padding:8px 10px;background:#1e1035;border-radius:6px;font-weight:700;font-size:14px}
+.calc-out-total .lbl{color:#a78bfa}
+.calc-out-total .val{color:#e9d5ff}
+.calc-roll-box{margin-top:8px;padding:8px 10px;background:var(--bg4);border:1px solid #4c1d95;border-radius:6px;font-size:11px;color:var(--txt2)}
+.calc-roll-box b{color:#c4b5fd}
+.calc-copy-btn{margin-top:6px;width:100%;padding:6px;background:#2e1065;border:1px solid #7c3aed;color:#c4b5fd;border-radius:5px;font-size:11px;cursor:pointer;font-weight:600}
+.calc-copy-btn:hover{background:#4c1d95}
 .fc-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:2000;padding:16px}
 .fc-overlay.open{display:flex}
 .fc-modal{background:var(--bg2);border:1px solid var(--border2);border-radius:12px;width:100%;max-width:820px;max-height:90vh;overflow-y:auto;padding:20px}
@@ -284,6 +315,8 @@ input[type=file]{display:none}
 .modal-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
 .modal-ok{background:var(--red2);border:1px solid var(--red);color:#fff;font-size:11px;font-weight:600;padding:8px 18px;border-radius:6px;cursor:pointer;transition:all .15s}
 .modal-ok:hover{background:var(--red)}
+.modal-ok.btn-danger{background:#7f1d1d;border-color:#ef4444}
+.modal-ok.btn-danger:hover{background:#ef4444}
 .modal-cancel{background:var(--bg4);border:1px solid var(--border2);color:var(--txt2);font-size:11px;font-weight:600;padding:8px 18px;border-radius:6px;cursor:pointer;transition:all .15s}
 .modal-cancel:hover{color:var(--txt);border-color:var(--txt3)}
 @media(max-width:600px){
@@ -309,6 +342,7 @@ input[type=file]{display:none}
   <button class="nav-btn" id="nav-equip" onclick="showPage('equip')">🛡 Itens</button>
   <button class="nav-btn" id="nav-loja" onclick="showPage('loja')">🪙 Loja</button>
   <button class="nav-btn" id="nav-arvore" onclick="showPage('arvore')">🌳 Árvore</button>
+  <button class="nav-btn" id="nav-calc" onclick="showPage('calc')" style="display:none;border-color:#a78bfa;color:#c4b5fd">✨ Calculadora</button>
 </div>
 <!-- FC OVERLAY -->
 <div class="fc-overlay" id="fc-overlay" onclick="closeFCOverlay(event)">
@@ -508,6 +542,7 @@ input[type=file]{display:none}
         <div class="field"><label>PE Máx</label><input type="number" id="f-pemax" placeholder="0" min="0" oninput="updatePE()"></div>
         <div class="field"><label>PE Gasto</label><input type="number" id="f-pegasto" placeholder="0" min="0" oninput="updatePE()"></div>
         <div class="field"><label>PE Temp</label><input type="number" id="f-petemp" placeholder="0" min="0" oninput="updatePE()" style="border-color:var(--green)!important;color:var(--green2)!important"></div>
+        <div class="field"><label style="color:var(--gold)">Limite de PE Gasto</label><input type="number" id="f-pe-limite" readonly style="border-color:var(--gold)!important;color:var(--gold)!important;font-weight:600"></div>
       </div>
       <div class="hppe-calc-info" id="pe-calc-info"></div>
     </div>
@@ -528,6 +563,10 @@ input[type=file]{display:none}
     <div class="stat-card"><div class="stat-card-lbl">🛡 Defesa</div><input type="number" id="f-defesa" readonly><div class="stat-sub" id="defesa-detail">armadura: 0</div></div>
     <div class="stat-card"><div class="stat-card-lbl">⚖ Penalidade</div><input type="number" id="f-penalidade" readonly style="color:var(--red3)!important"><div class="stat-sub" id="penalidade-detail">armadura: 0</div></div>
     <div class="stat-card"><div class="stat-card-lbl">👣 Movimento</div><input type="number" id="f-movimento" class="editable" placeholder="0"></div>
+  </div>
+  <div id="pose-btn-wrap" style="display:none;margin:6px 0">
+    <button id="pose-btn" onclick="togglePose()" style="width:100%;padding:7px 12px;font-size:12px;font-weight:700;border-radius:7px;border:2px solid var(--green);background:var(--bg3);color:var(--green2);cursor:pointer;transition:all .2s;letter-spacing:.5px">🥋 Pose de Combate</button>
+    <div id="pose-active-info" style="display:none;font-size:10px;color:var(--gold);text-align:center;margin-top:3px">⚡ Pose ativa — −7 PE ao ativar</div>
   </div>
   <div class="eq-wep-row">
     <div class="eq-wep-card"><div class="eq-wep-slot-lbl">⚔ Mão 1 / Principal</div><div id="ficha-wep1-content"><div class="eq-wep-empty">Nenhuma arma equipada</div></div></div>
@@ -569,7 +608,7 @@ input[type=file]{display:none}
       <div id="skills-poder"></div><div class="saiba-mais" id="sm-poder" onclick="toggleHidden('poder')"></div>
     </div>
   </div>
-  <div class="save-bar"><button class="save-btn" onclick="saveSheet()">💾 Salvar</button><span class="save-msg" id="save-msg">✓ Salvo</span></div>
+  <div class="save-bar"><button class="save-btn" onclick="saveSheet()">💾 Salvar</button><span class="save-msg" id="save-msg">✓ Salvo</span><button class="save-btn" style="background:var(--red3);border-color:var(--red3);margin-left:auto" onclick="askResetFicha()">🗑 Formatar do Zero</button></div>
 </div>
 </div>
 <!-- ITENS -->
@@ -663,6 +702,171 @@ input[type=file]{display:none}
 </div>
 </div>
 
+<!-- CALCULADORA DE FEITIÇOS -->
+<div class="page" id="page-calc">
+<div class="sheet">
+  <div style="font-family:'Cinzel',serif;font-size:18px;font-weight:700;color:#c4b5fd;text-align:center;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid #4c1d95">✨ Calculadora de Feitiços</div>
+  <div id="calc-layout" style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+    <!-- LEFT: Builder -->
+    <div id="calc-builder" style="display:flex;flex-direction:column;gap:10px">
+
+      <!-- Círculo -->
+      <div class="calc-section">
+        <div class="calc-section-title">Círculo do Feitiço</div>
+        <select id="calc-circulo" onchange="calcUpdate()" style="width:100%">
+          <option value="">— Selecione um círculo —</option>
+        </select>
+      </div>
+
+      <!-- Tipo -->
+      <div class="calc-section">
+        <div class="calc-section-title">Tipo de Feitiço</div>
+        <div class="calc-radio-grid" id="calc-tipo-grid">
+          <label class="calc-radio"><input type="radio" name="calc-tipo" value="dano" onchange="calcUpdate()"> Dano</label>
+          <label class="calc-radio"><input type="radio" name="calc-tipo" value="adaptar" onchange="calcUpdate()"> Adaptar</label>
+          <label class="calc-radio"><input type="radio" name="calc-tipo" value="defender" onchange="calcUpdate()"> Defender</label>
+          <label class="calc-radio"><input type="radio" name="calc-tipo" value="rastrear" onchange="calcUpdate()"> Rastrear</label>
+          <label class="calc-radio"><input type="radio" name="calc-tipo" value="restaurar" onchange="calcUpdate()"> Restaurar (Cura)</label>
+        </div>
+      </div>
+
+      <!-- Propriedades -->
+      <div class="calc-section">
+        <div class="calc-section-title">Tipo de Ação</div>
+        <div class="calc-radio-grid">
+          <label class="calc-radio"><input type="radio" name="calc-acao" value="1" checked onchange="calcUpdate()"> Simples (1 PE)</label>
+          <label class="calc-radio"><input type="radio" name="calc-acao" value="3" onchange="calcUpdate()"> Complexo (3 PE)</label>
+        </div>
+      </div>
+
+      <div class="calc-section">
+        <div class="calc-section-title">Tempo de Conjuração</div>
+        <div class="calc-radio-grid">
+          <label class="calc-radio"><input type="radio" name="calc-tempo" value="0" checked onchange="calcUpdate()"> Ação Principal (0 PE)</label>
+          <label class="calc-radio"><input type="radio" name="calc-tempo" value="3" onchange="calcUpdate()"> Ação Secundária (3 PE)</label>
+          <label class="calc-radio"><input type="radio" name="calc-tempo" value="5" onchange="calcUpdate()"> Reação (5 PE)</label>
+          <label class="calc-radio"><input type="radio" name="calc-tempo" value="-half" onchange="calcUpdate()"> Turno Inteiro (−½ PE no final)</label>
+        </div>
+      </div>
+
+      <div class="calc-section">
+        <div class="calc-section-title">Alcance</div>
+        <div class="calc-radio-grid">
+          <label class="calc-radio"><input type="radio" name="calc-alcance" value="0" checked onchange="calcUpdate()"> Toque (0 PE)</label>
+          <label class="calc-radio"><input type="radio" name="calc-alcance" value="2" onchange="calcUpdate()"> Aura 6m (2 PE)</label>
+        </div>
+      </div>
+
+      <div class="calc-section">
+        <div class="calc-section-title">Duração</div>
+        <div class="calc-radio-grid">
+          <label class="calc-radio"><input type="radio" name="calc-duracao" value="0" checked onchange="calcUpdate()"> Instantâneo (0 PE)</label>
+          <label class="calc-radio"><input type="radio" name="calc-duracao" value="3" onchange="calcUpdate()"> Prolongado (3 PE)</label>
+        </div>
+      </div>
+
+      <div class="calc-section">
+        <div class="calc-section-title">Alvos</div>
+        <div class="calc-radio-grid">
+          <label class="calc-radio"><input type="radio" name="calc-alvo" value="0" checked onchange="calcUpdate()"> Singular (0 PE)</label>
+          <label class="calc-radio"><input type="radio" name="calc-alvo" value="5" onchange="calcUpdate()"> Área de Efeito (5 PE)</label>
+        </div>
+      </div>
+
+      <div class="calc-section">
+        <div class="calc-section-title">Teste de Resistência</div>
+        <div class="calc-radio-grid">
+          <label class="calc-radio"><input type="radio" name="calc-resist" value="0" checked onchange="calcUpdate()"> Não requer teste</label>
+          <label class="calc-radio"><input type="radio" name="calc-resist" value="-half" onchange="calcUpdate()"> Requer Teste (−½ PE no final)</label>
+        </div>
+      </div>
+
+      <!-- Aumentar Acerto -->
+      <div class="calc-section" id="calc-acerto-section">
+        <div class="calc-section-title">Aumentar Acerto <span style="font-size:9px;color:var(--txt3)">(indisponível com Teste de Resistência)</span></div>
+        <div class="calc-stepper-row">
+          <button class="calc-step-btn" onclick="calcStep('acerto',-1)">−</button>
+          <span id="calc-acerto-val">0</span>
+          <button class="calc-step-btn" onclick="calcStep('acerto',1)">+</button>
+          <span style="font-size:10px;color:var(--txt3);margin-left:6px">= <span id="calc-acerto-pe">0</span> PE</span>
+        </div>
+      </div>
+
+      <!-- Aumento de Alcance -->
+      <div class="calc-section">
+        <div class="calc-section-title">Aumento de Alcance <span style="font-size:9px;color:var(--txt3)">(3 PE/metro)</span></div>
+        <div class="calc-stepper-row">
+          <button class="calc-step-btn" onclick="calcStep('alcance_extra',-1)">−</button>
+          <span id="calc-alcance-extra-val">0</span>m
+          <button class="calc-step-btn" onclick="calcStep('alcance_extra',1)">+</button>
+          <span style="font-size:10px;color:var(--txt3);margin-left:6px">= <span id="calc-alcance-extra-pe">0</span> PE</span>
+        </div>
+      </div>
+
+      <!-- Crítico Melhorado -->
+      <div class="calc-section" id="calc-crit-section">
+        <div class="calc-section-title">Crítico Melhorado <span style="font-size:9px;color:var(--txt3)">(12 PE / +1 multiplicador, apenas sem Teste)</span></div>
+        <div class="calc-stepper-row">
+          <button class="calc-step-btn" onclick="calcStep('crit',-1)">−</button>
+          <span id="calc-crit-val">0</span>
+          <button class="calc-step-btn" onclick="calcStep('crit',1)">+</button>
+          <span style="font-size:10px;color:var(--txt3);margin-left:6px">= <span id="calc-crit-pe">0</span> PE</span>
+        </div>
+      </div>
+
+      <!-- Prolongamento de Efeito -->
+      <div class="calc-section">
+        <div class="calc-section-title">Prolongamento de Efeito</div>
+        <div style="display:flex;flex-direction:column;gap:5px">
+          <label class="calc-check"><input type="checkbox" id="calc-prol-turno" onchange="calcUpdate()"> +5 PE por turno adicional</label>
+          <div class="calc-stepper-row" id="calc-prol-turno-row" style="display:none;margin-left:16px">
+            <button class="calc-step-btn" onclick="calcStep('prol_turno',-1)">−</button>
+            <span id="calc-prol-turno-val">1</span> turno(s)
+            <button class="calc-step-btn" onclick="calcStep('prol_turno',1)">+</button>
+            <span style="font-size:10px;color:var(--txt3);margin-left:6px">= <span id="calc-prol-turno-pe">5</span> PE</span>
+          </div>
+          <label class="calc-check"><input type="checkbox" id="calc-prol-dobrar" onchange="calcUpdate()"> +15 PE — Dobrar duração</label>
+          <label class="calc-check"><input type="checkbox" id="calc-prol-triplicar" onchange="calcUpdate()"> +30 PE — Triplicar duração</label>
+        </div>
+      </div>
+
+      <!-- Múltiplos Alvos -->
+      <div class="calc-section">
+        <div class="calc-section-title">Múltiplos Alvos <span style="font-size:9px;color:var(--txt3)">(4 PE / alvo adicional)</span></div>
+        <div class="calc-stepper-row">
+          <button class="calc-step-btn" onclick="calcStep('multi_alvo',-1)">−</button>
+          <span id="calc-multi-alvo-val">0</span> alvo(s)
+          <button class="calc-step-btn" onclick="calcStep('multi_alvo',1)">+</button>
+          <span style="font-size:10px;color:var(--txt3);margin-left:6px">= <span id="calc-multi-alvo-pe">0</span> PE</span>
+        </div>
+      </div>
+
+      <!-- Potencializações -->
+      <div class="calc-section" id="calc-pot-section">
+        <div class="calc-section-title">Potencialização <span style="font-size:9px;color:var(--txt3)">(não disponível em feitiços de Dano)</span></div>
+        <div class="calc-radio-grid">
+          <label class="calc-radio"><input type="radio" name="calc-pot" value="0" checked onchange="calcUpdate()"> Nenhuma</label>
+          <label class="calc-radio"><input type="radio" name="calc-pot" value="15" onchange="calcUpdate()"> 15 PE — Eficiência ×1.5</label>
+          <label class="calc-radio"><input type="radio" name="calc-pot" value="30" onchange="calcUpdate()"> 30 PE — Eficiência ×2.0</label>
+        </div>
+      </div>
+
+    </div><!-- /left -->
+
+    <!-- RIGHT: Ficha Técnica -->
+    <div id="calc-ficha" style="position:sticky;top:12px;align-self:start">
+      <div style="background:var(--bg3);border:1px solid #4c1d95;border-radius:10px;padding:14px">
+        <div style="font-family:'Cinzel',serif;font-size:14px;color:#c4b5fd;font-weight:700;margin-bottom:10px;border-bottom:1px solid #4c1d95;padding-bottom:6px">📋 Ficha Técnica</div>
+        <div id="calc-output">
+          <div style="color:var(--txt3);font-style:italic;font-size:12px">Configure o feitiço ao lado...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="save-bar"><button class="save-btn" onclick="saveSheet()">💾 Salvar</button><span class="save-msg" id="save-msg5">✓ Salvo</span></div>
+</div>
+</div>
+
 <script>
 // ══ DATA ══
 const SKILLS={fisico:['Acrobacia','Atletismo','Armas Brancas','Artes Marciais','Bloquear Físico','Destruir','Esquivar','Fortitude','Furtividade','Iniciativa','Prestidigitação','Resistir','Segurar'],intelecto:['Adestrar Animais','Arcanismo','Atuação','Charme','Conhecimento','Diplomacia','Dirigir','Intimidação','Intuição','Investigação','Línguas','Medicina','Mentiras','Natureza','Percepção','Pontaria','Sobrevivência','Tecnologia','Vontade'],poder:['Atacar','Adaptar','Bloquear Mágico','Detectar','Restaurar']};
@@ -687,7 +891,7 @@ const WEAPONS_BASE=[
   {id:'taco',name:'Taco',danoS:'6',danoDP:'10',crit:'20',critMul:3,critEff:'Atordoar',alcance:1,tipo:'Impacto',weight:1,dur:1,price:4,isRanged:false},
   {id:'chicote',name:'Chicote',danoS:'6',danoDP:'—',crit:'18',critMul:3,critEff:'Agarrar',alcance:3,tipo:'Cortante',weight:1,dur:1,price:10,isRanged:false},
   {id:'serra',name:'Serra',danoS:'8',danoDP:'14',crit:'17',critMul:2,critEff:'Decepar / Sangramento',alcance:1,tipo:'Cortante',weight:1,dur:1,price:10,isRanged:false},
-  {id:'escudo',name:'Escudo',danoS:'4',danoDP:'5',crit:'20',critMul:2,critEff:'Atordoamento',alcance:1,tipo:'Impacto',weight:0,dur:0,price:0,isRanged:false,isShield:true,variants:[{name:'Escudo Comum',defesa:10,pen:1,weight:2,dur:2,price:8},{name:'Escudo Tático',defesa:15,pen:4,weight:3,dur:3,price:32},{name:'Escudo Blindado',defesa:20,pen:6,weight:3,dur:3,price:40}]},
+  {id:'escudo',name:'Escudo',danoS:'4',danoDP:'5',crit:'20',critMul:2,critEff:'Atordoamento',alcance:1,tipo:'Impacto',weight:0,dur:2,price:0,isRanged:false,isShield:true},
   {id:'arco',name:'Arco e Flecha',danoS:'—',danoDP:'12',crit:'19',critMul:2,critEff:'Perfurar',alcance:36,tipo:'Perfurante',weight:1,dur:1,price:8,isRanged:true},
   {id:'besta',name:'Besta',danoS:'—',danoDP:'12',crit:'18',critMul:2,critEff:'Perfurar',alcance:18,tipo:'Perfurante',weight:2,dur:2,price:10,isRanged:true},
   {id:'revolver',name:'Revólver',danoS:'10',danoDP:'—',crit:'18',critMul:2,critEff:'Perfurar',alcance:36,tipo:'Perfurante',weight:1,dur:1,price:12,isRanged:true},
@@ -706,6 +910,41 @@ const ARMOR_CUSTOM_CAR=[{id:'none',name:'Nenhuma',mod:0},{id:'leve',name:'Leve (
 const ARMOR_CUSTOM_MAN=[{id:'versatil',name:'Versátil (+0)',mod:0},{id:'duas_maos',name:'Duas Mãos (+0)',mod:0},{id:'acoplada',name:'Acoplada (+0.2)',mod:0.2}];
 const ARMOR_CUSTOM_TEC=[{id:'none',name:'Nenhuma',mod:0},{id:'energizada',name:'Energizada (+0.3)',mod:0.3},{id:'carregar',name:'Carregar (+0.7)',mod:0.7},{id:'polarizado',name:'Polarizado (+1.0)',mod:1.0}];
 const ARMOR_CUSTOM_MAT=[{id:'none',name:'Nenhum',mod:0},{id:'reforcado',name:'Reforçado (+1.5)',mod:1.5},{id:'composto',name:'Composto (+1.0)',mod:1.0},{id:'fraco',name:'Fraco (−0.2)',mod:-0.2},{id:'fragil',name:'Frágil (−0.1)',mod:-0.1}];
+// SHIELD customization
+// Tipo: obrigatório, define a base do escudo
+const SHIELD_TIPO=[
+  {id:'none',    name:'— Escolha o tipo —', defesa:0, weight:0, pen:0, price:0},
+  {id:'comum',   name:'Comum   (+10 DEF / Peso 2 / −1 PEN)',  defesa:10, weight:2, pen:1,  price:8},
+  {id:'tatico',  name:'Tático  (+15 DEF / Peso 3 / −4 PEN)',  defesa:15, weight:3, pen:4,  price:22},
+  {id:'blindado',name:'Blindado (+20 DEF / Peso 3 / −6 PEN)', defesa:20, weight:3, pen:6,  price:40},
+];
+// Características (mesmo padrão das armas)
+const SHIELD_CAR=[
+  {id:'none',   name:'Nenhuma',                                                              priceMod: 0},
+  {id:'leve',   name:'Leve (−0.2 preço / −1 peso / −0.5x DEF — requer peso ≥ 2)',          priceMod:-0.2},
+  {id:'pesada', name:'Pesada (+1.0 preço / +1 peso / +1.5x DEF)',                           priceMod: 1.0},
+  {id:'rapida', name:'Rápida (+0.3 preço)',                                                   priceMod: 0.3},
+  {id:'lenta',  name:'Lenta (−0.1 preço)',                                                   priceMod:-0.1},
+  {id:'grande', name:'Grande (+0.5 preço / Duas Mãos)',                                      priceMod: 0.5},
+];
+const SHIELD_MAT=[
+  {id:'none',      name:'Nenhum',                        priceMod: 0},
+  {id:'reforcado', name:'Reforçado (+1.5 / +1 CritMul)', priceMod: 1.5},
+  {id:'composto',  name:'Composto (+1.0 / +1 Dur / +1 peso)', priceMod: 1.0},
+  {id:'fraco',     name:'Fraco (−0.2 / −1 CritMul)',     priceMod:-0.2},
+  {id:'fragil',    name:'Frágil (−0.1 / −1 Dur / −1 peso)', priceMod:-0.1},
+];
+const SHIELD_MAN=[
+  {id:'versatil',  name:'Versátil  (+0)',    priceMod: 0},
+  {id:'duas_maos', name:'Duas Mãos (+0)',    priceMod: 0},
+  {id:'acoplada',  name:'Acoplada (+0.2)',   priceMod: 0.2},
+];
+const SHIELD_EMP=[
+  {id:'none',      name:'Nenhuma',                        priceMod: 0},
+  {id:'pua',       name:'Púa (Dano d4, +0.05 preço)',     priceMod: 0.05},
+  {id:'espigoes',  name:'Espigões (Dano d6, +0.10 preço)',priceMod: 0.10},
+  {id:'aderencia', name:'Aderência (não derruba, +0.08)', priceMod: 0.08},
+];
 const SKILL_TREE=[
   {id:'batedor',name:'O Batedor',paths:[{name:'Caminho da Mão Nua',hasMNTree:true},{name:'Trilha do Armado',hasARTree:true},{name:'Módulo do Atirador'},{name:'Passo do Assassino',hasPATree:true},{name:'Técnicas de Suporte'},{name:'Fúria'}]},
   {id:'especialista',name:'O Especialista',paths:[{name:'Fomento Corporal',hasFCTree:true},{name:'Acrobata',hasACTree:true},{name:'Medicina',hasMedTree:true}]},
@@ -798,6 +1037,7 @@ let itemDamage={};
 let pendingAction=null;
 let shopWepCustom={};
 let shopArmorCustom={};
+let shopShieldCustom={};
 let treeData={};
 // FC state
 let fcOwned={}; // {nodeId: levelsOwned}
@@ -823,6 +1063,7 @@ let paArmaChoice=null; // arma choice for Passo root
 let mnOwned={}; // {nodeId: levelsOwned}
 let mnActiveNode=null;
 let mnMaestriaChoice=null;
+let poseActive=false; // tracks if Pose de Combate / Postura do Mamífero is active
 // MED (Medicina) state
 let medOwned={}; // {nodeId: levelsOwned}
 let medActiveNode=null;
@@ -868,7 +1109,7 @@ function buildSkills(attr,names){
   const c=document.getElementById('skills-'+attr);
   names.forEach(name=>{
     const id=skId(attr,name);const row=document.createElement('div');row.className='skill-row hidden-sk';row.id='row-'+id;
-    row.innerHTML='<span class="skill-name">'+name+'</span><div class="maestria-dots"><div class="maestria-dot" id="'+mdId(attr,name,0)+'" onclick="toggleMaestria(\''+attr+'\',\''+name+'\',0)"></div><div class="maestria-dot" id="'+mdId(attr,name,1)+'" onclick="toggleMaestria(\''+attr+'\',\''+name+'\',1)"></div></div><input type="number" class="sk-inp" id="'+id+'" placeholder="0" min="0" oninput="onSkillInput(this,\''+attr+'\',\''+name+'\')"><div id="'+bnId(attr,name)+'-wrap"><input type="number" class="sk-bon" id="'+bnId(attr,name)+'" placeholder="0" oninput="calcTotal(\''+attr+'\',\''+name+'\')"></div><span class="sk-total" id="'+ttId(attr,name)+'">0</span>';
+    row.innerHTML='<span class="skill-name">'+name+'</span><div class="maestria-dots"><div class="maestria-dot ficha-dot" id="'+mdId(attr,name,0)+'" title="Maestria da Ficha (concedida por habilidades)"></div><div class="maestria-dot" id="'+mdId(attr,name,1)+'" onclick="toggleMaestria(\''+attr+'\',\''+name+'\',1)" title="Maestria do Jogador"></div></div><input type="number" class="sk-inp" id="'+id+'" placeholder="0" min="0" oninput="onSkillInput(this,\''+attr+'\',\''+name+'\')"><div id="'+bnId(attr,name)+'-wrap"><input type="number" class="sk-bon" id="'+bnId(attr,name)+'" placeholder="0" oninput="calcTotal(\''+attr+'\',\''+name+'\')"></div><span class="sk-total" id="'+ttId(attr,name)+'">0</span>';
     c.appendChild(row);
   });
 }
@@ -895,7 +1136,7 @@ function calcTotal(attr,name){
   }
   autoSave();
 }
-function toggleMaestria(attr,name,idx){document.getElementById(mdId(attr,name,idx)).classList.toggle('filled');calcTotal(attr,name);autoSave();}
+function toggleMaestria(attr,name,idx){if(idx===0)return;document.getElementById(mdId(attr,name,idx)).classList.toggle('filled');calcTotal(attr,name);autoSave();}
 function updateSkillVisibility(attr){
   let hc=0;SKILLS[attr].forEach(name=>{const p=parseInt(document.getElementById(skId(attr,name)).value)||0;const r=document.getElementById('row-'+skId(attr,name));const v=p>0||!hiddenState[attr];r.classList.toggle('hidden-sk',!v);if(p===0)hc++;});
   const sm=document.getElementById('sm-'+attr);if(hc>0){sm.classList.add('show');sm.textContent=hiddenState[attr]?'▼ Saiba mais ('+hc+' ocultas)':'▲ Ocultar zeradas';}else sm.classList.remove('show');
@@ -915,9 +1156,17 @@ function onOfficialChange(){
   ['fisico','intelecto','poder'].forEach(a=>validateSkills(a));
   calcAutoHP();calcAutoPE();autoSave();
 }
-function onAttrChange(attr){updateAttrPtsLeft();validateSkills(attr);calcAutoHP();calcAutoPE();recalcCombat();autoSave();}
-function onLevelChange(){updateSkPtsLeft();updateSPBadge();['fisico','intelecto','poder'].forEach(a=>validateSkills(a));calcAutoHP();calcAutoPE();autoSave();}
-function onSkillInput(el,attr,name){const cap=parseInt(document.getElementById('atr-'+attr).value)||0;const v=parseInt(el.value)||0;el.classList.toggle('overlimit',(cap>0&&v>cap)||(isOfficial()&&v>60));calcTotal(attr,name);refreshWarn(attr);updateSkPtsLeft();updateSkillVisibility(attr);calcAutoHP();calcAutoPE();if(attr==='fisico'&&name==='Resistir')recalcCombat();autoSave();}
+function onAttrChange(attr){updateAttrPtsLeft();validateSkills(attr);calcAutoHP();calcAutoPE();recalcCombat();if(attr==='intelecto')updateDadoCuraField();autoSave();}
+function onLevelChange(){updateSkPtsLeft();updateSPBadge();['fisico','intelecto','poder'].forEach(a=>validateSkills(a));calcAutoHP();calcAutoPE();updatePELimite();updateDadoCuraField();autoSave();}
+function updatePELimite(){
+  const lvl=Math.max(1,parseInt(document.getElementById('f-nivel').value)||1);
+  // Starts at 24, increases by 6 every 5 levels (5,10,15,20...)
+  const bonus=Math.floor(lvl/5)*6;
+  const limite=24+bonus;
+  const el=document.getElementById('f-pe-limite');
+  if(el)el.value=limite;
+}
+function onSkillInput(el,attr,name){const cap=parseInt(document.getElementById('atr-'+attr).value)||0;const v=parseInt(el.value)||0;el.classList.toggle('overlimit',(cap>0&&v>cap)||(isOfficial()&&v>60));calcTotal(attr,name);refreshWarn(attr);updateSkPtsLeft();updateSkillVisibility(attr);calcAutoHP();calcAutoPE();if(attr==='fisico'&&name==='Resistir')recalcCombat();if(name==='Armas Brancas'||name==='Artes Marciais'||name==='Pontaria')renderFichaWeapons();if(name==='Adaptar')updateDadoCuraField();autoSave();}
 function validateSkills(attr){const cap=parseInt(document.getElementById('atr-'+attr).value)||0;SKILLS[attr].forEach(name=>{const el=document.getElementById(skId(attr,name));if(!el)return;const v=parseInt(el.value)||0;el.classList.toggle('overlimit',(cap>0&&v>cap)||(isOfficial()&&v>60));calcTotal(attr,name);});refreshWarn(attr);updateSkPtsLeft();updateSkillVisibility(attr);}
 function refreshWarn(attr){const any=SKILLS[attr].some(n=>document.getElementById(skId(attr,n))?.classList.contains('overlimit'));document.getElementById('warn-'+attr).textContent=any?'⚠ Alguma perícia excede o limite':'';}
 
@@ -994,7 +1243,13 @@ function updateWeight(){let w=0;inventory.weapon.forEach((it,i)=>{const dk='weap
 function recalcCombat(){
   let def=0,pen=0;
   SLOTS.forEach(s=>{const eq=equipped[s];if(eq){def+=eq.defesa||0;pen+=eq.pen||0;}});
-  let extra='';
+  // Shield defense from equipped weapons
+  let shieldDef=0;
+  [equippedWeapons.slot1,equippedWeapons.slot2].forEach(idx=>{
+    if(idx!==null&&idx<inventory.weapon.length){const w=inventory.weapon[idx];if(w&&w.isShield){shieldDef+=w.defesa||0;}}
+  });
+  def+=shieldDef;
+  let extra=shieldDef>0?' +Escudo('+shieldDef+')':'';
   // Casca Grossa Nv1: +Físico
   if((fcOwned['cascagrossa']||0)>=1){
     const fis=parseInt(document.getElementById('atr-fisico').value)||0;
@@ -1011,10 +1266,21 @@ function recalcCombat(){
   // Resistir: valor da perícia adiciona na defesa
   const resistirVal=parseInt(document.getElementById(skId('fisico','Resistir'))?.value)||0;
   if(resistirVal>0){def+=resistirVal;extra+=' +Resistir('+resistirVal+')';}
+  // Postura do Mamífero: +defense when pose active
+  const poseDef=getPoseDefBonus();
+  if(poseDef>0){def+=poseDef;extra+=' +'+poseDef+'(Postura)';}
   document.getElementById('f-defesa').value=def||'';
   document.getElementById('f-penalidade').value=pen||'';
   document.getElementById('defesa-detail').textContent='armadura: +'+def+(extra?extra:'');
   document.getElementById('penalidade-detail').textContent='armadura: '+pen;
+  // Pose movement bonus
+  const poseMov=getPoseMovBonus();
+  const movEl=document.getElementById('f-movimento');
+  if(movEl){
+    const baseM=parseInt(movEl.dataset.baseMov||movEl.value)||0;
+    if(!movEl.dataset.baseMov)movEl.dataset.baseMov=baseM;
+    movEl.value=baseM+(poseMov>0?poseMov:0);
+  }
 }
 function changeLevel(d){const el=document.getElementById('f-nivel');el.value=Math.max(1,Math.min(99,(parseInt(el.value)||1)+d));onLevelChange();}
 function loadPhoto(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{const img=document.getElementById('char-img');img.src=ev.target.result;img.style.display='block';document.getElementById('photo-ph').style.display='none';try{localStorage.setItem('rpg-photo',ev.target.result);}catch(_){}};r.readAsDataURL(f);}
@@ -1051,13 +1317,296 @@ function removeResFC(tipo,pct){
   renderResPanel();autoSave();
 }
 
+// ── POSE DE COMBATE ──
+function updatePoseButton(){
+  const hasPose=(mnOwned['poseCombate']||0)>=1;
+  const wrap=document.getElementById('pose-btn-wrap');
+  const btn=document.getElementById('pose-btn');
+  if(!wrap||!btn)return;
+  wrap.style.display=hasPose?'':'none';
+  // Button label
+  const mamLvl=mnOwned['posturaMamifero']||0;
+  btn.textContent=mamLvl>=1?'🐾 Postura do Mamífero':'🥋 Pose de Combate';
+  // Active state styling
+  if(poseActive){
+    btn.style.background='var(--green)';btn.style.color='#fff';
+    document.getElementById('pose-active-info').style.display='block';
+  } else {
+    btn.style.background='var(--bg3)';btn.style.color='var(--green2)';
+    document.getElementById('pose-active-info').style.display='none';
+  }
+}
+function togglePose(){
+  if(!poseActive){
+    // Activate: deduct 7 PE
+    const gasto=parseInt(document.getElementById('f-pegasto').value)||0;
+    document.getElementById('f-pegasto').value=gasto+7;
+    updatePE();
+    poseActive=true;
+  } else {
+    poseActive=false;
+  }
+  updatePoseButton();
+  // Apply/remove bonus to skill bones
+  applyPoseBonuses();
+  recalcCombat();
+  renderFichaWeapons();
+  autoSave();
+}
+function applyPoseBonuses(){
+  const hasPose=(mnOwned['poseCombate']||0)>=1;
+  if(!hasPose){poseActive=false;return;}
+  const mamLvl=mnOwned['posturaMamifero']||0;
+  const mamBonus=mamLvl>=2?5:mamLvl>=1?3:0;
+  const poseSkills=[{attr:'fisico',name:'Artes Marciais'},{attr:'fisico',name:'Atletismo'},{attr:'fisico',name:'Fortitude'}];
+  poseSkills.forEach(({attr,name})=>{
+    const bonEl=document.getElementById(bnId(attr,name));
+    if(!bonEl)return;
+    // Remove previous pose bonus (stored as data attr)
+    const prev=parseInt(bonEl.dataset.posebonus||0);
+    const cur=parseInt(bonEl.value)||0;
+    const base=cur-prev;
+    if(poseActive){bonEl.value=base+2;bonEl.dataset.posebonus=2;}
+    else{bonEl.value=base;bonEl.dataset.posebonus=0;}
+    calcTotal(attr,name);
+  });
+  // Postura do Mamífero: +movement and +defense handled in recalcCombat
+}
+function getPoseDamageBonus(){
+  if(!poseActive||(mnOwned['poseCombate']||0)<1)return 0;
+  const mamLvl=mnOwned['posturaMamifero']||0;
+  return 2+(mamLvl>=2?5:mamLvl>=1?3:0); // +2 from pose + mamifero bonus
+}
+function getPoseDefBonus(){
+  if(!poseActive||(mnOwned['posturaMamifero']||0)<1)return 0;
+  return (mnOwned['posturaMamifero']||0)>=2?5:3;
+}
+function getPoseMovBonus(){
+  if(!poseActive||(mnOwned['posturaMamifero']||0)<1)return 0;
+  return (mnOwned['posturaMamifero']||0)>=2?5:3;
+}
+
+// ── WEAPON SKILL BONUSES (Especialização, Treino de Manuseio, Duas Mãos) ──
+function getEspecializacaoDmg(w){
+  if(!(arOwned['especializacao']>=1)||!arEspecChoice||!w)return 0;
+  const cat=wepGetCat(w);
+  return cat===arEspecChoice?3:0;
+}
+function getEspecializacaoCritMul(w){
+  if(!(arOwned['especializacao']>=1)||!arEspecChoice||!w)return 0;
+  const cat=wepGetCat(w);
+  return cat===arEspecChoice?1:0;
+}
+function getTreinoManuseioBonus(w){
+  if(!(arOwned['treinoManuseio']>=1)||!arEmpunhaduraChoice||!w)return 0;
+  const wMan=(w.manuseio||'').toLowerCase();
+  const choice=arEmpunhaduraChoice.toLowerCase();
+  if(choice==='versátil'&&wMan.includes('vers'))return 1;
+  if(choice==='singular'&&(wMan.includes('uma'))||wMan.includes('singular'))return 1;
+  if(choice==='dupla'&&(wMan.includes('duas')||wMan.includes('dupla')||wMan.includes('dois')))return 1;
+  return 0;
+}
+function getDuasMaosBonus(w,isDamage){
+  if(!(arOwned['duasMaos']>=1)||!w)return{dmg:0,die:''};
+  const isDual=w.manuseio&&(w.manuseio.toLowerCase().includes('duas')||w.manuseio.toLowerCase().includes('dupla'));
+  if(!isDual)return{dmg:0,die:''};
+  return{dmg:3,die:'1d6'};
+}
+
+// ── WEAPON DAMAGE DISPLAY ──
+// Returns final displayed damage string with all bonuses applied
+function getFinalDamage(w,field){
+  // field = 'danoS' or 'danoDP'
+  const base=w[field];
+  // 1. Ultra Maestria (bumps dice — already handled in applyUltraMaestria)
+  const ultra=applyUltraMaestria(w);
+  let val=field==='danoS'?ultra.danoS:ultra.danoDP;
+  if(!val||val==='—')return{str:val,bonuses:[],ultraApplied:ultra.applied};
+  // Numeric bonuses
+  let totalBonus=0;const bonuses=[];
+  // 2. Especialização +3
+  const espDmg=getEspecializacaoDmg(w);
+  if(espDmg>0){totalBonus+=espDmg;bonuses.push('+'+espDmg+' Esp.');}
+  // 3. Treino de Manuseio +1
+  const treinoB=getTreinoManuseioBonus(w);
+  if(treinoB>0){totalBonus+=treinoB;bonuses.push('+'+treinoB+' Manuseio');}
+  // 4. Duas Mãos +3 +1d6
+  const duasB=getDuasMaosBonus(w,true);
+  if(duasB.dmg>0){totalBonus+=duasB.dmg;bonuses.push('+'+duasB.dmg+' 2Mãos');}
+  if(duasB.die){bonuses.push('+'+duasB.die+' 2Mãos');}
+  // 5. Pose de Combate damage bonus
+  const poseB=getPoseDamageBonus();
+  if(poseB>0){totalBonus+=poseB;bonuses.push('+'+poseB+' Pose');}
+  const finalStr=(totalBonus>0||duasB.die)?(val+(totalBonus>0?'+'+totalBonus:'')+(duasB.die?'+'+duasB.die:'')):val;
+  return{str:finalStr,bonuses,ultraApplied:ultra.applied};
+}
+
 // ── WEAPONS/EQUIP ──
+
+// Maps WEAPONS_BASE id → AR_WEAPON_CATS name
+const WEP_ID_TO_CAT={
+  lamina:'Lâmina',machado:'Machado',martelo:'Martelo',lanca:'Lança',bastao:'Bastão',
+  taco:'Taco',chicote:'Chicote',serra:'Serra',
+  arco:'Arco e Flecha',besta:'Besta',revolver:'Revólver',
+  escopeta:'Escopeta',fuzil:'Fuzil',rifle:'Rifle',lancador:'Lançador'
+};
+
+function wepGetCat(w){
+  // Try baseId first, then match by name
+  if(w.baseId&&WEP_ID_TO_CAT[w.baseId])return WEP_ID_TO_CAT[w.baseId];
+  const byName=Object.values(WEP_ID_TO_CAT).find(c=>w.name&&w.name.startsWith(c));
+  return byName||null;
+}
+
+function wepMatchesFoco(w){
+  if(!w||w.isShield||w.isGloveWeapon||!(arOwned['focoArmas']>=1))return false;
+  const cat=wepGetCat(w);
+  return cat&&arFocoArmas.includes(cat);
+}
+
+// Bump all dice in a damage string by 1 (d4→d6, d6→d8, d8→d10, d10→d12, d12→d12+d2)
+function bumpDie(dStr){
+  if(!dStr||dStr==='—')return dStr;
+  const DICE=['d4','d6','d8','d10','d12'];
+  return dStr.replace(/d(\d+)/g,(_,n)=>{
+    const i=DICE.indexOf('d'+n);
+    return i>=0&&i<DICE.length-1?DICE[i+1]:'d'+n;
+  });
+}
+
+function applyUltraMaestria(w){
+  // Only applies if ultra maestria owned and arUltraChoice matches weapon category
+  if(!(arOwned['ultraMaestria']>=1)||!arUltraChoice)return{danoS:w.danoS,danoDP:w.danoDP,applied:false};
+  const cat=wepGetCat(w);
+  if(cat!==arUltraChoice)return{danoS:w.danoS,danoDP:w.danoDP,applied:false};
+  return{danoS:bumpDie(w.danoS),danoDP:bumpDie(w.danoDP),applied:true};
+}
+
 function renderFichaWeapons(){
   const w1=equippedWeapons.slot1!==null&&equippedWeapons.slot1<inventory.weapon.length?inventory.weapon[equippedWeapons.slot1]:null;
   const w2=equippedWeapons.slot2!==null&&equippedWeapons.slot2<inventory.weapon.length?inventory.weapon[equippedWeapons.slot2]:null;
-  function wHtml(w){if(!w)return '<div class="eq-wep-empty">Nenhuma arma equipada</div>';return '<div class="eq-wep-name">'+w.displayName+'</div><div class="eq-wep-stats">Dano S: <b>'+w.danoS+'</b> &nbsp;Dano DP: <b>'+w.danoDP+'</b><br>Crítico: <b>'+w.crit+'x'+w.critMul+'</b> ('+w.critEff+')<br>Alcance: <b>'+w.alcance+'m</b> &nbsp;Tipo: <b>'+w.tipo+'</b><br>Manuseio: <b>'+w.manuseio+'</b>'+(w.customTags&&w.customTags.length?' &nbsp;['+w.customTags.join(', ')+']':'')+'</div>';}
-  document.getElementById('ficha-wep1-content').innerHTML=wHtml(w1);
-  document.getElementById('ficha-wep2-content').innerHTML=wHtml(w2);
+
+  function buildAttackRollText(w,isBareFist){
+    let skillVal=0,skillName='',fichaM=false,playerM=false,focoM=false;
+
+    if(isBareFist||!w){
+      skillVal=parseInt(document.getElementById(skId('fisico','Artes Marciais'))?.value)||0;
+      skillName='Artes Marciais';
+      fichaM=(mnOwned['maonua']>=1)&&mnMaestriaChoice?.attr==='fisico'&&mnMaestriaChoice?.name==='Artes Marciais';
+      playerM=document.getElementById(mdId('fisico','Artes Marciais',1))?.classList.contains('filled')||false;
+    } else if(w.isRanged||(w.customTags&&(w.customTags.includes('Arremessável')||w.customTags.includes('Munição')))){
+      skillVal=parseInt(document.getElementById(skId('intelecto','Pontaria'))?.value)||0;
+      skillName='Pontaria';
+      fichaM=(arOwned['armado']>=1)&&arMaestriaChoice?.attr==='intelecto'&&arMaestriaChoice?.name==='Pontaria';
+      playerM=document.getElementById(mdId('intelecto','Pontaria',1))?.classList.contains('filled')||false;
+      if(!fichaM&&!playerM)focoM=wepMatchesFoco(w);
+    } else {
+      skillVal=parseInt(document.getElementById(skId('fisico','Armas Brancas'))?.value)||0;
+      skillName='Armas Brancas';
+      fichaM=(arOwned['armado']>=1)&&arMaestriaChoice?.attr==='fisico'&&arMaestriaChoice?.name==='Armas Brancas';
+      playerM=document.getElementById(mdId('fisico','Armas Brancas',1))?.classList.contains('filled')||false;
+      if(!focoM)focoM=wepMatchesFoco(w);
+    }
+
+    // Determine effective maestria state
+    // fichaM OR playerM = single maestria already present
+    // focoM on top of existing single = dual → d4
+    // focoM alone = single maestria
+    const hasSingle=fichaM||playerM;
+    const dual=hasSingle&&focoM;
+
+    let roll='d20';
+    if(skillVal>0)roll+=' + '+skillName+' ('+skillVal+')';
+    if(dual)roll+=' + d4 (Maestria Dupla)';
+    else if(hasSingle||focoM)roll+=' + Maestria'+(focoM&&!hasSingle?' (Foco)':'');
+    // Duas Mãos: +1d6 on hit if using dual-hand weapon
+    const duasRollB=(!isBareFist&&w)?getDuasMaosBonus(w):{dmg:0,die:''};
+    if(duasRollB.die)roll+=' + '+duasRollB.die+' (2Mãos)';
+    return roll;
+  }
+
+  function wHtml(w,slotLabel){
+    const isBareFist=!w;
+    const roll=buildAttackRollText(w,isBareFist);
+    let html='';
+    if(isBareFist){
+      html+='<div class="eq-wep-name" style="color:var(--txt3);font-style:italic">Mão nua (Luva/Artes Marciais)</div>';
+      html+='<div class="eq-wep-stats">Dano: <b>d4</b> &nbsp;Tipo: <b>Impacto</b></div>';
+    } else {
+      html+='<div class="eq-wep-name">'+w.displayName+'</div>';
+      // Damage with all bonuses
+      const dmgS=getFinalDamage(w,'danoS');
+      const dmgDP=getFinalDamage(w,'danoDP');
+      const critMulBonus=getEspecializacaoCritMul(w);
+      const finalCritMul=w.critMul+critMulBonus;
+      html+='<div class="eq-wep-stats">Dano S: <b>'+dmgS.str+'</b>'+(dmgS.bonuses.length?' <span style="font-size:9px;color:var(--gold)">['+dmgS.bonuses.join(' ')+']</span>':'')+
+        ' &nbsp;Dano DP: <b>'+dmgDP.str+'</b>'+(dmgDP.bonuses.length?' <span style="font-size:9px;color:var(--gold)">['+dmgDP.bonuses.join(' ')+']</span>':'')+
+        '<br>Crítico: <b>'+w.crit+'x'+finalCritMul+'</b>'+(critMulBonus>0?' <span style="font-size:9px;color:var(--gold)">[+'+critMulBonus+' Esp.]</span>':'')+' ('+w.critEff+')<br>Alcance: <b>'+w.alcance+'m</b> &nbsp;Tipo: <b>'+w.tipo+'</b><br>Manuseio: <b>'+w.manuseio+'</b>'+(w.customTags&&w.customTags.length?' &nbsp;['+w.customTags.join(', ')+']':'')+'</div>';
+      if(w.isShield)html+='<div style="font-size:10px;color:var(--gold);margin-top:2px">🛡 +'+w.defesa+' DEF'+(w.pen>0?' &nbsp;−'+w.pen+' PEN':'')+'</div>';
+      // Foco/Ultra badges
+      const inFoco=wepMatchesFoco(w);
+      const inUltra=(arOwned['ultraMaestria']>=1)&&arUltraChoice&&wepGetCat(w)===arUltraChoice;
+      const inEsp=getEspecializacaoDmg(w)>0;
+      const inTreino=getTreinoManuseioBonus(w)>0;
+      const inDuas=getDuasMaosBonus(w).dmg>0;
+      const inPose=poseActive&&(mnOwned['poseCombate']||0)>=1;
+      if(inFoco||inUltra||inEsp||inTreino||inDuas||inPose){
+        html+='<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:3px">';
+        if(inFoco)html+='<span style="font-size:9px;background:#1e3a5f;color:#60a5fa;padding:1px 5px;border-radius:3px">🎯 Foco</span>';
+        if(inUltra)html+='<span style="font-size:9px;background:#3b1f00;color:#f97316;padding:1px 5px;border-radius:3px">⚡ Ultra</span>';
+        if(inEsp)html+='<span style="font-size:9px;background:#1a3320;color:#4ade80;padding:1px 5px;border-radius:3px">⚔ Esp.+3</span>';
+        if(inTreino)html+='<span style="font-size:9px;background:#1a2e3b;color:#7dd3fc;padding:1px 5px;border-radius:3px">🤝 Manuseio+1</span>';
+        if(inDuas)html+='<span style="font-size:9px;background:#2e1a3b;color:#c084fc;padding:1px 5px;border-radius:3px">💪 2Mãos</span>';
+        if(inPose)html+='<span style="font-size:9px;background:#1a2e1a;color:#86efac;padding:1px 5px;border-radius:3px">🥋 Pose+'+getPoseDamageBonus()+'</span>';
+        html+='</div>';
+      }
+    }
+    html+='<div class="eq-roll-row"><span class="eq-roll-label">🎲 Rolagem de ataque:</span><span class="eq-roll-str" id="rollstr-'+slotLabel+'">'+roll+'</span><button class="eq-roll-copy" onclick="copyRoll(\''+slotLabel+'\',false)" title="Copiar fórmula">📋 Copiar</button><button class="eq-roll-copy" style="border-color:var(--gold);color:var(--gold)" onclick="copyRoll(\''+slotLabel+'\',true)" title="Copiar como /r para chat">🎲 /r</button></div>';
+    return html;
+  }
+  document.getElementById('ficha-wep1-content').innerHTML=wHtml(w1,'slot1');
+  document.getElementById('ficha-wep2-content').innerHTML=wHtml(w2,'slot2');
+}
+function copyRoll(slotLabel,asRoll){
+  const el=document.getElementById('rollstr-'+slotLabel);if(!el)return;
+  let text=el.textContent;
+  if(asRoll){
+    const isSlot1=slotLabel==='slot1';
+    const wIdx=isSlot1?equippedWeapons.slot1:equippedWeapons.slot2;
+    const w=(wIdx!==null&&wIdx<inventory.weapon.length)?inventory.weapon[wIdx]:null;
+    const isBareFist=!w;
+
+    // Determine skill value and maestria state (mirrors buildAttackRollText logic)
+    let skillVal=0,fichaM=false,playerM=false,focoM=false;
+    if(isBareFist||!w){
+      skillVal=parseInt(document.getElementById(skId('fisico','Artes Marciais'))?.value)||0;
+      fichaM=(mnOwned['maonua']>=1)&&mnMaestriaChoice?.attr==='fisico'&&mnMaestriaChoice?.name==='Artes Marciais';
+      playerM=document.getElementById(mdId('fisico','Artes Marciais',1))?.classList.contains('filled')||false;
+    } else if(w.isRanged||(w.customTags&&(w.customTags.includes('Arremessável')||w.customTags.includes('Munição')))){
+      skillVal=parseInt(document.getElementById(skId('intelecto','Pontaria'))?.value)||0;
+      fichaM=(arOwned['armado']>=1)&&arMaestriaChoice?.attr==='intelecto'&&arMaestriaChoice?.name==='Pontaria';
+      playerM=document.getElementById(mdId('intelecto','Pontaria',1))?.classList.contains('filled')||false;
+      if(!fichaM&&!playerM)focoM=wepMatchesFoco(w);
+    } else {
+      skillVal=parseInt(document.getElementById(skId('fisico','Armas Brancas'))?.value)||0;
+      fichaM=(arOwned['armado']>=1)&&arMaestriaChoice?.attr==='fisico'&&arMaestriaChoice?.name==='Armas Brancas';
+      playerM=document.getElementById(mdId('fisico','Armas Brancas',1))?.classList.contains('filled')||false;
+      focoM=wepMatchesFoco(w);
+    }
+    const hasSingle=fichaM||playerM;
+    const dual=hasSingle&&focoM;
+
+    // Build clean parts array
+    const parts=['d20'];
+    if(skillVal>0)parts.push(String(skillVal));
+    if(dual)parts.push('d4');
+    else if(hasSingle||focoM)parts.push('Maestria');
+    // Duas Mãos +1d6 on hit
+    if(w&&!isBareFist){const db=getDuasMaosBonus(w);if(db.die)parts.push(db.die);}
+    text='/r '+parts.join(' + ');
+  }
+  const doCopy=t=>{navigator.clipboard.writeText(t).then(()=>showToast('📋 Copiado: '+t)).catch(()=>{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast('📋 Copiado!');});};
+  doCopy(text);
 }
 function switchEquipTab(tab,btn){document.querySelectorAll('.equip-tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.equip-panel').forEach(p=>p.classList.remove('active'));btn.classList.add('active');document.getElementById('equip-panel-'+tab).classList.add('active');if(tab==='armas')renderWeaponInvPanel();if(tab==='armadura')renderSlotsPanel();}
 function dKey(slot,name){return slot+'__'+name.replace(/\s/g,'_');}
@@ -1130,8 +1679,8 @@ function renderWeaponInvPanel(){
   });
   panel.innerHTML=html;
 }
-function equipWeapon(idx,slot){if(slot==='duas'){equippedWeapons.slot1=idx;equippedWeapons.slot2=null;}else if(slot===1)equippedWeapons.slot1=idx;else equippedWeapons.slot2=idx;renderWeaponInvPanel();renderFichaWeapons();autoSave();}
-function unequipWeapon(slot){if(slot===1)equippedWeapons.slot1=null;else equippedWeapons.slot2=null;renderWeaponInvPanel();renderFichaWeapons();autoSave();}
+function equipWeapon(idx,slot){if(slot==='duas'){equippedWeapons.slot1=idx;equippedWeapons.slot2=null;}else if(slot===1)equippedWeapons.slot1=idx;else equippedWeapons.slot2=idx;renderWeaponInvPanel();renderFichaWeapons();recalcCombat();autoSave();}
+function unequipWeapon(slot){if(slot===1)equippedWeapons.slot1=null;else equippedWeapons.slot2=null;renderWeaponInvPanel();renderFichaWeapons();recalcCombat();autoSave();}
 function applyWeaponDestroy(idx){const dk='weapon__'+idx;const w=inventory.weapon[idx];const cur=itemDamage[dk]||0;const maxDur=w.dur||1;if(cur>=maxDur){showToast('Arma já destruída!');return;}itemDamage[dk]=cur+1;if(itemDamage[dk]>=maxDur){if(equippedWeapons.slot1===idx)equippedWeapons.slot1=null;if(equippedWeapons.slot2===idx)equippedWeapons.slot2=null;showToast('💔 Arma destruída!');}else showToast('💥 Destruir: '+itemDamage[dk]+'/'+maxDur);renderWeaponInvPanel();renderFichaWeapons();autoSave();}
 function repairWeapon(idx){const w=inventory.weapon[idx];const cost=Math.ceil((w.finalPrice||w.price||1)/2);const money=parseInt(document.getElementById('f-money').value)||0;pendingAction={type:'repairWeapon',idx,cost};showModal('🔧 Reparar','Reparar <strong>'+w.displayName+'</strong> por <strong>'+cost+' 🪙</strong>?<br><small style="color:var(--txt2)">Dinheiro atual: '+money+'🪙</small>','Reparar');}
 function deleteWeapon(idx){pendingAction={type:'deleteWeapon',idx,name:inventory.weapon[idx].displayName};showModal('🗑 Excluir','Excluir <strong>'+inventory.weapon[idx].displayName+'</strong>?','Excluir');}
@@ -1154,6 +1703,7 @@ function applyCustomToWeapon(base,custom){
   if(custom.mat==='reforcado'){w.critMul+=1;mulMod+=1.5;tags.push('Reforçado');}else if(custom.mat==='composto'){w.weight+=1;w.dur+=1;mulMod+=1.0;tags.push('Composto');}else if(custom.mat==='fraco'){w.critMul=Math.max(1,w.critMul-1);mulMod-=0.2;tags.push('Fraco');}else if(custom.mat==='fragil'){w.weight=Math.max(1,w.weight-1);w.dur=Math.max(1,w.dur-1);mulMod-=0.1;tags.push('Frágil');}
   w.finalPrice=Math.max(1,Math.round(w.price*Math.max(0.1,1.0+mulMod)));
   w.customTags=tags;w.displayName=w.name+(tags.length?' ('+tags.join(', ')+')':'');
+  w.baseId=base.id; // store base category id for Foco/Ultra checks
   return w;
 }
 
@@ -1230,13 +1780,30 @@ function buildLojaArmas(){
   const container=document.getElementById('loja-armas');container.innerHTML='<div class="loja-sec-title">⚔ Armas</div>';
   WEAPONS_BASE.forEach((w,wIdx)=>{
     if(w.isShield){
-      const div=document.createElement('div');div.className='loja-category';div.innerHTML='<div class="loja-cat-name">'+w.name+'</div><div style="font-size:11px;color:var(--txt2);font-style:italic;padding:5px 8px;background:var(--bg3);border-radius:4px;margin-bottom:7px">Dano S: '+w.danoS+' | DP: '+w.danoDP+' | Crit: '+w.crit+'x'+w.critMul+' ('+w.critEff+') | Alcance: '+w.alcance+'m | Tipo: '+w.tipo+'</div>';
-      const tbl=document.createElement('table');tbl.className='loja-tbl';
-      let th='<thead><tr><th>Variante</th><th>Proteção</th><th>Pen.</th><th>Dur.</th><th>Preço</th></tr></thead><tbody>';
-      w.variants.forEach((v,vi)=>{th+='<tr><td data-label="">'+v.name+'</td><td data-label="Proteção" class="stat">+'+v.defesa+'</td><td data-label="Pen." class="stat">'+(v.pen>0?'−'+v.pen:'—')+'</td><td data-label="Dur." class="stat">'+v.dur+'</td><td data-label="Comprar"><button class="buy-btn" data-widx="'+wIdx+'" data-vidx="'+vi+'">'+v.price+'🪙</button></td></tr>';});
-      th+='</tbody>';tbl.innerHTML=th;
-      tbl.addEventListener('click',e=>{const btn=e.target.closest('.buy-btn[data-widx]');if(btn)askBuyShield(parseInt(btn.dataset.widx),parseInt(btn.dataset.vidx));});
-      div.appendChild(tbl);container.appendChild(div);return;
+      const div=document.createElement('div');div.className='loja-category';
+      div.innerHTML='<div class="loja-cat-name">🛡 Escudo</div>'+
+        '<div style="font-size:11px;color:var(--txt2);font-style:italic;padding:5px 8px;background:var(--bg3);border-radius:4px;margin-bottom:10px">Escolha o tipo de escudo e depois personalize-o. O escudo base não oferece defesa até que um tipo seja selecionado.</div>';
+      const cKey='shield_'+wIdx;
+      if(!shopShieldCustom[cKey])shopShieldCustom[cKey]={tipo:'none',car:'none',man:'versatil',mat:'none'};
+      const box=document.createElement('div');box.className='wep-custom-box';
+      box.innerHTML='<div class="wep-custom-title">Personalização do Escudo</div><div class="wep-custom-grid">'+
+        '<div class="wep-custom-group"><label style="color:var(--gold);font-weight:700">⚠ Tipo (obrigatório)</label><select onchange="onShieldCust(\''+cKey+'\',\'tipo\',this.value)" style="border-color:var(--gold)">'+
+          SHIELD_TIPO.map(o=>'<option value="'+o.id+'">'+o.name+'</option>').join('')+
+        '</select></div>'+
+        '<div class="wep-custom-group"><label>Característica</label><select onchange="onShieldCust(\''+cKey+'\',\'car\',this.value)">'+
+          SHIELD_CAR.map(o=>'<option value="'+o.id+'">'+o.name+'</option>').join('')+
+        '</select></div>'+
+        '<div class="wep-custom-group"><label>Manuseio</label><select onchange="onShieldCust(\''+cKey+'\',\'man\',this.value)">'+
+          SHIELD_MAN.map(o=>'<option value="'+o.id+'">'+o.name+'</option>').join('')+
+        '</select></div>'+
+        '<div class="wep-custom-group"><label>Material</label><select onchange="onShieldCust(\''+cKey+'\',\'mat\',this.value)">'+
+          SHIELD_MAT.map(o=>'<option value="'+o.id+'">'+o.name+'</option>').join('')+
+        '</select></div>'+
+        '</div><div class="wep-preview" id="spreview-'+wIdx+'"></div>'+
+        '<div style="text-align:center;margin-top:8px"><button class="buy-btn" style="width:auto;padding:7px 18px" onclick="askBuyShieldCustom(\''+cKey+'\','+wIdx+')">Comprar</button></div>';
+      div.appendChild(box);container.appendChild(div);
+      updateShieldPreview(cKey,wIdx);
+      return;
     }
     const div=document.createElement('div');div.className='loja-category';div.innerHTML='<div class="loja-cat-name">'+w.name+'</div>';
     const cKey='w'+wIdx;if(!shopWepCustom[cKey])shopWepCustom[cKey]={car:'none',man:'versatil',rec:w.isRanged?'municao':'nenhuma',tec:'none',mat:'none'};
@@ -1258,13 +1825,66 @@ function buildLojaArmas(){
 function onWepCust(wIdx,field,val){const cKey='w'+wIdx;if(!shopWepCustom[cKey])shopWepCustom[cKey]={car:'none',man:'versatil',rec:'nenhuma',tec:'none',mat:'none'};shopWepCustom[cKey][field]=val;updateWepPreview(wIdx);}
 function updateWepPreview(wIdx){const cKey='w'+wIdx;const c=shopWepCustom[cKey];if(!c)return;const base=WEAPONS_BASE[wIdx];const w=applyCustomToWeapon(base,c);const el=document.getElementById('wpreview-'+wIdx);if(!el)return;el.innerHTML='<div class="wep-preview-title">Prévia Final</div><div class="wep-preview-stats">Dano S: <b>'+w.danoS+'</b> &nbsp;DP: <b>'+w.danoDP+'</b> &nbsp;Crit: <b>'+w.crit+'x'+w.critMul+'</b> ('+w.critEff+')<br>Alcance: <b>'+w.alcance+'m</b> &nbsp;Tipo: <b>'+w.tipo+'</b> &nbsp;Peso: <b>'+w.weight+'</b> &nbsp;Dur: <b>'+w.dur+'</b><br>Manuseio: <b>'+w.manuseio+'</b>'+(w.customTags.length?' &nbsp;[<b>'+w.customTags.join(', ')+'</b>]':'')+'</div><div class="wep-preview-price">Preço Final: '+w.finalPrice+' 🪙</div>';}
 function askBuyWeapon(wIdx){const cKey='w'+wIdx;const c=shopWepCustom[cKey]||{car:'none',man:'versatil',rec:'nenhuma',tec:'none',mat:'none'};const base=WEAPONS_BASE[wIdx];const w=applyCustomToWeapon(base,c);const money=parseInt(document.getElementById('f-money').value)||0;pendingAction={type:'weapon',wIdx,customized:w};showModal('Confirmar Compra','Comprar <strong>'+w.displayName+'</strong> por <strong>'+w.finalPrice+' 🪙</strong>?<br><small style="color:'+(money<w.finalPrice?'var(--red3)':'var(--green2)')+'">Dinheiro: '+money+'🪙'+(money<w.finalPrice?' ⚠ insuficiente':'')+'</small>','Comprar');}
-function askBuyShield(wIdx,vIdx){const w=WEAPONS_BASE[wIdx];const v=w.variants[vIdx];const money=parseInt(document.getElementById('f-money').value)||0;pendingAction={type:'weaponShield',wIdx,vIdx};showModal('Confirmar Compra','Comprar <strong>'+v.name+'</strong> por <strong>'+v.price+' 🪙</strong>?<br><small style="color:'+(money<v.price?'var(--red3)':'var(--green2)')+'">Dinheiro: '+money+'🪙'+(money<v.price?' ⚠ insuficiente':'')+'</small>','Comprar');}
+function applyShieldCustom(cKey){
+  const c=shopShieldCustom[cKey]||{tipo:'none',car:'none',man:'versatil',mat:'none'};
+  const tipoBase=SHIELD_TIPO.find(t=>t.id===c.tipo)||SHIELD_TIPO[0];
+  let defesa=tipoBase.defesa,weight=tipoBase.weight,pen=tipoBase.pen,dur=2;
+  let mulMod=0;const tags=[];let empAtk=null;
+  // Manuseio
+  let manuseio='Versátil';
+  if(c.man==='duas_maos')manuseio='Duas Mãos';
+  else if(c.man==='acoplada'){manuseio='Acoplada';mulMod+=0.2;tags.push('Acoplada');}
+  // Característica (overrides manuseio if Grande)
+  if(c.car==='leve'){if(weight>=2){weight=Math.max(1,weight-1);defesa=Math.round(defesa*0.5);mulMod-=0.2;tags.push('Leve');}}
+  else if(c.car==='pesada'){weight+=1;defesa=Math.round(defesa*1.5);mulMod+=1.0;tags.push('Pesada');}
+  else if(c.car==='rapida'){mulMod+=0.3;tags.push('Rápida');}
+  else if(c.car==='lenta'){mulMod-=0.1;tags.push('Lenta');}
+  else if(c.car==='grande'){manuseio='Duas Mãos';mulMod+=0.5;tags.push('Grande');}
+  // Material
+  if(c.mat==='reforcado'){mulMod+=1.5;tags.push('Reforçado');}
+  else if(c.mat==='composto'){weight+=1;dur+=1;mulMod+=1.0;tags.push('Composto');}
+  else if(c.mat==='fraco'){mulMod-=0.2;tags.push('Fraco');}
+  else if(c.mat==='fragil'){weight=Math.max(1,weight-1);dur=Math.max(1,dur-1);mulMod-=0.1;tags.push('Frágil');}
+  const basePrice=Math.max(1,tipoBase.price||1);
+  const finalPrice=Math.max(1,Math.round(basePrice*Math.max(0.1,1.0+mulMod)));
+  const allTags=['Escudo',...(c.tipo!=='none'?[tipoBase.name.split('(')[0].trim()]:[]),...tags];
+  return {defesa,weight,pen,dur,manuseio,empAtk,tags:allTags,finalPrice,tipoBase};
+}
+function onShieldCust(cKey,field,val){
+  if(!shopShieldCustom[cKey])shopShieldCustom[cKey]={tipo:'none',car:'none',mat:'none',emp:'none'};
+  shopShieldCustom[cKey][field]=val;
+  const wIdx=parseInt(cKey.replace('shield_',''));
+  updateShieldPreview(cKey,wIdx);
+}
+function updateShieldPreview(cKey,wIdx){
+  const el=document.getElementById('spreview-'+wIdx);if(!el)return;
+  const c=shopShieldCustom[cKey]||{};
+  if(!c.tipo||c.tipo==='none'){el.innerHTML='<div class="wep-preview-title" style="color:var(--gold)">⚠ Selecione um tipo de escudo para ver a prévia</div>';return;}
+  const r=applyShieldCustom(cKey);
+  el.innerHTML='<div class="wep-preview-title">Prévia Final</div>'+
+    '<div class="wep-preview-stats">Defesa: <b>+'+r.defesa+'</b> &nbsp;Penalidade: <b>−'+r.pen+'</b> &nbsp;Peso: <b>'+r.weight+'</b> &nbsp;Dur: <b>'+r.dur+'</b><br>'+
+    'Manuseio: <b>'+r.manuseio+'</b>'+(r.empAtk?' &nbsp;Dano (Escudo): <b>'+r.empAtk+'</b>':'')+
+    '<br>Propriedades: <b>'+r.tags.join(', ')+'</b></div>'+
+    '<div class="wep-preview-price">Preço Final: '+r.finalPrice+' 🪙</div>';
+}
+function askBuyShieldCustom(cKey,wIdx){
+  const c=shopShieldCustom[cKey]||{};
+  if(!c.tipo||c.tipo==='none'){showToast('⚠ Escolha o tipo do escudo antes de comprar!');return;}
+  const r=applyShieldCustom(cKey);
+  const w=WEAPONS_BASE[wIdx];
+  const money=parseInt(document.getElementById('f-money').value)||0;
+  const extraTags=r.tags.filter(t=>t!=='Escudo'&&t!==r.tipoBase.name.split('(')[0].trim());
+  const displayName='Escudo '+r.tipoBase.name.split('(')[0].trim()+(extraTags.length?' ('+extraTags.join(', ')+')':'');
+  pendingAction={type:'weaponShieldCustom',displayName,defesa:r.defesa,dur:r.dur,pen:r.pen,weight:r.weight,finalPrice:r.finalPrice,tags:r.tags,empAtk:r.empAtk,manuseio:r.manuseio,baseW:w};
+  showModal('Confirmar Compra','Comprar <strong>'+displayName+'</strong> por <strong>'+r.finalPrice+' 🪙</strong>?<br><small style="color:'+(money<r.finalPrice?'var(--red3)':'var(--green2)')+'">Dinheiro: '+money+'🪙'+(money<r.finalPrice?' ⚠ insuficiente':'')+'</small>','Comprar');
+}
 function modalConfirm(){
   if(!pendingAction)return;const{type}=pendingAction;const money=parseInt(document.getElementById('f-money').value)||0;
   if(type==='armor'){const{cat,idx}=pendingAction;const item=ARMOR[cat][idx];if(money<item.price){showToast('Dinheiro insuficiente!');closeModal();return;}if(!inventory[cat])inventory[cat]=[];inventory[cat].push(JSON.parse(JSON.stringify(item)));document.getElementById('f-money').value=money-item.price;renderSlotsPanel();}
   else if(type==='gloves'){const{item}=pendingAction;if(money<item.price){showToast('Dinheiro insuficiente!');closeModal();return;}if(!inventory.luvas)inventory.luvas=[];inventory.luvas.push(JSON.parse(JSON.stringify(item)));document.getElementById('f-money').value=money-item.price;renderSlotsPanel();}
   else if(type==='weapon'){const{customized}=pendingAction;if(money<customized.finalPrice){showToast('Dinheiro insuficiente!');closeModal();return;}inventory.weapon.push(customized);document.getElementById('f-money').value=money-customized.finalPrice;updateWeight();renderWeaponInvPanel();}
-  else if(type==='weaponShield'){const{wIdx,vIdx}=pendingAction;const w=WEAPONS_BASE[wIdx];const v=w.variants[vIdx];if(money<v.price){showToast('Dinheiro insuficiente!');closeModal();return;}const obj={name:v.name,displayName:v.name,danoS:w.danoS,danoDP:w.danoDP,crit:w.crit,critMul:w.critMul,critEff:w.critEff,alcance:w.alcance,tipo:w.tipo,weight:v.weight,dur:v.dur,price:v.price,finalPrice:v.price,manuseio:'Versátil',isShield:true,defesa:v.defesa,pen:v.pen,customTags:['Escudo']};inventory.weapon.push(obj);document.getElementById('f-money').value=money-v.price;updateWeight();renderWeaponInvPanel();}
+  else if(type==='resetFicha'){doResetFicha();closeModal();return;}
+  else if(type==='weaponShieldCustom'){const{displayName,defesa,dur,pen,weight,finalPrice,tags,empAtk,manuseio,baseW}=pendingAction;if(money<finalPrice){showToast('Dinheiro insuficiente!');closeModal();return;}const obj={name:displayName,displayName,danoS:empAtk||baseW.danoS,danoDP:empAtk||baseW.danoDP,crit:baseW.crit,critMul:baseW.critMul,critEff:baseW.critEff,alcance:baseW.alcance,tipo:baseW.tipo,weight:weight||2,dur,price:finalPrice,finalPrice,manuseio:manuseio||'Versátil',isShield:true,defesa,pen,customTags:tags};inventory.weapon.push(obj);document.getElementById('f-money').value=money-finalPrice;updateWeight();renderWeaponInvPanel();renderFichaWeapons();}
   else if(type==='repair'){const{slot,itemName,cost}=pendingAction;if(money<cost){showToast('Dinheiro insuficiente!');closeModal();return;}const dk=dKey(slot,itemName);itemDamage[dk]=0;document.getElementById('f-money').value=money-cost;showToast('🔧 Item reparado!');renderSlotsPanel();}
   else if(type==='repairWeapon'){const{idx,cost}=pendingAction;if(money<cost){showToast('Dinheiro insuficiente!');closeModal();return;}itemDamage['weapon__'+idx]=0;document.getElementById('f-money').value=money-cost;showToast('🔧 Arma reparada!');renderWeaponInvPanel();renderFichaWeapons();}
   else if(type==='deleteArmor'){const{slot,idx,itemName}=pendingAction;if(equipped[slot]&&equipped[slot].name===itemName){equipped[slot]=null;recalcCombat();}const dk=dKey(slot,itemName);delete itemDamage[dk];inventory[slot].splice(idx,1);renderSlotsPanel();showToast('🗑 Excluído.');}
@@ -1343,7 +1963,12 @@ function renderPlayerTree(){
   const allFC=Object.entries(fcOwned).filter(([,v])=>v>0);
   const allAC=Object.entries(acOwned).filter(([,v])=>v>0);
   const allPA=Object.entries(paOwned).filter(([,v])=>v>0);
-  const anyOwned=allFC.length>0||allAC.length>0||allPA.length>0;
+  const allMN=Object.entries(mnOwned).filter(([,v])=>v>0);
+  const allMed=Object.entries(medOwned).filter(([,v])=>v>0);
+  const allAR=Object.entries(arOwned).filter(([,v])=>v>0);
+  const allCE=Object.entries(ceOwned).filter(([,v])=>v>0);
+  const allCC=Object.entries(ccOwned).filter(([,v])=>v>0);
+  const anyOwned=allFC.length>0||allAC.length>0||allPA.length>0||allMN.length>0||allMed.length>0||allAR.length>0||allCE.length>0||allCC.length>0;
   const section=document.getElementById('player-tree-section');
   const list=document.getElementById('player-tree-list');
   const spInfo=document.getElementById('pt-sp-info');
@@ -1385,7 +2010,6 @@ function renderPlayerTree(){
     }
   });
   // MN nodes
-  const allMN=Object.entries(mnOwned).filter(([,v])=>v>0);
   allMN.forEach(([id,lvls])=>{
     const node=MN_NODES.find(n=>n.id===id);if(!node)return;
     for(let lv=1;lv<=lvls;lv++){
@@ -1397,7 +2021,6 @@ function renderPlayerTree(){
     }
   });
   // MED nodes
-  const allMed=Object.entries(medOwned).filter(([,v])=>v>0);
   allMed.forEach(([id,lvls])=>{
     const node=MED_NODES.find(n=>n.id===id);if(!node)return;
     for(let lv=1;lv<=lvls;lv++){
@@ -1409,7 +2032,6 @@ function renderPlayerTree(){
     }
   });
   // AR nodes
-  const allAR=Object.entries(arOwned).filter(([,v])=>v>0);
   allAR.forEach(([id,lvls])=>{
     const node=AR_NODES.find(n=>n.id===id);if(!node)return;
     for(let lv=1;lv<=lvls;lv++){
@@ -1423,7 +2045,6 @@ function renderPlayerTree(){
     }
   });
   // CE nodes
-  const allCE=Object.entries(ceOwned).filter(([,v])=>v>0);
   allCE.forEach(([id,lvls])=>{
     const node=CE_NODES.find(n=>n.id===id);if(!node)return;
     for(let lv=1;lv<=lvls;lv++){
@@ -1434,7 +2055,6 @@ function renderPlayerTree(){
     }
   });
   // CC nodes
-  const allCC=Object.entries(ccOwned).filter(([,v])=>v>0);
   allCC.forEach(([id,lvls])=>{
     const node=CC_NODES.find(n=>n.id===id);if(!node)return;
     for(let lv=1;lv<=lvls;lv++){
@@ -1926,7 +2546,7 @@ function mnBuyLevel(id,lv){
     }
   }
   mnOwned[id]=(mnOwned[id]||0)+1;
-  updateSPBadge();buildMNTree();mnShowDesc(id);renderPlayerTree();autoSave();
+  updateSPBadge();buildMNTree();mnShowDesc(id);renderPlayerTree();updatePoseButton();autoSave();
   showToast('✓ Habilidade comprada!');
 }
 function sellMNLevel(id,lv){
@@ -1941,7 +2561,7 @@ function sellMNLevel(id,lv){
   }
   updateSPBadge();buildMNTree();
   if(mnActiveNode===id)mnShowDesc(id);
-  renderPlayerTree();autoSave();
+  renderPlayerTree();updatePoseButton();autoSave();
   showToast('↩ Habilidade vendida (+1pt)');
 }
 
@@ -2036,7 +2656,7 @@ function medBuyLevel(id,lv){
     }
   }
   medOwned[id]=(medOwned[id]||0)+1;
-  updateSPBadge();buildMedTree();medShowDesc(id);renderPlayerTree();autoSave();
+  updateSPBadge();buildMedTree();medShowDesc(id);renderPlayerTree();updateDadoCuraField();autoSave();
   showToast('✓ Habilidade comprada!');
 }
 function sellMedLevel(id,lv){
@@ -2051,7 +2671,7 @@ function sellMedLevel(id,lv){
   }
   updateSPBadge();buildMedTree();
   if(medActiveNode===id)medShowDesc(id);
-  renderPlayerTree();autoSave();
+  renderPlayerTree();updateDadoCuraField();autoSave();
   showToast('↩ Habilidade vendida (+1pt)');
 }
 
@@ -2138,10 +2758,15 @@ function arShowDesc(id){
         if(arMaestriaChoice)html+='<div style="font-size:10px;color:var(--green2);margin:4px 0">✓ Maestria aplicada em: '+arMaestriaChoice.name+'</div>';
         html+='<button class="fc-buy-btn" '+(canBuy?'':'disabled')+' onclick="arBuyLevel(\'armado\',1)">'+btnLabel+'</button></div>';
       } else if(lv.hasTripleArmaChoice){
-        html+='<div class="fc-res-picker"><label>Escolha 3 categorias de arma (segure Ctrl para múltiplos):</label>';
-        html+='<select id="ar-foco-sel" multiple size="5" style="height:auto">';
-        AR_WEAPON_CATS.forEach(cat=>{const sel=arFocoArmas.includes(cat)?' selected':'';html+='<option value="'+cat+'"'+sel+'>'+cat+'</option>';});
-        html+='</select>';
+        const owned=(arOwned['focoArmas']||0)>=1;
+        html+='<div class="fc-res-picker"><label>Escolha 3 categorias de arma:</label>';
+        html+='<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:4px;margin:6px 0" id="ar-foco-checks">';
+        AR_WEAPON_CATS.forEach(cat=>{
+          const checked=arFocoArmas.includes(cat);
+          html+='<label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;padding:3px 5px;border-radius:3px;background:var(--bg3)"><input type="checkbox" value="'+cat+'"'+(checked?' checked':'')+' onchange="arFocoCheckChange()"> '+cat+'</label>';
+        });
+        html+='</div>';
+        html+='<div id="ar-foco-count" style="font-size:10px;color:var(--txt3);margin-bottom:4px">0 / 3 selecionadas</div>';
         if(arFocoArmas.length>0)html+='<div style="font-size:10px;color:var(--green2);margin:4px 0">✓ Selecionadas: '+arFocoArmas.join(', ')+'</div>';
         html+='<button class="fc-buy-btn" '+(canBuy?'':'disabled')+' onclick="arBuyFoco()">'+btnLabel+'</button></div>';
       } else if(lv.hasFocoArmaChoice){
@@ -2202,12 +2827,25 @@ function arBuyLevel(id,lv){
   showToast('✓ Habilidade comprada!');
 }
 
+function arFocoCheckChange(){
+  const checks=document.querySelectorAll('#ar-foco-checks input[type="checkbox"]');
+  const checked=Array.from(checks).filter(c=>c.checked);
+  // Enforce max 3
+  if(checked.length>3){
+    // Uncheck the last one that was just checked
+    const evt=window.event||{};
+    if(evt.target&&evt.target.checked)evt.target.checked=false;
+    else checks.forEach(c=>{if(c.checked&&checked.indexOf(c)===3)c.checked=false;});
+  }
+  const count=Array.from(checks).filter(c=>c.checked).length;
+  const el=document.getElementById('ar-foco-count');
+  if(el){el.textContent=count+' / 3 selecionadas';el.style.color=count===3?'var(--green2)':'var(--txt3)';}
+}
 function arBuyFoco(){
   if(!arCheckPrereq('focoArmas',1)){showToast('Pré-requisito não atendido!');return;}
   if(isOfficial()&&spLeft()<1){showToast('Sem pontos de habilidade!');return;}
-  const sel=document.getElementById('ar-foco-sel');
-  if(!sel){showToast('Erro ao obter seleção!');return;}
-  const chosen=Array.from(sel.selectedOptions).map(o=>o.value);
+  const checks=document.querySelectorAll('#ar-foco-checks input[type="checkbox"]:checked');
+  const chosen=Array.from(checks).map(c=>c.value);
   if(chosen.length!==3){showToast('Selecione exatamente 3 categorias!');return;}
   arFocoArmas=chosen;
   arOwned['focoArmas']=(arOwned['focoArmas']||0)+1;
@@ -2305,7 +2943,7 @@ function ceShowDesc(id){
 function ceBuyLevel(id,lv){
   if(isOfficial()&&spLeft()<1){showToast('Sem pontos de habilidade!');return;}
   ceOwned[id]=(ceOwned[id]||0)+1;
-  updateSPBadge();buildCETree();ceShowDesc(id);renderPlayerTree();autoSave();
+  updateSPBadge();buildCETree();ceShowDesc(id);renderPlayerTree();updateCalcNavBtn();autoSave();
   showToast('✓ Habilidade comprada!');
 }
 function sellCELevel(id,lv){
@@ -2314,7 +2952,7 @@ function sellCELevel(id,lv){
   ceOwned[id]=Math.max(0,owned-1);
   updateSPBadge();buildCETree();
   if(ceActiveNode===id)ceShowDesc(id);
-  renderPlayerTree();autoSave();
+  renderPlayerTree();updateCalcNavBtn();autoSave();
   showToast('↩ Habilidade vendida (+1pt)');
 }
 
@@ -2446,7 +3084,7 @@ function ccBuyLevel(id,lv){
   if((id==='adaptacoes')&&(ccOwned['circulo_corpo']||0)<1){showToast('Pré-requisito não atendido!');return;}
   if(isOfficial()&&spLeft()<1){showToast('Sem pontos de habilidade!');return;}
   ccOwned[id]=(ccOwned[id]||0)+1;
-  updateSPBadge();buildCCTree();ccShowDesc(id);renderPlayerTree();autoSave();
+  updateSPBadge();buildCCTree();ccShowDesc(id);renderPlayerTree();updateCalcNavBtn();autoSave();
   showToast('✓ Habilidade comprada!');
 }
 
@@ -2546,32 +3184,250 @@ function sellCCLevel(id,lv){
 
 function updateDadoCuraField(){
   const hasRegen=ccAdaptations.some(a=>a.id==='regeneracao_parcial');
+  const hasMedicina=(medOwned['medicina']||0)>=1;
+  const hasCuraGentil=(medOwned['curaGentil']||0)>=1;
+  const shouldShow=hasRegen||hasMedicina;
+
   let el=document.getElementById('dado-cura-section');
-  if(hasRegen&&!el){
-    // Create the Dado de Cura section in the ficha page
-    const ficha=document.querySelector('#page-ficha .sheet .save-bar');
-    if(ficha){
-      const section=document.createElement('div');
-      section.id='dado-cura-section';
-      section.style.cssText='background:var(--bg3);border:1px solid var(--green);border-radius:8px;padding:10px 14px;margin-bottom:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap';
-      section.innerHTML='<span style="font-size:13px;color:var(--green2);font-weight:600">🌿 Dado de Cura</span>'+
-        '<span style="font-size:11px;color:var(--txt2)">(Nível do Personagem)d4 + Perícia Restaurar (se maestria)</span>'+
-        '<div style="flex:1;min-width:150px"><input type="text" id="dado-cura-val" placeholder="Ex: 3d4+5" oninput="autoSave()" style="font-size:13px;font-weight:600;color:var(--green2);border-color:var(--green)"></div>';
-      ficha.parentNode.insertBefore(section,ficha);
+
+  if(shouldShow){
+    const lvl=Math.max(1,parseInt(document.getElementById('f-nivel').value)||1);
+    const intel=parseInt(document.getElementById('atr-intelecto').value)||0;
+    const adaptar=parseInt(document.getElementById(skId('poder','Adaptar'))?.value)||0;
+
+    // Build formula string
+    let formula=lvl+'d4';
+    if(hasMedicina){
+      // Medicina uses Adaptar
+      formula+=' + Adaptar ('+adaptar+')';
+      if(hasCuraGentil&&intel>0)formula+=' + Intelecto ('+intel+')';
+    } else {
+      // CC Regeneração: (nível)d4 + Restaurar (se maestria)
+      formula+=' + Restaurar (se maestria)';
     }
-  } else if(!hasRegen&&el){
+
+    if(!el){
+      const ficha=document.querySelector('#page-ficha .sheet .save-bar');
+      if(ficha){
+        const section=document.createElement('div');
+        section.id='dado-cura-section';
+        section.style.cssText='background:var(--bg3);border:1px solid var(--green);border-radius:8px;padding:10px 14px;margin-bottom:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap';
+        ficha.parentNode.insertBefore(section,ficha);
+        el=section;
+      }
+    }
+    if(el){
+      const origin=hasMedicina?'Medicina'+(hasRegen?' / CC Regen':''):'CC Regen';
+      el.innerHTML=
+        '<span style="font-size:13px;color:var(--green2);font-weight:600">🌿 Dado de Cura</span>'+
+        '<span style="font-size:11px;color:var(--txt3);font-style:italic">('+origin+')</span>'+
+        '<span style="font-size:12px;color:var(--txt2);font-weight:600">'+formula+'</span>'+
+        '<div style="flex:1;min-width:130px"><input type="text" id="dado-cura-val" placeholder="Resultado / Notas" oninput="autoSave()" style="font-size:12px;font-weight:600;color:var(--green2);border-color:var(--green)"></div>';
+    }
+  } else if(!shouldShow&&el){
     el.remove();
   }
 }
 
 // ── MODAL/TOAST ──
-function showModal(title,body,okLabel){document.getElementById('modal-title').textContent=title;document.getElementById('modal-body').innerHTML=body;document.getElementById('modal-ok-btn').textContent=okLabel||'Confirmar';document.getElementById('modal-overlay').classList.add('open');}
+function showModal(title,body,okLabel,btnClass){document.getElementById('modal-title').textContent=title;document.getElementById('modal-body').innerHTML=body;const btn=document.getElementById('modal-ok-btn');btn.textContent=okLabel||'Confirmar';btn.className='modal-ok'+(btnClass?' '+btnClass:'');document.getElementById('modal-overlay').classList.add('open');}
 function closeModal(){document.getElementById('modal-overlay').classList.remove('open');pendingAction=null;}
 document.getElementById('modal-overlay').addEventListener('click',function(e){if(e.target===this)closeModal();});
 function showToast(msg){let t=document.getElementById('_toast');if(!t){t=document.createElement('div');t.id='_toast';t.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--border2);color:var(--txt);font-size:12px;font-weight:500;padding:10px 18px;border-radius:8px;z-index:3000;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap';document.body.appendChild(t);}t.textContent=msg;t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',2400);}
 
 // ── PAGE NAV ──
-function showPage(page){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+page).classList.add('active');document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));document.getElementById('nav-'+page).classList.add('active');if(page==='equip')renderSlotsPanel();if(page==='arvore')buildSkillTree();}
+function showPage(page){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+page).classList.add('active');document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));document.getElementById('nav-'+page).classList.add('active');if(page==='equip')renderSlotsPanel();if(page==='arvore')buildSkillTree();if(page==='calc')calcInit();}
+
+// ── CALCULADORA DE FEITIÇOS ──
+const CALC_CIRCULOS=[
+  {id:'ce',name:'Círculo do Espírito',owned:()=>(ceOwned['circulo_espirito']||0)>=1},
+  {id:'cc',name:'Círculo do Corpo',owned:()=>(ccOwned['circulo_corpo']||0)>=1},
+];
+const CALC_STEPS={acerto:0,alcance_extra:0,crit:0,prol_turno:1,multi_alvo:0};
+
+function calcInit(){
+  // Populate círculo select with only owned ones
+  const sel=document.getElementById('calc-circulo');
+  const prev=sel.value;
+  sel.innerHTML='<option value="">— Selecione um círculo —</option>';
+  CALC_CIRCULOS.filter(c=>c.owned()).forEach(c=>{
+    const o=document.createElement('option');o.value=c.id;o.textContent=c.name;
+    if(c.id===prev)o.selected=true;
+    sel.appendChild(o);
+  });
+  calcUpdate();
+}
+
+function calcStep(key,dir){
+  const min={acerto:0,alcance_extra:0,crit:0,prol_turno:1,multi_alvo:0};
+  CALC_STEPS[key]=Math.max(min[key]||0,(CALC_STEPS[key]||0)+dir);
+  calcUpdate();
+}
+
+function updateCalcNavBtn(){
+  const hasAny=CALC_CIRCULOS.some(c=>c.owned());
+  const btn=document.getElementById('nav-calc');
+  if(btn)btn.style.display=hasAny?'':'none';
+}
+
+function calcGetTipo(){
+  const r=document.querySelector('input[name="calc-tipo"]:checked');
+  return r?r.value:null;
+}
+function calcGetRadio(name){
+  const r=document.querySelector('input[name="'+name+'"]:checked');
+  return r?r.value:'0';
+}
+
+function calcUpdate(){
+  // Show/hide turno row
+  const prolCheck=document.getElementById('calc-prol-turno');
+  const prolRow=document.getElementById('calc-prol-turno-row');
+  if(prolCheck&&prolRow)prolRow.style.display=prolCheck.checked?'flex':'none';
+
+  const tipo=calcGetTipo();
+  const resist=calcGetRadio('calc-resist');
+  const hasResist=resist==='-half';
+
+  // Acerto only available without resist
+  const acSec=document.getElementById('calc-acerto-section');
+  if(acSec)acSec.style.opacity=hasResist?'0.4':'1';
+
+  // Crit only without resist
+  const critSec=document.getElementById('calc-crit-section');
+  if(critSec)critSec.style.opacity=hasResist?'0.4':'1';
+
+  // Pot not for dano
+  const potSec=document.getElementById('calc-pot-section');
+  if(potSec)potSec.style.opacity=(tipo==='dano')?'0.4':'1';
+
+  // Update stepper displays
+  ['acerto','alcance_extra','crit','prol_turno','multi_alvo'].forEach(k=>{
+    const v=CALC_STEPS[k]||0;
+    const el=document.getElementById('calc-'+k.replace('_','-')+'-val');
+    if(el)el.textContent=v;
+    // PE
+    const peEl=document.getElementById('calc-'+k.replace('_','-')+'-pe');
+    if(peEl){
+      let pe=0;
+      if(k==='acerto')pe=hasResist?0:v;
+      if(k==='alcance_extra')pe=v*3;
+      if(k==='crit')pe=hasResist?0:v*12;
+      if(k==='prol_turno')pe=document.getElementById('calc-prol-turno')?.checked?(v*5):0;
+      if(k==='multi_alvo')pe=v*4;
+      peEl.textContent=pe;
+    }
+  });
+
+  calcRender();
+}
+
+function calcRender(){
+  const tipo=calcGetTipo();
+  if(!tipo){
+    document.getElementById('calc-output').innerHTML='<div style="color:var(--txt3);font-style:italic;font-size:12px">Selecione o tipo de feitiço...</div>';
+    return;
+  }
+
+  const circulo=document.getElementById('calc-circulo').value;
+  const acao=parseInt(calcGetRadio('calc-acao'))||1;
+  const tempo=calcGetRadio('calc-tempo');
+  const alcanceBase=parseInt(calcGetRadio('calc-alcance'))||0;
+  const duracao=parseInt(calcGetRadio('calc-duracao'))||0;
+  const alvo=parseInt(calcGetRadio('calc-alvo'))||0;
+  const resist=calcGetRadio('calc-resist');
+  const hasResist=resist==='-half';
+  const pot=parseInt(calcGetRadio('calc-pot'))||0;
+
+  const acerto=hasResist?0:(CALC_STEPS.acerto||0);
+  const alcanceExtra=CALC_STEPS.alcance_extra||0;
+  const crit=hasResist?0:(CALC_STEPS.crit||0);
+  const multiAlvo=CALC_STEPS.multi_alvo||0;
+  const prolTurnoChecked=document.getElementById('calc-prol-turno')?.checked;
+  const prolTurno=prolTurnoChecked?(CALC_STEPS.prol_turno||1):0;
+  const prolDobrar=document.getElementById('calc-prol-dobrar')?.checked;
+  const prolTrip=document.getElementById('calc-prol-triplicar')?.checked;
+
+  // Build PE sum (before half-reductions)
+  let peSum=0;
+  const rows=[];
+
+  const add=(label,val,note='')=>{if(val!==0){rows.push({label,val,note});peSum+=val;}};
+
+  add('Tipo de Ação',acao,acao===1?'Simples':'Complexo');
+  const tempoLabels={'0':'Ação Principal','3':'Ação Secundária','5':'Reação','-half':'Turno Inteiro'};
+  if(tempo!=='-half')add('Tempo de Conjuração',parseInt(tempo),tempoLabels[tempo]);
+  if(alcanceBase>0)add('Alcance Base',alcanceBase,'Aura 6m');
+  if(duracao>0)add('Duração',duracao,'Prolongado');
+  if(alvo>0)add('Alvos',alvo,'Área de Efeito');
+  if(acerto>0)add('Aumentar Acerto',acerto,'×1 PE cada');
+  if(alcanceExtra>0)add('Aumento de Alcance',alcanceExtra*3,alcanceExtra+'m × 3 PE');
+  if(crit>0)add('Crítico Melhorado',crit*12,'+'+crit+' mult × 12 PE');
+  if(prolTurno>0)add('Turnos Adicionais',prolTurno*5,prolTurno+'t × 5 PE');
+  if(prolDobrar)add('Dobrar Duração',15,'');
+  if(prolTrip)add('Triplicar Duração',30,'');
+  if(multiAlvo>0)add('Múltiplos Alvos',multiAlvo*4,multiAlvo+' alvo(s) × 4 PE');
+  if(tipo!=='dano'&&pot>0)add('Potencialização',pot,pot===15?'Efic. ×1.5':'Efic. ×2.0');
+
+  // Apply half-reductions at the end
+  let halfReductions=[];
+  if(tempo==='-half')halfReductions.push('Turno Inteiro');
+  if(hasResist)halfReductions.push('Teste de Resistência');
+  let finalPE=peSum;
+  halfReductions.forEach(()=>{finalPE=Math.ceil(finalPE/2);});
+
+  // Attack roll
+  const poder=parseInt(document.getElementById('atr-poder')?.value)||0;
+  const tipoRollMap={dano:'Atacar',adaptar:'Adaptar',defender:'Defender',rastrear:'Rastrear',restaurar:'Restaurar'};
+  const rollSkillName=tipoRollMap[tipo]||'Atacar';
+  const rollSkillVal=parseInt(document.getElementById(skId('poder',rollSkillName))?.value)||0;
+  const rollStr=tipo==='dano'
+    ?'d20 + Atacar ('+rollSkillVal+')'
+    :'d20 + '+rollSkillName+' ('+rollSkillVal+')';
+
+  // Damage for dano type
+  const danoStr=tipo==='dano'?('d6 + Poder ('+poder+')'):null;
+  const critMul=tipo==='dano'&&crit>0?(2+crit)+'x':'—';
+  const alcanceFinalM=alcanceBase===2?6:0+alcanceExtra;
+
+  // Build output HTML
+  let html='';
+  html+='<div style="display:flex;flex-direction:column;gap:3px">';
+  rows.forEach(r=>{
+    html+='<div class="calc-out-row"><span class="calc-out-label">'+r.label+(r.note?' <span style="font-size:9px;color:var(--txt3)">('+r.note+')</span>':'')+'</span><span class="calc-out-val">+'+r.val+' PE</span></div>';
+  });
+  if(halfReductions.length>0){
+    html+='<div class="calc-out-row" style="color:#f97316"><span class="calc-out-label">⟨ ÷2 ao final: '+halfReductions.join(' + ')+'</span><span class="calc-out-val" style="color:#f97316">÷2</span></div>';
+  }
+  html+='</div>';
+  html+='<div class="calc-out-total"><span class="lbl">⚡ Custo Total</span><span class="val">'+finalPE+' PE</span></div>';
+
+  // Ficha técnica
+  html+='<div class="calc-roll-box" style="margin-top:10px">';
+  html+='<div style="font-size:12px;font-weight:700;color:#c4b5fd;margin-bottom:6px">📋 Resumo Técnico</div>';
+  const circ=CALC_CIRCULOS.find(c=>c.id===circulo);
+  if(circ)html+='<div class="calc-out-row"><span class="calc-out-label">Círculo</span><span class="calc-out-val">'+circ.name+'</span></div>';
+  html+='<div class="calc-out-row"><span class="calc-out-label">Tipo</span><span class="calc-out-val">'+tipo.charAt(0).toUpperCase()+tipo.slice(1)+'</span></div>';
+  html+='<div class="calc-out-row"><span class="calc-out-label">Rolagem de Ataque</span><span class="calc-out-val">'+rollStr+'</span></div>';
+  if(danoStr)html+='<div class="calc-out-row"><span class="calc-out-label">Dano Base</span><span class="calc-out-val">'+danoStr+'</span></div>';
+  if(tipo==='dano')html+='<div class="calc-out-row"><span class="calc-out-label">Crítico</span><span class="calc-out-val">20 × '+critMul+'</span></div>';
+  html+='<div class="calc-out-row"><span class="calc-out-label">Alcance Total</span><span class="calc-out-val">'+(alcanceFinalM>0?alcanceFinalM+'m':'Toque')+'</span></div>';
+  if(hasResist)html+='<div class="calc-out-row"><span class="calc-out-label">Resistência</span><span class="calc-out-val" style="color:#f97316">Requer Teste</span></div>';
+  if(tipo!=='dano'&&pot>0)html+='<div class="calc-out-row"><span class="calc-out-label">Potencialização</span><span class="calc-out-val" style="color:#4ade80">'+( pot===15?'×1.5':'×2.0')+'</span></div>';
+  html+='<div class="calc-out-total" style="margin-top:6px"><span class="lbl">⚡ PE Total</span><span class="val">'+finalPE+' PE</span></div>';
+
+  // Copy button
+  const rollCopy=tipo==='dano'?('/r d20 + '+rollSkillVal):('/r d20 + '+rollSkillVal);
+  html+='</div>';
+  html+='<button class="calc-copy-btn" onclick="calcCopyRoll(\''+rollCopy+'\','+finalPE+')">📋 Copiar Rolagem + Custo</button>';
+
+  document.getElementById('calc-output').innerHTML=html;
+}
+
+function calcCopyRoll(roll,pe){
+  const text=roll+' — Custo: '+pe+' PE';
+  navigator.clipboard.writeText(text).then(()=>showToast('📋 Copiado: '+text)).catch(()=>{const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast('📋 Copiado!');});
+}
 
 // ── SAVE/LOAD ──
 function gatherData(){
@@ -2597,10 +3453,57 @@ function gatherData(){
   d._fcMC=fcMaestriaChoice?JSON.stringify(fcMaestriaChoice):null;
   d._ceOwned=JSON.stringify(ceOwned);
   d._ccOwned=JSON.stringify(ccOwned);d._ccAdapts=JSON.stringify(ccAdaptations);
+  d._poseActive=poseActive;
   const dadoCura=document.getElementById('dado-cura-val');if(dadoCura)d['dado-cura-val']=dadoCura.value;
   return d;
 }
+function askResetFicha(){showModal('⚠ Formatar Ficha do Zero','<strong style="color:var(--red3)">Atenção!</strong> Isso irá apagar <b>todos os dados</b> da ficha — personagem, itens, habilidades, tudo.<br><br>Esta ação é <b>irreversível</b>. Tem certeza?','Apagar tudo','btn-danger');pendingAction={type:'resetFicha'};}
+function doResetFicha(){
+  localStorage.removeItem('rpg-sheet');
+  // Reset all state
+  inventory={weapon:[],capacete:[],peitoral:[],calca:[],botas:[],luvas:[]};
+  equipped={capacete:null,peitoral:null,calca:null,botas:null,luvas:null};
+  equippedWeapons={slot1:null,slot2:null};
+  itemDamage={};resRows=[];vulnRows=[];
+  poseActive=false;
+  fcOwned={};acOwned={};paOwned={};arOwned={};mnOwned={};medOwned={};ceOwned={};ccOwned={};ccAdaptations=[];
+  fcMaestriaChoice=null;acMaestriaChoice=null;paAcrobaticaChoice=null;
+  arMaestriaChoice=null;arFocoArmas=[];arEmpunhaduraChoice=null;arEspecChoice=null;arUltraChoice=null;
+  mnMaestriaChoice=null;medMaestriaChoice=null;shopWepCustom={};shopArmorCustom={};shopShieldCustom={};
+  // Clear all inputs
+  document.querySelectorAll('input[type="text"],input[type="number"],textarea').forEach(el=>{
+    if(el.id==='chk-official')return;
+    el.value='';
+  });
+  document.querySelectorAll('input[type="checkbox"]').forEach(el=>{if(el.id!=='chk-official')el.checked=false;});
+  recalcCombat();
+  ['fisico','intelecto','poder'].forEach(a=>validateSkills(a));
+  reapplyFichaDots();
+  renderSlotsPanel();renderWeaponInvPanel();renderFichaWeapons();
+  renderResPanel();buildSkillTree();updateSPBadge();updatePELimite();
+  updateDadoCuraField();updatePoseButton();
+  lojaBuilt={protecoes:false,armas:false,utilitarios:false,aprimoramentos:false};
+  showToast('✓ Ficha formatada do zero!');
+}
 function saveSheet(){try{localStorage.setItem('rpg-sheet',JSON.stringify(gatherData()));document.querySelectorAll('.save-msg').forEach(m=>{m.style.opacity='1';setTimeout(()=>m.style.opacity='0',2000);});}catch(_){}}
+function reapplyFichaDots(){
+  // First clear ALL dot 0s
+  Object.entries(SKILLS).forEach(([a,ns])=>ns.forEach(n=>{
+    const d=document.getElementById(mdId(a,n,0));
+    if(d)d.classList.remove('filled');
+  }));
+  // Reapply from each tree's maestria choice
+  const applyDot0=mc=>{
+    if(!mc)return;
+    const d=document.getElementById(mdId(mc.attr,mc.name,0));
+    if(d){d.classList.add('filled');calcTotal(mc.attr,mc.name);}
+  };
+  if((fcOwned['fomento']||0)>=1)applyDot0(fcMaestriaChoice);
+  if((acOwned['acrobacia']||0)>=1)applyDot0(acMaestriaChoice);
+  if((mnOwned['maonua']||0)>=1)applyDot0(mnMaestriaChoice);
+  if((medOwned['medicina']||0)>=1)applyDot0(medMaestriaChoice);
+  if((arOwned['armado']||0)>=1)applyDot0(arMaestriaChoice);
+}
 function loadSheet(){
   try{
     const raw=localStorage.getItem('rpg-sheet');
@@ -2611,7 +3514,11 @@ function loadSheet(){
       Object.entries(d).forEach(([id,val])=>{
         if(SKIP.includes(id))return;
         const el=document.getElementById(id);if(!el||el.readOnly)return;
-        if(id.startsWith('md-')){val?el.classList.add('filled'):el.classList.remove('filled');}else el.value=val;
+        if(id.startsWith('md-')){
+          // dot 0 = ficha dot, restored by reapplyFichaDots() after load
+          // dot 1 = player dot, restore normally
+          if(id.endsWith('-1')){val?el.classList.add('filled'):el.classList.remove('filled');}
+        }else el.value=val;
       });
       if(d._inv)try{const inv=JSON.parse(d._inv);Object.assign(inventory,inv);}catch(_){}
       if(d._eq)try{const eq=JSON.parse(d._eq);SLOTS.forEach(s=>{equipped[s]=eq[s]||null;});}catch(_){}
@@ -2630,7 +3537,7 @@ function loadSheet(){
       if(d._paAC)paArmaChoice=d._paAC;
       if(d._arOwned)try{Object.assign(arOwned,JSON.parse(d._arOwned));}catch(_){}
       if(d._arMC)try{arMaestriaChoice=JSON.parse(d._arMC);}catch(_){}
-      if(d._arFoco)try{arFocoArmas=JSON.parse(d._arFoco);}catch(_){}
+      if(d._arFoco)try{const v=JSON.parse(d._arFoco);arFocoArmas=Array.isArray(v)?v:[];}catch(_){}
       if(d._arEmp)arEmpunhaduraChoice=d._arEmp;
       if(d._arEC)arEspecChoice=d._arEC;
       if(d._arUC)arUltraChoice=d._arUC;
@@ -2642,6 +3549,8 @@ function loadSheet(){
       if(d._ceOwned)try{Object.assign(ceOwned,JSON.parse(d._ceOwned));}catch(_){}
       if(d._ccOwned)try{Object.assign(ccOwned,JSON.parse(d._ccOwned));}catch(_){}
       if(d._ccAdapts)try{ccAdaptations=JSON.parse(d._ccAdapts);}catch(_){}
+      if(d._poseActive)poseActive=!!d._poseActive;
+      reapplyFichaDots();
     }
     const ph=localStorage.getItem('rpg-photo');
     if(ph){const img=document.getElementById('char-img');img.src=ph;img.style.display='block';document.getElementById('photo-ph').style.display='none';}
@@ -2653,8 +3562,9 @@ function loadSheet(){
   updateHP();updatePE();updateWeight();
   SLOTS.forEach(s=>{const el=document.getElementById('mslot-'+s);if(el)el.classList.toggle('equipped',!!equipped[s]);});
   recalcCombat();['fisico','intelecto','poder'].forEach(a=>validateSkills(a));
-  onOfficialChange();renderFichaWeapons();
-  updateDadoCuraField();
+  onOfficialChange();renderFichaWeapons();updatePELimite();
+  updateDadoCuraField();updatePoseButton();updateCalcNavBtn();
+  if(poseActive)applyPoseBonuses();
   // restore dado-cura-val after field is created
   try{const raw=localStorage.getItem('rpg-sheet');if(raw){const d=JSON.parse(raw);if(d['dado-cura-val']){const el=document.getElementById('dado-cura-val');if(el)el.value=d['dado-cura-val'];}}}catch(_){}
 }
