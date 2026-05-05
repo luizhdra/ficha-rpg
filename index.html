@@ -710,6 +710,18 @@ input[type=file]{display:none}
     <!-- LEFT: Builder -->
     <div id="calc-builder" style="display:flex;flex-direction:column;gap:10px">
 
+    <!-- Nome e Descrição -->
+    <div class="calc-section">
+      <div class="calc-section-title">Nome da Magia</div>
+      <input type="text" id="calc-nome" placeholder="Ex: Chama Arcana..." oninput="calcUpdate()" style="width:100%;font-size:13px;margin-bottom:8px">
+      <div class="calc-section-title" style="margin-top:4px">Descrição</div>
+      <textarea id="calc-descricao" rows="3" placeholder="Descreva o efeito da magia..." style="width:100%;font-size:12px;resize:vertical;background:var(--bg4);border:1px solid var(--border2);border-radius:5px;color:var(--txt);padding:6px"></textarea>
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <button onclick="calcSaveSpell()" style="flex:1;padding:6px;background:#2e1065;border:1px solid #7c3aed;color:#c4b5fd;border-radius:5px;font-size:11px;cursor:pointer;font-weight:600">💾 Salvar Magia</button>
+        <button onclick="calcNewSpell()" style="flex:1;padding:6px;background:var(--bg3);border:1px solid var(--border2);color:var(--txt2);border-radius:5px;font-size:11px;cursor:pointer">🆕 Nova</button>
+      </div>
+    </div>
+
       <!-- Círculo -->
       <div class="calc-section">
         <div class="calc-section-title">Círculo do Feitiço</div>
@@ -776,19 +788,19 @@ input[type=file]{display:none}
       <div class="calc-section">
         <div class="calc-section-title">Teste de Resistência</div>
         <div class="calc-radio-grid">
-          <label class="calc-radio"><input type="radio" name="calc-resist" value="0" checked onchange="calcUpdate()"> Não requer teste</label>
-          <label class="calc-radio"><input type="radio" name="calc-resist" value="-half" onchange="calcUpdate()"> Requer Teste (−½ PE no final)</label>
+          <label class="calc-radio"><input type="radio" name="calc-resist" value="0" checked onchange="calcUpdate()"> CD</label>
+          <label class="calc-radio"><input type="radio" name="calc-resist" value="-half" onchange="calcUpdate()"> Requer Reação (−½ PE no final)</label>
         </div>
       </div>
 
       <!-- Aumentar Acerto -->
       <div class="calc-section" id="calc-acerto-section">
-        <div class="calc-section-title">Aumentar Acerto <span style="font-size:9px;color:var(--txt3)">(indisponível com Teste de Resistência)</span></div>
+        <div class="calc-section-title">Aumentar Acerto <span style="font-size:9px;color:var(--txt3)">(bônus na rolagem de ataque — indisponível com Requer Reação)</span></div>
         <div class="calc-stepper-row">
           <button class="calc-step-btn" onclick="calcStep('acerto',-1)">−</button>
           <span id="calc-acerto-val">0</span>
           <button class="calc-step-btn" onclick="calcStep('acerto',1)">+</button>
-          <span style="font-size:10px;color:var(--txt3);margin-left:6px">= <span id="calc-acerto-pe">0</span> PE</span>
+          <span style="font-size:10px;color:var(--txt3);margin-left:6px">= <span id="calc-acerto-pe">0</span> PE &nbsp;/&nbsp; +<span id="calc-acerto-bonus">0</span> na rolagem</span>
         </div>
       </div>
 
@@ -859,6 +871,13 @@ input[type=file]{display:none}
         <div style="font-family:'Cinzel',serif;font-size:14px;color:#c4b5fd;font-weight:700;margin-bottom:10px;border-bottom:1px solid #4c1d95;padding-bottom:6px">📋 Ficha Técnica</div>
         <div id="calc-output">
           <div style="color:var(--txt3);font-style:italic;font-size:12px">Configure o feitiço ao lado...</div>
+        </div>
+      </div>
+      <!-- Saved spells -->
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px;margin-top:12px">
+        <div style="font-family:'Cinzel',serif;font-size:13px;color:#c4b5fd;font-weight:700;margin-bottom:8px">📚 Magias Salvas</div>
+        <div id="calc-saved-list">
+          <div style="color:var(--txt3);font-style:italic;font-size:11px">Nenhuma magia salva.</div>
         </div>
       </div>
     </div>
@@ -1109,7 +1128,11 @@ function buildSkills(attr,names){
   const c=document.getElementById('skills-'+attr);
   names.forEach(name=>{
     const id=skId(attr,name);const row=document.createElement('div');row.className='skill-row hidden-sk';row.id='row-'+id;
-    row.innerHTML='<span class="skill-name">'+name+'</span><div class="maestria-dots"><div class="maestria-dot ficha-dot" id="'+mdId(attr,name,0)+'" title="Maestria da Ficha (concedida por habilidades)"></div><div class="maestria-dot" id="'+mdId(attr,name,1)+'" onclick="toggleMaestria(\''+attr+'\',\''+name+'\',1)" title="Maestria do Jogador"></div></div><input type="number" class="sk-inp" id="'+id+'" placeholder="0" min="0" oninput="onSkillInput(this,\''+attr+'\',\''+name+'\')"><div id="'+bnId(attr,name)+'-wrap"><input type="number" class="sk-bon" id="'+bnId(attr,name)+'" placeholder="0" oninput="calcTotal(\''+attr+'\',\''+name+'\')"></div><span class="sk-total" id="'+ttId(attr,name)+'">0</span>';
+    row.innerHTML='<span class="skill-name">'+name+'</span><div class="maestria-dots"><div class="maestria-dot ficha-dot" id="'+mdId(attr,name,0)+'" title="Maestria da Ficha (concedida por habilidades)"></div><div class="maestria-dot" id="'+mdId(attr,name,1)+'" title="Maestria do Jogador"></div></div><input type="number" class="sk-inp" id="'+id+'" placeholder="0" min="0" data-attr="'+attr+'" data-name="'+name+'"><div id="'+bnId(attr,name)+'-wrap"><input type="number" class="sk-bon" id="'+bnId(attr,name)+'" placeholder="0" data-attr="'+attr+'" data-name="'+name+'"></div><span class="sk-total" id="'+ttId(attr,name)+'">0</span>';
+    // Attach listeners after element creation to avoid inline-string escaping issues
+    row.querySelector('.sk-inp').addEventListener('input',function(){onSkillInput(this,this.dataset.attr,this.dataset.name);});
+    row.querySelector('.sk-bon').addEventListener('input',function(){calcTotal(this.dataset.attr,this.dataset.name);});
+    row.querySelector('.maestria-dot:last-child').addEventListener('click',function(){toggleMaestria(attr,name,1);});
     c.appendChild(row);
   });
 }
@@ -1130,8 +1153,16 @@ function calcTotal(attr,name){
     bonWrap.innerHTML='<div class="sk-bon-d4">'+(fcB?'+'+fcB+'+d4':'+d4')+'</div>';
     document.getElementById(ttId(attr,name)).textContent=per+(fcB?'+'+fcB:'')+'+d4';
   } else {
-    if(!bonWrap.querySelector('.sk-bon'))bonWrap.innerHTML='<input type="number" class="sk-bon" id="'+bnId(attr,name)+'" placeholder="0" oninput="calcTotal(\''+attr+'\',\''+name+'\')">';
-    const man=parseInt(document.getElementById(bnId(attr,name))?.value)||0;
+    let bonEl=bonWrap.querySelector('.sk-bon');
+    if(!bonEl){
+      // Preserve any existing value before recreating
+      const prevVal=bonWrap.dataset.savedVal||'';
+      bonWrap.innerHTML='<input type="number" class="sk-bon" id="'+bnId(attr,name)+'" placeholder="0" data-attr="'+attr+'" data-name="'+name+'">';
+      bonEl=bonWrap.querySelector('.sk-bon');
+      if(bonEl&&prevVal)bonEl.value=prevVal;
+      if(bonEl)bonEl.addEventListener('input',function(){calcTotal(this.dataset.attr,this.dataset.name);});
+    }
+    const man=parseInt(bonEl?.value)||0;
     document.getElementById(ttId(attr,name)).textContent=per+man+fcB;
   }
   autoSave();
@@ -1406,38 +1437,51 @@ function getTreinoManuseioBonus(w){
   if(choice==='dupla'&&(wMan.includes('duas')||wMan.includes('dupla')||wMan.includes('dois')))return 1;
   return 0;
 }
-function getDuasMaosBonus(w,isDamage){
-  if(!(arOwned['duasMaos']>=1)||!w)return{dmg:0,die:''};
+function getDuasMaosBonus(w){
+  // Returns flat damage bonus only (d6 is on the attack roll, not damage)
+  if(!(arOwned['duasMaos']>=1)||!w)return{dmg:0};
   const isDual=w.manuseio&&(w.manuseio.toLowerCase().includes('duas')||w.manuseio.toLowerCase().includes('dupla'));
-  if(!isDual)return{dmg:0,die:''};
-  return{dmg:3,die:'1d6'};
+  return isDual?{dmg:3}:{dmg:0};
+}
+
+// Bump all dice in a damage string: each die type increases its count by 1
+// e.g. "10 + d4 + 2d6" → "10 + 2d4 + 3d6"
+function bumpDie(dStr){
+  if(!dStr||dStr==='—')return dStr;
+  return dStr.replace(/(\d+)?(d\d+)/g,(match,count,die)=>{
+    const n=parseInt(count||1);
+    return (n+1)+die;
+  });
+}
+
+function applyUltraMaestria(w){
+  if(!(arOwned['ultraMaestria']>=1)||!arUltraChoice)return{danoS:w.danoS,danoDP:w.danoDP,applied:false};
+  const cat=wepGetCat(w);
+  if(cat!==arUltraChoice)return{danoS:w.danoS,danoDP:w.danoDP,applied:false};
+  return{danoS:bumpDie(w.danoS),danoDP:bumpDie(w.danoDP),applied:true};
 }
 
 // ── WEAPON DAMAGE DISPLAY ──
-// Returns final displayed damage string with all bonuses applied
 function getFinalDamage(w,field){
-  // field = 'danoS' or 'danoDP'
-  const base=w[field];
-  // 1. Ultra Maestria (bumps dice — already handled in applyUltraMaestria)
   const ultra=applyUltraMaestria(w);
   let val=field==='danoS'?ultra.danoS:ultra.danoDP;
   if(!val||val==='—')return{str:val,bonuses:[],ultraApplied:ultra.applied};
-  // Numeric bonuses
-  let totalBonus=0;const bonuses=[];
+  let totalBonus=0;const bonuses=[];let dieBonuses='';
+  // 1. Foco em Armas: +d4 to damage
+  if(wepMatchesFoco(w)){dieBonuses+='+d4';bonuses.push('+d4 Foco');}
   // 2. Especialização +3
   const espDmg=getEspecializacaoDmg(w);
   if(espDmg>0){totalBonus+=espDmg;bonuses.push('+'+espDmg+' Esp.');}
   // 3. Treino de Manuseio +1
   const treinoB=getTreinoManuseioBonus(w);
-  if(treinoB>0){totalBonus+=treinoB;bonuses.push('+'+treinoB+' Manuseio');}
-  // 4. Duas Mãos +3 +1d6
-  const duasB=getDuasMaosBonus(w,true);
+  if(treinoB>0){totalBonus+=treinoB;bonuses.push('+'+treinoB+' Treino');}
+  // 4. Duas Mãos: +3 flat damage (d6 is on attack roll)
+  const duasB=getDuasMaosBonus(w);
   if(duasB.dmg>0){totalBonus+=duasB.dmg;bonuses.push('+'+duasB.dmg+' 2Mãos');}
-  if(duasB.die){bonuses.push('+'+duasB.die+' 2Mãos');}
-  // 5. Pose de Combate damage bonus
+  // 5. Pose de Combate
   const poseB=getPoseDamageBonus();
   if(poseB>0){totalBonus+=poseB;bonuses.push('+'+poseB+' Pose');}
-  const finalStr=(totalBonus>0||duasB.die)?(val+(totalBonus>0?'+'+totalBonus:'')+(duasB.die?'+'+duasB.die:'')):val;
+  const finalStr=val+(totalBonus>0?'+'+totalBonus:'')+dieBonuses;
   return{str:finalStr,bonuses,ultraApplied:ultra.applied};
 }
 
@@ -1487,8 +1531,7 @@ function renderFichaWeapons(){
   const w2=equippedWeapons.slot2!==null&&equippedWeapons.slot2<inventory.weapon.length?inventory.weapon[equippedWeapons.slot2]:null;
 
   function buildAttackRollText(w,isBareFist){
-    let skillVal=0,skillName='',fichaM=false,playerM=false,focoM=false;
-
+    let skillVal=0,skillName='',fichaM=false,playerM=false;
     if(isBareFist||!w){
       skillVal=parseInt(document.getElementById(skId('fisico','Artes Marciais'))?.value)||0;
       skillName='Artes Marciais';
@@ -1499,29 +1542,21 @@ function renderFichaWeapons(){
       skillName='Pontaria';
       fichaM=(arOwned['armado']>=1)&&arMaestriaChoice?.attr==='intelecto'&&arMaestriaChoice?.name==='Pontaria';
       playerM=document.getElementById(mdId('intelecto','Pontaria',1))?.classList.contains('filled')||false;
-      if(!fichaM&&!playerM)focoM=wepMatchesFoco(w);
     } else {
       skillVal=parseInt(document.getElementById(skId('fisico','Armas Brancas'))?.value)||0;
       skillName='Armas Brancas';
       fichaM=(arOwned['armado']>=1)&&arMaestriaChoice?.attr==='fisico'&&arMaestriaChoice?.name==='Armas Brancas';
       playerM=document.getElementById(mdId('fisico','Armas Brancas',1))?.classList.contains('filled')||false;
-      if(!focoM)focoM=wepMatchesFoco(w);
     }
-
-    // Determine effective maestria state
-    // fichaM OR playerM = single maestria already present
-    // focoM on top of existing single = dual → d4
-    // focoM alone = single maestria
-    const hasSingle=fichaM||playerM;
-    const dual=hasSingle&&focoM;
-
+    const hasMaestria=fichaM||playerM;
     let roll='d20';
     if(skillVal>0)roll+=' + '+skillName+' ('+skillVal+')';
-    if(dual)roll+=' + d4 (Maestria Dupla)';
-    else if(hasSingle||focoM)roll+=' + Maestria'+(focoM&&!hasSingle?' (Foco)':'');
-    // Duas Mãos: +1d6 on hit if using dual-hand weapon
-    const duasRollB=(!isBareFist&&w)?getDuasMaosBonus(w):{dmg:0,die:''};
-    if(duasRollB.die)roll+=' + '+duasRollB.die+' (2Mãos)';
+    if(hasMaestria)roll+=' + Maestria';
+    // Duas Mãos: +1d6 on the attack roll (not damage)
+    if(!isBareFist&&w){
+      const isDual=w.manuseio&&(w.manuseio.toLowerCase().includes('duas')||w.manuseio.toLowerCase().includes('dupla'));
+      if(isDual&&(arOwned['duasMaos']>=1))roll+=' + 1d6 (2Mãos)';
+    }
     return roll;
   }
 
@@ -1576,8 +1611,8 @@ function copyRoll(slotLabel,asRoll){
     const w=(wIdx!==null&&wIdx<inventory.weapon.length)?inventory.weapon[wIdx]:null;
     const isBareFist=!w;
 
-    // Determine skill value and maestria state (mirrors buildAttackRollText logic)
-    let skillVal=0,fichaM=false,playerM=false,focoM=false;
+    // Determine skill value and maestria (mirrors buildAttackRollText)
+    let skillVal=0,fichaM=false,playerM=false;
     if(isBareFist||!w){
       skillVal=parseInt(document.getElementById(skId('fisico','Artes Marciais'))?.value)||0;
       fichaM=(mnOwned['maonua']>=1)&&mnMaestriaChoice?.attr==='fisico'&&mnMaestriaChoice?.name==='Artes Marciais';
@@ -1586,23 +1621,17 @@ function copyRoll(slotLabel,asRoll){
       skillVal=parseInt(document.getElementById(skId('intelecto','Pontaria'))?.value)||0;
       fichaM=(arOwned['armado']>=1)&&arMaestriaChoice?.attr==='intelecto'&&arMaestriaChoice?.name==='Pontaria';
       playerM=document.getElementById(mdId('intelecto','Pontaria',1))?.classList.contains('filled')||false;
-      if(!fichaM&&!playerM)focoM=wepMatchesFoco(w);
     } else {
       skillVal=parseInt(document.getElementById(skId('fisico','Armas Brancas'))?.value)||0;
       fichaM=(arOwned['armado']>=1)&&arMaestriaChoice?.attr==='fisico'&&arMaestriaChoice?.name==='Armas Brancas';
       playerM=document.getElementById(mdId('fisico','Armas Brancas',1))?.classList.contains('filled')||false;
-      focoM=wepMatchesFoco(w);
     }
-    const hasSingle=fichaM||playerM;
-    const dual=hasSingle&&focoM;
-
-    // Build clean parts array
+    const hasMaestria=fichaM||playerM;
     const parts=['d20'];
     if(skillVal>0)parts.push(String(skillVal));
-    if(dual)parts.push('d4');
-    else if(hasSingle||focoM)parts.push('Maestria');
-    // Duas Mãos +1d6 on hit
-    if(w&&!isBareFist){const db=getDuasMaosBonus(w);if(db.die)parts.push(db.die);}
+    if(hasMaestria)parts.push('Maestria');
+    // Duas Mãos: +1d6 on roll
+    if(w&&!isBareFist){const isDual=w.manuseio&&(w.manuseio.toLowerCase().includes('duas')||w.manuseio.toLowerCase().includes('dupla'));if(isDual&&(arOwned['duasMaos']>=1))parts.push('1d6');}
     text='/r '+parts.join(' + ');
   }
   const doCopy=t=>{navigator.clipboard.writeText(t).then(()=>showToast('📋 Copiado: '+t)).catch(()=>{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast('📋 Copiado!');});};
@@ -3244,9 +3273,10 @@ const CALC_CIRCULOS=[
   {id:'cc',name:'Círculo do Corpo',owned:()=>(ccOwned['circulo_corpo']||0)>=1},
 ];
 const CALC_STEPS={acerto:0,alcance_extra:0,crit:0,prol_turno:1,multi_alvo:0};
+let calcSavedSpells=[];
+let calcEditingIdx=-1;
 
 function calcInit(){
-  // Populate círculo select with only owned ones
   const sel=document.getElementById('calc-circulo');
   const prev=sel.value;
   sel.innerHTML='<option value="">— Selecione um círculo —</option>';
@@ -3255,6 +3285,7 @@ function calcInit(){
     if(c.id===prev)o.selected=true;
     sel.appendChild(o);
   });
+  calcRenderSavedList();
   calcUpdate();
 }
 
@@ -3270,44 +3301,23 @@ function updateCalcNavBtn(){
   if(btn)btn.style.display=hasAny?'':'none';
 }
 
-function calcGetTipo(){
-  const r=document.querySelector('input[name="calc-tipo"]:checked');
-  return r?r.value:null;
-}
-function calcGetRadio(name){
-  const r=document.querySelector('input[name="'+name+'"]:checked');
-  return r?r.value:'0';
-}
+function calcGetTipo(){const r=document.querySelector('input[name="calc-tipo"]:checked');return r?r.value:null;}
+function calcGetRadio(name){const r=document.querySelector('input[name="'+name+'"]:checked');return r?r.value:'0';}
 
 function calcUpdate(){
-  // Show/hide turno row
   const prolCheck=document.getElementById('calc-prol-turno');
   const prolRow=document.getElementById('calc-prol-turno-row');
   if(prolCheck&&prolRow)prolRow.style.display=prolCheck.checked?'flex':'none';
-
   const tipo=calcGetTipo();
   const resist=calcGetRadio('calc-resist');
   const hasResist=resist==='-half';
-
-  // Acerto only available without resist
-  const acSec=document.getElementById('calc-acerto-section');
-  if(acSec)acSec.style.opacity=hasResist?'0.4':'1';
-
-  // Crit only without resist
-  const critSec=document.getElementById('calc-crit-section');
-  if(critSec)critSec.style.opacity=hasResist?'0.4':'1';
-
-  // Pot not for dano
-  const potSec=document.getElementById('calc-pot-section');
-  if(potSec)potSec.style.opacity=(tipo==='dano')?'0.4':'1';
-
-  // Update stepper displays
+  const acSec=document.getElementById('calc-acerto-section');if(acSec)acSec.style.opacity=hasResist?'0.4':'1';
+  const critSec=document.getElementById('calc-crit-section');if(critSec)critSec.style.opacity=hasResist?'0.4':'1';
+  const potSec=document.getElementById('calc-pot-section');if(potSec)potSec.style.opacity=(tipo==='dano')?'0.4':'1';
   ['acerto','alcance_extra','crit','prol_turno','multi_alvo'].forEach(k=>{
     const v=CALC_STEPS[k]||0;
-    const el=document.getElementById('calc-'+k.replace('_','-')+'-val');
-    if(el)el.textContent=v;
-    // PE
-    const peEl=document.getElementById('calc-'+k.replace('_','-')+'-pe');
+    const el=document.getElementById('calc-'+k.replace(/_/g,'-')+'-val');if(el)el.textContent=v;
+    const peEl=document.getElementById('calc-'+k.replace(/_/g,'-')+'-pe');
     if(peEl){
       let pe=0;
       if(k==='acerto')pe=hasResist?0:v;
@@ -3318,17 +3328,14 @@ function calcUpdate(){
       peEl.textContent=pe;
     }
   });
-
+  const acBonusEl=document.getElementById('calc-acerto-bonus');
+  if(acBonusEl)acBonusEl.textContent=hasResist?0:(CALC_STEPS.acerto||0);
   calcRender();
 }
 
 function calcRender(){
   const tipo=calcGetTipo();
-  if(!tipo){
-    document.getElementById('calc-output').innerHTML='<div style="color:var(--txt3);font-style:italic;font-size:12px">Selecione o tipo de feitiço...</div>';
-    return;
-  }
-
+  if(!tipo){document.getElementById('calc-output').innerHTML='<div style="color:var(--txt3);font-style:italic;font-size:12px">Selecione o tipo de feitiço...</div>';return;}
   const circulo=document.getElementById('calc-circulo').value;
   const acao=parseInt(calcGetRadio('calc-acao'))||1;
   const tempo=calcGetRadio('calc-tempo');
@@ -3338,7 +3345,6 @@ function calcRender(){
   const resist=calcGetRadio('calc-resist');
   const hasResist=resist==='-half';
   const pot=parseInt(calcGetRadio('calc-pot'))||0;
-
   const acerto=hasResist?0:(CALC_STEPS.acerto||0);
   const alcanceExtra=CALC_STEPS.alcance_extra||0;
   const crit=hasResist?0:(CALC_STEPS.crit||0);
@@ -3347,20 +3353,15 @@ function calcRender(){
   const prolTurno=prolTurnoChecked?(CALC_STEPS.prol_turno||1):0;
   const prolDobrar=document.getElementById('calc-prol-dobrar')?.checked;
   const prolTrip=document.getElementById('calc-prol-triplicar')?.checked;
-
-  // Build PE sum (before half-reductions)
-  let peSum=0;
-  const rows=[];
-
+  let peSum=0;const rows=[];
   const add=(label,val,note='')=>{if(val!==0){rows.push({label,val,note});peSum+=val;}};
-
   add('Tipo de Ação',acao,acao===1?'Simples':'Complexo');
   const tempoLabels={'0':'Ação Principal','3':'Ação Secundária','5':'Reação','-half':'Turno Inteiro'};
-  if(tempo!=='-half')add('Tempo de Conjuração',parseInt(tempo),tempoLabels[tempo]);
+  if(tempo!=='-half')add('Tempo de Conjuração',parseInt(tempo)||0,tempoLabels[tempo]);
   if(alcanceBase>0)add('Alcance Base',alcanceBase,'Aura 6m');
   if(duracao>0)add('Duração',duracao,'Prolongado');
   if(alvo>0)add('Alvos',alvo,'Área de Efeito');
-  if(acerto>0)add('Aumentar Acerto',acerto,'×1 PE cada');
+  if(acerto>0)add('Aumentar Acerto',acerto,'bônus na rolagem');
   if(alcanceExtra>0)add('Aumento de Alcance',alcanceExtra*3,alcanceExtra+'m × 3 PE');
   if(crit>0)add('Crítico Melhorado',crit*12,'+'+crit+' mult × 12 PE');
   if(prolTurno>0)add('Turnos Adicionais',prolTurno*5,prolTurno+'t × 5 PE');
@@ -3368,65 +3369,97 @@ function calcRender(){
   if(prolTrip)add('Triplicar Duração',30,'');
   if(multiAlvo>0)add('Múltiplos Alvos',multiAlvo*4,multiAlvo+' alvo(s) × 4 PE');
   if(tipo!=='dano'&&pot>0)add('Potencialização',pot,pot===15?'Efic. ×1.5':'Efic. ×2.0');
-
-  // Apply half-reductions at the end
   let halfReductions=[];
   if(tempo==='-half')halfReductions.push('Turno Inteiro');
-  if(hasResist)halfReductions.push('Teste de Resistência');
+  if(hasResist)halfReductions.push('Requer Reação');
   let finalPE=peSum;
   halfReductions.forEach(()=>{finalPE=Math.ceil(finalPE/2);});
-
-  // Attack roll
   const poder=parseInt(document.getElementById('atr-poder')?.value)||0;
   const tipoRollMap={dano:'Atacar',adaptar:'Adaptar',defender:'Defender',rastrear:'Rastrear',restaurar:'Restaurar'};
   const rollSkillName=tipoRollMap[tipo]||'Atacar';
   const rollSkillVal=parseInt(document.getElementById(skId('poder',rollSkillName))?.value)||0;
-  const rollStr=tipo==='dano'
-    ?'d20 + Atacar ('+rollSkillVal+')'
-    :'d20 + '+rollSkillName+' ('+rollSkillVal+')';
-
-  // Damage for dano type
+  const totalBonus=rollSkillVal+acerto;
   const danoStr=tipo==='dano'?('d6 + Poder ('+poder+')'):null;
-  const critMul=tipo==='dano'&&crit>0?(2+crit)+'x':'—';
-  const alcanceFinalM=alcanceBase===2?6:0+alcanceExtra;
-
-  // Build output HTML
-  let html='';
-  html+='<div style="display:flex;flex-direction:column;gap:3px">';
-  rows.forEach(r=>{
-    html+='<div class="calc-out-row"><span class="calc-out-label">'+r.label+(r.note?' <span style="font-size:9px;color:var(--txt3)">('+r.note+')</span>':'')+'</span><span class="calc-out-val">+'+r.val+' PE</span></div>';
-  });
-  if(halfReductions.length>0){
-    html+='<div class="calc-out-row" style="color:#f97316"><span class="calc-out-label">⟨ ÷2 ao final: '+halfReductions.join(' + ')+'</span><span class="calc-out-val" style="color:#f97316">÷2</span></div>';
-  }
+  const critMulFinal=2+crit; // base 20x2
+  const alcanceFinalM=alcanceBase===2?6+alcanceExtra:alcanceExtra;
+  const nome=document.getElementById('calc-nome')?.value||'';
+  // Descriptive roll string (for display)
+  let rollDisplay='d20';
+  if(rollSkillVal>0)rollDisplay+=' + '+rollSkillName+' ('+rollSkillVal+')';
+  if(acerto>0)rollDisplay+=' + '+acerto+' (Acerto)';
+  // Clean /r roll (only numbers and dice)
+  const cleanParts=['d20'];
+  if(totalBonus>0)cleanParts.push(String(totalBonus));
+  const cleanRoll='/r '+cleanParts.join(' + ');
+  let html='<div style="display:flex;flex-direction:column;gap:3px">';
+  rows.forEach(r=>{html+='<div class="calc-out-row"><span class="calc-out-label">'+r.label+(r.note?' <span style="font-size:9px;color:var(--txt3)">('+r.note+')</span>':'')+'</span><span class="calc-out-val">+'+r.val+' PE</span></div>';});
+  if(halfReductions.length>0)html+='<div class="calc-out-row" style="color:#f97316"><span class="calc-out-label">⟨ ÷2: '+halfReductions.join(' + ')+'</span><span class="calc-out-val" style="color:#f97316">÷2</span></div>';
   html+='</div>';
   html+='<div class="calc-out-total"><span class="lbl">⚡ Custo Total</span><span class="val">'+finalPE+' PE</span></div>';
-
-  // Ficha técnica
   html+='<div class="calc-roll-box" style="margin-top:10px">';
+  if(nome)html+='<div style="font-size:13px;font-weight:700;color:#e9d5ff;margin-bottom:6px">'+nome+'</div>';
   html+='<div style="font-size:12px;font-weight:700;color:#c4b5fd;margin-bottom:6px">📋 Resumo Técnico</div>';
   const circ=CALC_CIRCULOS.find(c=>c.id===circulo);
   if(circ)html+='<div class="calc-out-row"><span class="calc-out-label">Círculo</span><span class="calc-out-val">'+circ.name+'</span></div>';
   html+='<div class="calc-out-row"><span class="calc-out-label">Tipo</span><span class="calc-out-val">'+tipo.charAt(0).toUpperCase()+tipo.slice(1)+'</span></div>';
-  html+='<div class="calc-out-row"><span class="calc-out-label">Rolagem de Ataque</span><span class="calc-out-val">'+rollStr+'</span></div>';
+  html+='<div class="calc-out-row"><span class="calc-out-label">Rolagem de Ataque</span><span class="calc-out-val">'+rollDisplay+'</span></div>';
   if(danoStr)html+='<div class="calc-out-row"><span class="calc-out-label">Dano Base</span><span class="calc-out-val">'+danoStr+'</span></div>';
-  if(tipo==='dano')html+='<div class="calc-out-row"><span class="calc-out-label">Crítico</span><span class="calc-out-val">20 × '+critMul+'</span></div>';
-  html+='<div class="calc-out-row"><span class="calc-out-label">Alcance Total</span><span class="calc-out-val">'+(alcanceFinalM>0?alcanceFinalM+'m':'Toque')+'</span></div>';
-  if(hasResist)html+='<div class="calc-out-row"><span class="calc-out-label">Resistência</span><span class="calc-out-val" style="color:#f97316">Requer Teste</span></div>';
-  if(tipo!=='dano'&&pot>0)html+='<div class="calc-out-row"><span class="calc-out-label">Potencialização</span><span class="calc-out-val" style="color:#4ade80">'+( pot===15?'×1.5':'×2.0')+'</span></div>';
+  if(tipo==='dano')html+='<div class="calc-out-row"><span class="calc-out-label">Crítico</span><span class="calc-out-val">20 × '+critMulFinal+'</span></div>';
+  html+='<div class="calc-out-row"><span class="calc-out-label">Alcance</span><span class="calc-out-val">'+(alcanceFinalM>0?alcanceFinalM+'m':'Toque')+'</span></div>';
+  if(hasResist)html+='<div class="calc-out-row"><span class="calc-out-label">Resistência</span><span class="calc-out-val" style="color:#f97316">Requer Reação</span></div>';
+  else html+='<div class="calc-out-row"><span class="calc-out-label">Resistência</span><span class="calc-out-val" style="color:#4ade80">CD</span></div>';
+  if(tipo!=='dano'&&pot>0)html+='<div class="calc-out-row"><span class="calc-out-label">Potencialização</span><span class="calc-out-val" style="color:#4ade80">'+(pot===15?'×1.5':'×2.0')+'</span></div>';
   html+='<div class="calc-out-total" style="margin-top:6px"><span class="lbl">⚡ PE Total</span><span class="val">'+finalPE+' PE</span></div>';
-
-  // Copy button
-  const rollCopy=tipo==='dano'?('/r d20 + '+rollSkillVal):('/r d20 + '+rollSkillVal);
   html+='</div>';
-  html+='<button class="calc-copy-btn" onclick="calcCopyRoll(\''+rollCopy+'\','+finalPE+')">📋 Copiar Rolagem + Custo</button>';
-
+  html+='<button class="calc-copy-btn" onclick="calcCopyRoll(\''+cleanRoll.replace(/'/g,"\\'")+'\')" style="margin-top:6px">📋 Copiar Rolagem (/r)</button>';
   document.getElementById('calc-output').innerHTML=html;
 }
 
-function calcCopyRoll(roll,pe){
-  const text=roll+' — Custo: '+pe+' PE';
-  navigator.clipboard.writeText(text).then(()=>showToast('📋 Copiado: '+text)).catch(()=>{const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast('📋 Copiado!');});
+function calcCopyRoll(roll){
+  navigator.clipboard.writeText(roll).then(()=>showToast('📋 Copiado: '+roll)).catch(()=>{const ta=document.createElement('textarea');ta.value=roll;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast('📋 Copiado!');});
+}
+
+function calcGetSnapshot(){
+  return{circulo:document.getElementById('calc-circulo').value,tipo:calcGetTipo(),acao:calcGetRadio('calc-acao'),tempo:calcGetRadio('calc-tempo'),alcance:calcGetRadio('calc-alcance'),duracao:calcGetRadio('calc-duracao'),alvo:calcGetRadio('calc-alvo'),resist:calcGetRadio('calc-resist'),pot:calcGetRadio('calc-pot'),steps:{...CALC_STEPS},prolTurno:document.getElementById('calc-prol-turno')?.checked||false,prolDobrar:document.getElementById('calc-prol-dobrar')?.checked||false,prolTrip:document.getElementById('calc-prol-triplicar')?.checked||false};
+}
+function calcSaveSpell(){
+  const nome=(document.getElementById('calc-nome')?.value||'').trim();
+  const descricao=document.getElementById('calc-descricao')?.value||'';
+  if(!nome){showToast('⚠ Dê um nome à magia antes de salvar!');return;}
+  const snap=calcGetSnapshot();
+  if(calcEditingIdx>=0){calcSavedSpells[calcEditingIdx]={nome,descricao,snap};showToast('✓ Magia atualizada: '+nome);}
+  else{calcSavedSpells.push({nome,descricao,snap});showToast('✓ Magia salva: '+nome);}
+  calcRenderSavedList();autoSave();
+}
+function calcNewSpell(){
+  calcEditingIdx=-1;
+  document.getElementById('calc-nome').value='';document.getElementById('calc-descricao').value='';
+  [['calc-acao','1'],['calc-tempo','0'],['calc-alcance','0'],['calc-duracao','0'],['calc-alvo','0'],['calc-resist','0'],['calc-pot','0']].forEach(([n,v])=>{const r=document.querySelector('input[name="'+n+'"][value="'+v+'"]');if(r)r.checked=true;});
+  document.querySelectorAll('input[name="calc-tipo"]').forEach(r=>r.checked=false);
+  ['calc-prol-turno','calc-prol-dobrar','calc-prol-triplicar'].forEach(id=>{const el=document.getElementById(id);if(el)el.checked=false;});
+  Object.keys(CALC_STEPS).forEach(k=>{CALC_STEPS[k]=k==='prol_turno'?1:0;});
+  calcUpdate();
+}
+function calcLoadSpell(idx){
+  calcEditingIdx=idx;const sp=calcSavedSpells[idx];
+  document.getElementById('calc-nome').value=sp.nome;document.getElementById('calc-descricao').value=sp.descricao||'';
+  const s=sp.snap;document.getElementById('calc-circulo').value=s.circulo||'';
+  if(s.tipo){const r=document.querySelector('input[name="calc-tipo"][value="'+s.tipo+'"]');if(r)r.checked=true;}
+  ['acao','tempo','alcance','duracao','alvo','resist','pot'].forEach(k=>{const r=document.querySelector('input[name="calc-'+k+'"][value="'+s[k]+'"]');if(r)r.checked=true;});
+  Object.assign(CALC_STEPS,s.steps||{});
+  if(s.prolTurno!==undefined){const el=document.getElementById('calc-prol-turno');if(el)el.checked=s.prolTurno;}
+  if(s.prolDobrar!==undefined){const el=document.getElementById('calc-prol-dobrar');if(el)el.checked=s.prolDobrar;}
+  if(s.prolTrip!==undefined){const el=document.getElementById('calc-prol-triplicar');if(el)el.checked=s.prolTrip;}
+  calcUpdate();showToast('📖 Carregada: '+sp.nome);
+}
+function calcDeleteSpell(idx){
+  calcSavedSpells.splice(idx,1);if(calcEditingIdx===idx)calcEditingIdx=-1;else if(calcEditingIdx>idx)calcEditingIdx--;
+  calcRenderSavedList();autoSave();showToast('🗑 Magia removida');
+}
+function calcRenderSavedList(){
+  const el=document.getElementById('calc-saved-list');if(!el)return;
+  if(calcSavedSpells.length===0){el.innerHTML='<div style="color:var(--txt3);font-style:italic;font-size:11px">Nenhuma magia salva.</div>';return;}
+  el.innerHTML=calcSavedSpells.map((sp,i)=>'<div style="background:var(--bg4);border:1px solid '+(i===calcEditingIdx?'#a78bfa':'var(--border2)')+';border-radius:6px;padding:8px 10px;margin-bottom:6px"><div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span style="font-size:12px;font-weight:600;color:#c4b5fd;cursor:pointer" onclick="calcLoadSpell('+i+')">✨ '+sp.nome+'</span><div style="display:flex;gap:4px"><button onclick="calcLoadSpell('+i+')" style="font-size:10px;padding:2px 7px;background:#2e1065;border:1px solid #7c3aed;color:#c4b5fd;border-radius:4px;cursor:pointer">📖</button><button onclick="calcDeleteSpell('+i+')" style="font-size:10px;padding:2px 7px;background:var(--bg3);border:1px solid var(--border2);color:var(--red3);border-radius:4px;cursor:pointer">🗑</button></div></div>'+(sp.descricao?'<div style="font-size:10px;color:var(--txt3);margin-top:3px;font-style:italic">'+sp.descricao.substring(0,80)+(sp.descricao.length>80?'…':'')+'</div>':'')+'</div>').join('');
 }
 
 // ── SAVE/LOAD ──
@@ -3454,6 +3487,7 @@ function gatherData(){
   d._ceOwned=JSON.stringify(ceOwned);
   d._ccOwned=JSON.stringify(ccOwned);d._ccAdapts=JSON.stringify(ccAdaptations);
   d._poseActive=poseActive;
+  d._calcSpells=JSON.stringify(calcSavedSpells);
   const dadoCura=document.getElementById('dado-cura-val');if(dadoCura)d['dado-cura-val']=dadoCura.value;
   return d;
 }
@@ -3465,7 +3499,7 @@ function doResetFicha(){
   equipped={capacete:null,peitoral:null,calca:null,botas:null,luvas:null};
   equippedWeapons={slot1:null,slot2:null};
   itemDamage={};resRows=[];vulnRows=[];
-  poseActive=false;
+  poseActive=false;calcSavedSpells=[];calcEditingIdx=-1;
   fcOwned={};acOwned={};paOwned={};arOwned={};mnOwned={};medOwned={};ceOwned={};ccOwned={};ccAdaptations=[];
   fcMaestriaChoice=null;acMaestriaChoice=null;paAcrobaticaChoice=null;
   arMaestriaChoice=null;arFocoArmas=[];arEmpunhaduraChoice=null;arEspecChoice=null;arUltraChoice=null;
@@ -3550,6 +3584,7 @@ function loadSheet(){
       if(d._ccOwned)try{Object.assign(ccOwned,JSON.parse(d._ccOwned));}catch(_){}
       if(d._ccAdapts)try{ccAdaptations=JSON.parse(d._ccAdapts);}catch(_){}
       if(d._poseActive)poseActive=!!d._poseActive;
+      if(d._calcSpells)try{calcSavedSpells=JSON.parse(d._calcSpells);}catch(_){}
       reapplyFichaDots();
     }
     const ph=localStorage.getItem('rpg-photo');
