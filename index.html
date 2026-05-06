@@ -681,7 +681,7 @@ input[type=file]{display:none}
   </div>
   <div id="loja-protecoes" class="loja-section"></div>
   <div id="loja-armas" class="loja-section"></div>
-  <div id="loja-utilitarios" class="loja-section"><div class="loja-sec-title">🧪 Utilitários</div><div style="font-size:11px;color:var(--txt3);padding:16px;text-align:center">EM BREVE</div></div>
+  <div id="loja-utilitarios" class="loja-section"><div class="loja-sec-title">🧪 Utilitários</div><div id="loja-utilitarios-content"></div></div>
   <div id="loja-aprimoramentos" class="loja-section"><div class="loja-sec-title">✨ Aprimoramentos</div><div style="font-size:11px;color:var(--txt3);padding:16px;text-align:center">EM BREVE</div></div>
   <div class="save-bar"><button class="save-btn" onclick="saveSheet()">💾 Salvar</button><span class="save-msg" id="save-msg3">✓ Salvo</span></div>
 </div>
@@ -1649,6 +1649,23 @@ function renderFichaWeapons(){
       html+='</div>';
     }
 
+    // Ammo display for ranged weapons
+    if(!isBareFist&&w&&isRangedWeapon(w)){
+      const wIdx=slotLabel==='slot1'?equippedWeapons.slot1:equippedWeapons.slot2;
+      const ammoIdx=wIdx!==null&&wIdx!==undefined?wepAmmo[wIdx]:undefined;
+      const ammo=ammoIdx!==undefined?(getAmmoList()[ammoIdx]):null;
+      html+='<div style="margin-top:6px;padding:6px 8px;background:var(--bg4);border:1px solid var(--border2);border-radius:5px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">';
+      html+='<span style="font-size:9px;color:var(--txt3);font-weight:600;text-transform:uppercase">🏹 Munição:</span>';
+      if(ammo){
+        html+='<span style="font-size:12px;font-weight:700;color:var(--green2)">'+ammo.name+'</span>';
+        html+='<span style="font-size:11px;color:var(--txt3)">×'+ammo.units+'</span>';
+        if(ammo.efeito&&ammo.efeito!=='Nenhum')html+='<span style="font-size:9px;color:var(--gold);font-style:italic">'+ammo.efeito+'</span>';
+        html+='<button onclick="atirarMunicao('+wIdx+')" style="margin-left:auto;padding:4px 12px;background:var(--red2);border:1px solid var(--red);color:#fff;border-radius:5px;font-size:11px;font-weight:700;cursor:pointer">🏹 Atirar</button>';
+      } else {
+        html+='<span style="font-size:10px;color:var(--txt3);font-style:italic">Nenhuma munição equipada</span>';
+      }
+      html+='</div>';
+    }
     // Attack rolls — Duas Mãos has two: normal and vs uma mão (+1d6)
     if(dmg?.hasDuasMaos){
       const rollNormal=buildAttackRollText(w,false);
@@ -1784,12 +1801,78 @@ function renderWeaponInvPanel(){
     if(!broken)html+='<button class="btn btn-red" onclick="applyWeaponDestroy('+idx+')">💥</button>';
     if(broken)html+='<button class="btn btn-green" onclick="repairWeapon('+idx+')">🔧 '+Math.ceil((w.finalPrice||w.price||0)/2)+'🪙</button>';
     html+='<button class="btn btn-delete" onclick="deleteWeapon('+idx+')">🗑</button>';
-    html+='</div></div>';
+    html+='</div>';
+    // Ammo slot for ranged weapons
+    if(isRangedWeapon(w)){
+      const ammoList=getAmmoList();
+      const curAmmoIdx=wepAmmo[idx];
+      const curAmmo=curAmmoIdx!==undefined?ammoList[curAmmoIdx]:null;
+      html+='<div style="margin-top:6px;padding-top:6px;border-top:1px solid var(--border2);display:flex;align-items:center;gap:6px;flex-wrap:wrap">';
+      html+='<span style="font-size:9px;color:var(--txt3);font-weight:600;text-transform:uppercase;letter-spacing:.5px">🏹 Munição:</span>';
+      if(curAmmo){
+        html+='<span style="font-size:11px;color:var(--green2);font-weight:600">'+curAmmo.name+' <span style="color:var(--txt3)">(×'+curAmmo.units+')</span></span>';
+        html+='<button class="btn btn-gray" style="font-size:9px;padding:2px 7px" onclick="unequipAmmoFromWeapon('+idx+')">Tirar</button>';
+      } else if(ammoList.length>0){
+        html+='<select id="ammo-sel-'+idx+'" style="font-size:11px;padding:2px 6px;flex:1;min-width:120px;max-width:180px"><option value="">— Escolher —</option>';
+        ammoList.forEach((a,ai)=>{html+='<option value="'+ai+'">'+a.name+' (×'+a.units+')</option>';});
+        html+='</select>';
+        html+='<button class="btn btn-gold" style="font-size:9px;padding:2px 8px" onclick="var s=document.getElementById(\'ammo-sel-'+idx+'\');if(s.value!==\'\')equipAmmoToWeapon('+idx+',parseInt(s.value))">Equipar</button>';
+      } else {
+        html+='<span style="font-size:10px;color:var(--txt3);font-style:italic">Sem munição no inventário</span>';
+      }
+      html+='</div>';
+    }
+    html+='</div>';
   });
   panel.innerHTML=html;
 }
 function equipWeapon(idx,slot){if(slot==='duas'){equippedWeapons.slot1=idx;equippedWeapons.slot2=null;}else if(slot===1)equippedWeapons.slot1=idx;else equippedWeapons.slot2=idx;renderWeaponInvPanel();renderFichaWeapons();recalcCombat();autoSave();}
 function unequipWeapon(slot){if(slot===1)equippedWeapons.slot1=null;else equippedWeapons.slot2=null;renderWeaponInvPanel();renderFichaWeapons();recalcCombat();autoSave();}
+
+// ── AMMO SYSTEM ──
+// wepAmmo[weaponIdx] = ammoInventoryIdx
+let wepAmmo={};
+
+function getAmmoList(){return inventory.ammo||[];}
+
+function isRangedWeapon(w){
+  if(!w)return false;
+  return w.isRanged||(w.customTags&&(w.customTags.includes('Munição')||w.customTags.includes('Arremessável')));
+}
+
+function equipAmmoToWeapon(wIdx,ammoIdx){
+  wepAmmo[wIdx]=ammoIdx;
+  renderWeaponInvPanel();renderFichaWeapons();autoSave();
+  const a=getAmmoList()[ammoIdx];
+  showToast('🏹 '+a.name+' equipada em '+inventory.weapon[wIdx].displayName);
+}
+function unequipAmmoFromWeapon(wIdx){
+  delete wepAmmo[wIdx];
+  renderWeaponInvPanel();renderFichaWeapons();autoSave();
+}
+function atirarMunicao(wIdx){
+  const ammoIdx=wepAmmo[wIdx];
+  if(ammoIdx===undefined||ammoIdx===null){showToast('Nenhuma munição equipada!');return;}
+  const ammo=getAmmoList()[ammoIdx];
+  if(!ammo||ammo.units<=0){showToast('Sem munição!');return;}
+  ammo.units--;
+  if(ammo.units<=0){
+    // Remove depleted ammo and fix wepAmmo indices
+    (inventory.ammo||[]).splice(ammoIdx,1);
+    const newWepAmmo={};
+    Object.entries(wepAmmo).forEach(([k,v])=>{
+      const vi=parseInt(v);
+      if(vi<ammoIdx)newWepAmmo[k]=vi;
+      else if(vi>ammoIdx)newWepAmmo[k]=vi-1;
+      // vi===ammoIdx: depleted, remove
+    });
+    wepAmmo=newWepAmmo;
+    showToast('💥 Última munição disparada!');
+  } else {
+    showToast('🏹 Disparado! Restam: '+ammo.units);
+  }
+  renderWeaponInvPanel();renderFichaWeapons();autoSave();
+}
 function applyWeaponDestroy(idx){const dk='weapon__'+idx;const w=inventory.weapon[idx];const cur=itemDamage[dk]||0;const maxDur=w.dur||1;if(cur>=maxDur){showToast('Arma já destruída!');return;}itemDamage[dk]=cur+1;if(itemDamage[dk]>=maxDur){if(equippedWeapons.slot1===idx)equippedWeapons.slot1=null;if(equippedWeapons.slot2===idx)equippedWeapons.slot2=null;showToast('💔 Arma destruída!');}else showToast('💥 Destruir: '+itemDamage[dk]+'/'+maxDur);renderWeaponInvPanel();renderFichaWeapons();autoSave();}
 function repairWeapon(idx){const w=inventory.weapon[idx];const cost=Math.ceil((w.finalPrice||w.price||1)/2);const money=parseInt(document.getElementById('f-money').value)||0;pendingAction={type:'repairWeapon',idx,cost};showModal('🔧 Reparar','Reparar <strong>'+w.displayName+'</strong> por <strong>'+cost+' 🪙</strong>?<br><small style="color:var(--txt2)">Dinheiro atual: '+money+'🪙</small>','Reparar');}
 function deleteWeapon(idx){pendingAction={type:'deleteWeapon',idx,name:inventory.weapon[idx].displayName};showModal('🗑 Excluir','Excluir <strong>'+inventory.weapon[idx].displayName+'</strong>?','Excluir');}
@@ -1820,8 +1903,99 @@ function applyCustomToWeapon(base,custom){
 function toggleCat(cat){
   const sec=document.getElementById('loja-'+cat);const btn=document.getElementById('cat-btn-'+cat);const isOpen=sec.classList.contains('open');
   ['protecoes','armas','utilitarios','aprimoramentos'].forEach(s=>{document.getElementById('loja-'+s).classList.remove('open');document.getElementById('cat-btn-'+s).classList.remove('open');});
-  if(!isOpen){sec.classList.add('open');btn.classList.add('open');if(cat==='protecoes'&&!lojaBuilt.protecoes){buildLojaProtecoes();lojaBuilt.protecoes=true;}if(cat==='armas'&&!lojaBuilt.armas){buildLojaArmas();lojaBuilt.armas=true;}}
+  if(!isOpen){sec.classList.add('open');btn.classList.add('open');if(cat==='protecoes'&&!lojaBuilt.protecoes){buildLojaProtecoes();lojaBuilt.protecoes=true;}if(cat==='armas'&&!lojaBuilt.armas){buildLojaArmas();lojaBuilt.armas=true;}if(cat==='utilitarios'&&!lojaBuilt.utilitarios){buildLojaUtilitarios();lojaBuilt.utilitarios=true;}}
 }
+function buildLojaUtilitarios(){
+  const cont=document.getElementById('loja-utilitarios-content');if(!cont)return;
+  cont.innerHTML='';
+  const sec=document.createElement('div');
+  sec.innerHTML='<div id="util-mun-btn" onclick="toggleUtilMun()" style="display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 14px;cursor:pointer;margin-bottom:6px;user-select:none">'+
+    '<div style="display:flex;align-items:center;gap:8px">'+
+    '<span style="font-size:18px">🏹</span>'+
+    '<div><div style="font-size:13px;font-weight:700;color:var(--txt)">Munições</div><div style="font-size:10px;color:var(--txt3)">Flechas, Virotes, Cartuchos e Especiais</div></div>'+
+    '</div>'+
+    '<span id="util-mun-arrow" style="font-size:12px;color:var(--txt3);transition:transform .2s">▼</span>'+
+    '</div>'+
+    '<div id="util-mun-body" style="display:none"></div>';
+  cont.appendChild(sec);
+}
+
+const AMMO_GROUPS=[
+  {name:'Flechas e Virotes',items:[
+    {name:'Seta Comum',units:10,efeito:'Nenhum',peso:1,preco:6},
+    {name:'Seta Pesada',units:5,efeito:'Aumenta o dano em +5 e críticos atordoam',peso:1,preco:12},
+    {name:'Seta Incendiária',units:3,efeito:'Ao acertar, incendeia o alvo causando +2d6 de dano por turno',peso:1,preco:20},
+    {name:'Seta Farpada',units:4,efeito:'Aumenta o dano em +1d8 e críticos sangram',peso:1,preco:18},
+    {name:'Seta Dourada',units:8,efeito:'Pode ser encantada com Arcano',peso:1,preco:12},
+    {name:'Seta Banhada',units:6,efeito:'Pode ser banhada por um alquímico, ativa o efeito ao acertar',peso:1,preco:16},
+    {name:'Seta Laçada',units:2,efeito:'A flecha é amarrada por uma corda',peso:2,preco:8},
+  ]},
+  {name:'Munições',items:[
+    {name:'Cartucho Pequeno',units:10,efeito:'Nenhum',peso:1,preco:12},
+    {name:'Cartucho Médio',units:10,efeito:'Nenhum',peso:1,preco:12},
+    {name:'Cartucho Grande',units:10,efeito:'Nenhum',peso:1,preco:12},
+    {name:'Munição de Captura',units:4,efeito:'Ao acertar, libera uma rede que prende o alvo',peso:2,preco:26},
+    {name:'Munição Pesada',units:5,efeito:'Aumenta o dano em +5 e críticos atordoam',peso:1,preco:24},
+    {name:'Munição Perfurante',units:4,efeito:'Aumenta o dano em +1d8 e críticos sangram',peso:1,preco:12},
+    {name:'Munição Incendiária',units:6,efeito:'Ao acertar, incendeia o alvo causando +2d6 de dano por turno',peso:1,preco:18},
+    {name:'Munição Explosiva',units:2,efeito:'Explode após atingir o alvo. Todos num alcance curto tomam 12d8 de dano de fogo.',peso:2,preco:32},
+    {name:'Munição Fedorenta',units:4,efeito:'Libera uma névoa tóxica após atingir o alvo. Todos num alcance curto dentro da névoa recebem 8d6 de dano tóxico.',peso:1,preco:18},
+    {name:'Balas de Ouro',units:8,efeito:'Pode ser encantada com arcano',peso:1,preco:16},
+  ]},
+  {name:'Munições Especiais',items:[
+    {name:'Fogo de Artifício',units:6,efeito:'Explode num padrão colorido após atingir o alvo. Todos num alcance curto tomam 6d8 de dano de fogo.',peso:2,preco:24},
+    {name:'Balas de Festim',units:12,efeito:'Não causa dano ao atingir o alvo.',peso:1,preco:6},
+    {name:'Bolsas de Tinta',units:8,efeito:'Explodem tinta ao atingir o alvo. Não causa dano.',peso:1,preco:12},
+    {name:'Dardos',units:10,efeito:'Pode ser banhado em veneno. Aplica efeito ao atingir o alvo.',peso:1,preco:24},
+  ]},
+];
+
+function buildMunicoesList(){
+  const body=document.getElementById('util-mun-body');if(!body)return;
+  let html='';
+  AMMO_GROUPS.forEach(g=>{
+    html+='<div class="loja-category" style="margin-bottom:10px">';
+    html+='<div class="loja-cat-name" style="color:#f97316">'+g.name+'</div>';
+    html+='<table class="loja-tbl"><thead><tr><th>Nome</th><th>Efeito</th><th>Peso</th><th>Preço</th></tr></thead><tbody>';
+    g.items.forEach((item,idx)=>{
+      html+='<tr>'+
+        '<td data-label="Nome" style="font-weight:600">'+item.name+' <span style="font-size:9px;color:var(--txt3)">(×'+item.units+')</span></td>'+
+        '<td data-label="Efeito" style="font-size:11px;color:var(--txt2)">'+item.efeito+'</td>'+
+        '<td data-label="Peso" class="stat">'+item.peso+'</td>'+
+        '<td data-label="Comprar"><button class="buy-btn" data-group="'+AMMO_GROUPS.indexOf(g)+'" data-idx="'+idx+'">'+item.preco+' 🪙</button></td>'+
+      '</tr>';
+    });
+    html+='</tbody></table></div>';
+  });
+  body.innerHTML=html;
+  // Attach click listeners
+  body.querySelectorAll('.buy-btn[data-group]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const g=AMMO_GROUPS[parseInt(btn.dataset.group)];
+      const item=g.items[parseInt(btn.dataset.idx)];
+      askBuyAmmo(item);
+    });
+  });
+}
+
+function toggleUtilMun(){
+  const body=document.getElementById('util-mun-body');
+  const arrow=document.getElementById('util-mun-arrow');
+  const btn=document.getElementById('util-mun-btn');
+  if(!body)return;
+  const open=body.style.display==='none';
+  body.style.display=open?'block':'none';
+  if(arrow)arrow.style.transform=open?'rotate(180deg)':'';
+  if(btn)btn.style.borderColor=open?'var(--red)':'var(--border)';
+  if(open&&body.innerHTML==='')buildMunicoesList();
+}
+
+function askBuyAmmo(item){
+  const money=parseInt(document.getElementById('f-money').value)||0;
+  pendingAction={type:'ammo',item};
+  showModal('Comprar Munição','Comprar <strong>'+item.name+' (×'+item.units+')</strong> por <strong>'+item.preco+' 🪙</strong>?<br><small style="color:'+(money<item.preco?'var(--red3)':'var(--green2)')+'">Dinheiro: '+money+'🪙'+(money<item.preco?' ⚠ insuficiente':'')+'</small>','Comprar');
+}
+
 function buildLojaProtecoes(){
   const container=document.getElementById('loja-protecoes');container.innerHTML='<div class="loja-sec-title">🛡 Proteções</div>';
   const ORDER=['capacete','peitoral','calca','botas','luvas'];
@@ -1993,6 +2167,17 @@ function modalConfirm(){
   else if(type==='gloves'){const{item}=pendingAction;if(money<item.price){showToast('Dinheiro insuficiente!');closeModal();return;}if(!inventory.luvas)inventory.luvas=[];inventory.luvas.push(JSON.parse(JSON.stringify(item)));document.getElementById('f-money').value=money-item.price;renderSlotsPanel();}
   else if(type==='weapon'){const{customized}=pendingAction;if(money<customized.finalPrice){showToast('Dinheiro insuficiente!');closeModal();return;}inventory.weapon.push(customized);document.getElementById('f-money').value=money-customized.finalPrice;updateWeight();renderWeaponInvPanel();}
   else if(type==='resetFicha'){doResetFicha();closeModal();return;}
+  else if(type==='ammo'){
+    const{item}=pendingAction;
+    if(money<item.preco){showToast('Dinheiro insuficiente!');closeModal();return;}
+    if(!inventory.ammo)inventory.ammo=[];
+    // Find existing stack of same name and add, or push new
+    const existing=inventory.ammo.find(a=>a.name===item.name);
+    if(existing){existing.units+=item.units;}
+    else{inventory.ammo.push({name:item.name,units:item.units,maxUnits:item.units,peso:item.peso,preco:item.preco,efeito:item.efeito});}
+    document.getElementById('f-money').value=money-item.preco;
+    updateWeight();renderWeaponInvPanel();showToast('✓ '+item.name+' (×'+item.units+') comprado!');
+  }
   else if(type==='weaponShieldCustom'){const{displayName,defesa,dur,pen,weight,finalPrice,tags,empAtk,manuseio,baseW}=pendingAction;if(money<finalPrice){showToast('Dinheiro insuficiente!');closeModal();return;}const obj={name:displayName,displayName,danoS:empAtk||baseW.danoS,danoDP:empAtk||baseW.danoDP,crit:baseW.crit,critMul:baseW.critMul,critEff:baseW.critEff,alcance:baseW.alcance,tipo:baseW.tipo,weight:weight||2,dur,price:finalPrice,finalPrice,manuseio:manuseio||'Versátil',isShield:true,defesa,pen,customTags:tags};inventory.weapon.push(obj);document.getElementById('f-money').value=money-finalPrice;updateWeight();renderWeaponInvPanel();renderFichaWeapons();}
   else if(type==='repair'){const{slot,itemName,cost}=pendingAction;if(money<cost){showToast('Dinheiro insuficiente!');closeModal();return;}const dk=dKey(slot,itemName);itemDamage[dk]=0;document.getElementById('f-money').value=money-cost;showToast('🔧 Item reparado!');renderSlotsPanel();}
   else if(type==='repairWeapon'){const{idx,cost}=pendingAction;if(money<cost){showToast('Dinheiro insuficiente!');closeModal();return;}itemDamage['weapon__'+idx]=0;document.getElementById('f-money').value=money-cost;showToast('🔧 Arma reparada!');renderWeaponInvPanel();renderFichaWeapons();}
@@ -3718,7 +3903,7 @@ function gatherData(){
     try{d[bnId(a,n)]=document.getElementById(bnId(a,n))?.value||'';}catch(_){}
     [0,1].forEach(i=>{d[mdId(a,n,i)]=document.getElementById(mdId(a,n,i))?.classList.contains('filled')||false;});
   }));
-  d._inv=JSON.stringify(inventory);d._eq=JSON.stringify(equipped);d._eqw=JSON.stringify(equippedWeapons);
+  d._inv=JSON.stringify(inventory);d._eq=JSON.stringify(equipped);d._eqw=JSON.stringify(equippedWeapons);d._wepAmmo=JSON.stringify(wepAmmo);
   d._dmg=JSON.stringify(itemDamage);d._tree=JSON.stringify(treeData);
   d._fcOwned=JSON.stringify(fcOwned);d._fcVital=fcVitalLvlBought;d._fcDet=fcDetLvlBought;
   d._fcRes=JSON.stringify(fcResChoices);d._resRows=JSON.stringify(resRows);d._vulnRows=JSON.stringify(vulnRows);
@@ -3740,9 +3925,9 @@ function askResetFicha(){showModal('⚠ Formatar Ficha do Zero','<strong style="
 function doResetFicha(){
   localStorage.removeItem('rpg-sheet');
   // Reset all state
-  inventory={weapon:[],capacete:[],peitoral:[],calca:[],botas:[],luvas:[]};
+  inventory={weapon:[],capacete:[],peitoral:[],calca:[],botas:[],luvas:[],ammo:[]};
   equipped={capacete:null,peitoral:null,calca:null,botas:null,luvas:null};
-  equippedWeapons={slot1:null,slot2:null};
+  equippedWeapons={slot1:null,slot2:null};wepAmmo={};
   itemDamage={};resRows=[];vulnRows=[];
   poseActive=false;calcSavedSpells=[];calcEditingIdx=-1;
   fcOwned={};acOwned={};paOwned={};arOwned={};mnOwned={};medOwned={};ceOwned={};ccOwned={};ccAdaptations=[];
@@ -3802,6 +3987,7 @@ function loadSheet(){
       if(d._inv)try{const inv=JSON.parse(d._inv);Object.assign(inventory,inv);}catch(_){}
       if(d._eq)try{const eq=JSON.parse(d._eq);SLOTS.forEach(s=>{equipped[s]=eq[s]||null;});}catch(_){}
       if(d._eqw)try{Object.assign(equippedWeapons,JSON.parse(d._eqw));}catch(_){}
+      if(d._wepAmmo)try{Object.assign(wepAmmo,JSON.parse(d._wepAmmo));}catch(_){}
       if(d._dmg)try{Object.assign(itemDamage,JSON.parse(d._dmg));}catch(_){}
       if(d._tree)try{Object.assign(treeData,JSON.parse(d._tree));}catch(_){}
       if(d._fcOwned)try{Object.assign(fcOwned,JSON.parse(d._fcOwned));}catch(_){}
