@@ -679,12 +679,12 @@ input[type=file]{display:none}
     <div class="loja-cat-card" id="cat-btn-protecoes" onclick="toggleCat('protecoes')"><div class="loja-cat-icon">🛡</div><div class="loja-cat-title">Proteções</div><div class="loja-cat-sub">Capacetes, Luvas<br>Peitorais, etc.</div><span class="loja-cat-arrow">▼</span></div>
     <div class="loja-cat-card" id="cat-btn-armas" onclick="toggleCat('armas')"><div class="loja-cat-icon">⚔</div><div class="loja-cat-title">Armas</div><div class="loja-cat-sub">Corpo a corpo<br>À distância</div><span class="loja-cat-arrow">▼</span></div>
     <div class="loja-cat-card" id="cat-btn-utilitarios" onclick="toggleCat('utilitarios')"><div class="loja-cat-icon">🧪</div><div class="loja-cat-title">Utilitários</div><div class="loja-cat-sub">Poções, Ferramentas</div><span class="loja-cat-arrow">▼</span></div>
-    <div class="loja-cat-card" id="cat-btn-aprimoramentos" onclick="toggleCat('aprimoramentos')"><div class="loja-cat-icon">✨</div><div class="loja-cat-title">Aprimoramentos</div><div class="loja-cat-sub">Em breve</div><span class="loja-cat-arrow">▼</span></div>
+    <div class="loja-cat-card" id="cat-btn-aprimoramentos" onclick="toggleCat('aprimoramentos')"><div class="loja-cat-icon">✨</div><div class="loja-cat-title">Aprimoramentos</div><div class="loja-cat-sub">Proteções, Armas<br>e Itens</div><span class="loja-cat-arrow">▼</span></div>
   </div>
   <div id="loja-protecoes" class="loja-section"></div>
   <div id="loja-armas" class="loja-section"></div>
   <div id="loja-utilitarios" class="loja-section"><div class="loja-sec-title">🧪 Utilitários</div><div id="loja-utilitarios-content"></div></div>
-  <div id="loja-aprimoramentos" class="loja-section"><div class="loja-sec-title">✨ Aprimoramentos</div><div style="font-size:11px;color:var(--txt3);padding:16px;text-align:center">EM BREVE</div></div>
+  <div id="loja-aprimoramentos" class="loja-section"><div class="loja-sec-title">✨ Aprimoramentos</div><div id="loja-aprimoramentos-content"></div></div>
   <div class="save-bar"><button class="save-btn" onclick="saveSheet()">💾 Salvar</button><span class="save-msg" id="save-msg3">✓ Salvo</span></div>
 </div>
 </div>
@@ -1670,8 +1670,8 @@ function renderFichaWeapons(){
     }
     // Attack rolls — Duas Mãos has two: normal and vs uma mão (+1d6)
     if(dmg?.hasDuasMaos){
-      const rollNormal=buildAttackRollText(w,false);
-      const rollVsUma=rollNormal+' + 1d6 (vs 1Mão)';
+      const rollNormal=buildAttackRollText(w,false)+' + 1d6';
+      const rollVsUma=buildAttackRollText(w,false)+' + 2d6 (vs 1Mão)';
       // Store normal roll in id for /r copy
       html+='<div class="eq-roll-row"><span class="eq-roll-label">🎲 Acerto:</span><span class="eq-roll-str" id="rollstr-'+slotLabel+'">'+rollNormal+'</span><button class="eq-roll-copy" onclick="copyRoll(\''+slotLabel+'\',false)">📋</button><button class="eq-roll-copy" style="border-color:var(--gold);color:var(--gold)" onclick="copyRoll(\''+slotLabel+'\',true)">🎲 /r</button></div>';
       html+='<div class="eq-roll-row" style="margin-top:3px"><span class="eq-roll-label" style="color:#c084fc">🎲 Acerto vs 1Mão:</span><span class="eq-roll-str" id="rollstr-'+slotLabel+'-uma" style="color:#c084fc">'+rollVsUma+'</span><button class="eq-roll-copy" style="border-color:#c084fc;color:#c084fc" onclick="copyRollStr(\''+slotLabel+'-uma\')">📋</button><button class="eq-roll-copy" style="border-color:var(--gold);color:var(--gold)" onclick="copyRollStrSlash(\''+slotLabel+'-uma\')">🎲 /r</button></div>';
@@ -1751,7 +1751,7 @@ function renderUtilInvPanel(){
   html+='<th style="text-align:left;padding:4px 6px">Item</th><th style="text-align:center;padding:4px 6px">Qtd</th><th style="text-align:center;padding:4px 6px">Peso</th><th style="text-align:center;padding:4px 6px">Ação</th></tr></thead><tbody>';
   inventory.util.forEach(function(item,idx){
     html+='<tr style="border-top:1px solid var(--border)">';
-    html+='<td style="padding:5px 6px;font-size:12px;font-weight:600;color:var(--txt)">'+item.name+'</td>';
+    html+='<td style="padding:5px 6px;font-size:12px;font-weight:600;color:var(--txt)">'+item.name+(item.preco?'<div style="font-size:9px;color:var(--txt3)">🪙'+item.preco+' cada</div>':'')+'</td>';
     html+='<td style="text-align:center;padding:5px 6px"><div style="display:flex;align-items:center;justify-content:center;gap:4px">';
     html+='<button onclick="utilQtyChange('+idx+',-1)" style="width:20px;height:20px;border-radius:4px;background:var(--bg4);border:1px solid var(--border);color:var(--txt);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center">-</button>';
     html+='<span id="util-qty-'+idx+'" style="min-width:22px;text-align:center;font-size:12px;font-weight:700;color:var(--gold)">'+item.qty+'</span>';
@@ -1801,10 +1801,10 @@ function renderSlotsPanel(){
       html+='<div style="margin-top:6px;font-size:9px;color:var(--txt3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Inventário</div>';
       inv.forEach((item,idx)=>{
         const isEq=eq&&eq.name===item.name;const dk=dKey(slot,item.name);const dmg=itemDamage[dk]||0;const broken=dmg>=(item.dur||1);
-        html+='<div class="inv-item-row'+(isEq?' eq-row':'')+'"><span class="inv-item-name" style="color:'+(broken?'var(--txt3)':isEq?'var(--gold)':'var(--txt)')+'">'+((item.displayName||item.name)+(isEq?' ✓':'')+(broken?' 💔':''))+'</span>';
+        html+='<div class="inv-item-row'+(isEq?' eq-row':'')+'"><span class="inv-item-name" style="color:'+(broken?'var(--txt3)':isEq?'var(--gold)':'var(--txt)')+'">'+((item.displayName||item.name)+(isEq?' ✓':'')+(broken?' 💔':''))+'</span>'+(item.paidPrice?'<span style="font-size:9px;color:var(--txt3);margin-left:4px">🪙'+item.paidPrice+'</span>':'');
         if(!broken&&!isEq)html+='<button class="btn btn-gold" onclick="equipItem(\''+slot+'\','+idx+')">Vestir</button>';
         if(broken)html+='<button class="btn btn-green" onclick="repairArmor(\''+slot+'\',\''+item.name+'\','+item.price+')">🔧 '+Math.ceil(item.price/2)+'🪙</button>';
-        html+='<button class="btn btn-delete" onclick="deleteArmorItem(\''+slot+'\','+idx+')">🗑</button></div>';
+        html+='<button class="btn btn-delete" onclick="deleteArmorItem(\''+slot+'\','+idx+')">🗑</button></div>';html+=getItemUpgradeHtml('armor_'+slot+'_'+item.name);
       });
     }
     card.innerHTML=html;panel.appendChild(card);
@@ -1828,7 +1828,7 @@ function renderWeaponInvPanel(){
     let dots='';for(let i=0;i<(w.dur||1);i++)dots+='<span style="display:inline-block;width:9px;height:9px;border-radius:2px;background:'+(i<dmg?'var(--red)':'var(--green)')+';margin-right:2px"></span>';
     html+='<div class="weapon-inv-card">';
     html+='<div class="weapon-inv-name"><span>'+w.displayName+(broken?' <span style="color:var(--red);font-size:10px">💔 DESTRUÍDA</span>':'')+'</span><div>'+dots+'</div></div>';
-    html+='<div class="weapon-inv-stats">Dano S: <b>'+w.danoS+'</b> &nbsp;DP: <b>'+w.danoDP+'</b> &nbsp;Crit: <b>'+w.crit+'x'+w.critMul+'</b> ('+w.critEff+')<br>Alcance: <b>'+w.alcance+'m</b> &nbsp;Tipo: <b>'+w.tipo+'</b> &nbsp;Manuseio: <b>'+manuseio+'</b>'+(w.customTags&&w.customTags.length?'<br>Propriedades: <b>'+w.customTags.join(', ')+'</b>':'')+'</div>';
+    html+='<div class="weapon-inv-stats">Dano S: <b>'+w.danoS+'</b> &nbsp;DP: <b>'+w.danoDP+'</b> &nbsp;Crit: <b>'+w.crit+'x'+w.critMul+'</b> ('+w.critEff+')<br>Alcance: <b>'+w.alcance+'m</b> &nbsp;Tipo: <b>'+w.tipo+'</b> &nbsp;Manuseio: <b>'+manuseio+'</b>'+(w.customTags&&w.customTags.length?'<br>Propriedades: <b>'+w.customTags.join(', ')+'</b>':'')+(w.paidPrice?'<br><span style="color:var(--txt3);font-size:10px">🪙 Comprado por '+w.paidPrice+'</span>':'')+'</div>';
     html+='<div class="weapon-slot-row"><span style="font-size:9px;color:var(--txt3);font-weight:600;text-transform:uppercase;letter-spacing:.5px">Equipar:</span>';
     if(isSlot1)html+='<span class="wep-badge wep-badge-1">✓ Mão 1</span><button class="btn btn-gray" onclick="unequipWeapon(1)">Tirar</button>';
     else if(isSlot2)html+='<span class="wep-badge wep-badge-2">✓ Mão 2</span><button class="btn btn-gray" onclick="unequipWeapon(2)">Tirar</button>';
@@ -1866,6 +1866,7 @@ function renderWeaponInvPanel(){
       }
       html+='</div>';
     }
+    html+=getItemUpgradeHtml('weapon_'+idx);
     html+='</div>';
   });
   panel.innerHTML=html;
@@ -1947,7 +1948,7 @@ function applyCustomToWeapon(base,custom){
 function toggleCat(cat){
   const sec=document.getElementById('loja-'+cat);const btn=document.getElementById('cat-btn-'+cat);const isOpen=sec.classList.contains('open');
   ['protecoes','armas','utilitarios','aprimoramentos'].forEach(s=>{document.getElementById('loja-'+s).classList.remove('open');document.getElementById('cat-btn-'+s).classList.remove('open');});
-  if(!isOpen){sec.classList.add('open');btn.classList.add('open');if(cat==='protecoes'&&!lojaBuilt.protecoes){buildLojaProtecoes();lojaBuilt.protecoes=true;}if(cat==='armas'&&!lojaBuilt.armas){buildLojaArmas();lojaBuilt.armas=true;}if(cat==='utilitarios'&&!lojaBuilt.utilitarios){buildLojaUtilitarios();lojaBuilt.utilitarios=true;}}
+  if(!isOpen){sec.classList.add('open');btn.classList.add('open');if(cat==='protecoes'&&!lojaBuilt.protecoes){buildLojaProtecoes();lojaBuilt.protecoes=true;}if(cat==='armas'&&!lojaBuilt.armas){buildLojaArmas();lojaBuilt.armas=true;}if(cat==='utilitarios'&&!lojaBuilt.utilitarios){buildLojaUtilitarios();lojaBuilt.utilitarios=true;}if(cat==='aprimoramentos'&&!lojaBuilt.aprimoramentos){buildLojaAprimoramentos();lojaBuilt.aprimoramentos=true;}}
 }
 const UTIL_SECTIONS=[
   {id:'mun',icon:'🏹',title:'Munições',sub:'Flechas, Virotes, Cartuchos e Especiais'},
@@ -2171,6 +2172,161 @@ function askBuyAmmo(item){
   showModal('Comprar Munição','Comprar <strong>'+item.name+' (×'+item.units+')</strong> por <strong>'+item.preco+' 🪙</strong>?<br><small style="color:'+(money<item.preco?'var(--red3)':'var(--green2)')+'">Dinheiro: '+money+'🪙'+(money<item.preco?' ⚠ insuficiente':'')+'</small>','Comprar');
 }
 
+// APRIMORAMENTOS
+const UPGRADES_PROTECAO = [
+  {
+    id: 'revestimento_espinhos',
+    name: 'Revestimento de Espinhos',
+    icon: '💞',
+    desc: 'Causa dano ao ser atingido, atingir ou agarrar.',
+    qualidades: [
+      {q:2, desc:'+2d6 de dano por contato'},
+      {q:3, desc:'+3d6 de dano por contato'},
+      {q:4, desc:'+4d6 de dano por contato'},
+    ]
+  }
+];
+const UPGRADES_ARMA = [];
+const UPGRADES_ITEM = [];
+const UPGRADE_QUAL_MULT = {1:1.5, 2:3, 3:4.5, 4:6};
+function getItemUpgrades(k){if(!inventory.upgrades)inventory.upgrades={};return inventory.upgrades[k]||[];}
+function addItemUpgrade(k,uid,q){if(!inventory.upgrades)inventory.upgrades={};if(!inventory.upgrades[k])inventory.upgrades[k]=[];inventory.upgrades[k]=inventory.upgrades[k].filter(u=>u.id!==uid);inventory.upgrades[k].push({id:uid,qualidade:q});}
+function getUpgradeById(id){return [...UPGRADES_PROTECAO,...UPGRADES_ARMA,...UPGRADES_ITEM].find(u=>u.id===id);}
+function getUpgradeLabel(uid,q){const u=getUpgradeById(uid);if(!u)return '';const qo=u.qualidades.find(x=>x.q===q);return u.name+' Q'+q+': '+(qo?qo.desc:'');}
+const APRI_SECTIONS=[
+  {id:'protecao',icon:'🛡',title:'Aprimoramentos para Proteções',sub:'Capacetes, Peitorais, Calças, Botas, Luvas, Escudos',upgrades:UPGRADES_PROTECAO},
+  {id:'arma',icon:'⚔',title:'Aprimoramentos para Armas',sub:'Armas corpo a corpo, distância, Luvas, Escudos',upgrades:UPGRADES_ARMA},
+  {id:'item',icon:'🧪',title:'Aprimoramentos para Itens',sub:'Utilitários e equipamentos gerais',upgrades:UPGRADES_ITEM},
+];
+function buildLojaAprimoramentos(){
+  const cont=document.getElementById('loja-aprimoramentos-content');if(!cont)return;
+  cont.innerHTML='';
+  APRI_SECTIONS.forEach(function(sec){
+    const wrap=document.createElement('div');wrap.style.marginBottom='6px';
+    wrap.innerHTML='<div id="apri-'+sec.id+'-btn" onclick="toggleApriSec(\''+sec.id+'\')" style="display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 14px;cursor:pointer;user-select:none">'+
+      '<div style="display:flex;align-items:center;gap:8px">'+
+      '<span style="font-size:18px">'+sec.icon+'</span>'+
+      '<div><div style="font-size:13px;font-weight:700;color:var(--txt)">'+sec.title+'</div><div style="font-size:10px;color:var(--txt3)">'+sec.sub+'</div></div>'+
+      '</div><span id="apri-'+sec.id+'-arrow" style="font-size:12px;color:var(--txt3);transition:transform .2s">▼</span></div>'+
+      '<div id="apri-'+sec.id+'-body" style="display:none;padding-top:4px"></div>';
+    cont.appendChild(wrap);
+  });
+}
+function toggleApriSec(id){
+  const body=document.getElementById('apri-'+id+'-body');
+  const arrow=document.getElementById('apri-'+id+'-arrow');
+  const btn=document.getElementById('apri-'+id+'-btn');
+  if(!body)return;
+  const open=body.style.display==='none';
+  body.style.display=open?'block':'none';
+  if(arrow)arrow.style.transform=open?'rotate(180deg)':'';
+  if(btn)btn.style.borderColor=open?'var(--red)':'var(--border)';
+  if(open&&body.innerHTML==='')buildApriList(id,body);
+}
+function buildApriList(secId,body){
+  const sec=APRI_SECTIONS.find(s=>s.id===secId);
+  if(!sec||sec.upgrades.length===0){body.innerHTML='<div style="font-size:11px;color:var(--txt3);padding:14px;text-align:center">Nenhum aprimoramento disponível</div>';return;}
+  let html='';
+  sec.upgrades.forEach(function(upg){
+    html+='<div style="background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:12px;margin-bottom:8px">';
+    html+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">';
+    html+='<span style="font-size:20px">'+upg.icon+'</span>';
+    html+='<div><div style="font-size:13px;font-weight:700;color:var(--txt)">'+upg.name+'</div>';
+    html+='<div style="font-size:11px;color:var(--txt2);margin-top:2px">'+upg.desc+'</div></div></div>';
+    upg.qualidades.forEach(function(qObj){
+      html+='<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 8px;background:var(--bg4);border-radius:5px;margin-bottom:4px;gap:8px;flex-wrap:wrap">';
+      html+='<div style="display:flex;align-items:center;gap:6px"><span style="font-size:10px;font-weight:700;color:var(--gold);background:#2a2010;border:1px solid var(--gold);border-radius:3px;padding:1px 5px">Q'+qObj.q+'</span>';
+      html+='<span style="font-size:11px;color:var(--txt)">'+qObj.desc+'</span></div>';
+      html+='<button class="buy-btn" style="font-size:11px;padding:4px 10px" onclick="openApriItemPicker(\''+upg.id+'\','+qObj.q+',\''+secId+'\')">Aplicar</button>';
+      html+='</div>';
+    });
+    html+='</div>';
+  });
+  body.innerHTML=html;
+}
+function getApriTargetItems(secId){
+  const items=[];
+  if(secId==='protecao'||secId==='arma'){
+    const SL=['capacete','peitoral','calca','botas','luvas'];
+    SL.forEach(function(slot){
+      (inventory[slot]||[]).forEach(function(item){
+        const key='armor_'+slot+'_'+item.name;
+        const existing=getItemUpgrades(key).map(u=>getUpgradeLabel(u.id,u.qualidade)).join(' | ');
+        items.push({key,label:(item.displayName||item.name)+' ('+slot+')',itemPrice:item.price||item.finalPrice||1,existing});
+      });
+    });
+  }
+  inventory.weapon.forEach(function(w,idx){
+    if((secId==='protecao'&&w.isShield)||(secId==='arma')){
+      const key='weapon_'+idx;
+      const existing=getItemUpgrades(key).map(u=>getUpgradeLabel(u.id,u.qualidade)).join(' | ');
+      const label=(w.displayName||w.name)+(w.isShield?' (escudo)':' (arma)');
+      items.push({key,label,itemPrice:w.finalPrice||w.price||1,existing});
+    }
+  });
+  if(secId==='item'){
+    (inventory.util||[]).forEach(function(item,idx){
+      const key='util_'+idx;
+      const existing=getItemUpgrades(key).map(u=>getUpgradeLabel(u.id,u.qualidade)).join(' | ');
+      items.push({key,label:item.name,itemPrice:item.preco||1,existing});
+    });
+  }
+  return items;
+}
+function openApriItemPicker(upgradeId,qualidade,secId){
+  const upg=getUpgradeById(upgradeId);if(!upg)return;
+  const qObj=upg.qualidades.find(x=>x.q===qualidade);
+  const items=getApriTargetItems(secId);
+  if(items.length===0){showToast('Nenhum item compatível no inventário!');return;}
+  const money=parseInt(document.getElementById('f-money').value)||0;
+  let html='<div style="text-align:left">';
+  html+='<div style="font-size:11px;font-weight:700;color:var(--txt);margin-bottom:6px">Escolha o item para aplicar:</div>';
+  html+='<div style="font-size:11px;color:var(--txt2);margin-bottom:2px"><b>'+upg.name+'</b> — Q'+qualidade+': '+qObj.desc+'</div>';
+  html+='<div style="font-size:10px;color:var(--txt3);margin-bottom:10px">Preço = '+UPGRADE_QUAL_MULT[qualidade]+'x o preço do item</div>';
+  html+='<div style="display:flex;flex-direction:column;gap:5px;max-height:240px;overflow-y:auto">';
+  items.forEach(function(it){
+    const cost=Math.round(it.itemPrice*UPGRADE_QUAL_MULT[qualidade]);
+    const canAfford=money>=cost;
+    const hasUpg=getItemUpgrades(it.key).some(u=>u.id===upgradeId);
+    html+='<div style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;background:var(--bg4);border:1px solid var(--border);border-radius:6px;gap:8px;flex-wrap:wrap">';
+    html+='<div><div style="font-size:12px;font-weight:600;color:var(--txt)">'+it.label+'</div>';
+    if(it.existing)html+='<div style="font-size:9px;color:var(--txt3)">Atuais: '+it.existing+'</div>';
+    html+='<div style="font-size:10px;color:'+(canAfford?'var(--green2)':'var(--red3)')+'">🪙 '+cost+(canAfford?'':' ⚠ insuficiente')+'</div></div>';
+    const prevQ=qualidade-1;const needsPrev=qualidade>2;const hasPrev=!needsPrev||getItemUpgrades(it.key).some(u=>u.id===upgradeId&&u.qualidade===prevQ);
+    if(hasPrev){html+='<button class="buy-btn" style="font-size:11px" onclick="confirmApriUpgrade(\''+it.key+'\',\''+upgradeId+'\','+qualidade+','+cost+')">'+( hasUpg?'Atualizar':'Aplicar')+'</button>';}
+    else{html+='<button class="buy-btn" style="font-size:11px;opacity:.4;cursor:not-allowed" title="Requer Q'+(prevQ)+' primeiro" disabled>Q'+prevQ+' necessário</button>';}
+    html+='</div>';
+  });
+  html+='</div></div>';
+  showModal('✨ '+upg.name+' Q'+qualidade,html,null);
+  const okBtn=document.getElementById('modal-ok-btn');if(okBtn)okBtn.style.display='none';
+}
+function confirmApriUpgrade(itemKey,upgradeId,qualidade,cost){
+  const money=parseInt(document.getElementById('f-money').value)||0;
+  if(money<cost){showToast('Dinheiro insuficiente!');return;}
+  const prevQ=qualidade-1;if(qualidade>2&&!getItemUpgrades(itemKey).some(u=>u.id===upgradeId&&u.qualidade===prevQ)){showToast('Requer Q'+prevQ+' primeiro!');return;}
+  addItemUpgrade(itemKey,upgradeId,qualidade);
+  document.getElementById('f-money').value=money-cost;
+  closeModal();
+  renderSlotsPanel();renderWeaponInvPanel();renderUtilInvPanel();
+  autoSave();
+  const upg=getUpgradeById(upgradeId);
+  showToast('💞 '+(upg?upg.name:'Aprimoramento')+' Q'+qualidade+' aplicado!');
+}
+function getItemUpgradeHtml(itemKey){
+  const ups=getItemUpgrades(itemKey);
+  if(!ups.length)return '';
+  let html='<div style="margin-top:5px;padding-top:5px;border-top:1px solid var(--border2)">';
+  html+='<div style="font-size:9px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">💞 Aprimoramentos</div>';
+  ups.forEach(function(u){
+    const upg=getUpgradeById(u.id);
+    const qObj=upg?upg.qualidades.find(x=>x.q===u.qualidade):null;
+    html+='<div style="font-size:10px;color:var(--txt2)"><span style="color:var(--gold);font-weight:600">'+(upg?upg.name:'?')+' Q'+u.qualidade+':</span> '+(qObj?qObj.desc:'')+'</div>';
+  });
+  html+='</div>';
+  return html;
+}
+
 function buildLojaProtecoes(){
   const container=document.getElementById('loja-protecoes');container.innerHTML='<div class="loja-sec-title">🛡 Proteções</div>';
   const ORDER=['capacete','peitoral','calca','botas','luvas'];
@@ -2338,9 +2494,9 @@ function askBuyShieldCustom(cKey,wIdx){
 }
 function modalConfirm(){
   if(!pendingAction)return;const{type}=pendingAction;const money=parseInt(document.getElementById('f-money').value)||0;
-  if(type==='armor'){const{cat,idx}=pendingAction;const item=ARMOR[cat][idx];if(money<item.price){showToast('Dinheiro insuficiente!');closeModal();return;}if(!inventory[cat])inventory[cat]=[];inventory[cat].push(JSON.parse(JSON.stringify(item)));document.getElementById('f-money').value=money-item.price;renderSlotsPanel();}
-  else if(type==='gloves'){const{item}=pendingAction;if(money<item.price){showToast('Dinheiro insuficiente!');closeModal();return;}if(!inventory.luvas)inventory.luvas=[];inventory.luvas.push(JSON.parse(JSON.stringify(item)));document.getElementById('f-money').value=money-item.price;renderSlotsPanel();}
-  else if(type==='weapon'){const{customized}=pendingAction;if(money<customized.finalPrice){showToast('Dinheiro insuficiente!');closeModal();return;}inventory.weapon.push(customized);document.getElementById('f-money').value=money-customized.finalPrice;updateWeight();renderWeaponInvPanel();}
+  if(type==='armor'){const{cat,idx}=pendingAction;const item=ARMOR[cat][idx];if(money<item.price){showToast('Dinheiro insuficiente!');closeModal();return;}if(!inventory[cat])inventory[cat]=[];const ai=JSON.parse(JSON.stringify(item));ai.paidPrice=item.price;inventory[cat].push(ai);document.getElementById('f-money').value=money-item.price;renderSlotsPanel();}
+  else if(type==='gloves'){const{item}=pendingAction;if(money<item.price){showToast('Dinheiro insuficiente!');closeModal();return;}if(!inventory.luvas)inventory.luvas=[];const gi=JSON.parse(JSON.stringify(item));gi.paidPrice=item.price||item.finalPrice;inventory.luvas.push(gi);document.getElementById('f-money').value=money-item.price;renderSlotsPanel();}
+  else if(type==='weapon'){const{customized}=pendingAction;if(money<customized.finalPrice){showToast('Dinheiro insuficiente!');closeModal();return;}customized.paidPrice=customized.finalPrice;inventory.weapon.push(customized);document.getElementById('f-money').value=money-customized.finalPrice;updateWeight();renderWeaponInvPanel();}
   else if(type==='resetFicha'){doResetFicha();closeModal();return;}
   else if(type==='ammo'){
     const{item}=pendingAction;
@@ -2349,7 +2505,7 @@ function modalConfirm(){
     // Find existing stack of same name and add, or push new
     const existing=inventory.ammo.find(a=>a.name===item.name);
     if(existing){existing.units+=item.units;}
-    else{inventory.ammo.push({name:item.name,units:item.units,maxUnits:item.units,peso:item.peso,preco:item.preco,efeito:item.efeito});}
+    else{inventory.ammo.push({name:item.name,units:item.units,maxUnits:item.units,peso:item.peso,preco:item.preco,efeito:item.efeito,paidPrice:item.preco});}
     document.getElementById('f-money').value=money-item.preco;
     updateWeight();renderWeaponInvPanel();showToast('✓ '+item.name+' (×'+item.units+') comprado!');
   }
@@ -2363,7 +2519,7 @@ function modalConfirm(){
     document.getElementById('f-money').value=money-item.preco;
     updateWeight();renderUtilInvPanel();showToast('✓ '+item.name+' comprado!');
   }
-  else if(type==='weaponShieldCustom'){const{displayName,defesa,dur,pen,weight,finalPrice,tags,empAtk,manuseio,baseW}=pendingAction;if(money<finalPrice){showToast('Dinheiro insuficiente!');closeModal();return;}const obj={name:displayName,displayName,danoS:empAtk||baseW.danoS,danoDP:empAtk||baseW.danoDP,crit:baseW.crit,critMul:baseW.critMul,critEff:baseW.critEff,alcance:baseW.alcance,tipo:baseW.tipo,weight:weight||2,dur,price:finalPrice,finalPrice,manuseio:manuseio||'Versátil',isShield:true,defesa,pen,customTags:tags};inventory.weapon.push(obj);document.getElementById('f-money').value=money-finalPrice;updateWeight();renderWeaponInvPanel();renderFichaWeapons();}
+  else if(type==='weaponShieldCustom'){const{displayName,defesa,dur,pen,weight,finalPrice,tags,empAtk,manuseio,baseW}=pendingAction;if(money<finalPrice){showToast('Dinheiro insuficiente!');closeModal();return;}const obj={name:displayName,displayName,danoS:empAtk||baseW.danoS,danoDP:empAtk||baseW.danoDP,crit:baseW.crit,critMul:baseW.critMul,critEff:baseW.critEff,alcance:baseW.alcance,tipo:baseW.tipo,weight:weight||2,dur,price:finalPrice,finalPrice,paidPrice:finalPrice,manuseio:manuseio||'Versátil',isShield:true,defesa,pen,customTags:tags};inventory.weapon.push(obj);document.getElementById('f-money').value=money-finalPrice;updateWeight();renderWeaponInvPanel();renderFichaWeapons();}
   else if(type==='repair'){const{slot,itemName,cost}=pendingAction;if(money<cost){showToast('Dinheiro insuficiente!');closeModal();return;}const dk=dKey(slot,itemName);itemDamage[dk]=0;document.getElementById('f-money').value=money-cost;showToast('🔧 Item reparado!');renderSlotsPanel();}
   else if(type==='repairWeapon'){const{idx,cost}=pendingAction;if(money<cost){showToast('Dinheiro insuficiente!');closeModal();return;}itemDamage['weapon__'+idx]=0;document.getElementById('f-money').value=money-cost;showToast('🔧 Arma reparada!');renderWeaponInvPanel();renderFichaWeapons();}
   else if(type==='deleteArmor'){const{slot,idx,itemName}=pendingAction;if(equipped[slot]&&equipped[slot].name===itemName){equipped[slot]=null;recalcCombat();}const dk=dKey(slot,itemName);delete itemDamage[dk];inventory[slot].splice(idx,1);renderSlotsPanel();showToast('🗑 Excluído.');}
@@ -3709,8 +3865,8 @@ function updateDadoCuraField(){
 }
 
 // ── MODAL/TOAST ──
-function showModal(title,body,okLabel,btnClass){document.getElementById('modal-title').textContent=title;document.getElementById('modal-body').innerHTML=body;const btn=document.getElementById('modal-ok-btn');btn.textContent=okLabel||'Confirmar';btn.className='modal-ok'+(btnClass?' '+btnClass:'');document.getElementById('modal-overlay').classList.add('open');}
-function closeModal(){document.getElementById('modal-overlay').classList.remove('open');pendingAction=null;}
+function showModal(title,body,okLabel,btnClass){document.getElementById('modal-title').textContent=title;document.getElementById('modal-body').innerHTML=body;const btn=document.getElementById('modal-ok-btn');if(okLabel===null){btn.style.display='none';}else{btn.style.display='';btn.textContent=okLabel||'Confirmar';btn.className='modal-ok'+(btnClass?' '+btnClass:'');}document.getElementById('modal-overlay').classList.add('open');}
+function closeModal(){document.getElementById('modal-overlay').classList.remove('open');pendingAction=null;const btn=document.getElementById('modal-ok-btn');if(btn)btn.style.display='';}
 document.getElementById('modal-overlay').addEventListener('click',function(e){if(e.target===this)closeModal();});
 function showToast(msg){let t=document.getElementById('_toast');if(!t){t=document.createElement('div');t.id='_toast';t.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--border2);color:var(--txt);font-size:12px;font-weight:500;padding:10px 18px;border-radius:8px;z-index:3000;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap';document.body.appendChild(t);}t.textContent=msg;t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',2400);}
 
@@ -4102,6 +4258,7 @@ function gatherData(){
   d._ceOwned=JSON.stringify(ceOwned);
   d._ccOwned=JSON.stringify(ccOwned);d._ccAdapts=JSON.stringify(ccAdaptations);
   d._poseActive=poseActive;
+  d._upgrades=JSON.stringify(inventory.upgrades||{});
   d._calcSpells=JSON.stringify(calcSavedSpells);
   const dadoCura=document.getElementById('dado-cura-val');if(dadoCura)d['dado-cura-val']=dadoCura.value;
   return d;
@@ -4110,7 +4267,7 @@ function askResetFicha(){showModal('⚠ Formatar Ficha do Zero','<strong style="
 function doResetFicha(){
   localStorage.removeItem('rpg-sheet');
   // Reset all state
-  inventory={weapon:[],capacete:[],peitoral:[],calca:[],botas:[],luvas:[],ammo:[]};
+  inventory={weapon:[],capacete:[],peitoral:[],calca:[],botas:[],luvas:[],ammo:[],upgrades:{}};
   equipped={capacete:null,peitoral:null,calca:null,botas:null,luvas:null};
   equippedWeapons={slot1:null,slot2:null};wepAmmo={};
   itemDamage={};resRows=[];vulnRows=[];
@@ -4200,6 +4357,7 @@ function loadSheet(){
       if(d._ccOwned)try{Object.assign(ccOwned,JSON.parse(d._ccOwned));}catch(_){}
       if(d._ccAdapts)try{ccAdaptations=JSON.parse(d._ccAdapts);}catch(_){}
       if(d._poseActive)poseActive=!!d._poseActive;
+      if(d._upgrades)try{inventory.upgrades=JSON.parse(d._upgrades);}catch(_){}
       if(d._calcSpells)try{calcSavedSpells=JSON.parse(d._calcSpells);}catch(_){}
       reapplyFichaDots();
     }
