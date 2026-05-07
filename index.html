@@ -617,6 +617,7 @@ input[type=file]{display:none}
   <div class="equip-tabs">
     <button class="equip-tab active" onclick="switchEquipTab('armadura',this)">🛡 Armadura</button>
     <button class="equip-tab" onclick="switchEquipTab('armas',this)">⚔ Armas</button>
+    <button class="equip-tab" onclick="switchEquipTab('util',this)">🧪 Utilitários</button>
   </div>
   <div class="equip-panel active" id="equip-panel-armadura">
     <div class="equip-layout">
@@ -667,6 +668,7 @@ input[type=file]{display:none}
     </div>
   </div>
   <div class="equip-panel" id="equip-panel-armas"><div id="weapon-inv-panel"></div></div>
+  <div class="equip-panel" id="equip-panel-util"><div id="util-inv-panel"></div></div>
   <div class="save-bar"><button class="save-btn" onclick="saveSheet()">💾 Salvar</button><span class="save-msg" id="save-msg2">✓ Salvo</span></div>
 </div>
 </div>
@@ -1161,7 +1163,7 @@ function calcTotal(attr,name){
   const fcB=getFCBonus(attr,name);
   if(dual){
     bonWrap.innerHTML='<div class="sk-bon-d4">'+(fcB?'+'+fcB+'+d4':'+d4')+'</div>';
-    document.getElementById(ttId(attr,name)).textContent=per+(fcB?'+'+fcB:'')+'+d4';
+    document.getElementById(ttId(attr,name)).textContent=Number(per)+(fcB?'+'+fcB:'')+'+d4';
   } else {
     let bonEl=bonWrap.querySelector('.sk-bon');
     if(!bonEl){
@@ -1173,7 +1175,7 @@ function calcTotal(attr,name){
       if(bonEl)bonEl.addEventListener('input',function(){calcTotal(this.dataset.attr,this.dataset.name);});
     }
     const man=parseInt(bonEl?.value)||0;
-    document.getElementById(ttId(attr,name)).textContent=per+man+fcB;
+    document.getElementById(ttId(attr,name)).textContent=Number(per)+Number(man)+Number(fcB);
   }
   autoSave();
 }
@@ -1279,7 +1281,7 @@ function updatePE(){
   document.getElementById('exh-label').textContent=t;document.getElementById('exh-sub').textContent=s;
   autoSave();
 }
-function updateWeight(){let w=0;inventory.weapon.forEach((it,i)=>{const dk='weapon__'+i;const dmg=itemDamage[dk]||0;if(dmg<(it.dur||1))w+=it.weight||0;});const pct=Math.min(100,Math.round(w/10*100));document.getElementById('weight-display').textContent=w+'/10';document.getElementById('weight-bar').style.width=pct+'%';document.getElementById('weight-bar').style.background=pct>80?'var(--red)':pct>60?'#c07020':'var(--gold)';}
+function updateWeight(){let w=0;inventory.weapon.forEach((it,i)=>{const dk='weapon__'+i;const dmg=itemDamage[dk]||0;if(dmg<(it.dur||1))w+=it.weight||0;});if(inventory.util)inventory.util.forEach(function(it){const p=parseFloat(it.peso);if(!isNaN(p))w+=p*(it.qty||1);});const pct=Math.min(100,Math.round(w/10*100));document.getElementById('weight-display').textContent=w+'/10';document.getElementById('weight-bar').style.width=pct+'%';document.getElementById('weight-bar').style.background=pct>80?'var(--red)':pct>60?'#c07020':'var(--gold)';}
 
 function recalcCombat(){
   let def=0,pen=0;
@@ -1734,8 +1736,50 @@ function copyRoll(slotLabel,asRoll){
   const doCopy=t=>{navigator.clipboard.writeText(t).then(()=>showToast('📋 Copiado: '+t)).catch(()=>{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast('📋 Copiado!');});};
   doCopy(text);
 }
-function switchEquipTab(tab,btn){document.querySelectorAll('.equip-tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.equip-panel').forEach(p=>p.classList.remove('active'));btn.classList.add('active');document.getElementById('equip-panel-'+tab).classList.add('active');if(tab==='armas')renderWeaponInvPanel();if(tab==='armadura')renderSlotsPanel();}
+function switchEquipTab(tab,btn){document.querySelectorAll('.equip-tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.equip-panel').forEach(p=>p.classList.remove('active'));btn.classList.add('active');document.getElementById('equip-panel-'+tab).classList.add('active');if(tab==='armas')renderWeaponInvPanel();if(tab==='armadura')renderSlotsPanel();if(tab==='util')renderUtilInvPanel();}
 function dKey(slot,name){return slot+'__'+name.replace(/\s/g,'_');}
+function renderUtilInvPanel(){
+  const panel=document.getElementById('util-inv-panel');if(!panel)return;
+  if(!inventory.util||inventory.util.length===0){
+    panel.innerHTML='<div style="font-size:11px;color:var(--txt3);padding:20px;text-align:center">Nenhum utilitário no inventário</div>';
+    return;
+  }
+  let html='<div style="padding:4px">';
+  html+='<div style="font-size:11px;font-weight:700;color:var(--txt2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">Utilitários</div>';
+  html+='<table style="width:100%;border-collapse:collapse">';
+  html+='<thead><tr style="font-size:9px;color:var(--txt3);text-transform:uppercase;letter-spacing:.4px">';
+  html+='<th style="text-align:left;padding:4px 6px">Item</th><th style="text-align:center;padding:4px 6px">Qtd</th><th style="text-align:center;padding:4px 6px">Peso</th><th style="text-align:center;padding:4px 6px">Ação</th></tr></thead><tbody>';
+  inventory.util.forEach(function(item,idx){
+    html+='<tr style="border-top:1px solid var(--border)">';
+    html+='<td style="padding:5px 6px;font-size:12px;font-weight:600;color:var(--txt)">'+item.name+'</td>';
+    html+='<td style="text-align:center;padding:5px 6px"><div style="display:flex;align-items:center;justify-content:center;gap:4px">';
+    html+='<button onclick="utilQtyChange('+idx+',-1)" style="width:20px;height:20px;border-radius:4px;background:var(--bg4);border:1px solid var(--border);color:var(--txt);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center">-</button>';
+    html+='<span id="util-qty-'+idx+'" style="min-width:22px;text-align:center;font-size:12px;font-weight:700;color:var(--gold)">'+item.qty+'</span>';
+    html+='<button onclick="utilQtyChange('+idx+',+1)" style="width:20px;height:20px;border-radius:4px;background:var(--bg4);border:1px solid var(--border);color:var(--txt);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center">+</button>';
+    html+='</div></td>';
+    html+='<td style="text-align:center;padding:5px 6px;font-size:11px;color:var(--txt2)">'+item.peso+'</td>';
+    html+='<td style="text-align:center;padding:5px 6px"><button onclick="utilDelete('+idx+')" style="font-size:10px;padding:3px 8px;background:var(--bg4);border:1px solid var(--border);color:var(--red3);border-radius:4px;cursor:pointer">🗑</button></td>';
+    html+='</tr>';
+  });
+  html+='</tbody></table></div>';
+  panel.innerHTML=html;
+}
+
+function utilQtyChange(idx,delta){
+  if(!inventory.util||!inventory.util[idx])return;
+  inventory.util[idx].qty=Math.max(0,(inventory.util[idx].qty||1)+delta);
+  if(inventory.util[idx].qty===0){
+    inventory.util.splice(idx,1);
+  }
+  renderUtilInvPanel();updateWeight();autoSave();
+}
+
+function utilDelete(idx){
+  if(!inventory.util)return;
+  inventory.util.splice(idx,1);
+  renderUtilInvPanel();updateWeight();autoSave();
+}
+
 function scrollToSlot(slot){showPage('equip');document.querySelectorAll('.equip-tab').forEach((t,i)=>{if(i===0)t.classList.add('active');else t.classList.remove('active');});document.querySelectorAll('.equip-panel').forEach((p,i)=>{if(i===0)p.classList.add('active');else p.classList.remove('active');});setTimeout(()=>{const el=document.getElementById('slot-card-'+slot);if(el)el.scrollIntoView({behavior:'smooth',block:'center'});},150);}
 function renderSlotsPanel(){
   const panel=document.getElementById('slots-panel');panel.innerHTML='';
@@ -1905,20 +1949,53 @@ function toggleCat(cat){
   ['protecoes','armas','utilitarios','aprimoramentos'].forEach(s=>{document.getElementById('loja-'+s).classList.remove('open');document.getElementById('cat-btn-'+s).classList.remove('open');});
   if(!isOpen){sec.classList.add('open');btn.classList.add('open');if(cat==='protecoes'&&!lojaBuilt.protecoes){buildLojaProtecoes();lojaBuilt.protecoes=true;}if(cat==='armas'&&!lojaBuilt.armas){buildLojaArmas();lojaBuilt.armas=true;}if(cat==='utilitarios'&&!lojaBuilt.utilitarios){buildLojaUtilitarios();lojaBuilt.utilitarios=true;}}
 }
+const UTIL_SECTIONS=[
+  {id:'mun',icon:'🏹',title:'Munições',sub:'Flechas, Virotes, Cartuchos e Especiais'},
+  {id:'ace',icon:'🎒',title:'Acessórios',sub:'Instrumentos, Mochilas, Itens Comuns e Explosivos'},
+  {id:'fer',icon:'🧰',title:'Ferramentas',sub:'Maletas, Kits e Conjuntos Profissionais'},
+  {id:'alq',icon:'⚗️',title:'Alquímicos',sub:'Remédios, Soros, Venenos, Géis e mais'},
+  {id:'ves',icon:'👗',title:'Vestimentas',sub:'Roupas, Uniformes, Fantasias e Acessórios'},
+];
+
 function buildLojaUtilitarios(){
   const cont=document.getElementById('loja-utilitarios-content');if(!cont)return;
   cont.innerHTML='';
-  const sec=document.createElement('div');
-  sec.innerHTML='<div id="util-mun-btn" onclick="toggleUtilMun()" style="display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 14px;cursor:pointer;margin-bottom:6px;user-select:none">'+
-    '<div style="display:flex;align-items:center;gap:8px">'+
-    '<span style="font-size:18px">🏹</span>'+
-    '<div><div style="font-size:13px;font-weight:700;color:var(--txt)">Munições</div><div style="font-size:10px;color:var(--txt3)">Flechas, Virotes, Cartuchos e Especiais</div></div>'+
-    '</div>'+
-    '<span id="util-mun-arrow" style="font-size:12px;color:var(--txt3);transition:transform .2s">▼</span>'+
-    '</div>'+
-    '<div id="util-mun-body" style="display:none"></div>';
-  cont.appendChild(sec);
+  UTIL_SECTIONS.forEach(function(s){
+    const wrap=document.createElement('div');
+    wrap.style.marginBottom='6px';
+    wrap.innerHTML=
+      '<div id="util-'+s.id+'-btn" onclick="toggleUtilSec(\''+s.id+'\')" style="display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 14px;cursor:pointer;user-select:none">'+
+        '<div style="display:flex;align-items:center;gap:8px">'+
+          '<span style="font-size:18px">'+s.icon+'</span>'+
+          '<div><div style="font-size:13px;font-weight:700;color:var(--txt)">'+s.title+'</div><div style="font-size:10px;color:var(--txt3)">'+s.sub+'</div></div>'+
+        '</div>'+
+        '<span id="util-'+s.id+'-arrow" style="font-size:12px;color:var(--txt3);transition:transform .2s">▼</span>'+
+      '</div>'+
+      '<div id="util-'+s.id+'-body" style="display:none;padding-top:4px"></div>';
+    cont.appendChild(wrap);
+  });
 }
+
+function toggleUtilSec(id){
+  const body=document.getElementById('util-'+id+'-body');
+  const arrow=document.getElementById('util-'+id+'-arrow');
+  const btn=document.getElementById('util-'+id+'-btn');
+  if(!body)return;
+  const open=body.style.display==='none';
+  body.style.display=open?'block':'none';
+  if(arrow)arrow.style.transform=open?'rotate(180deg)':'';
+  if(btn)btn.style.borderColor=open?'var(--red)':'var(--border)';
+  if(open&&body.innerHTML===''){
+    if(id==='mun')buildMunicoesList();
+    else if(id==='ace')buildAcessoriosList();
+    else if(id==='fer')buildFerramentasList();
+    else if(id==='alq')buildAlquimicosList();
+    else if(id==='ves')buildVestimentasList();
+  }
+}
+
+function toggleUtilMun(){toggleUtilSec('mun');}
+
 
 const AMMO_GROUPS=[
   {name:'Flechas e Virotes',items:[
@@ -1978,16 +2055,114 @@ function buildMunicoesList(){
   });
 }
 
-function toggleUtilMun(){
-  const body=document.getElementById('util-mun-body');
-  const arrow=document.getElementById('util-mun-arrow');
-  const btn=document.getElementById('util-mun-btn');
-  if(!body)return;
-  const open=body.style.display==='none';
-  body.style.display=open?'block':'none';
-  if(arrow)arrow.style.transform=open?'rotate(180deg)':'';
-  if(btn)btn.style.borderColor=open?'var(--red)':'var(--border)';
-  if(open&&body.innerHTML==='')buildMunicoesList();
+
+const ACESSORIOS_GROUPS=[
+  {name:'Instrumentos e Itens Comuns',items:[
+    {name:'Instrumento Musical',peso:'-',preco:10},
+    {name:'Item Menor',peso:1,preco:4},
+    {name:'Conjunto de Itens Menores',peso:1,preco:6},
+    {name:'Item Médio',peso:2,preco:6},
+    {name:'Conjunto de Itens Médios',peso:2,preco:8},
+    {name:'Item Maior',peso:3,preco:10},
+  ]},
+  {name:'Mochilas',items:[
+    {name:'Bolsa Pequena',peso:'-',preco:8},
+    {name:'Bolsa Média',peso:'-',preco:12},
+    {name:'Mochila Média',peso:'-',preco:16},
+    {name:'Mochila Grande',peso:'-',preco:20},
+  ]},
+  {name:'Explosivo',items:[
+    {name:'Explosivo',peso:1,preco:24},
+  ]},
+];
+
+const FERRAMENTAS_GROUPS=[
+  {name:'Ferramentas',items:[
+    {name:'Maleta de Treinamento',peso:2,preco:18},
+    {name:'Conjunto de Demolição e Arrombamento',peso:2,preco:12},
+    {name:'Caixa de Primeiros Socorros',peso:2,preco:20},
+    {name:'Ração para Animais',peso:2,preco:10},
+    {name:'Ferramentas do Arcanista',peso:2,preco:24},
+    {name:'Estojo de Falsificações',peso:2,preco:20},
+    {name:'Livros Acadêmicos',peso:2,preco:16},
+    {name:'Maleta do Detetive',peso:2,preco:12},
+    {name:'Manual de Instruções',peso:2,preco:10},
+    {name:'Ferramentas de Tecnologia',peso:2,preco:22},
+    {name:'Conjunto de Itens Esotéricos',peso:2,preco:20},
+  ]},
+];
+
+const ALQUIMICOS_GROUPS=[
+  {name:'Alquímicos',items:[
+    {name:'Remédios',peso:1,preco:12},
+    {name:'Soro de Resistência',peso:1,preco:20},
+    {name:'Soro de Enfraquecimento',peso:1,preco:18},
+    {name:'Adrenalina',peso:1,preco:18},
+    {name:'Veneno',peso:1,preco:14},
+    {name:'Antídoto',peso:1,preco:18},
+    {name:'Gel de Resistência',peso:1,preco:22},
+    {name:'Gel de Enfraquecimento',peso:1,preco:20},
+    {name:'Proteína',peso:1,preco:16},
+    {name:'Pastilhas de Fraqueza',peso:1,preco:14},
+    {name:'Energético',peso:1,preco:18},
+    {name:'Comprimido de Peso',peso:1,preco:10},
+    {name:'Colírios de Visão',peso:1,preco:18},
+    {name:'Creme de Movimento',peso:1,preco:16},
+    {name:'Óleo de Aprimoramento',peso:1,preco:24},
+    {name:'Maquiagem',peso:1,preco:10},
+    {name:'Pílulas de Sanidade',peso:1,preco:28},
+  ]},
+];
+
+const VESTIMENTAS_GROUPS=[
+  {name:'Vestimentas',items:[
+    {name:'Roupas de Civil',peso:1,preco:10},
+    {name:'Uniforme da Empresa',peso:1,preco:14},
+    {name:'Fantasia',peso:1,preco:26},
+    {name:'Roupas Chiques',peso:1,preco:22},
+    {name:'Traje de Inverno',peso:1,preco:12},
+    {name:'Traje de Verão',peso:1,preco:6},
+    {name:'Manto',peso:1,preco:8},
+    {name:'Máscara',peso:1,preco:10},
+  ]},
+];
+
+function buildGenericUtilList(bodyId,groups,buyType){
+  const body=document.getElementById(bodyId);if(!body)return;
+  let html='';
+  groups.forEach(function(g,gi){
+    html+='<div class="loja-category" style="margin-bottom:10px">';
+    html+='<div class="loja-cat-name" style="color:#f97316">'+g.name+'</div>';
+    html+='<table class="loja-tbl"><thead><tr><th>Nome</th><th>Peso</th><th>Preço</th></tr></thead><tbody>';
+    g.items.forEach(function(item,idx){
+      html+='<tr>'+
+        '<td data-label="Nome" style="font-weight:600">'+item.name+'</td>'+
+        '<td data-label="Peso" class="stat">'+item.peso+'</td>'+
+        '<td data-label="Comprar"><button class="buy-btn" data-gidx="'+gi+'" data-idx="'+idx+'" data-buytype="'+buyType+'">'+item.preco+' 🪙</button></td>'+
+      '</tr>';
+    });
+    html+='</tbody></table></div>';
+  });
+  body.innerHTML=html;
+  body.querySelectorAll('.buy-btn[data-buytype]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      const map={ace:ACESSORIOS_GROUPS,fer:FERRAMENTAS_GROUPS,alq:ALQUIMICOS_GROUPS,ves:VESTIMENTAS_GROUPS};
+      const gArr=map[btn.dataset.buytype];
+      const item=gArr[parseInt(btn.dataset.gidx)].items[parseInt(btn.dataset.idx)];
+      askBuyGenericUtil(item);
+    });
+  });
+}
+
+function buildAcessoriosList(){buildGenericUtilList('util-ace-body',ACESSORIOS_GROUPS,'ace');}
+function buildFerramentasList(){buildGenericUtilList('util-fer-body',FERRAMENTAS_GROUPS,'fer');}
+function buildAlquimicosList(){buildGenericUtilList('util-alq-body',ALQUIMICOS_GROUPS,'alq');}
+function buildVestimentasList(){buildGenericUtilList('util-ves-body',VESTIMENTAS_GROUPS,'ves');}
+
+function askBuyGenericUtil(item){
+  const money=parseInt(document.getElementById('f-money').value)||0;
+  pendingAction={type:'genericUtil',item};
+  showModal('Comprar Item','Comprar <strong>'+item.name+'</strong> por <strong>'+item.preco+' 🪙</strong>?<br><small style="color:'+(money<item.preco?'var(--red3)':'var(--green2)')+'">Dinheiro: '+money+'🪙'+(money<item.preco?' ⚠ insuficiente':'')+'</small>','Comprar');
 }
 
 function askBuyAmmo(item){
@@ -2177,6 +2352,16 @@ function modalConfirm(){
     else{inventory.ammo.push({name:item.name,units:item.units,maxUnits:item.units,peso:item.peso,preco:item.preco,efeito:item.efeito});}
     document.getElementById('f-money').value=money-item.preco;
     updateWeight();renderWeaponInvPanel();showToast('✓ '+item.name+' (×'+item.units+') comprado!');
+  }
+  else if(type==='genericUtil'){
+    const{item}=pendingAction;
+    if(money<item.preco){showToast('Dinheiro insuficiente!');closeModal();return;}
+    if(!inventory.util)inventory.util=[];
+    const existing=inventory.util.find(u=>u.name===item.name);
+    if(existing){existing.qty=(existing.qty||1)+1;}
+    else{inventory.util.push({name:item.name,peso:item.peso,preco:item.preco,qty:1});}
+    document.getElementById('f-money').value=money-item.preco;
+    updateWeight();renderUtilInvPanel();showToast('✓ '+item.name+' comprado!');
   }
   else if(type==='weaponShieldCustom'){const{displayName,defesa,dur,pen,weight,finalPrice,tags,empAtk,manuseio,baseW}=pendingAction;if(money<finalPrice){showToast('Dinheiro insuficiente!');closeModal();return;}const obj={name:displayName,displayName,danoS:empAtk||baseW.danoS,danoDP:empAtk||baseW.danoDP,crit:baseW.crit,critMul:baseW.critMul,critEff:baseW.critEff,alcance:baseW.alcance,tipo:baseW.tipo,weight:weight||2,dur,price:finalPrice,finalPrice,manuseio:manuseio||'Versátil',isShield:true,defesa,pen,customTags:tags};inventory.weapon.push(obj);document.getElementById('f-money').value=money-finalPrice;updateWeight();renderWeaponInvPanel();renderFichaWeapons();}
   else if(type==='repair'){const{slot,itemName,cost}=pendingAction;if(money<cost){showToast('Dinheiro insuficiente!');closeModal();return;}const dk=dKey(slot,itemName);itemDamage[dk]=0;document.getElementById('f-money').value=money-cost;showToast('🔧 Item reparado!');renderSlotsPanel();}
