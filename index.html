@@ -565,8 +565,8 @@ input[type=file]{display:none}
     <div class="stat-card"><div class="stat-card-lbl">👣 Movimento</div><input type="number" id="f-movimento" class="editable" placeholder="0"></div>
   </div>
   <div id="pose-btn-wrap" style="display:none;margin:6px 0">
-    <button id="pose-btn" onclick="togglePose()" style="width:100%;padding:7px 12px;font-size:12px;font-weight:700;border-radius:7px;border:2px solid var(--green);background:var(--bg3);color:var(--green2);cursor:pointer;transition:all .2s;letter-spacing:.5px">🥋 Pose de Combate</button>
-    <div id="pose-active-info" style="display:none;font-size:10px;color:var(--gold);text-align:center;margin-top:3px">⚡ Pose ativa — −7 PE ao ativar</div>
+    <div id="pose-btns-row" style="display:flex;gap:4px;flex-wrap:wrap"></div>
+    <div id="pose-active-info" style="display:none;margin-top:4px;padding:5px 8px;background:#0d1f0d;border:1px solid var(--green);border-radius:6px"></div>
   </div>
   <div class="eq-wep-row">
     <div class="eq-wep-card"><div class="eq-wep-slot-lbl">⚔ Mão 1 / Principal</div><div id="ficha-wep1-content"><div class="eq-wep-empty">Nenhuma arma equipada</div></div></div>
@@ -1003,7 +1003,11 @@ const PA_NODES=[
 const MN_NODES=[
   {id:'maonua',name:'Caminho da Mão Nua',grade:1,maxLevels:1,stars:false,isRoot:true,levels:[{n:1,txt:'Você ganha Maestria em Perícia: Artes Marciais ou Perícia: Atletismo.',hasChoice:true,choiceSkills:[{attr:'fisico',name:'Artes Marciais'},{attr:'fisico',name:'Atletismo'}]}]},
   {id:'poseCombate',name:'Pose de Combate',grade:2,maxLevels:1,stars:true,levels:[{n:1,txt:'Gastando 7 PE, você pode ativar a Pose de Combate. Você só pode usar uma pose por turno e a cada turno ativo gasta 3 PE. Enquanto ativa, ganha: +2 de bônus em Artes Marciais, Atletismo, Fortitude e Dano Físico.'}]},
-  {id:'posturaMamifero',name:'Postura do Mamífero',grade:4,maxLevels:2,stars:true,levels:[{n:1,txt:'Você aprende a variação Pose de Combate: Postura do Mamífero. Além dos benefícios da Pose de Combate, concede: +3 de Dano Físico, +3 metros de movimento e +3 pontos em Defesa.'},{n:2,txt:'Todos os benefícios da Postura do Mamífero aumentam de +3 para +5.'}]}
+  {id:'posturaMamifero',name:'Postura do Mamífero',grade:4,maxLevels:2,stars:true,levels:[{n:1,txt:'Você aprende a variação Pose de Combate: Postura do Mamífero. Além dos benefícios da Pose de Combate, concede: +3 de Dano Físico, +3 metros de movimento e +3 pontos em Defesa.'},{n:2,txt:'Todos os benefícios da Postura do Mamífero aumentam de +3 para +5.'}]},
+  {id:'posturaAve',name:'Postura da Ave',grade:4,maxLevels:2,stars:true,levels:[{n:1,txt:'Pose de Combate: Postura da Ave. Benefícios adicionais: +3 em Esquivar, dano de queda reduzido em 1/4, e você pode saltar 3 metros mais alto.'},{n:2,txt:'Todos os benefícios anteriores da Postura da Ave aumentam para +5. Você passa a resistir metade (1/2) de todo dano de queda sofrido.'}]},
+  {id:'posturaReptil',name:'Postura do Réptil',grade:4,maxLevels:2,stars:true,levels:[{n:1,txt:'Pose de Combate: Postura do Réptil. Benefícios adicionais: +1 reação na rodada. Contra-ataques bem-sucedidos aplicam Atordoado no inimigo por 1 turno. Vantagem em testes para agarrar.'},{n:2,txt:'Os benefícios base da Pose de Combate aumentam para +5 (em vez de +2).'}]},
+  {id:'posturaPeixe',name:'Postura do Peixe',grade:4,maxLevels:2,stars:true,levels:[{n:1,txt:'Pose de Combate: Postura do Peixe. Benefícios adicionais: +3 em Bloquear Físico. Ao bloquear com sucesso, pode gastar 9 PE para revidar metade do dano recebido. Após um bloqueio bem-sucedido, pode realizar uma ação de movimento.'},{n:2,txt:'O bônus em Bloquear Físico da Postura do Peixe aumenta de +3 para +5.'}]},
+  {id:'armaNatural',name:'Arma Natural Aprimorada',grade:2,maxLevels:3,stars:true,levels:[{n:1,txt:'O 1d6 do seu dano físico desarmado/luva se torna 1d8.'},{n:2,txt:'O 1d8 do seu dano físico desarmado/luva se torna 1d10.'},{n:3,txt:'O 1d10 do seu dano físico desarmado/luva se torna 1d12.'}]}
 ];
 const MED_NODES=[
   {id:'medicina',name:'Medicina',grade:2,maxLevels:1,stars:false,isRoot:true,levels:[{n:1,txt:'Você ganha Maestria em Perícia: Medicina, Perícia: Restaurar ou Perícia: Resistir.',hasChoice:true,choiceSkills:[{attr:'intelecto',name:'Medicina'},{attr:'poder',name:'Restaurar'},{attr:'fisico',name:'Resistir'}]}]},
@@ -1094,7 +1098,9 @@ let paArmaChoice=null; // arma choice for Passo root
 let mnOwned={}; // {nodeId: levelsOwned}
 let mnActiveNode=null;
 let mnMaestriaChoice=null;
-let poseActive=false; // tracks if Pose de Combate / Postura do Mamífero is active
+let poseActive=false;
+let activePostura='base'; // 'base'|'mamifero'|'ave'|'reptil'|'peixe'
+// tracks if Pose de Combate / Postura do Mamífero is active
 // MED (Medicina) state
 let medOwned={}; // {nodeId: levelsOwned}
 let medActiveNode=null;
@@ -1320,9 +1326,12 @@ function recalcCombat(){
   const poseMov=getPoseMovBonus();
   const movEl=document.getElementById('f-movimento');
   if(movEl){
-    const baseM=parseInt(movEl.dataset.baseMov||movEl.value)||0;
-    if(!movEl.dataset.baseMov)movEl.dataset.baseMov=baseM;
-    movEl.value=baseM+(poseMov>0?poseMov:0);
+    // Subtract previous pose bonus to recover true base, then add current
+    const prevMov=parseInt(movEl.dataset.posemovbonus||0);
+    const cur=parseInt(movEl.value)||0;
+    const baseM=cur-prevMov;
+    movEl.value=baseM+poseMov;
+    movEl.dataset.posemovbonus=poseMov;
   }
 }
 function changeLevel(d){const el=document.getElementById('f-nivel');el.value=Math.max(1,Math.min(99,(parseInt(el.value)||1)+d));onLevelChange();}
@@ -1364,41 +1373,89 @@ function removeResFC(tipo,pct){
 function updatePoseButton(){
   const hasPose=(mnOwned['poseCombate']||0)>=1;
   const wrap=document.getElementById('pose-btn-wrap');
-  const btn=document.getElementById('pose-btn');
-  if(!wrap||!btn)return;
+  if(!wrap)return;
   wrap.style.display=hasPose?'':'none';
-  // Button label
-  const mamLvl=mnOwned['posturaMamifero']||0;
-  btn.textContent=mamLvl>=1?'🐾 Postura do Mamífero':'🥋 Pose de Combate';
-  // Active state styling
+  if(!hasPose)return;
+  // Build posturas list
+  const POSTURAS=[
+    {id:'base',   label:'🥋 Pose',      req:0},
+    {id:'mamifero',label:'🐾 Mamífero', req:mnOwned['posturaMamifero']||0},
+    {id:'ave',    label:'🦅 Ave',       req:mnOwned['posturaAve']||0},
+    {id:'reptil', label:'🦎 Réptil',    req:mnOwned['posturaReptil']||0},
+    {id:'peixe',  label:'🐟 Peixe',     req:mnOwned['posturaPeixe']||0},
+  ].filter(p=>p.req>0||p.id==='base');
+  const row=document.getElementById('pose-btns-row');
+  if(row){
+    row.innerHTML='';
+    // Desativar button
+    if(poseActive){
+      const off=document.createElement('button');
+      off.textContent='✖ Desativar';
+      off.style.cssText='flex:1;min-width:60px;padding:5px 8px;font-size:11px;font-weight:700;border-radius:6px;border:2px solid var(--red);background:#2a0a0a;color:var(--red3);cursor:pointer';
+      off.onclick=function(){poseActive=false;activePostura='base';updatePoseButton();applyPoseBonuses();recalcCombat();renderFichaWeapons();autoSave();};
+      row.appendChild(off);
+    }
+    POSTURAS.forEach(function(p){
+      const isActive=poseActive&&activePostura===p.id;
+      const btn=document.createElement('button');
+      btn.textContent=p.label;
+      btn.style.cssText='flex:1;min-width:60px;padding:5px 8px;font-size:11px;font-weight:700;border-radius:6px;border:2px solid var(--green);cursor:pointer;transition:all .15s;'+(isActive?'background:var(--green);color:#fff;':'background:var(--bg3);color:var(--green2);');
+      btn.onclick=function(){activatePostura(p.id);};
+      row.appendChild(btn);
+    });
+  }
+  // Info panel
+  const infoEl=document.getElementById('pose-active-info');
+  if(!infoEl)return;
   if(poseActive){
-    btn.style.background='var(--green)';btn.style.color='#fff';
-    document.getElementById('pose-active-info').style.display='block';
+    infoEl.style.display='block';
+    const pb=getPoseBaseBonus();
+    const mamLv=mnOwned['posturaMamifero']||0;
+    const aveLv=mnOwned['posturaAve']||0;
+    const reptLv=mnOwned['posturaReptil']||0;
+    const peixLv=mnOwned['posturaPeixe']||0;
+    let lines=['🥋 Base: +'+pb+' AM/Atl/Fort/Dano'];
+    if(activePostura==='mamifero'&&mamLv>=1){const mb=mamLv>=2?5:3;lines.push('🐾 +'+mb+' DEF/MOV/Dano extra');}
+    if(activePostura==='ave'&&aveLv>=1){const ab=aveLv>=2?5:3;lines.push('🦅 +'+ab+' Esquivar, queda 1/'+(aveLv>=2?'2':'4'));}
+    if(activePostura==='reptil'&&reptLv>=1)lines.push('🦎 +1 reação, vantagem agarrar');
+    if(activePostura==='peixe'&&peixLv>=1){const pb2=peixLv>=2?5:3;lines.push('🐟 +'+pb2+' Bloquear Físico');}
+    infoEl.innerHTML=lines.map(l=>'<div style="font-size:10px;color:var(--green2)">'+l+'</div>').join('');
   } else {
-    btn.style.background='var(--bg3)';btn.style.color='var(--green2)';
-    document.getElementById('pose-active-info').style.display='none';
+    infoEl.style.display='none';
   }
 }
-function togglePose(){
+function activatePostura(id){
   if(!poseActive){
-    // Activate: deduct 7 PE
+    // First activation: deduct 7 PE
     const gasto=parseInt(document.getElementById('f-pegasto').value)||0;
     document.getElementById('f-pegasto').value=gasto+7;
     updatePE();
     poseActive=true;
-  } else {
-    poseActive=false;
   }
+  activePostura=id;
   updatePoseButton();
-  // Apply/remove bonus to skill bones
   applyPoseBonuses();
   recalcCombat();
   renderFichaWeapons();
   autoSave();
 }
+function togglePose(){
+  activatePostura(activePostura||'base');
+  autoSave();
+}
 function applyPoseBonuses(){
   const hasPose=(mnOwned['poseCombate']||0)>=1;
-  if(!hasPose){poseActive=false;return;}
+  if(!hasPose){
+    poseActive=false;
+    // Clear any leftover pose bonuses from fields
+    ['Artes Marciais','Atletismo','Fortitude'].forEach(function(n){
+      const el=document.getElementById(bnId('fisico',n));if(!el)return;
+      const prev=parseInt(el.dataset.posebonus||0);if(prev){el.value=(parseInt(el.value)||0)-prev;el.dataset.posebonus=0;calcTotal('fisico',n);}
+    });
+    const eqEl=document.getElementById(bnId('fisico','Esquivar'));if(eqEl){const p=parseInt(eqEl.dataset.poseavebonus||0);if(p){eqEl.value=(parseInt(eqEl.value)||0)-p;eqEl.dataset.poseavebonus=0;calcTotal('fisico','Esquivar');}}
+    const blEl=document.getElementById(bnId('fisico','Bloquear Físico'));if(blEl){const p=parseInt(blEl.dataset.posepeixebonus||0);if(p){blEl.value=(parseInt(blEl.value)||0)-p;blEl.dataset.posepeixebonus=0;calcTotal('fisico','Bloquear Físico');}}
+    return;
+  }
   const mamLvl=mnOwned['posturaMamifero']||0;
   const mamBonus=mamLvl>=2?5:mamLvl>=1?3:0;
   const poseSkills=[{attr:'fisico',name:'Artes Marciais'},{attr:'fisico',name:'Atletismo'},{attr:'fisico',name:'Fortitude'}];
@@ -1409,23 +1466,55 @@ function applyPoseBonuses(){
     const prev=parseInt(bonEl.dataset.posebonus||0);
     const cur=parseInt(bonEl.value)||0;
     const base=cur-prev;
-    if(poseActive){bonEl.value=base+2;bonEl.dataset.posebonus=2;}
+    if(poseActive){const pb=getPoseBaseBonus();bonEl.value=base+pb;bonEl.dataset.posebonus=pb;}
     else{bonEl.value=base;bonEl.dataset.posebonus=0;}
     calcTotal(attr,name);
   });
+  // Postura da Ave: +3/+5 em Esquivar (only when ave is active postura)
+  const aveLvl=mnOwned['posturaAve']||0;
+  if(aveLvl>=1){
+    const aveBonus=(poseActive&&activePostura==='ave')?(aveLvl>=2?5:3):0;
+    const eqEl=document.getElementById(bnId('fisico','Esquivar'));
+    if(eqEl){const prev=parseInt(eqEl.dataset.poseavebonus||0);const cur=parseInt(eqEl.value)||0;const base=cur-prev;
+    eqEl.value=base+aveBonus;eqEl.dataset.poseavebonus=aveBonus;calcTotal('fisico','Esquivar');}
+  }
+  // Postura do Peixe: +3/+5 em Bloquear Físico (only when peixe is active)
+  const peixeLvl=mnOwned['posturaPeixe']||0;
+  if(peixeLvl>=1){
+    const peixeBonus=(poseActive&&activePostura==='peixe')?(peixeLvl>=2?5:3):0;
+    const blEl=document.getElementById(bnId('fisico','Bloquear Físico'));
+    if(blEl){const prev=parseInt(blEl.dataset.posepeixebonus||0);const cur=parseInt(blEl.value)||0;const base=cur-prev;
+    blEl.value=base+peixeBonus;blEl.dataset.posepeixebonus=peixeBonus;calcTotal('fisico','Bloquear Físico');}
+  }
   // Postura do Mamífero: +movement and +defense handled in recalcCombat
+}
+function getBareFistCrit(){
+  // If a glove is equipped, use its critLimiar; else default 20
+  const eq=equipped.luvas;
+  if(eq&&eq.critLimiar)return eq.critLimiar;
+  return 20;
+}
+function getArmaNaturalDie(){
+  const lv=mnOwned['armaNatural']||0;
+  if(lv>=3)return 'd12';
+  if(lv>=2)return 'd10';
+  if(lv>=1)return 'd8';
+  return 'd6'; // base gloves
+}
+function getPoseBaseBonus(){
+  return (mnOwned['posturaReptil']||0)>=2?5:2;
 }
 function getPoseDamageBonus(){
   if(!poseActive||(mnOwned['poseCombate']||0)<1)return 0;
-  const mamLvl=mnOwned['posturaMamifero']||0;
-  return 2+(mamLvl>=2?5:mamLvl>=1?3:0); // +2 from pose + mamifero bonus
+  const mamLvl=(activePostura==='mamifero')?(mnOwned['posturaMamifero']||0):0;
+  return getPoseBaseBonus()+(mamLvl>=2?5:mamLvl>=1?3:0);
 }
 function getPoseDefBonus(){
-  if(!poseActive||(mnOwned['posturaMamifero']||0)<1)return 0;
+  if(!poseActive||activePostura!=='mamifero'||(mnOwned['posturaMamifero']||0)<1)return 0;
   return (mnOwned['posturaMamifero']||0)>=2?5:3;
 }
 function getPoseMovBonus(){
-  if(!poseActive||(mnOwned['posturaMamifero']||0)<1)return 0;
+  if(!poseActive||activePostura!=='mamifero'||(mnOwned['posturaMamifero']||0)<1)return 0;
   return (mnOwned['posturaMamifero']||0)>=2?5:3;
 }
 
@@ -1610,8 +1699,30 @@ function renderFichaWeapons(){
     const isBareFist=!w;
     let html='';
     if(isBareFist){
-      html+='<div class="eq-wep-name" style="color:var(--txt3);font-style:italic">Mão nua (Luva/Artes Marciais)</div>';
-      html+='<div class="eq-wep-stats">Dano: <b>d4</b> &nbsp;Tipo: <b>Impacto</b></div>';
+      const poseB=getPoseDamageBonus();
+      const hasMN=(mnOwned['maonua']||0)>=1;
+      const naturalDie=hasMN?getArmaNaturalDie():'d6';
+      const fisVal=parseInt(document.getElementById('atr-fisico')?.value)||0;
+      const fisStr=fisVal>0?'+Físico('+fisVal+')':'';
+      const poseStr=poseB>0?'+'+poseB:'';
+      const danoStr=naturalDie+fisStr+poseStr;
+      const critLimiar=getBareFistCrit();
+      const eqLuva=equipped.luvas;
+      const luvaName=eqLuva?(eqLuva.displayName||eqLuva.name):null;
+      const wepLabel=luvaName?'Luvas: '+luvaName:'Mão nua';
+      html+='<div class="eq-wep-name" style="color:'+(eqLuva?'var(--txt)':'var(--txt3)')+';font-style:italic">'+wepLabel+' <span style="font-size:9px;color:var(--txt3)">(Artes Marciais)</span></div>';
+      html+='<div class="eq-wep-stats">';
+      html+='Dano: <b>'+danoStr+'</b>';
+      if(poseB>0)html+=' <span style="font-size:9px;color:var(--gold)">[+'+poseB+' Pose]</span>';
+      html+='<br>Crítico: <b>'+critLimiar+'×2</b>';
+      if(critLimiar<20)html+=' <span style="font-size:9px;color:var(--gold)">[Luva Reforçada]</span>';
+      html+=' (Atordoar) &nbsp;Tipo: <b>Impacto</b> &nbsp;Alcance: <b>1m</b>';
+      html+='</div>';
+      if(poseB>0){
+        html+='<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:3px">';
+        html+='<span style="font-size:9px;background:#1a2e1a;color:#86efac;padding:1px 5px;border-radius:3px">🥋 Pose+'+poseB+'</span>';
+        html+='</div>';
+      }
       const roll=buildAttackRollText(null,true);
       html+='<div class="eq-roll-row"><span class="eq-roll-label">🎲 Acerto:</span><span class="eq-roll-str" id="rollstr-'+slotLabel+'">'+roll+'</span><button class="eq-roll-copy" onclick="copyRoll(\''+slotLabel+'\',false)">📋</button><button class="eq-roll-copy" style="border-color:var(--gold);color:var(--gold)" onclick="copyRoll(\''+slotLabel+'\',true)">🎲 /r</button></div>';
       return html;
@@ -1816,7 +1927,9 @@ function unequipSlot(slot){equipped[slot]=null;renderSlotsPanel();recalcCombat()
 function applyDestroy(slot,itemName,maxDur,price){const dk=dKey(slot,itemName);const cur=itemDamage[dk]||0;if(cur>=maxDur){showToast('Item já destruído!');return;}itemDamage[dk]=cur+1;if(itemDamage[dk]>=maxDur){if(equipped[slot]&&equipped[slot].name===itemName){equipped[slot]=null;recalcCombat();}showToast('💔 Item destruído!');}else showToast('💥 Destruir: '+itemDamage[dk]+'/'+maxDur);renderSlotsPanel();autoSave();}
 function repairArmor(slot,itemName,origPrice){const cost=Math.ceil(origPrice/2);const money=parseInt(document.getElementById('f-money').value)||0;pendingAction={type:'repair',slot,itemName,cost};showModal('🔧 Reparar','Reparar <strong>'+itemName+'</strong> por <strong>'+cost+' 🪙</strong>?<br><small style="color:var(--txt2)">Dinheiro atual: '+money+'🪙</small>','Reparar');}
 function deleteArmorItem(slot,idx){const item=inventory[slot][idx];pendingAction={type:'deleteArmor',slot,idx,itemName:item.displayName||item.name};showModal('🗑 Excluir','Excluir <strong>'+(item.displayName||item.name)+'</strong>?','Excluir');}
-function equipGlovesAsWeapon(){const eq=equipped.luvas;if(!eq)return;const obj={...GLOVES_AS_WEAPON_BASE,displayName:'Luvas: '+(eq.displayName||eq.name),manuseio:'Versátil',customTags:['Mão Nua','d6+FIS'],dur:eq.dur,weight:0,price:eq.price,finalPrice:eq.price,isGloveWeapon:true};inventory.weapon.push(obj);renderWeaponInvPanel();updateWeight();showToast('⚔ Luvas adicionadas como arma!');autoSave();}
+function equipGlovesAsWeapon(){const eq=equipped.luvas;if(!eq)return;
+  const nd=(mnOwned['maonua']||0)>=1?getArmaNaturalDie():'d6';
+  const obj={...GLOVES_AS_WEAPON_BASE,danoS:nd+'+FIS',displayName:'Luvas: '+(eq.displayName||eq.name),manuseio:'Versátil',customTags:['Mão Nua',nd+'+FIS'],dur:eq.dur,weight:0,price:eq.price,finalPrice:eq.price,isGloveWeapon:true};inventory.weapon.push(obj);renderWeaponInvPanel();updateWeight();showToast('⚔ Luvas adicionadas como arma!');autoSave();}
 function renderWeaponInvPanel(){
   const panel=document.getElementById('weapon-inv-panel');
   if(inventory.weapon.length===0){panel.innerHTML='<div style="font-size:11px;color:var(--txt3);padding:20px;text-align:center">Nenhuma arma no inventário</div>';return;}
@@ -2386,6 +2499,7 @@ function askBuyGloves(idx){
   const itemCopy=JSON.parse(JSON.stringify(baseItem));
   if(c.mat==='composto')itemCopy.dur+=1;if(c.mat==='fragil'||c.mat==='fraco')itemCopy.dur=Math.max(1,itemCopy.dur-1);
   itemCopy.manuseio=manuseio;itemCopy.customTags=tags;itemCopy.displayName=baseItem.name+(tags.length?' ('+tags.join(', ')+')':'');itemCopy.price=finalPrice;itemCopy.finalPrice=finalPrice;
+  itemCopy.critLimiar=c.mat==='reforcado'?19:20; // Luva Reforçada: limiar 19
   pendingAction={type:'gloves',slot:'luvas',item:itemCopy};
   showModal('Confirmar Compra','Comprar <strong>'+itemCopy.displayName+'</strong> por <strong>'+finalPrice+' 🪙</strong>?<br><small style="color:'+(money<finalPrice?'var(--red3)':'var(--green2)')+'">Dinheiro: '+money+'🪙'+(money<finalPrice?' ⚠ insuficiente':'')+'</small>','Comprar');
 }
@@ -3104,7 +3218,7 @@ function buildMNTree(){
   html+=buildMNNodeHTML('maonua',true);
   html+='<div style="display:flex;justify-content:center"><div class="fc-cv"></div></div>';
   html+='<div style="display:flex;justify-content:center;align-items:flex-start;width:100%">';
-  ['poseCombate'].forEach(id=>{
+  ['poseCombate','armaNatural'].forEach(id=>{
     html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
     html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
     html+='<div class="fc-cv" style="height:16px"></div>';
@@ -3112,11 +3226,14 @@ function buildMNTree(){
     html+='</div>';
   });
   html+='</div>';
-  html+='<div style="display:flex;justify-content:center;width:100%;margin-top:4px">';
-  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-  html+='<div class="fc-cv" style="height:20px"></div>';
-  html+=buildMNNodeHTML('posturaMamifero',false);
-  html+='</div></div>';
+  html+='<div style="display:flex;justify-content:center;width:100%;margin-top:4px;gap:4px">';
+  ['posturaMamifero','posturaAve','posturaReptil','posturaPeixe'].forEach(function(pid){
+    html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
+    html+='<div class="fc-cv" style="height:20px"></div>';
+    html+=buildMNNodeHTML(pid,false);
+    html+='</div>';
+  });
+  html+='</div>';
   html+='</div>';
   container.innerHTML=html;
 }
@@ -3166,6 +3283,10 @@ function mnCheckPrereq(id,lv){
   if(id==='maonua')return true;
   if((mnOwned['maonua']||0)<1)return false;
   if(id==='posturaMamifero'&&(mnOwned['poseCombate']||0)<1)return false;
+  if(id==='armaNatural'&&(mnOwned['maonua']||0)<1)return false;
+  if(id==='posturaAve'&&(mnOwned['poseCombate']||0)<1)return false;
+  if(id==='posturaReptil'&&(mnOwned['poseCombate']||0)<1)return false;
+  if(id==='posturaPeixe'&&(mnOwned['poseCombate']||0)<1)return false;
   if(lv>1&&(mnOwned[id]||0)<lv-1)return false;
   return true;
 }
@@ -3181,6 +3302,7 @@ function mnBuyLevel(id,lv){
     }
   }
   mnOwned[id]=(mnOwned[id]||0)+1;
+  if(id==='armaNatural'){const nd=getArmaNaturalDie();inventory.weapon.forEach(function(w){if(w.isGloveWeapon){w.danoS=nd+'+FIS';w.customTags=['Mão Nua',nd+'+FIS'];}});renderWeaponInvPanel();renderFichaWeapons();}
   updateSPBadge();buildMNTree();mnShowDesc(id);renderPlayerTree();updatePoseButton();autoSave();
   showToast('✓ Habilidade comprada!');
 }
@@ -3188,6 +3310,7 @@ function sellMNLevel(id,lv){
   const owned=mnOwned[id]||0;
   if(lv!==owned){showToast('Só pode vender o nível mais alto!');return;}
   mnOwned[id]=Math.max(0,owned-1);
+  if(id==='armaNatural'){const nd=getArmaNaturalDie();inventory.weapon.forEach(function(w){if(w.isGloveWeapon){w.danoS=nd+'+FIS';w.customTags=['Mão Nua',nd+'+FIS'];}});renderWeaponInvPanel();renderFichaWeapons();}
   if(id==='maonua'&&lv===1&&mnMaestriaChoice){
     const{attr,name}=mnMaestriaChoice;
     const dot0=document.getElementById(mdId(attr,name,0));
@@ -4257,7 +4380,14 @@ function gatherData(){
   d._fcMC=fcMaestriaChoice?JSON.stringify(fcMaestriaChoice):null;
   d._ceOwned=JSON.stringify(ceOwned);
   d._ccOwned=JSON.stringify(ccOwned);d._ccAdapts=JSON.stringify(ccAdaptations);
-  d._poseActive=poseActive;
+  d._poseActive=poseActive;d._activePostura=activePostura||'base';
+  // Save pose bonus amounts so dataset can be restored after reload
+  const _pb={};['Artes Marciais','Atletismo','Fortitude'].forEach(function(n){
+    const el=document.getElementById(bnId('fisico',n));if(el)_pb['fisico_'+n]=parseInt(el.dataset.posebonus||0);
+  });
+  const eqEl=document.getElementById(bnId('fisico','Esquivar'));if(eqEl)_pb['fisico_Esquivar']=parseInt(eqEl.dataset.poseavebonus||0);
+  const blEl=document.getElementById(bnId('fisico','Bloquear Físico'));if(blEl)_pb['fisico_Bloquear Físico']=parseInt(blEl.dataset.posepeixebonus||0);
+  d._poseBonusMap=JSON.stringify(_pb);
   d._upgrades=JSON.stringify(inventory.upgrades||{});
   d._calcSpells=JSON.stringify(calcSavedSpells);
   const dadoCura=document.getElementById('dado-cura-val');if(dadoCura)d['dado-cura-val']=dadoCura.value;
@@ -4356,7 +4486,16 @@ function loadSheet(){
       if(d._ceOwned)try{Object.assign(ceOwned,JSON.parse(d._ceOwned));}catch(_){}
       if(d._ccOwned)try{Object.assign(ccOwned,JSON.parse(d._ccOwned));}catch(_){}
       if(d._ccAdapts)try{ccAdaptations=JSON.parse(d._ccAdapts);}catch(_){}
-      if(d._poseActive)poseActive=!!d._poseActive;
+      if(d._poseActive)poseActive=!!d._poseActive;if(d._activePostura)activePostura=d._activePostura;
+      // Restore pose bonus dataset attributes so applyPoseBonuses can subtract correctly
+      if(d._poseBonusMap){try{
+        const pbm=JSON.parse(d._poseBonusMap);
+        ['Artes Marciais','Atletismo','Fortitude'].forEach(function(n){
+          const el=document.getElementById(bnId('fisico',n));if(el)el.dataset.posebonus=pbm['fisico_'+n]||0;
+        });
+        const eqEl2=document.getElementById(bnId('fisico','Esquivar'));if(eqEl2)eqEl2.dataset.poseavebonus=pbm['fisico_Esquivar']||0;
+        const blEl2=document.getElementById(bnId('fisico','Bloquear Físico'));if(blEl2)blEl2.dataset.posepeixebonus=pbm['fisico_Bloquear Físico']||0;
+      }catch(_){}}
       if(d._upgrades)try{inventory.upgrades=JSON.parse(d._upgrades);}catch(_){}
       if(d._calcSpells)try{calcSavedSpells=JSON.parse(d._calcSpells);}catch(_){}
       reapplyFichaDots();
