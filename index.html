@@ -243,7 +243,7 @@ input[type=file]{display:none}
 /* FC OVERLAY */
 .calc-section{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 12px}
 .calc-section-title{font-size:11px;font-weight:700;color:#c4b5fd;text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px}
-.calc-radio-grid{display:flex;flex-direction:column;gap:4px}
+.calc-layout{display:grid;grid-template-columns:1fr 1fr;gap:16px}.calc-radio-grid{display:flex;flex-direction:column;gap:4px}
 .calc-radio{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--txt2);cursor:pointer;padding:3px 5px;border-radius:4px}
 .calc-radio:hover{background:var(--bg4);color:var(--txt)}
 .calc-radio input{accent-color:#a78bfa}
@@ -266,7 +266,7 @@ input[type=file]{display:none}
 .calc-copy-btn:hover{background:#4c1d95}
 .fc-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:2000;padding:16px}
 .fc-overlay.open{display:flex}
-.fc-modal{background:var(--bg2);border:1px solid var(--border2);border-radius:12px;width:100%;max-width:820px;max-height:90vh;overflow-y:auto;padding:20px}
+.fc-modal{background:var(--bg2);border:1px solid var(--border2);border-radius:12px;width:100%;max-width:820px;max-height:90vh;overflow-y:auto;padding:20px;box-sizing:border-box}
 .fc-modal-title{font-family:'Cinzel',serif;font-size:16px;font-weight:700;color:var(--gold);text-align:center;margin-bottom:4px;letter-spacing:2px}
 .fc-modal-sub{font-size:10px;color:var(--txt3);text-align:center;margin-bottom:6px;letter-spacing:1px;text-transform:uppercase}
 .fc-sp-bar{text-align:center;margin-bottom:14px;padding:8px;background:var(--bg3);border-radius:6px}
@@ -275,7 +275,7 @@ input[type=file]{display:none}
 .fc-modal-inner{position:relative}
 .fc-tree{display:flex;flex-direction:column;align-items:center}
 .fc-cv{width:2px;height:22px;background:var(--border2);margin:0 auto}
-.fc-node{background:var(--bg3);border:2px solid var(--border);border-radius:8px;padding:9px 12px;cursor:pointer;transition:all .2s;min-width:130px;max-width:185px;text-align:center}
+.fc-node{background:var(--bg3);border:2px solid var(--border);border-radius:8px;padding:9px 12px;cursor:pointer;transition:all .2s;min-width:130px;max-width:185px;text-align:center}.fc-node.fc-node-sm{padding:5px 8px;min-width:80px;max-width:120px;border-radius:6px}.fc-node.fc-node-sm .fc-node-name{font-size:10px}.fc-node.fc-node-sm .fc-node-grade{font-size:8px}.fc-node.fc-node-sm .fc-stars{font-size:8px;margin-top:1px}
 .fc-node:hover{border-color:var(--gold);background:var(--bg4)}
 .fc-node.root-node{border-color:var(--red);background:#2a1a1a;min-width:170px}
 .fc-node.root-node:hover{border-color:var(--red3)}
@@ -320,19 +320,62 @@ input[type=file]{display:none}
 .modal-cancel{background:var(--bg4);border:1px solid var(--border2);color:var(--txt2);font-size:11px;font-weight:600;padding:8px 18px;border-radius:6px;cursor:pointer;transition:all .15s}
 .modal-cancel:hover{color:var(--txt);border-color:var(--txt3)}
 @media(max-width:600px){
-  .loja-tbl thead{display:none}.loja-tbl,.loja-tbl tbody,.loja-tbl tr,.loja-tbl td{display:block;width:100%}
+  .sheet{padding:10px;border-radius:0;border-left:none;border-right:none}
+  .nav-bar{gap:3px}
+  .nav-btn{font-size:10px;padding:5px 7px}
+  .top-row{grid-template-columns:1fr;gap:8px}
+  .photo-box{flex-direction:row;justify-content:flex-start;gap:10px}
+  .hppe-row{grid-template-columns:1fr}
+  .hppe-inputs{grid-template-columns:1fr 1fr}
+  .combat-row{grid-template-columns:1fr 1fr}
+  .money-weight-row{grid-template-columns:1fr 1fr}
+  .eq-wep-row{grid-template-columns:1fr}
+  .attrs-row{grid-template-columns:1fr}
+  .res-grid{grid-template-columns:1fr}
+  .exh-inline{flex-wrap:wrap}
+  .sk-header,.skill-row{grid-template-columns:1fr 20px 26px 22px 26px;gap:1px}
+  .sk-col-lbl,.fc-node-grade{font-size:8px}
+  #pose-btns-row{flex-wrap:wrap}
+  #pose-btns-row button{font-size:10px;padding:4px 6px;min-width:50px}
+  .equip-layout{grid-template-columns:1fr}
+  .equip-tabs{flex-wrap:wrap;gap:3px}
+  .equip-tab{font-size:10px;padding:5px 7px}
+  .inv-item-row{flex-wrap:wrap;gap:3px}
+  .inv-item-name{font-size:11px}
+  .eq-wep-card{padding:8px}
+  .eq-wep-name{font-size:12px}
+  .eq-wep-stats{font-size:11px}
+  .eq-roll-row{flex-wrap:wrap;gap:4px}
+  .eq-roll-str{font-size:11px;min-width:80px}
+  .eq-roll-copy{padding:3px 6px;font-size:10px}
+  .loja-cats{grid-template-columns:1fr 1fr}
+  .loja-cat-card{padding:8px 10px}
+  .buy-btn{width:100%;padding:8px}
+  .wep-custom-grid{grid-template-columns:1fr}
+  .loja-tbl thead{display:none}
+  .loja-tbl,.loja-tbl tbody,.loja-tbl tr,.loja-tbl td{display:block;width:100%}
   .loja-tbl tr{margin-bottom:8px;border:1px solid var(--border);border-radius:6px;overflow:hidden}
   .loja-tbl td{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;border-bottom:1px solid var(--border);text-align:right}
   .loja-tbl td:first-child{background:var(--bg3);font-size:13px;text-align:left;justify-content:flex-start;border-bottom:1px solid var(--border2)}
   .loja-tbl td::before{content:attr(data-label);font-size:9px;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;text-align:left;margin-right:8px;flex-shrink:0}
   .loja-tbl td:first-child::before{display:none}
   .loja-tbl tr:last-child td:last-child{border-bottom:none}
-  .buy-btn{width:100%;padding:8px}.loja-cats{grid-template-columns:1fr 1fr}
-  .top-row,.hppe-row,.combat-row,.equip-layout,.eq-wep-row,.money-weight-row{grid-template-columns:1fr}
-  .attrs-row,.tree-paths{grid-template-columns:1fr}.wep-custom-grid{grid-template-columns:1fr}
-  .exh-inline{flex-wrap:wrap}.res-grid{grid-template-columns:1fr}
+  .tree-paths{grid-template-columns:1fr 1fr}
+  .fc-modal{padding:12px;border-radius:8px}
+  .fc-node{min-width:70px;max-width:120px;padding:6px 8px}
+  .fc-node-name{font-size:10px}
+  .fc-node-grade{font-size:8px}
+  .fc-stars{font-size:9px}
+  .fc-tree{overflow-x:auto;padding-bottom:8px}
+  .fc-desc-card{font-size:11px}
+  .calc-layout{flex-direction:column}
+  .calc-left,.calc-right{width:100%!important;min-width:unset!important}
 }
-@media(min-width:601px) and (max-width:850px){.attrs-row{grid-template-columns:1fr 1fr}}
+@media(min-width:601px) and (max-width:850px){
+  .attrs-row{grid-template-columns:1fr 1fr}
+  .combat-row{grid-template-columns:1fr 1fr}
+  .fc-node{min-width:100px;max-width:150px}
+}
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:3px}
 </style>
 </head>
@@ -437,6 +480,23 @@ input[type=file]{display:none}
         <div class="fc-desc-title" id="ar-desc-title"></div>
         <div class="fc-desc-grade" id="ar-desc-grade"></div>
         <div id="ar-desc-levels"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- MÓDULO DO ATIRADOR (AT) OVERLAY -->
+<div class="fc-overlay" id="at-overlay" onclick="closeATOverlay(event)">
+  <div class="fc-modal">
+    <div class="fc-modal-inner">
+      <button class="fc-close" onclick="closeATOverlayDirect()">✕</button>
+      <div class="fc-modal-title">Módulo do Atirador</div>
+      <div class="fc-modal-sub">Árvore de Habilidades — O Batedor</div>
+      <div class="fc-sp-bar" id="at-sp-bar"></div>
+      <div id="at-tree-container"></div>
+      <div class="fc-desc-card" id="at-desc-card">
+        <div class="fc-desc-title" id="at-desc-title"></div>
+        <div class="fc-desc-grade" id="at-desc-grade"></div>
+        <div id="at-desc-levels"></div>
       </div>
     </div>
   </div>
@@ -708,7 +768,7 @@ input[type=file]{display:none}
 <div class="page" id="page-calc">
 <div class="sheet">
   <div style="font-family:'Cinzel',serif;font-size:18px;font-weight:700;color:#c4b5fd;text-align:center;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid #4c1d95">✨ Calculadora de Feitiços</div>
-  <div id="calc-layout" style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+  <div id="calc-layout" class="calc-layout" style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
     <!-- LEFT: Builder -->
     <div id="calc-builder" style="display:flex;flex-direction:column;gap:10px">
 
@@ -977,7 +1037,7 @@ const SHIELD_EMP=[
   {id:'aderencia', name:'Aderência (não derruba, +0.08)', priceMod: 0.08},
 ];
 const SKILL_TREE=[
-  {id:'batedor',name:'O Batedor',paths:[{name:'Caminho da Mão Nua',hasMNTree:true},{name:'Trilha do Armado',hasARTree:true},{name:'Módulo do Atirador'},{name:'Passo do Assassino',hasPATree:true},{name:'Técnicas de Suporte'},{name:'Fúria'}]},
+  {id:'batedor',name:'O Batedor',paths:[{name:'Caminho da Mão Nua',hasMNTree:true},{name:'Trilha do Armado',hasARTree:true},{name:'Módulo do Atirador',hasATTree:true},{name:'Passo do Assassino',hasPATree:true},{name:'Técnicas de Suporte'},{name:'Fúria'}]},
   {id:'especialista',name:'O Especialista',paths:[{name:'Fomento Corporal',hasFCTree:true},{name:'Acrobata',hasACTree:true},{name:'Medicina',hasMedTree:true}]},
   {id:'arcanista',name:'O Arcanista',paths:[{name:'Círculo do Espírito',hasCETree:true},{name:'Círculo dos Elementos'},{name:'Círculo do Corpo',hasCCTree:true}]}
 ];
@@ -985,20 +1045,38 @@ const FC_NODES=[
   {id:'fomento',name:'Fomento Corporal',grade:1,maxLevels:1,stars:false,levels:[{n:1,txt:'Você ganha Maestria em Perícia: Fortitude, Perícia: Vontade ou Perícia: Resistir.',hasChoice:true,choiceSkills:[{attr:'fisico',name:'Fortitude'},{attr:'intelecto',name:'Vontade'},{attr:'fisico',name:'Resistir'}]}]},
   {id:'vitalidade',name:'Vitalidade',grade:3,maxLevels:2,stars:true,levels:[{n:1,txt:'A cada nível que passa após obter esta habilidade, você ganha +2 PV.'},{n:2,txt:'Você ganha um bônus de +2 em rolagens de teste com a Perícia: Fortitude.'}]},
   {id:'cascagrossa',name:'Casca Grossa',grade:4,maxLevels:2,stars:true,levels:[{n:1,txt:'Você pode adicionar o valor de seu Atributo: Físico em sua defesa. Além disso, ganha maestria em 2 propriedades de proteção a sua escolha.'},{n:2,txt:'Quando você estiver com menos da metade dos seus PV totais, recebe um bônus de +5 em defesa. Este efeito acaba se você ficar com mais da metade dos seus PV totais.'}]},
-  {id:'atletico',name:'Atlético',grade:4,maxLevels:1,stars:true,levels:[{n:1,txt:'Você ganha um bônus de +3 em rolagens de teste com a Perícia: Atletismo. Além disso, pode andar +3 metros extra.'}]},
+  {id:'atletico',name:'Atlético',grade:3,maxLevels:1,stars:true,levels:[{n:1,txt:'Você ganha um bônus de +3 em rolagens de teste com as Perícias: Atletismo e Acrobacia. Além disso, pode andar uma quantidade adicional de deslocamento igual à metade do seu movimento base.'}]},
   {id:'determinacao',name:'Determinação',grade:3,maxLevels:2,stars:true,levels:[{n:1,txt:'A cada nível que passa após obter esta habilidade, você ganha +2 PE.'},{n:2,txt:'Você ganha um bônus de +2 em rolagens de teste com a Perícia: Vontade.'}]},
-  {id:'resistencia',name:'Resistência',grade:3,maxLevels:3,stars:true,levels:[{n:1,txt:'Você ganha R1 (50%) em um tipo de dano a sua escolha.'},{n:2,txt:'Você pode escolher entre: Ganhar R1 em um novo tipo de dano; ou Aumentar uma resistência existente em mais 50% (máx 100%).'},{n:3,txt:'Você pode escolher entre: Ganhar R1 em um novo tipo de dano; ou Aumentar uma resistência existente em mais 50% (máx 100%).'}]}
+  {id:'resistencia',name:'Resistência',grade:3,maxLevels:3,stars:true,levels:[{n:1,txt:'Você ganha R1 (50%) em um tipo de dano a sua escolha.'},{n:2,txt:'Você pode escolher entre: Ganhar R1 em um novo tipo de dano; ou Aumentar uma resistência existente em mais 50% (máx 100%).'},{n:3,txt:'Você pode escolher entre: Ganhar R1 em um novo tipo de dano; ou Aumentar uma resistência existente em mais 50% (máx 100%).'}]},
+  {id:'espiritoImortal',name:'Espírito Imortal',grade:3,maxLevels:1,stars:true,levels:[{n:1,txt:'Você ganha +6 de limite de gasto de PE por turno.'}]},
+  {id:'carregar',name:'Carregar',grade:3,maxLevels:2,stars:true,levels:[{n:1,txt:'Sua quantidade de espaços de inventário aumentam em +5. Além disso, você ganha um bônus de +1 em rolagens de teste com a Perícia: Segurar.'},{n:2,txt:'Você não recebe desvantagem ao tentar agarrar ou segurar uma criatura de tamanho maior que o seu.'}]}
 ];
 const AC_NODES=[
   {id:'acrobacia',name:'Acrobacia',grade:2,maxLevels:1,stars:false,isRoot:true,levels:[{n:1,txt:'Você ganha Maestria em Perícia: Acrobacia, Perícia: Prestidigitação ou Perícia: Furtividade.',hasChoice:true,choiceSkills:[{attr:'fisico',name:'Acrobacia'},{attr:'fisico',name:'Prestidigitação'},{attr:'fisico',name:'Furtividade'}]}]},
-  {id:'agilidade',name:'Agilidade',grade:3,maxLevels:1,stars:true,levels:[{n:1,txt:'Você pode rolar Perícia: Acrobacia ao invés de Perícia: Esquiva. Numa rolagem bem sucedida, você pode se deslocar 1 metro (1 quadrante) para qualquer direção a sua escolha.'}]}
+  {id:'agilidade',name:'Agilidade',grade:3,maxLevels:1,stars:true,levels:[{n:1,txt:'Você pode rolar Perícia: Acrobacia ao invés de Perícia: Esquiva. Numa rolagem bem sucedida, você pode se deslocar 1 metro (1 quadrante) para qualquer direção a sua escolha.'}]},
+  {id:'iniciativaAprimorada',name:'Iniciativa Aprimorada',grade:3,maxLevels:1,stars:true,levels:[{n:1,txt:'Se você for o primeiro a agir num combate, seu primeiro ataque causa +2d8 de dano adicional. O efeito acaba ao realizar uma ação de ataque.'}]},
+  {id:'reflexosAumentados',name:'Reflexos Aumentados',grade:3,maxLevels:2,stars:true,levels:[{n:1,txt:'Você não ganha a Condição: Desprevenido contra inimigos que possa ver.'},{n:2,txt:'Gaste 9 PE para rolar Acrobacia durante Ação de Movimento para avançar num inimigo. Se bem-sucedido, sua próxima ação ganha +5 no acerto.'}]},
+  {id:'cambalhota',name:'Cambalhota',grade:4,maxLevels:1,stars:true,levels:[{n:1,txt:'Sempre que realizar a Manobra: Cambalhota, você ganha +5 metros de movimento adicional.'}]},
+  {id:'maosLeves',name:'Mãos Leves',grade:2,maxLevels:2,stars:true,levels:[{n:1,txt:'Você ganha vantagem sempre que for realizar as manobras: Desarmar ou Furtar.'},{n:2,txt:'Você tem vantagem em testes para evitar ser desarmado.'}]},
+  {id:'eRapidas',name:'E Rápidas',grade:3,maxLevels:1,stars:true,levels:[{n:1,txt:'Seguindo o efeito de Mãos Leves, você pode acessar o inventário de um oponente para remover ou adicionar um item.'}]},
+  {id:'despistar',name:'Despistar',grade:2,maxLevels:1,stars:true,levels:[{n:1,txt:'Você pode realizar a Manobra: Trocar Posição para mudar a posição de 2 criaturas adjacentes a sua escolha.'}]},
+  {id:'camuflagem',name:'Camuflagem',grade:3,maxLevels:1,stars:true,levels:[{n:1,txt:'Sob cobertura total: +3 nas Perícias Furtividade e Prestidigitação. Sob cobertura, seu ataque furtivo recebe vantagem.'}]},
+  {id:'emboscar',name:'Emboscar',grade:3,maxLevels:2,stars:true,levels:[{n:1,txt:'Ao atacar alguém que ainda não agiu, aplique a Condição: Desprevenido na criatura, que dura até o início do turno dela.'},{n:2,txt:'Ao flanquear, caso você esteja no flanco, os efeitos de flanquear são dobrados apenas para você.'}]},
+  {id:'sorrateiro',name:'Sorrateiro',grade:5,maxLevels:1,stars:true,levels:[{n:1,txt:'Se estiver adjacente a um oponente com a Condição: Desprevenido, você pode realizar um ataque contra ele como parte de sua Ação Primária.'}]}
 ];
 const PA_NODES=[
   {id:'passo',name:'Passo do Assassino',grade:2,maxLevels:1,stars:false,isRoot:true,levels:[{n:1,txt:'Escolha uma categoria de armas para adicionar a Propriedade: Arma do Assassino. Caso ela já tenha as propriedades de outras trilhas, ela é automaticamente substituída para a propriedade atual.',hasArmaChoice:true}]},
   {id:'ataquefurtivo',name:'Ataque Furtivo',grade:3,maxLevels:2,stars:true,levels:[{n:1,txt:'Quando segurar uma arma com a Propriedade: Arma do Assassino, caso você realize um ataque após entrar em estado de furtividade, causa x1,5 pontos de dano no alvo. O ataque furtivo só ocorre caso o alvo ainda não tenha percebido você.'},{n:2,txt:'Ataques contra criaturas com a Condição: Desprevenidos são sempre considerados ataques furtivos caso você esteja atacando com uma arma que possua a Propriedade: Arma do Assassino.'}]},
   {id:'atacduplo',name:'Ataque Duplo',grade:3,maxLevels:1,stars:true,levels:[{n:1,txt:'Quando faz um ataque com a arma escolhida, você pode gastar 7 PE para fazer um ataque adicional ainda como Ação Principal, mas sofre penalidade de −5 em ambas as jogadas de ataque. Essa penalidade é apagada se a arma escolhida tiver a Propriedade: Arma do Assassino.'}]},
   {id:'maisUm',name:'Mais Um!',grade:4,maxLevels:1,stars:true,levels:[{n:1,txt:'Ao atacar, quando uma criatura estiver com as seguintes condições: Atordoado, Desprevenido, Exposto ou Paralisado, você pode realizar um ataque extra como Ação Secundária.'}]},
-  {id:'apunhalar',name:'Apunhalar',grade:4,maxLevels:2,stars:true,levels:[{n:1,txt:'Ao acertar uma criatura pelas costas, você ganha +3 de bônus no acerto e dano.'},{n:2,txt:'O bônus anterior aumenta para +5 caso esteja utilizando uma arma de Propriedade: Arma do Assassino.'}]}
+  {id:'apunhalar',name:'Apunhalar',grade:4,maxLevels:2,stars:true,levels:[{n:1,txt:'Ao acertar uma criatura pelas costas, você ganha +3 de bônus no acerto e dano.'},{n:2,txt:'O bônus anterior aumenta para +5 caso esteja utilizando uma arma de Propriedade: Arma do Assassino.'}]},
+  {id:'distracao',name:'Distração',grade:3,maxLevels:1,stars:false,levels:[{n:1,txt:'Ao realizar a Manobra: Distrair/Impressionar, você pode usar as Perícias: Charme, Diplomacia, Intimidação ou Mentiras como substituto da Perícia: Atuação.'}]},
+  {id:'golpeDesequilibrante',name:'Golpe Desequilibrante',grade:4,maxLevels:1,stars:true,levels:[{n:1,txt:'Ao atacar com uma Arma do Assassino, gaste 11 PE para aplicar uma das seguintes condições até o final do próximo turno: Atordoado, Lento, Silenciado ou Desprevenido.'}]},
+  {id:'ataqueDuplo',name:'Ataque Duplo',grade:2,maxLevels:1,stars:true,levels:[{n:1,txt:'Ao atacar com a arma escolhida, gaste 7 PE para fazer um ataque adicional como Ação Principal, com penalidade de -5 em ambos. Essa penalidade é removida se a arma tiver a Propriedade: Arma do Assassino.'}]},
+  {id:'fintaDupla',name:'Finta Dupla',grade:3,maxLevels:1,stars:true,levels:[{n:1,txt:'Você pode usar a Manobra: Distrair em mais de uma criatura. A distracção pode afetar até 1 + (Nível / 5) criaturas que você possa ver.'}]},
+  {id:'cacadorCriaturas',name:'Caçador de Criaturas',grade:3,maxLevels:2,stars:true,levels:[{n:1,txt:'Escolha um tipo de criatura. Contra ela: +1d4 no acerto e dano, +1 em testes de perícia, e ataques dessa criatura contra você têm desvantagem.',hasChoice:true},{n:2,txt:'Se possuir uma Arma do Assassino, seu multiplicador de crítico e margem de ameaça contra esse tipo ganham +1.'}]},
+  {id:'vantagemBatalha',name:'Vantagem na Batalha',grade:3,maxLevels:2,stars:true,levels:[{n:1,txt:'Empunhando uma Arma do Assassino: ao estar em vantagem numérica contra uma criatura ou grupo, ganhe +3 de acerto em todas as ações até o fim do combate ou até perder essa vantagem.'},{n:2,txt:'Além do efeito anterior, você recebe +1d8 de bônus de dano enquanto possuir essa vantagem numérica.'}]},
+  {id:'voceEhOProximo',name:'Você é o Próximo!',grade:3,maxLevels:2,stars:true,levels:[{n:1,txt:'Após derrotar uma criatura, realize um teste de Intimidação contra uma criatura adjacente. Em sucesso, ela ganha a Condição: Com Medo até o fim do combate ou até ser dissipado.'},{n:2,txt:'Empunhando uma Arma do Assassino: no primeiro ataque contra a criatura com Condição: Com Medo, ganhe +5 acerto, +5 dano, +1 margem e +1 multiplicador de crítico. Após o ataque, o efeito é dissipado.'}]}
 ];
 const MN_NODES=[
   {id:'maonua',name:'Caminho da Mão Nua',grade:1,maxLevels:1,stars:false,isRoot:true,levels:[{n:1,txt:'Você ganha Maestria em Perícia: Artes Marciais ou Perícia: Atletismo.',hasChoice:true,choiceSkills:[{attr:'fisico',name:'Artes Marciais'},{attr:'fisico',name:'Atletismo'}]}]},
@@ -1007,12 +1085,23 @@ const MN_NODES=[
   {id:'posturaAve',name:'Postura da Ave',grade:4,maxLevels:2,stars:true,levels:[{n:1,txt:'Pose de Combate: Postura da Ave. Benefícios adicionais: +3 em Esquivar, dano de queda reduzido em 1/4, e você pode saltar 3 metros mais alto.'},{n:2,txt:'Todos os benefícios anteriores da Postura da Ave aumentam para +5. Você passa a resistir metade (1/2) de todo dano de queda sofrido.'}]},
   {id:'posturaReptil',name:'Postura do Réptil',grade:4,maxLevels:2,stars:true,levels:[{n:1,txt:'Pose de Combate: Postura do Réptil. Benefícios adicionais: +1 reação na rodada. Contra-ataques bem-sucedidos aplicam Atordoado no inimigo por 1 turno. Vantagem em testes para agarrar.'},{n:2,txt:'Os benefícios base da Pose de Combate aumentam para +5 (em vez de +2).'}]},
   {id:'posturaPeixe',name:'Postura do Peixe',grade:4,maxLevels:2,stars:true,levels:[{n:1,txt:'Pose de Combate: Postura do Peixe. Benefícios adicionais: +3 em Bloquear Físico. Ao bloquear com sucesso, pode gastar 9 PE para revidar metade do dano recebido. Após um bloqueio bem-sucedido, pode realizar uma ação de movimento.'},{n:2,txt:'O bônus em Bloquear Físico da Postura do Peixe aumenta de +3 para +5.'}]},
-  {id:'armaNatural',name:'Arma Natural Aprimorada',grade:2,maxLevels:3,stars:true,levels:[{n:1,txt:'O 1d6 do seu dano físico desarmado/luva se torna 1d8.'},{n:2,txt:'O 1d8 do seu dano físico desarmado/luva se torna 1d10.'},{n:3,txt:'O 1d10 do seu dano físico desarmado/luva se torna 1d12.'}]}
+  {id:'armaNatural',name:'Arma Natural Aprimorada',grade:2,maxLevels:3,stars:true,levels:[{n:1,txt:'O 1d6 do seu dano físico desarmado/luva se torna 1d8.'},{n:2,txt:'O 1d8 do seu dano físico desarmado/luva se torna 1d10.'},{n:3,txt:'O 1d10 do seu dano físico desarmado/luva se torna 1d12.'}]},
+  {id:'golpeAvassalador',name:'Golpe Avassalador',grade:3,maxLevels:3,stars:true,levels:[{n:1,txt:'Escolha: +1 no multiplicador de crítico (20×2→20×3) OU +1 na margem de crítico (20×2→19×2).'},{n:2,txt:'Escolha novamente: +1 no multiplicador de crítico OU +1 na margem de crítico.'},{n:3,txt:'Escolha novamente: +1 no multiplicador de crítico OU +1 na margem de crítico.'}]},
+  {id:'defletir',name:'Defletir',grade:3,maxLevels:1,stars:false,levels:[{n:1,txt:'Ao ser acertado por um ataque a distância, gaste 7 PE para defender. Em sucesso, o projétil é redirecionado à criatura mais próxima. Se ela também tiver Defletir, pode iniciar uma reação em cadeia.'}]},
+  {id:'refletirProjetil',name:'Refletir Projétil',grade:4,maxLevels:1,stars:false,levels:[{n:1,txt:'Ao defletir um projétil, gaste 5 PE adicionais (além dos 7 de Defletir) para redirecionar o projétil para qualquer direção de sua escolha.'}]},
+  {id:'sequenciaGolpes',name:'Sequência de Golpes',grade:2,maxLevels:3,stars:true,levels:[{n:1,txt:'Gaste 9 PE adicionais: dá 1 golpe adicional desarmado como Ação Secundária.'},{n:2,txt:'Gaste 11 PE adicionais: dá 2 golpes adicionais desarmados como Ação Secundária.'},{n:3,txt:'Gaste 13 PE adicionais: dá 3 golpes adicionais desarmados como Ação Secundária.'}]},
+  {id:'chuvaGolpes',name:'Chuva de Golpes',grade:3,maxLevels:2,stars:true,levels:[{n:1,txt:'Ao acertar com crítico natural desarmado, você tem direito a 1 golpe adicional gratuito. O efeito não se estende além disso.'},{n:2,txt:'Ao acertar com crítico natural desarmado, você tem direito a 2 golpes adicionais gratuitos. O efeito não se estende além disso.'}]}
 ];
 const MED_NODES=[
   {id:'medicina',name:'Medicina',grade:2,maxLevels:1,stars:false,isRoot:true,levels:[{n:1,txt:'Você ganha Maestria em Perícia: Medicina, Perícia: Restaurar ou Perícia: Resistir.',hasChoice:true,choiceSkills:[{attr:'intelecto',name:'Medicina'},{attr:'poder',name:'Restaurar'},{attr:'fisico',name:'Resistir'}]}]},
   {id:'curaGentil',name:'Cura Gentil',grade:3,maxLevels:1,stars:true,levels:[{n:1,txt:'Você adiciona o valor de seu Atributo: Intelecto ao seu dado de cura.'}]},
   {id:'enfermeiro',name:'Enfermeiro',grade:4,maxLevels:1,stars:true,levels:[{n:1,txt:'Sua cura excedente se transforma em pontos de vida temporários para a criatura. Esse benefício dura por até 2 cenas.'}]}
+];
+const AT_NODES=[
+  {id:'atirador',name:'Módulo do Atirador',grade:1,maxLevels:1,stars:false,isRoot:true,levels:[{n:1,txt:'Você ganha Maestria em Perícia: Pontaria ou Perícia: Atletismo.',hasChoice:true,choiceSkills:[{attr:'intelecto',name:'Pontaria'},{attr:'fisico',name:'Atletismo'}]}]},
+  {id:'mirar',name:'Mirar',grade:2,maxLevels:1,stars:true,levels:[{n:1,txt:'Gaste uma Ação de Movimento para mirar. Se fizer isso, ganha um bônus de acerto equivalente ao seu Atributo: Intelecto em ataques à distância até o fim do seu próximo turno.'}]},
+  {id:'artilhariaPesada',name:'Artilharia Pesada',grade:2,maxLevels:2,stars:true,levels:[{n:1,txt:'Ao realizar um ataque bem-sucedido contra um alvo com a Condição: Desprevenido, o dano causado é maximizado.'},{n:2,txt:'Toda vez que você possuir vantagem num ataque, pode escolher entre manter a vantagem ou ganhar um bônus equivalente ao seu Atributo: Intelecto no acerto.'}]},
+  {id:'sentinela',name:'Sentinela',grade:2,maxLevels:2,stars:true,levels:[{n:1,txt:'Caso você seja o primeiro em ordem de iniciativa, seu primeiro ataque no combate receberá vantagem.'},{n:2,txt:'Ao realizar um ataque crítico, você pode fazer uma ação de recarga de arma como uma ação adicional, independente do tempo de recarga.'}]}
 ];
 const AR_NODES=[
   {id:'armado',name:'Trilha do Armado',grade:2,maxLevels:1,stars:false,isRoot:true,levels:[{n:1,txt:'Você ganha Maestria em Perícia: Armas Brancas ou Perícia: Pontaria.',hasChoice:true,choiceSkills:[{attr:'fisico',name:'Armas Brancas'},{attr:'intelecto',name:'Pontaria'}]}]},
@@ -1022,7 +1111,13 @@ const AR_NODES=[
   {id:'combateDefensivo',name:'Combate Defensivo',grade:3,maxLevels:1,stars:true,levels:[{n:1,txt:'Se você estiver usando um escudo: não poderá ser flanqueado e ganha cobertura parcial.'}]},
   {id:'segurarEscudo',name:'Segurar Escudo',grade:3,maxLevels:1,stars:true,levels:[{n:1,txt:'Se você terminar seu turno adjacente a um aliado, pode conceder um bônus de +3 de Perícia: Bloquear a ele (sem que você mesmo o perca). Seu aliado perde o bônus se não estiver mais adjacente a você. O efeito funciona como bônus adicional, ultrapassando limites máximos de defesa.'}]},
   {id:'treinoManuseio',name:'Treino de Manuseio',grade:3,maxLevels:1,stars:true,levels:[{n:1,txt:'Você escolhe um tipo de empunhadura: Versátil, Singular (Uma Mão) ou Dupla (Duas Mãos). Armas que possuem a empunhadura escolhida ganham +1 ponto de dano.',hasEmpunhaduraChoice:true}]},
-  {id:'duasMaos',name:'Duas Mãos',grade:4,maxLevels:2,stars:true,levels:[{n:1,txt:'Quando estiver usando uma arma de empunhadura Dupla, você ganha +1d6 em seu acerto. Além disso, ganha +3 pontos de dano e +1d6 de acerto contra inimigos que usam armas de uma mão.'},{n:2,txt:'Quando você está usando uma arma com as duas mãos, pode gastar 7 PE após um ataque bem-sucedido para ignorar 10 pontos de defesa do alvo.'}]}
+  {id:'duasMaos',name:'Duas Mãos',grade:4,maxLevels:2,stars:true,levels:[{n:1,txt:'Quando estiver usando uma arma de empunhadura Dupla, você ganha +1d6 em seu acerto. Além disso, ganha +3 pontos de dano e +1d6 de acerto contra inimigos que usam armas de uma mão.'},{n:2,txt:'Quando você está usando uma arma com as duas mãos, pode gastar 7 PE após um ataque bem-sucedido para ignorar 10 pontos de defesa do alvo.'}]},
+  {id:'armasPesadas',name:'Armas Pesadas',grade:4,maxLevels:2,stars:true,levels:[{n:1,txt:'Ao atacar com arma Pesada, pague 11 PE. Se acertar, além do dano, pode usar Derrubar ou Empurrar como Ação Secundária (use o resultado do ataque como teste de manobra).'},{n:2,txt:'Você ganha vantagem em testes de ataque contra criaturas de tamanho maior.'}]},
+  {id:'versatil',name:'Versátil',grade:3,maxLevels:2,stars:true,levels:[{n:1,txt:'Uma Mão: +1d6 de bônus de dano quando segura com uma mão. | Duas Mãos: +1d6 de bônus de acerto quando segura com as duas mãos.'},{n:2,txt:'Uma Mão: Gaste 7 PE para +5 dano/-5 acerto (gaste +1 PE para aumentar o efeito em +1). | Duas Mãos: Gaste 7 PE para +5 acerto/-5 dano (gaste +1 PE para aumentar o efeito em +1).'}]},
+  {id:'ripostar',name:'Ripostar',grade:5,maxLevels:1,stars:false,levels:[{n:1,txt:'Uma Mão: Ao ripostar com arma de uma mão, você pode realizar uma reação adicional que conta como Ação de Movimento. | Duas Mãos: Ao ripostar com arma de duas mãos, a Condição: Desprevenido é prolongada para 2 turnos.'}]},
+  {id:'umaMao',name:'Uma Mão',grade:3,maxLevels:1,stars:true,levels:[{n:1,txt:'Quando estiver usando uma arma de empunhadura Singular, você ganha +3 em seu dano.'}]},
+  {id:'saqueRapido',name:'Saque Rápido',grade:4,maxLevels:1,stars:true,levels:[{n:1,txt:'Gaste 9 PE para sacar ou guardar itens de forma gratuita (em vez de Ação Secundária). Ações para sabotar um mecanismo têm -3 turnos (ou -1 cena) de redução de tempo.'}]},
+  {id:'duasArmas',name:'Duas Armas',grade:5,maxLevels:2,stars:true,levels:[{n:1,txt:'Se estiver com duas armas e fizer uma ação de ataque, pode fazer dois ataques com uma Ação Principal, um com cada arma.'},{n:2,txt:'Ao sofrer um ataque e reagir com bloqueio, pode gastar 9 PE para adicionar seu bônus de acerto (da arma com maior valor) em sua resistência.'}]}
 ];
 const CE_NODES=[
   {id:'circulo_espirito',name:'Círculo do Espírito',grade:2,maxLevels:1,stars:false,isRoot:true,levels:[{n:1,txt:'Você se torna capaz de usar o Círculo do Espírito.'}]}
@@ -1098,6 +1193,7 @@ let paArmaChoice=null; // arma choice for Passo root
 let mnOwned={}; // {nodeId: levelsOwned}
 let mnActiveNode=null;
 let mnMaestriaChoice=null;
+let golpeAvChoices=[]; // per level: 'mul' or 'margem'
 let poseActive=false;
 let activePostura='base'; // 'base'|'mamifero'|'ave'|'reptil'|'peixe'
 // tracks if Pose de Combate / Postura do Mamífero is active
@@ -1106,7 +1202,8 @@ let medOwned={}; // {nodeId: levelsOwned}
 let medActiveNode=null;
 let medMaestriaChoice=null;
 // AR (Trilha do Armado) state
-let arOwned={}; // {nodeId: levelsOwned}
+let arOwned={};
+let atOwned={}; // {nodeId: levelsOwned}
 let arActiveNode=null;
 let arMaestriaChoice=null; // skill choice for root
 let arFocoArmas=[]; // up to 3 weapon categories
@@ -1125,7 +1222,7 @@ let ccAdaptations=[]; // [{id,evoLevel}] list of learned adaptations and their e
 
 // ── SP ──
 function spBudget(){const lvl=Math.max(1,parseInt(document.getElementById('f-nivel').value)||1);return 8+(lvl-1);}
-function spUsed(){let u=0;Object.values(fcOwned).forEach(v=>u+=v);Object.values(acOwned).forEach(v=>u+=v);Object.values(paOwned).forEach(v=>u+=v);Object.values(arOwned).forEach(v=>u+=v);Object.values(mnOwned).forEach(v=>u+=v);Object.values(medOwned).forEach(v=>u+=v);Object.values(ceOwned).forEach(v=>u+=v);Object.values(ccOwned).forEach(v=>u+=v);return u;}
+function spUsed(){let u=0;Object.values(fcOwned).forEach(v=>u+=v);Object.values(acOwned).forEach(v=>u+=v);Object.values(paOwned).forEach(v=>u+=v);Object.values(arOwned).forEach(v=>u+=v);Object.values(atOwned).forEach(v=>u+=v);Object.values(mnOwned).forEach(v=>u+=v);Object.values(medOwned).forEach(v=>u+=v);Object.values(ceOwned).forEach(v=>u+=v);Object.values(ccOwned).forEach(v=>u+=v);return u;}
 function spLeft(){return spBudget()-spUsed();}
 function updateSPBadge(){
   const el=document.getElementById('sp-badge');
@@ -1488,11 +1585,22 @@ function applyPoseBonuses(){
   }
   // Postura do Mamífero: +movement and +defense handled in recalcCombat
 }
+function getGolpeAvMul(){
+  return golpeAvChoices.filter(c=>c==='mul').length;
+}
+function getGolpeAvMargem(){
+  return golpeAvChoices.filter(c=>c==='margem').length;
+}
+function getBareFistCritMul(){
+  return 2+getGolpeAvMul();
+}
+function getBareFistCritLimiar(){
+  const equip=equipped.luvas;
+  const gloveMod=equip&&equip.critLimiar?equip.critLimiar-20:0;
+  return 20+gloveMod-getGolpeAvMargem();
+}
 function getBareFistCrit(){
-  // If a glove is equipped, use its critLimiar; else default 20
-  const eq=equipped.luvas;
-  if(eq&&eq.critLimiar)return eq.critLimiar;
-  return 20;
+  return getBareFistCritLimiar();
 }
 function getArmaNaturalDie(){
   const lv=mnOwned['armaNatural']||0;
@@ -1528,6 +1636,24 @@ function getEspecializacaoCritMul(w){
   if(!(arOwned['especializacao']>=1)||!arEspecChoice||!w)return 0;
   const cat=wepGetCat(w);
   return cat===arEspecChoice?1:0;
+}
+function getVersatilDmgBonus(w){
+  // +d6 damage when one-handed (Singular or not isDual)
+  if((arOwned['versatil']||0)<1||!w)return '';
+  if(!isDualHandWeapon(w))return '+d6';
+  return '';
+}
+function getVersatilAtkBonus(w){
+  // +d6 attack when two-handed (Dual)
+  if((arOwned['versatil']||0)<1||!w)return '';
+  if(isDualHandWeapon(w))return '+d6';
+  return '';
+}
+function getUmaMaoBonus(w){
+  // +3 damage when one-handed
+  if((arOwned['umaMao']||0)<1||!w)return 0;
+  if(!isDualHandWeapon(w))return 3;
+  return 0;
 }
 function getTreinoManuseioBonus(w){
   if(!(arOwned['treinoManuseio']>=1)||!arEmpunhaduraChoice||!w)return 0;
@@ -1591,6 +1717,12 @@ function getFinalDamage(w){
   // Treino de Manuseio +1
   const treinoB=getTreinoManuseioBonus(w);
   if(treinoB>0){sharedBonus+=treinoB;sharedTags.push('+'+treinoB+' Treino');}
+  // Versátil +d6 dano (1 mão)
+  const versatilDmgDie=getVersatilDmgBonus(w);
+  if(versatilDmgDie)sharedTags.push(versatilDmgDie+' Vérs.');
+  // Uma Mão +3 dano
+  const umaMaoB=getUmaMaoBonus(w);
+  if(umaMaoB>0){sharedBonus+=umaMaoB;sharedTags.push('+'+umaMaoB+' 1Mão');}
   // Pose de Combate
   const poseB=getPoseDamageBonus();
   if(poseB>0){sharedBonus+=poseB;sharedTags.push('+'+poseB+' Pose');}
@@ -1613,7 +1745,7 @@ function getFinalDamage(w){
     // Has Dano S
     const danoS=w.danoS;
     let sBonuses=[...sharedTags];
-    const sStr=danoS+(sharedBonus>0?'+'+sharedBonus:'')+focoDie;
+    const sStr=danoS+(sharedBonus>0?'+'+sharedBonus:'')+focoDie+versatilDmgDie;
     const dpNormal=buildStr(baseDP,0,'',ultra.applied?['⚡ Ultra']:hasFoco?['🎯 Foco']:[]);
     return{
       danoS:{str:sStr,tags:sBonuses},
@@ -1689,6 +1821,7 @@ function renderFichaWeapons(){
       playerM=document.getElementById(mdId('fisico','Armas Brancas',1))?.classList.contains('filled')||false;
     }
     const hasMaestria=fichaM||playerM;
+    const versatilAtkDie=w?getVersatilAtkBonus(w):'';
     let roll='d20';
     if(skillVal>0)roll+=' + '+skillName+' ('+skillVal+')';
     if(hasMaestria)roll+=' + Maestria';
@@ -1714,8 +1847,13 @@ function renderFichaWeapons(){
       html+='<div class="eq-wep-stats">';
       html+='Dano: <b>'+danoStr+'</b>';
       if(poseB>0)html+=' <span style="font-size:9px;color:var(--gold)">[+'+poseB+' Pose]</span>';
-      html+='<br>Crítico: <b>'+critLimiar+'×2</b>';
-      if(critLimiar<20)html+=' <span style="font-size:9px;color:var(--gold)">[Luva Reforçada]</span>';
+      const critMul=getBareFistCritMul();
+      const critMods=[];
+      if(critLimiar<20)critMods.push('Luva Reforçada');
+      if(getGolpeAvMargem()>0)critMods.push('-'+getGolpeAvMargem()+' margem');
+      if(getGolpeAvMul()>0)critMods.push('+'+getGolpeAvMul()+'× mul');
+      html+='<br>Crítico: <b>'+critLimiar+'×'+critMul+'</b>';
+      if(critMods.length)html+=' <span style="font-size:9px;color:var(--gold)">['+critMods.join(', ')+']</span>';
       html+=' (Atordoar) &nbsp;Tipo: <b>Impacto</b> &nbsp;Alcance: <b>1m</b>';
       html+='</div>';
       if(poseB>0){
@@ -2678,6 +2816,12 @@ function buildSkillTree(){
           '<div style="font-size:10px;color:var(--txt3);margin-top:2px">Clique para ver a árvore</div>'+
           '<div style="margin-top:8px;display:flex;align-items:center;gap:6px"><span style="font-size:10px;color:var(--txt3)">XP Investido:</span><input type="number" style="width:60px;font-size:12px;padding:3px 5px;text-align:center" value="'+xp+'" min="0" onclick="event.stopPropagation()" onchange="setPathXP(\''+cls.id+'\',\''+p.name+'\',this.value)"></div></div>';
       } else if(p.hasARTree){
+      } else if(p.hasATTree){
+        pathsHtml+='<div class="tree-path-card" onclick="openATOverlay()" style="border-color:#38bdf8">'+
+          '<div class="tree-path-name" style="color:#7dd3fc">'+p.name+' 🏹</div>'+
+          '<div style="font-size:10px;color:var(--txt3);margin-top:2px">Clique para ver a árvore</div>'+
+          '<div style="margin-top:8px;display:flex;align-items:center;gap:6px"><span style="font-size:10px;color:var(--txt3)">XP Investido:</span><input type="number" style="width:60px;font-size:12px;padding:3px 5px;text-align:center" value="'+xp+'" min="0" onclick="event.stopPropagation()" onchange="setPathXP(\''+cls.id+'\',\''+p.name+'\',this.value)"></div></div>';
+      } else if(p.hasARTree){
         pathsHtml+='<div class="tree-path-card" onclick="openAROverlay()" style="border-color:var(--green)">'+
           '<div class="tree-path-name" style="color:var(--green2)">'+p.name+' ⚔</div>'+
           '<div style="font-size:10px;color:var(--txt3);margin-top:2px">Clique para ver a árvore</div>'+
@@ -2838,25 +2982,52 @@ function buildFCTree(){
     spEl.innerHTML='<span style="font-size:10px;color:var(--txt3)">Ative "Versão Oficial" para comprar habilidades com pontos</span>';
   }
   const container=document.getElementById('fc-tree-container');
+  // Layout: 4 colunas
+  // Col0: Vitalidade -> CascaGrossa | Atletico
+  // Col1: Determinacao -> EspiritoImortal
+  // Col2: Resistencia
+  // Col3: Carregar (raiz)
   let html='<div class="fc-tree">';
   html+=buildFCNodeHTML('fomento',true);
   html+='<div style="display:flex;justify-content:center"><div class="fc-cv"></div></div>';
-  // 3 branches
-  html+='<div style="display:flex;justify-content:center;align-items:flex-start;width:100%">';
-  ['vitalidade','determinacao','resistencia'].forEach(id=>{
-    html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-    html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
-    html+='<div class="fc-cv" style="height:16px"></div>';
-    html+=buildFCNodeHTML(id,false);
-    html+='</div>';
-  });
-  html+='</div>';
-  // Casca Grossa below Vitalidade (left third)
-  html+='<div style="display:flex;justify-content:flex-start;width:100%">';
+  html+='<div style="display:flex;align-items:flex-start;width:100%;gap:4px">';
   html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-  html+='<div class="fc-cv" style="height:20px"></div>';
+  html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
+  html+='<div class="fc-cv" style="height:16px"></div>';
+  html+=buildFCNodeHTML('vitalidade',false);
+  html+='<div style="display:flex;align-items:flex-start;width:95%;gap:2px">';
+  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
+  html+='<div class="fc-cv" style="height:8px"></div>';
+  html+='<div style="height:2px;background:var(--border2);width:100%"></div>';
+  html+='<div class="fc-cv" style="height:6px"></div>';
   html+=buildFCNodeHTML('cascagrossa',false);
-  html+='</div><div style="flex:2"></div></div>';
+  html+='</div>';
+  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
+  html+='<div class="fc-cv" style="height:8px"></div>';
+  html+='<div style="height:2px;background:var(--border2);width:100%"></div>';
+  html+='<div class="fc-cv" style="height:6px"></div>';
+  html+=buildFCNodeHTML('atletico',false);
+  html+='</div>';
+  html+='</div>';
+  html+='</div>';
+  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
+  html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
+  html+='<div class="fc-cv" style="height:16px"></div>';
+  html+=buildFCNodeHTML('determinacao',false);
+  html+='<div class="fc-cv" style="height:10px"></div>';
+  html+=buildFCNodeHTML('espiritoImortal',false);
+  html+='</div>';
+  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
+  html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
+  html+='<div class="fc-cv" style="height:16px"></div>';
+  html+=buildFCNodeHTML('resistencia',false);
+  html+='</div>';
+  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
+  html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
+  html+='<div class="fc-cv" style="height:16px"></div>';
+  html+=buildFCNodeHTML('carregar',false);
+  html+='</div>';
+  html+='</div>';
   html+='</div>';
   container.innerHTML=html;
 }
@@ -2924,6 +3095,9 @@ function fcCheckPrereq(id,lv){
   if(id==='fomento')return true;
   if((fcOwned['fomento']||0)<1)return false;
   if(id==='cascagrossa'&&(fcOwned['vitalidade']||0)<1)return false;
+  if(id==='atletico'&&(fcOwned['vitalidade']||0)<1)return false;
+  if(id==='espiritoImortal'&&(fcOwned['determinacao']||0)<1)return false;
+  if(id==='carregar'&&(fcOwned['fomento']||0)<1)return false;
   if(lv>1&&(fcOwned[id]||0)<lv-1)return false;
   return true;
 }
@@ -3004,18 +3178,65 @@ function buildACTree(){
   if(isOfficial()){const left=spLeft();const total=spBudget();const used=spUsed();spEl.innerHTML='<span style="font-size:12px;font-weight:600;color:'+(left<0?'var(--red3)':'var(--green2)')+'">✦ '+left+' pts disponíveis</span><span style="font-size:10px;color:var(--txt3);margin-left:10px">'+used+' usados / '+total+' total</span>';}
   else{spEl.innerHTML='<span style="font-size:10px;color:var(--txt3)">Ative "Versão Oficial" para comprar habilidades com pontos</span>';}
   const container=document.getElementById('ac-tree-container');
+  // Layout: 4 colunas
+  // Col0: Agilidade -> IniciativaAprimorada | ReflexosAumentados->Cambalhota
+  // Col1: MaosLeves -> ERapidas
+  // Col2: Despistar -> Camuflagem | Emboscar -> Sorrateiro
   let html='<div class="fc-tree">';
   html+=buildACNodeHTML('acrobacia',true);
   html+='<div style="display:flex;justify-content:center"><div class="fc-cv"></div></div>';
-  html+='<div style="display:flex;justify-content:center;align-items:flex-start;width:100%">';
-  ['agilidade'].forEach(id=>{
-    html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-    html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
-    html+='<div class="fc-cv" style="height:16px"></div>';
-    html+=buildACNodeHTML(id,false);
-    html+='</div>';
-  });
-  html+='</div></div>';
+  html+='<div style="display:flex;align-items:flex-start;width:100%;gap:4px">';
+  html+='<div style="flex:2;display:flex;flex-direction:column;align-items:center">';
+  html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
+  html+='<div class="fc-cv" style="height:16px"></div>';
+  html+=buildACNodeHTML('agilidade',false);
+  html+='<div style="display:flex;align-items:flex-start;width:95%;gap:2px">';
+  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
+  html+='<div class="fc-cv" style="height:8px"></div>';
+  html+='<div style="height:2px;background:var(--border2);width:100%"></div>';
+  html+='<div class="fc-cv" style="height:6px"></div>';
+  html+=buildACNodeHTML('iniciativaAprimorada',false);
+  html+='</div>';
+  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
+  html+='<div class="fc-cv" style="height:8px"></div>';
+  html+='<div style="height:2px;background:var(--border2);width:100%"></div>';
+  html+='<div class="fc-cv" style="height:6px"></div>';
+  html+=buildACNodeHTML('reflexosAumentados',false);
+  html+='<div class="fc-cv" style="height:8px"></div>';
+  html+=buildACNodeHTML('cambalhota',false);
+  html+='</div>';
+  html+='</div>';
+  html+='</div>';
+  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
+  html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
+  html+='<div class="fc-cv" style="height:16px"></div>';
+  html+=buildACNodeHTML('maosLeves',false);
+  html+='<div class="fc-cv" style="height:10px"></div>';
+  html+=buildACNodeHTML('eRapidas',false);
+  html+='</div>';
+  html+='<div style="flex:2;display:flex;flex-direction:column;align-items:center">';
+  html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
+  html+='<div class="fc-cv" style="height:16px"></div>';
+  html+=buildACNodeHTML('despistar',false);
+  html+='<div style="display:flex;align-items:flex-start;width:95%;gap:2px">';
+  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
+  html+='<div class="fc-cv" style="height:8px"></div>';
+  html+='<div style="height:2px;background:var(--border2);width:100%"></div>';
+  html+='<div class="fc-cv" style="height:6px"></div>';
+  html+=buildACNodeHTML('camuflagem',false);
+  html+='</div>';
+  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
+  html+='<div class="fc-cv" style="height:8px"></div>';
+  html+='<div style="height:2px;background:var(--border2);width:100%"></div>';
+  html+='<div class="fc-cv" style="height:6px"></div>';
+  html+=buildACNodeHTML('emboscar',false);
+  html+='<div class="fc-cv" style="height:8px"></div>';
+  html+=buildACNodeHTML('sorrateiro',false);
+  html+='</div>';
+  html+='</div>';
+  html+='</div>';
+  html+='</div>';
+  html+='</div>';
   container.innerHTML=html;
 }
 function buildACNodeHTML(id,isRoot){
@@ -3061,6 +3282,15 @@ function acShowDesc(id){
 function acCheckPrereq(id,lv){
   if(id==='acrobacia')return true;
   if((acOwned['acrobacia']||0)<1)return false;
+  if(id==='iniciativaAprimorada'&&(acOwned['agilidade']||0)<1)return false;
+  if(id==='reflexosAumentados'&&(acOwned['agilidade']||0)<1)return false;
+  if(id==='cambalhota'&&(acOwned['reflexosAumentados']||0)<1)return false;
+  if(id==='maosLeves'&&(acOwned['acrobacia']||0)<1)return false;
+  if(id==='eRapidas'&&(acOwned['maosLeves']||0)<1)return false;
+  if(id==='despistar'&&(acOwned['acrobacia']||0)<1)return false;
+  if(id==='camuflagem'&&(acOwned['despistar']||0)<1)return false;
+  if(id==='emboscar'&&(acOwned['despistar']||0)<1)return false;
+  if(id==='sorrateiro'&&(acOwned['emboscar']||0)<1)return false;
   if(lv>1&&(acOwned[id]||0)<lv-1)return false;
   return true;
 }
@@ -3110,25 +3340,69 @@ function buildPATree(){
   if(isOfficial()){const left=spLeft();const total=spBudget();const used=spUsed();spEl.innerHTML='<span style="font-size:12px;font-weight:600;color:'+(left<0?'var(--red3)':'var(--green2)')+'">✦ '+left+' pts disponíveis</span><span style="font-size:10px;color:var(--txt3);margin-left:10px">'+used+' usados / '+total+' total</span>';}
   else{spEl.innerHTML='<span style="font-size:10px;color:var(--txt3)">Ative "Versão Oficial" para comprar habilidades com pontos</span>';}
   const container=document.getElementById('pa-tree-container');
+  // Layout PA: 4 colunas
+  // Col0: AtaqueFurtivo -> Distracao | MaisUm
+  // Col1: Apunhalar -> GolpeDesequilibrante
+  // Col2: AtaqueDuplo (raiz) -> FintaDupla
+  // Col3: CacadorCriaturas (raiz)
+  // (AtaqdupLO da versao antiga) -> descontinuado, trocado por AtaqueDuplo novo
   let html='<div class="fc-tree">';
   html+=buildPANodeHTML('passo',true);
   html+='<div style="display:flex;justify-content:center"><div class="fc-cv"></div></div>';
-  html+='<div style="display:flex;justify-content:center;align-items:flex-start;width:100%">';
-  ['ataquefurtivo','atacduplo'].forEach(id=>{
-    html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-    html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
-    html+='<div class="fc-cv" style="height:16px"></div>';
-    html+=buildPANodeHTML(id,false);
-    html+='</div>';
-  });
-  html+='</div>';
-  // Grau 4: maisUm e apunhalar below ataquefurtivo (left)
-  html+='<div style="display:flex;justify-content:flex-start;width:100%">';
+  html+='<div style="display:flex;align-items:flex-start;width:100%;gap:4px">';
   html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-  html+='<div class="fc-cv" style="height:20px"></div>';
-  html+='<div style="display:flex;gap:8px;width:100%;justify-content:center">';
-  ['maisUm','apunhalar'].forEach(id=>{html+=buildPANodeHTML(id,false);});
-  html+='</div></div><div style="flex:1"></div></div>';
+  html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
+  html+='<div class="fc-cv" style="height:16px"></div>';
+  html+=buildPANodeHTML('ataquefurtivo',false);
+  html+='<div style="display:flex;align-items:flex-start;width:95%;gap:2px">';
+  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
+  html+='<div class="fc-cv" style="height:8px"></div>';
+  html+='<div style="height:2px;background:var(--border2);width:100%"></div>';
+  html+='<div class="fc-cv" style="height:6px"></div>';
+  html+=buildPANodeHTML('distracao',false);
+  html+='</div>';
+  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
+  html+='<div class="fc-cv" style="height:8px"></div>';
+  html+='<div style="height:2px;background:var(--border2);width:100%"></div>';
+  html+='<div class="fc-cv" style="height:6px"></div>';
+  html+=buildPANodeHTML('maisUm',false);
+  html+='</div>';
+  html+='</div>';
+  html+='</div>';
+  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
+  html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
+  html+='<div class="fc-cv" style="height:16px"></div>';
+  html+=buildPANodeHTML('apunhalar',false);
+  html+='<div class="fc-cv" style="height:10px"></div>';
+  html+=buildPANodeHTML('golpeDesequilibrante',false);
+  html+='</div>';
+  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
+  html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
+  html+='<div class="fc-cv" style="height:16px"></div>';
+  html+=buildPANodeHTML('ataqueDuplo',false);
+  html+='<div class="fc-cv" style="height:10px"></div>';
+  html+=buildPANodeHTML('fintaDupla',false);
+  html+='</div>';
+  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
+  html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
+  html+='<div class="fc-cv" style="height:16px"></div>';
+  html+=buildPANodeHTML('cacadorCriaturas',false);
+  html+='<div style="display:flex;align-items:flex-start;width:95%;gap:2px">';
+  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
+  html+='<div class="fc-cv" style="height:8px"></div>';
+  html+='<div style="height:2px;background:var(--border2);width:100%"></div>';
+  html+='<div class="fc-cv" style="height:6px"></div>';
+  html+=buildPANodeHTML('vantagemBatalha',false);
+  html+='</div>';
+  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
+  html+='<div class="fc-cv" style="height:8px"></div>';
+  html+='<div style="height:2px;background:var(--border2);width:100%"></div>';
+  html+='<div class="fc-cv" style="height:6px"></div>';
+  html+=buildPANodeHTML('voceEhOProximo',false);
+  html+='</div>';
+  html+='</div>';
+  html+='</div>';
+  html+='</div>';
   html+='</div>';
   container.innerHTML=html;
 }
@@ -3176,6 +3450,13 @@ function paCheckPrereq(id,lv){
   if(id==='passo')return true;
   if((paOwned['passo']||0)<1)return false;
   if((id==='maisUm'||id==='apunhalar')&&(paOwned['ataquefurtivo']||0)<1)return false;
+  if(id==='distracao'&&(paOwned['ataquefurtivo']||0)<1)return false;
+  if(id==='golpeDesequilibrante'&&(paOwned['apunhalar']||0)<1)return false;
+  if(id==='ataqueDuplo'&&(paOwned['passo']||0)<1)return false;
+  if(id==='fintaDupla'&&(paOwned['ataqueDuplo']||0)<1)return false;
+  if(id==='cacadorCriaturas'&&(paOwned['passo']||0)<1)return false;
+  if(id==='vantagemBatalha'&&(paOwned['cacadorCriaturas']||0)<1)return false;
+  if(id==='voceEhOProximo'&&(paOwned['cacadorCriaturas']||0)<1)return false;
   if(lv>1&&(paOwned[id]||0)<lv-1)return false;
   return true;
 }
@@ -3214,36 +3495,71 @@ function buildMNTree(){
   if(isOfficial()){const left=spLeft();const total=spBudget();const used=spUsed();spEl.innerHTML='<span style="font-size:12px;font-weight:600;color:'+(left<0?'var(--red3)':'var(--green2)')+'">✦ '+left+' pts disponíveis</span><span style="font-size:10px;color:var(--txt3);margin-left:10px">'+used+' usados / '+total+' total</span>';}
   else{spEl.innerHTML='<span style="font-size:10px;color:var(--txt3)">Ative "Versão Oficial" para comprar habilidades com pontos</span>';}
   const container=document.getElementById('mn-tree-container');
+  // Layout: Raiz no topo, 2 colunas: Esquerda (Pose+derivados), Direita (ArmaNatural+derivados)
+  // Linha extra abaixo: Sequencia+ChuvaGolpes na esquerda
   let html='<div class="fc-tree">';
+  // Raiz centralizada
   html+=buildMNNodeHTML('maonua',true);
   html+='<div style="display:flex;justify-content:center"><div class="fc-cv"></div></div>';
-  html+='<div style="display:flex;justify-content:center;align-items:flex-start;width:100%">';
-  ['poseCombate','armaNatural'].forEach(id=>{
-    html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-    html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
-    html+='<div class="fc-cv" style="height:16px"></div>';
-    html+=buildMNNodeHTML(id,false);
+  // Linha 1: PoseCombate | ArmaNatural | SequenciaGolpes
+  html+='<div style="display:flex;align-items:flex-start;width:100%;gap:4px">';
+  // Col Esquerda: Pose + posturas pequenas
+  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
+  html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
+  html+='<div class="fc-cv" style="height:16px"></div>';
+  html+=buildMNNodeHTML('poseCombate',false);
+  html+='<div class="fc-cv" style="height:10px"></div>';
+  // Posturas pequenas em 2x2 sob Pose
+  html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;width:100%">';
+  ['posturaMamifero','posturaAve','posturaReptil','posturaPeixe'].forEach(function(pid){
+    html+='<div style="display:flex;flex-direction:column;align-items:center">';
+    html+='<div class="fc-cv" style="height:10px"></div>';
+    html+=buildMNNodeHTML(pid,false,true);
     html+='</div>';
   });
   html+='</div>';
-  html+='<div style="display:flex;justify-content:center;width:100%;margin-top:4px;gap:4px">';
-  ['posturaMamifero','posturaAve','posturaReptil','posturaPeixe'].forEach(function(pid){
-    html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-    html+='<div class="fc-cv" style="height:20px"></div>';
-    html+=buildMNNodeHTML(pid,false);
-    html+='</div>';
-  });
+  html+='</div>';
+  // Col Centro: SequenciaGolpes + ChuvaGolpes
+  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
+  html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
+  html+='<div class="fc-cv" style="height:16px"></div>';
+  html+=buildMNNodeHTML('sequenciaGolpes',false);
+  html+='<div class="fc-cv" style="height:10px"></div>';
+  html+=buildMNNodeHTML('chuvaGolpes',false);
+  html+='</div>';
+  // Col Direita: ArmaNatural -> dois galhos: GolpeAvassalador e Defletir->Refletir
+  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
+  html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
+  html+='<div class="fc-cv" style="height:16px"></div>';
+  html+=buildMNNodeHTML('armaNatural',false);
+  html+='<div style="display:flex;align-items:flex-start;width:90%;margin-top:0">';
+  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
+  html+='<div class="fc-cv" style="height:12px"></div>';
+  html+='<div style="height:2px;background:var(--border2);width:100%"></div>';
+  html+='<div class="fc-cv" style="height:8px"></div>';
+  html+=buildMNNodeHTML('golpeAvassalador',false);
+  html+='</div>';
+  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
+  html+='<div class="fc-cv" style="height:12px"></div>';
+  html+='<div style="height:2px;background:var(--border2);width:100%"></div>';
+  html+='<div class="fc-cv" style="height:8px"></div>';
+  html+=buildMNNodeHTML('defletir',false);
+  html+='<div class="fc-cv" style="height:10px"></div>';
+  html+=buildMNNodeHTML('refletirProjetil',false);
+  html+='</div>';
+  html+='</div>';
+  html+='</div>';
   html+='</div>';
   html+='</div>';
   container.innerHTML=html;
 }
-function buildMNNodeHTML(id,isRoot){
+function buildMNNodeHTML(id,isRoot,sm){
   const node=MN_NODES.find(n=>n.id===id);if(!node)return '';
   const owned=mnOwned[id]||0;
   let starsHtml='';
   if(node.stars){starsHtml='<div class="fc-stars">';for(let i=0;i<node.maxLevels;i++)starsHtml+='<span class="fc-star'+(i<owned?' lit':'')+'">★</span>';starsHtml+='</div>';}
   const badge=owned>0?'<div class="fc-owned-badge">✓ Nv'+owned+'/'+node.maxLevels+'</div>':'';
-  return '<div class="fc-node'+(isRoot?' root-node':'')+(owned>0?' owned':'')+'" onclick="mnShowDesc(\''+id+'\')" id="mnn-'+id+'">'+
+  return '<div class="fc-node'+(isRoot?' root-node':'')+(owned>0?' owned':'')+(sm?' fc-node-sm':'')+'" onclick="mnShowDesc(\''+id+'\')" id="mnn-'+id+'">'+
     '<div class="fc-node-name">'+node.name+'</div>'+
     '<div class="fc-node-grade">Grau '+node.grade+(isRoot?' · Raiz':'')+'</div>'+
     starsHtml+badge+'</div>';
@@ -3267,6 +3583,11 @@ function mnShowDesc(id){
         lv.choiceSkills.forEach(sk=>{html+='<option value="'+sk.attr+'|'+sk.name+'">'+sk.name+'</option>';});
         html+='</select>';
         if(mnMaestriaChoice)html+='<div style="font-size:10px;color:var(--green2);margin:4px 0">✓ Maestria aplicada em: '+mnMaestriaChoice.name+'</div>';
+    if(id==='golpeAvassalador'&&golpeAvChoices.length){
+      const muls=golpeAvChoices.filter(c=>c==='mul').length;
+      const margens=golpeAvChoices.filter(c=>c==='margem').length;
+      html+='<div style="font-size:10px;color:var(--green2);margin:4px 0">✓ Crítico atual: '+(20-margens)+'×'+(2+muls)+(muls?' (+'+muls+'× mul)':'')+(margens?' (-'+margens+' margem)':'')+'</div>';
+    }
         html+='<button class="fc-buy-btn" '+(canBuy?'':'disabled')+' onclick="mnBuyLevel(\'maonua\',1)">'+btnLabel+'</button></div>';
       } else {
         html+='<button class="fc-buy-btn" '+(canBuy?'':'disabled')+' onclick="mnBuyLevel(\''+id+'\','+lv.n+')">'+btnLabel+'</button>';
@@ -3284,6 +3605,11 @@ function mnCheckPrereq(id,lv){
   if((mnOwned['maonua']||0)<1)return false;
   if(id==='posturaMamifero'&&(mnOwned['poseCombate']||0)<1)return false;
   if(id==='armaNatural'&&(mnOwned['maonua']||0)<1)return false;
+  if(id==='golpeAvassalador'&&(mnOwned['armaNatural']||0)<1)return false;
+  if(id==='defletir'&&(mnOwned['armaNatural']||0)<1)return false;
+  if(id==='refletirProjetil'&&(mnOwned['defletir']||0)<1)return false;
+  if(id==='sequenciaGolpes'&&(mnOwned['maonua']||0)<1)return false;
+  if(id==='chuvaGolpes'&&(mnOwned['sequenciaGolpes']||0)<1)return false;
   if(id==='posturaAve'&&(mnOwned['poseCombate']||0)<1)return false;
   if(id==='posturaReptil'&&(mnOwned['poseCombate']||0)<1)return false;
   if(id==='posturaPeixe'&&(mnOwned['poseCombate']||0)<1)return false;
@@ -3301,15 +3627,43 @@ function mnBuyLevel(id,lv){
       if(dot0&&!dot0.classList.contains('filled')){dot0.classList.add('filled');calcTotal(attr,name);autoSave();}
     }
   }
+  if(id==='golpeAvassalador'){
+    openGolpeAvModal();
+    return;
+  }
   mnOwned[id]=(mnOwned[id]||0)+1;
   if(id==='armaNatural'){const nd=getArmaNaturalDie();inventory.weapon.forEach(function(w){if(w.isGloveWeapon){w.danoS=nd+'+FIS';w.customTags=['Mão Nua',nd+'+FIS'];}});renderWeaponInvPanel();renderFichaWeapons();}
   updateSPBadge();buildMNTree();mnShowDesc(id);renderPlayerTree();updatePoseButton();autoSave();
   showToast('✓ Habilidade comprada!');
 }
+function openGolpeAvModal(){
+  const lv=(mnOwned['golpeAvassalador']||0)+1;
+  const curMul=2+golpeAvChoices.filter(c=>c==='mul').length;
+  const curMargem=20-golpeAvChoices.filter(c=>c==='margem').length;
+  const nextMul=curMul+1;
+  const nextMargem=curMargem-1;
+  let body='<div style="text-align:left">';
+  body+='<div style="font-size:11px;color:var(--txt2);margin-bottom:10px">Escolha para o N'+lv+':</div>';
+  body+='<div style="display:flex;flex-direction:column;gap:8px">';
+  body+='<button class="buy-btn" onclick="confirmGolpeAv(\'mul\')" style="text-align:left;padding:10px">';
+  body+='🔴 +1 Multiplicador<br><span style="font-size:10px;color:var(--txt3)">'+curMargem+'x'+curMul+' para '+curMargem+'x'+nextMul+'</span></button>';
+  body+='<button class="buy-btn" onclick="confirmGolpeAv(\'margem\')" style="text-align:left;padding:10px">';
+  body+='🔴 +1 Margem<br><span style="font-size:10px;color:var(--txt3)">'+curMargem+'x'+curMul+' para '+nextMargem+'x'+curMul+'</span></button>';
+  body+='</div></div>';
+  showModal('Golpe Avassalador Nv'+lv,body,null);
+}
+function confirmGolpeAv(choice){
+  golpeAvChoices.push(choice);
+  mnOwned['golpeAvassalador']=(mnOwned['golpeAvassalador']||0)+1;
+  closeModal();
+  updateSPBadge();buildMNTree();mnShowDesc('golpeAvassalador');renderPlayerTree();updatePoseButton();renderFichaWeapons();autoSave();
+  showToast('✓ Golpe Avassalador: '+(choice==='mul'?'+1 Multiplicador':'+1 Margem')+' aplicado!');
+}
 function sellMNLevel(id,lv){
   const owned=mnOwned[id]||0;
   if(lv!==owned){showToast('Só pode vender o nível mais alto!');return;}
   mnOwned[id]=Math.max(0,owned-1);
+  if(id==='golpeAvassalador'){golpeAvChoices.pop();renderFichaWeapons();}
   if(id==='armaNatural'){const nd=getArmaNaturalDie();inventory.weapon.forEach(function(w){if(w.isGloveWeapon){w.danoS=nd+'+FIS';w.customTags=['Mão Nua',nd+'+FIS'];}});renderWeaponInvPanel();renderFichaWeapons();}
   if(id==='maonua'&&lv===1&&mnMaestriaChoice){
     const{attr,name}=mnMaestriaChoice;
@@ -3439,6 +3793,105 @@ function openAROverlay(){document.getElementById('ar-overlay').classList.add('op
 function closeAROverlay(e){if(e.target===document.getElementById('ar-overlay'))closeAROverlayDirect();}
 function closeAROverlayDirect(){document.getElementById('ar-overlay').classList.remove('open');}
 
+function atCheckPrereq(id,lv){
+  if(id==='atirador')return true;
+  if((atOwned['atirador']||0)<1)return false;
+  if(lv>1&&(atOwned[id]||0)<lv-1)return false;
+  return true;
+}
+function atBuyLevel(id,lv){
+  if(!atCheckPrereq(id,lv)){showToast('Pré-requisito não atendido!');return;}
+  if(isOfficial()&&spLeft()<1){showToast('Sem pontos de habilidade!');return;}
+  if(id==='atirador'&&lv===1){
+    const sel=document.getElementById('at-maestria-sel');
+    if(sel){
+      const parts=sel.value.split('|');atMaestriaChoice={attr:parts[0],name:parts[1]};
+      const d=document.getElementById(mdId(atMaestriaChoice.attr,atMaestriaChoice.name,0));
+      if(d){d.classList.add('filled');calcTotal(atMaestriaChoice.attr,atMaestriaChoice.name);}
+    }
+  }
+  atOwned[id]=(atOwned[id]||0)+1;
+  updateSPBadge();buildATTree();atShowDesc(id);renderPlayerTree();autoSave();
+  showToast('✓ Habilidade comprada!');
+}
+let atMaestriaChoice=null;
+function atSellLevel(id,lv){
+  const owned=atOwned[id]||0;if(owned<lv)return;
+  atOwned[id]=Math.max(0,owned-1);
+  if(id==='atirador'&&lv===1&&atMaestriaChoice){
+    const d=document.getElementById(mdId(atMaestriaChoice.attr,atMaestriaChoice.name,0));
+    if(d){d.classList.remove('filled');calcTotal(atMaestriaChoice.attr,atMaestriaChoice.name);}
+    atMaestriaChoice=null;
+  }
+  updateSPBadge();buildATTree();atShowDesc(id);renderPlayerTree();reapplyFichaDots();autoSave();
+  showToast('↩ Habilidade vendida.');
+}
+function atShowDesc(id){
+  const node=AT_NODES.find(n=>n.id===id);if(!node)return;
+  document.getElementById('at-desc-title').textContent=node.name;
+  document.getElementById('at-desc-grade').textContent='Grau '+node.grade+(node.isRoot?' · Raiz':'');
+  const owned=atOwned[id]||0;
+  let html='';
+  node.levels.forEach(function(lv){
+    const prereqOk=atCheckPrereq(id,lv.n);const spOk=!isOfficial()||spLeft()>0;
+    const canBuy=prereqOk&&spOk&&owned<lv.n;
+    const alreadyOwned=owned>=lv.n;
+    html+='<div class="fc-desc-level">';
+    html+='<div class="fc-desc-lv-header"><span class="fc-desc-lv-badge">Nv'+lv.n+'</span>';
+    if(alreadyOwned)html+='<button class="fc-sell-btn" onclick="atSellLevel(\''+id+'\','+lv.n+')">\u21a9 Vender</button>';
+    html+='</div><div class="fc-desc-lv-txt">'+lv.txt+'</div>';
+    if(!alreadyOwned){
+      if(lv.hasChoice){
+        html+='<div class="fc-res-picker"><label>Escolha a Per\xedcia:</label><select id="at-maestria-sel">';
+        lv.choiceSkills.forEach(function(sk){html+='<option value="'+sk.attr+'|'+sk.name+'">'+sk.name+'</option>';});
+        html+='</select>';
+        if(atMaestriaChoice)html+='<div style="font-size:10px;color:var(--green2);margin:4px 0">\u2713 Maestria aplicada em: '+atMaestriaChoice.name+'</div>';
+        html+='<button class="fc-buy-btn" '+(canBuy?'':'disabled')+' onclick="atBuyLevel(\'atirador\',1)">'+(canBuy?'Comprar Nv1 (1pt)':(!prereqOk?'Pr\xe9-requisito n\xe3o atendido':'Sem pts dispon\xedveis'))+'</button>';
+        html+='</div>';
+      } else {
+        html+='<button class="fc-buy-btn" '+(canBuy?'':'disabled')+' onclick="atBuyLevel(\''+id+'\','+lv.n+')">'+
+          (canBuy?'Comprar Nv'+lv.n+' (1pt)':(!prereqOk?'Pr\xe9-requisito n\xe3o atendido':'Sem pts dispon\xedveis'))+'</button>';
+      }
+    }
+    html+='</div>';
+  });
+  document.getElementById('at-desc-levels').innerHTML=html;
+  document.getElementById('at-desc-card').classList.add('show');
+}
+function buildATNodeHTML(id,isRoot){
+  const node=AT_NODES.find(n=>n.id===id);if(!node)return '';
+  const owned=atOwned[id]||0;
+  let starsHtml='';
+  if(node.stars){starsHtml='<div class="fc-stars">';for(let i=0;i<node.maxLevels;i++)starsHtml+='<span class="fc-star'+(i<owned?' lit':'')+'">\u2605</span>';starsHtml+='</div>';}
+  const badge=owned>0?'<div class="fc-owned-badge">\u2713 Nv'+owned+'/'+node.maxLevels+'</div>':'';
+  return '<div class="fc-node'+(isRoot?' root-node':'')+(owned>0?' owned':'')+'" onclick="atShowDesc(\''+id+'\')" id="atn-'+id+'">'+
+    '<div class="fc-node-name">'+node.name+'</div>'+
+    '<div class="fc-node-grade">Grau '+node.grade+(isRoot?' \xb7 Raiz':'')+'</div>'+
+    starsHtml+badge+'</div>';
+}
+function buildATTree(){
+  const spEl=document.getElementById('at-sp-bar');
+  if(isOfficial()){const left=spLeft();const total=spBudget();const used=spUsed();spEl.innerHTML='<span style="font-size:12px;font-weight:600;color:'+(left<0?'var(--red3)':'var(--green2)') +'">'+'\u2726 '+left+' pts dispon\xedveis</span><span style="font-size:10px;color:var(--txt3);margin-left:10px">'+used+' usados / '+total+' total</span>';}
+  else{spEl.innerHTML='<span style="font-size:10px;color:var(--txt3)">Ative "Vers\xe3o Oficial" para comprar habilidades com pontos</span>';}
+  const container=document.getElementById('at-tree-container');
+  let html='<div class="fc-tree">';
+  html+=buildATNodeHTML('atirador',true);
+  html+='<div style="display:flex;justify-content:center"><div class="fc-cv"></div></div>';
+  html+='<div style="display:flex;align-items:flex-start;width:100%;gap:4px">';
+  ['mirar','artilhariaPesada','sentinela'].forEach(function(nid){
+    html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
+    html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
+    html+='<div class="fc-cv" style="height:16px"></div>';
+    html+=buildATNodeHTML(nid,false);
+    html+='</div>';
+  });
+  html+='</div></div>';
+  container.innerHTML=html;
+}
+function openATOverlay(){document.getElementById('at-overlay').classList.add('open');buildATTree();document.getElementById('at-desc-card').classList.remove('show');}
+function closeATOverlay(e){if(e.target===document.getElementById('at-overlay'))closeATOverlayDirect();}
+function closeATOverlayDirect(){document.getElementById('at-overlay').classList.remove('open');}
+
 function buildARTree(){
   const spEl=document.getElementById('ar-sp-bar');
   if(isOfficial()){const left=spLeft();const total=spBudget();const used=spUsed();spEl.innerHTML='<span style="font-size:12px;font-weight:600;color:'+(left<0?'var(--red3)':'var(--green2)')+'">✦ '+left+' pts disponíveis</span><span style="font-size:10px;color:var(--txt3);margin-left:10px">'+used+' usados / '+total+' total</span>';}
@@ -3449,35 +3902,63 @@ function buildARTree(){
   //   [focoArmas] [combateDefensivo] [segurarEscudo] [treinoManuseio]
   //   [especializacao]                               [duasMaos]
   //   [ultraMaestria]
+  // Layout: 3 colunas principais
+  // Col0: FocoArmas -> Espec -> Ultra
+  // Col1: TreinoManuseio -> 3 galhos: DuasMaos/Versatil/UmaMao
+  // Col2: CombateDefensivo -> SegurarEscudo
   let html='<div class="fc-tree">';
   html+=buildARNodeHTML('armado',true);
   html+='<div style="display:flex;justify-content:center"><div class="fc-cv"></div></div>';
-  // Row 1: 3 branches from root
-  html+='<div style="display:flex;justify-content:center;align-items:flex-start;width:100%">';
-  ['focoArmas','combateDefensivo','treinoManuseio'].forEach(id=>{
-    html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-    html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
-    html+='<div class="fc-cv" style="height:16px"></div>';
-    html+=buildARNodeHTML(id,false);
-    html+='</div>';
-  });
-  html+='</div>';
-  // Row 2: especializacao(col0) | segurarEscudo(col1) | duasMaos(col2)
-  html+='<div style="display:flex;width:100%;margin-top:4px">';
-  [['especializacao',0],['segurarEscudo',1],['duasMaos',2]].forEach(([nid,])=>{
-    html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-    html+='<div class="fc-cv" style="height:20px"></div>';
-    html+=buildARNodeHTML(nid,false);
-    html+='</div>';
-  });
-  html+='</div>';
-  // Row 3: ultraMaestria below especializacao
-  html+='<div style="display:flex;width:100%;margin-top:4px">';
+  html+='<div style="display:flex;align-items:flex-start;width:100%;gap:6px">';
   html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-  html+='<div class="fc-cv" style="height:20px"></div>';
+  html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
+  html+='<div class="fc-cv" style="height:16px"></div>';
+  html+=buildARNodeHTML('focoArmas',false);
+  html+='<div class="fc-cv" style="height:10px"></div>';
+  html+=buildARNodeHTML('especializacao',false);
+  html+='<div class="fc-cv" style="height:10px"></div>';
   html+=buildARNodeHTML('ultraMaestria',false);
   html+='</div>';
-  html+='<div style="flex:2"></div>';
+  html+='<div style="flex:2;display:flex;flex-direction:column;align-items:center">';
+  html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
+  html+='<div class="fc-cv" style="height:16px"></div>';
+  html+=buildARNodeHTML('treinoManuseio',false);
+  html+='<div style="display:flex;align-items:flex-start;width:100%;gap:2px">';
+  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
+  html+='<div class="fc-cv" style="height:8px"></div>';
+  html+='<div style="height:2px;background:var(--border2);width:100%"></div>';
+  html+='<div class="fc-cv" style="height:6px"></div>';
+  html+=buildARNodeHTML('duasMaos',false);
+  html+='<div class="fc-cv" style="height:8px"></div>';
+  html+=buildARNodeHTML('armasPesadas',false);
+  html+='</div>';
+  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
+  html+='<div class="fc-cv" style="height:8px"></div>';
+  html+='<div style="height:2px;background:var(--border2);width:100%"></div>';
+  html+='<div class="fc-cv" style="height:6px"></div>';
+  html+=buildARNodeHTML('versatil',false);
+  html+='<div class="fc-cv" style="height:8px"></div>';
+  html+=buildARNodeHTML('ripostar',false);
+  html+='</div>';
+  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
+  html+='<div class="fc-cv" style="height:8px"></div>';
+  html+='<div style="height:2px;background:var(--border2);width:100%"></div>';
+  html+='<div class="fc-cv" style="height:6px"></div>';
+  html+=buildARNodeHTML('umaMao',false);
+  html+='<div class="fc-cv" style="height:8px"></div>';
+  html+=buildARNodeHTML('saqueRapido',false);
+  html+='<div class="fc-cv" style="height:8px"></div>';
+  html+=buildARNodeHTML('duasArmas',false);
+  html+='</div>';
+  html+='</div>';
+  html+='</div>';
+  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
+  html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
+  html+='<div class="fc-cv" style="height:16px"></div>';
+  html+=buildARNodeHTML('combateDefensivo',false);
+  html+='<div class="fc-cv" style="height:10px"></div>';
+  html+=buildARNodeHTML('segurarEscudo',false);
+  html+='</div>';
   html+='</div>';
   html+='</div>';
   container.innerHTML=html;
@@ -3563,6 +4044,12 @@ function arCheckPrereq(id,lv){
   if((id==='especializacao')&&(arOwned['focoArmas']||0)<1)return false;
   if((id==='ultraMaestria')&&(arOwned['especializacao']||0)<1)return false;
   if(id==='duasMaos'&&(arOwned['treinoManuseio']||0)<1)return false;
+  if(id==='armasPesadas'&&(arOwned['duasMaos']||0)<1)return false;
+  if(id==='versatil'&&(arOwned['treinoManuseio']||0)<1)return false;
+  if(id==='ripostar'&&(arOwned['versatil']||0)<1)return false;
+  if(id==='umaMao'&&(arOwned['treinoManuseio']||0)<1)return false;
+  if(id==='saqueRapido'&&(arOwned['umaMao']||0)<1)return false;
+  if(id==='duasArmas'&&(arOwned['saqueRapido']||0)<1)return false;
   if(id==='segurarEscudo'&&(arOwned['combateDefensivo']||0)<1)return false;
   if(lv>1&&(arOwned[id]||0)<lv-1)return false;
   return true;
@@ -4373,14 +4860,14 @@ function gatherData(){
   d._fcRes=JSON.stringify(fcResChoices);d._resRows=JSON.stringify(resRows);d._vulnRows=JSON.stringify(vulnRows);
   d._acOwned=JSON.stringify(acOwned);d._acMC=acMaestriaChoice?JSON.stringify(acMaestriaChoice):null;
   d._paOwned=JSON.stringify(paOwned);d._paAC=paArmaChoice||null;
-  d._arOwned=JSON.stringify(arOwned);d._arMC=arMaestriaChoice?JSON.stringify(arMaestriaChoice):null;d._arFoco=JSON.stringify(arFocoArmas);d._arEmp=arEmpunhaduraChoice||null;
+  d._arOwned=JSON.stringify(arOwned);d._atOwned=JSON.stringify(atOwned);d._atMC=atMaestriaChoice?JSON.stringify(atMaestriaChoice):null;d._arMC=arMaestriaChoice?JSON.stringify(arMaestriaChoice):null;d._arFoco=JSON.stringify(arFocoArmas);d._arEmp=arEmpunhaduraChoice||null;
   d._arEC=arEspecChoice||null;d._arUC=arUltraChoice||null;
   d._mnOwned=JSON.stringify(mnOwned);d._mnMC=mnMaestriaChoice?JSON.stringify(mnMaestriaChoice):null;
   d._medOwned=JSON.stringify(medOwned);d._medMC=medMaestriaChoice?JSON.stringify(medMaestriaChoice):null;
   d._fcMC=fcMaestriaChoice?JSON.stringify(fcMaestriaChoice):null;
   d._ceOwned=JSON.stringify(ceOwned);
   d._ccOwned=JSON.stringify(ccOwned);d._ccAdapts=JSON.stringify(ccAdaptations);
-  d._poseActive=poseActive;d._activePostura=activePostura||'base';
+  d._poseActive=poseActive;d._activePostura=activePostura||'base';d._golpeAvChoices=JSON.stringify(golpeAvChoices||[]);
   // Save pose bonus amounts so dataset can be restored after reload
   const _pb={};['Artes Marciais','Atletismo','Fortitude'].forEach(function(n){
     const el=document.getElementById(bnId('fisico',n));if(el)_pb['fisico_'+n]=parseInt(el.dataset.posebonus||0);
@@ -4402,7 +4889,7 @@ function doResetFicha(){
   equippedWeapons={slot1:null,slot2:null};wepAmmo={};
   itemDamage={};resRows=[];vulnRows=[];
   poseActive=false;calcSavedSpells=[];calcEditingIdx=-1;
-  fcOwned={};acOwned={};paOwned={};arOwned={};mnOwned={};medOwned={};ceOwned={};ccOwned={};ccAdaptations=[];
+  fcOwned={};acOwned={};paOwned={};arOwned={};atOwned={};mnOwned={};medOwned={};ceOwned={};ccOwned={};ccAdaptations=[];
   fcMaestriaChoice=null;acMaestriaChoice=null;paAcrobaticaChoice=null;
   arMaestriaChoice=null;arFocoArmas=[];arEmpunhaduraChoice=null;arEspecChoice=null;arUltraChoice=null;
   mnMaestriaChoice=null;medMaestriaChoice=null;shopWepCustom={};shopArmorCustom={};shopShieldCustom={};
@@ -4473,6 +4960,8 @@ function loadSheet(){
       if(d._paOwned)try{Object.assign(paOwned,JSON.parse(d._paOwned));}catch(_){}
       if(d._paAC)paArmaChoice=d._paAC;
       if(d._arOwned)try{Object.assign(arOwned,JSON.parse(d._arOwned));}catch(_){}
+      if(d._atOwned)try{Object.assign(atOwned,JSON.parse(d._atOwned));}catch(_){}
+      if(d._atMC)try{atMaestriaChoice=JSON.parse(d._atMC);}catch(_){}
       if(d._arMC)try{arMaestriaChoice=JSON.parse(d._arMC);}catch(_){}
       if(d._arFoco)try{const v=JSON.parse(d._arFoco);arFocoArmas=Array.isArray(v)?v:[];}catch(_){}
       if(d._arEmp)arEmpunhaduraChoice=d._arEmp;
@@ -4486,7 +4975,7 @@ function loadSheet(){
       if(d._ceOwned)try{Object.assign(ceOwned,JSON.parse(d._ceOwned));}catch(_){}
       if(d._ccOwned)try{Object.assign(ccOwned,JSON.parse(d._ccOwned));}catch(_){}
       if(d._ccAdapts)try{ccAdaptations=JSON.parse(d._ccAdapts);}catch(_){}
-      if(d._poseActive)poseActive=!!d._poseActive;if(d._activePostura)activePostura=d._activePostura;
+      if(d._poseActive)poseActive=!!d._poseActive;if(d._activePostura)activePostura=d._activePostura;if(d._golpeAvChoices)try{golpeAvChoices=JSON.parse(d._golpeAvChoices);}catch(_){}
       // Restore pose bonus dataset attributes so applyPoseBonuses can subtract correctly
       if(d._poseBonusMap){try{
         const pbm=JSON.parse(d._poseBonusMap);
