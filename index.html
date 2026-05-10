@@ -668,7 +668,7 @@ input[type=file]{display:none}
       <div id="skills-poder"></div><div class="saiba-mais" id="sm-poder" onclick="toggleHidden('poder')"></div>
     </div>
   </div>
-  <div class="save-bar"><button class="save-btn" onclick="saveSheet()">💾 Salvar</button><span class="save-msg" id="save-msg">✓ Salvo</span><button class="save-btn" style="background:var(--red3);border-color:var(--red3);margin-left:auto" onclick="askResetFicha()">🗑 Formatar do Zero</button></div>
+  <div class="save-bar"><button class="save-btn" onclick="saveSheet()">💾 Salvar</button><button class="save-btn" onclick="exportJSON()" title="Exportar JSON" style="background:var(--bg4)">📤</button><button class="save-btn" onclick="importJSON()" title="Importar JSON" style="background:var(--bg4)">📥</button><span class="save-msg" id="save-msg">✓ Salvo</span><button class="save-btn" style="background:var(--red3);border-color:var(--red3);margin-left:auto" onclick="askResetFicha()">🗑 Formatar do Zero</button></div>
 </div>
 </div>
 <!-- ITENS -->
@@ -4854,7 +4854,8 @@ function gatherData(){
     try{d[bnId(a,n)]=document.getElementById(bnId(a,n))?.value||'';}catch(_){}
     [0,1].forEach(i=>{d[mdId(a,n,i)]=document.getElementById(mdId(a,n,i))?.classList.contains('filled')||false;});
   }));
-  d._inv=JSON.stringify(inventory);d._eq=JSON.stringify(equipped);d._eqw=JSON.stringify(equippedWeapons);d._wepAmmo=JSON.stringify(wepAmmo);
+  const invForSave=Object.assign({},inventory,{upgrades:undefined});
+  d._inv=JSON.stringify(invForSave);d._eq=JSON.stringify(equipped);d._eqw=JSON.stringify(equippedWeapons);d._wepAmmo=JSON.stringify(wepAmmo);
   d._dmg=JSON.stringify(itemDamage);d._tree=JSON.stringify(treeData);
   d._fcOwned=JSON.stringify(fcOwned);d._fcVital=fcVitalLvlBought;d._fcDet=fcDetLvlBought;
   d._fcRes=JSON.stringify(fcResChoices);d._resRows=JSON.stringify(resRows);d._vulnRows=JSON.stringify(vulnRows);
@@ -4908,7 +4909,31 @@ function doResetFicha(){
   lojaBuilt={protecoes:false,armas:false,utilitarios:false,aprimoramentos:false};
   showToast('✓ Ficha formatada do zero!');
 }
-function saveSheet(){try{localStorage.setItem('rpg-sheet',JSON.stringify(gatherData()));document.querySelectorAll('.save-msg').forEach(m=>{m.style.opacity='1';setTimeout(()=>m.style.opacity='0',2000);});}catch(_){}}
+function saveSheet(){
+  try{
+    const data=gatherData();
+    // Strip photo from main save to save space (photo saved separately)
+    delete data._photo;
+    const json=JSON.stringify(data);
+    const kb=Math.round(json.length/1024);
+    localStorage.setItem('rpg-sheet',json);
+    document.querySelectorAll('.save-msg').forEach(m=>{
+      m.textContent='💾 Salvo ('+(kb)+'kb)';
+      m.style.opacity='1';
+      m.style.color='var(--green2)';
+      setTimeout(()=>m.style.opacity='0',2000);
+    });
+  } catch(e){
+    console.error('Save error:',e);
+    const isQuota=e&&e.name==='QuotaExceededError';
+    document.querySelectorAll('.save-msg').forEach(m=>{
+      m.textContent=isQuota?'⚠ Dados demais! Exporte e limpe.':'⚠ Erro ao salvar!';
+      m.style.opacity='1';
+      m.style.color='var(--red3)';
+      setTimeout(()=>m.style.opacity='0',4000);
+    });
+  }
+}
 function reapplyFichaDots(){
   // First clear ALL dot 0s
   Object.entries(SKILLS).forEach(([a,ns])=>ns.forEach(n=>{
@@ -5004,6 +5029,37 @@ function loadSheet(){
   if(poseActive)applyPoseBonuses();
   // restore dado-cura-val after field is created
   try{const raw=localStorage.getItem('rpg-sheet');if(raw){const d=JSON.parse(raw);if(d['dado-cura-val']){const el=document.getElementById('dado-cura-val');if(el)el.value=d['dado-cura-val'];}}}catch(_){}
+}
+function exportJSON(){
+  const data=gatherData();
+  delete data._photo;
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  const nome=document.getElementById('f-nome')?.value||'personagem';
+  a.download=(nome.trim()||'ficha')+'_rpg.json';
+  a.click();URL.revokeObjectURL(a.href);
+  showToast('📤 Exportado!');
+}
+function importJSON(){
+  const input=document.createElement('input');
+  input.type='file';input.accept='.json,application/json';
+  input.onchange=function(){
+    const f=input.files[0];if(!f)return;
+    const r=new FileReader();
+    r.onload=function(){
+      try{
+        const d=JSON.parse(r.result);
+        localStorage.setItem('rpg-sheet',JSON.stringify(d));
+        showToast('📥 Importado! Recarregando...');
+        setTimeout(()=>location.reload(),800);
+      } catch(e){
+        showToast('⚠ Arquivo inválido!');
+      }
+    };
+    r.readAsText(f);
+  };
+  input.click();
 }
 let _t;function autoSave(){clearTimeout(_t);_t=setTimeout(saveSheet,800);}
 document.addEventListener('input',e=>{
