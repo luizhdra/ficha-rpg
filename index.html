@@ -1592,7 +1592,11 @@ function getGolpeAvMargem(){
   return golpeAvChoices.filter(c=>c==='margem').length;
 }
 function getBareFistCritMul(){
-  return 2+getGolpeAvMul();
+  // Base 2 + Golpe Avassalador mul choices + Macica upgrade on equipped glove
+  const eq=equipped.luvas;
+  const gloveKey=eq?'armor_luvas_'+(eq.name||''):null;
+  const macicaB=gloveKey?getMacicaBonus(gloveKey):0;
+  return 2+getGolpeAvMul()+macicaB;
 }
 function getBareFistCritLimiar(){
   const equip=equipped.luvas;
@@ -1868,7 +1872,9 @@ function renderFichaWeapons(){
 
     const dmg=getFinalDamage(w);
     const critMulBonus=dmg?.critMulBonus||0;
-    const finalCritMul=(w.critMul||2)+critMulBonus;
+    const _wIdx=slotLabel==='slot1'?equippedWeapons.slot1:equippedWeapons.slot2;
+    const _macicaB=_wIdx!==null&&_wIdx!==undefined?getMacicaBonus('weapon_'+_wIdx):0;
+    const finalCritMul=(w.critMul||2)+critMulBonus+_macicaB;
     html+='<div class="eq-wep-name">'+w.displayName+'</div>';
 
     // Build damage stats block
@@ -1881,7 +1887,8 @@ function renderFichaWeapons(){
       statsHtml+='Dano S: <b>'+dmg.danoS.str+'</b>'+(dmg.danoS.tags.length?' <span style="font-size:9px;color:var(--gold)">['+dmg.danoS.tags.join(' ')+']</span>':'')+
         ' &nbsp;Dano DP: <b>'+dmg.dpNormal.str+'</b>'+(dmg.dpNormal.tags.length?' <span style="font-size:9px;color:var(--gold)">['+dmg.dpNormal.tags.join(' ')+']</span>':'');
     }
-    statsHtml+='<br>Crítico: <b>'+w.crit+'×'+finalCritMul+'</b>'+(critMulBonus>0?' <span style="font-size:9px;color:var(--gold)">[+'+critMulBonus+' Esp.]</span>':'')+' ('+w.critEff+')<br>Alcance: <b>'+w.alcance+'m</b> &nbsp;Tipo: <b>'+w.tipo+'</b><br>Manuseio: <b>'+w.manuseio+'</b>'+(w.customTags&&w.customTags.length?' &nbsp;['+w.customTags.join(', ')+']':'');
+    statsHtml+='<br>Crítico: <b>'+w.crit+'×'+finalCritMul+'</b>'+(critMulBonus>0?' <span style="font-size:9px;color:var(--gold)">[+'+critMulBonus+' Esp.]</span>':'')+
+    (_macicaB>0?' <span style="font-size:9px;color:#f97316">[+'+_macicaB+' Maciça]</span>':'')+' ('+w.critEff+')<br>Alcance: <b>'+w.alcance+'m</b> &nbsp;Tipo: <b>'+w.tipo+'</b><br>Manuseio: <b>'+w.manuseio+'</b>'+(w.customTags&&w.customTags.length?' &nbsp;['+w.customTags.join(', ')+']':'');
     html+='<div class="eq-wep-stats">'+statsHtml+'</div>';
     if(w.isShield)html+='<div style="font-size:10px;color:var(--gold);margin-top:2px">🛡 +'+w.defesa+' DEF'+(w.pen>0?' &nbsp;−'+w.pen+' PEN':'')+'</div>';
 
@@ -2079,7 +2086,9 @@ function renderWeaponInvPanel(){
     let dots='';for(let i=0;i<(w.dur||1);i++)dots+='<span style="display:inline-block;width:9px;height:9px;border-radius:2px;background:'+(i<dmg?'var(--red)':'var(--green)')+';margin-right:2px"></span>';
     html+='<div class="weapon-inv-card">';
     html+='<div class="weapon-inv-name"><span>'+w.displayName+(broken?' <span style="color:var(--red);font-size:10px">💔 DESTRUÍDA</span>':'')+'</span><div>'+dots+'</div></div>';
-    html+='<div class="weapon-inv-stats">Dano S: <b>'+w.danoS+'</b> &nbsp;DP: <b>'+w.danoDP+'</b> &nbsp;Crit: <b>'+w.crit+'x'+w.critMul+'</b> ('+w.critEff+')<br>Alcance: <b>'+w.alcance+'m</b> &nbsp;Tipo: <b>'+w.tipo+'</b> &nbsp;Manuseio: <b>'+manuseio+'</b>'+(w.customTags&&w.customTags.length?'<br>Propriedades: <b>'+w.customTags.join(', ')+'</b>':'')+(w.paidPrice?'<br><span style="color:var(--txt3);font-size:10px">🪙 Comprado por '+w.paidPrice+'</span>':'')+'</div>';
+    const macicaB=getMacicaBonus('weapon_'+idx);
+    const dispCritMul=w.critMul+macicaB;
+    html+='<div class="weapon-inv-stats">Dano S: <b>'+w.danoS+'</b> &nbsp;DP: <b>'+w.danoDP+'</b> &nbsp;Crit: <b>'+w.crit+'x'+dispCritMul+'</b>'+(macicaB>0?' <span style="font-size:9px;color:var(--gold)">[+'+macicaB+' Maciça]</span>':'')+' ('+w.critEff+')<br>Alcance: <b>'+w.alcance+'m</b> &nbsp;Tipo: <b>'+w.tipo+'</b> &nbsp;Manuseio: <b>'+manuseio+'</b>'+(w.customTags&&w.customTags.length?'<br>Propriedades: <b>'+w.customTags.join(', ')+'</b>':'')+(w.paidPrice?'<br><span style="color:var(--txt3);font-size:10px">🪙 Comprado por '+w.paidPrice+'</span>':'')+'</div>';
     html+='<div class="weapon-slot-row"><span style="font-size:9px;color:var(--txt3);font-weight:600;text-transform:uppercase;letter-spacing:.5px">Equipar:</span>';
     if(isSlot1)html+='<span class="wep-badge wep-badge-1">✓ Mão 1</span><button class="btn btn-gray" onclick="unequipWeapon(1)">Tirar</button>';
     else if(isSlot2)html+='<span class="wep-badge wep-badge-2">✓ Mão 2</span><button class="btn btn-gray" onclick="unequipWeapon(2)">Tirar</button>';
@@ -2236,7 +2245,7 @@ function toggleUtilSec(id){
   const open=body.style.display==='none';
   body.style.display=open?'block':'none';
   if(arrow)arrow.style.transform=open?'rotate(180deg)':'';
-  if(btn)btn.style.borderColor=open?'var(--red)':'var(--border)';
+  // Border color stays as category color, no override needed
   if(open&&body.innerHTML===''){
     if(id==='mun')buildMunicoesList();
     else if(id==='ace')buildAcessoriosList();
@@ -2437,9 +2446,31 @@ const UPGRADES_PROTECAO = [
     ]
   }
 ];
-const UPGRADES_ARMA = [];
+const UPGRADES_ARMA = [
+  {
+    id: 'macica',
+    name: 'Maciça',
+    icon: '🔨',
+    desc: 'A arma é reforçada com uma camada de metal adicional, se tornando mais letal.',
+    qualidades: [
+      {q:1, desc:'Multiplicador de crítico +1 (ex: 20×2 → 20×3)'},
+      {q:2, desc:'Multiplicador de crítico +2'},
+      {q:3, desc:'Multiplicador de crítico +3'},
+      {q:4, desc:'Multiplicador de crítico +4'},
+    ]
+  }
+];
 const UPGRADES_ITEM = [];
 const UPGRADE_QUAL_MULT = {1:1.5, 2:3, 3:4.5, 4:6};
+// Per-upgrade price multipliers (override global)
+const UPGRADE_PRICE_OVERRIDE = {
+  macica: {1:1, 2:2, 3:3, 4:4}
+};
+function getUpgradeCost(upgradeId, qualidade, itemPrice){
+  const override=UPGRADE_PRICE_OVERRIDE[upgradeId];
+  const mult=override?override[qualidade]:UPGRADE_QUAL_MULT[qualidade];
+  return Math.round(itemPrice*(mult||1));
+}
 function getItemUpgrades(k){if(!inventory.upgrades)inventory.upgrades={};return inventory.upgrades[k]||[];}
 function addItemUpgrade(k,uid,q){if(!inventory.upgrades)inventory.upgrades={};if(!inventory.upgrades[k])inventory.upgrades[k]=[];inventory.upgrades[k]=inventory.upgrades[k].filter(u=>u.id!==uid);inventory.upgrades[k].push({id:uid,qualidade:q});}
 function getUpgradeById(id){return [...UPGRADES_PROTECAO,...UPGRADES_ARMA,...UPGRADES_ITEM].find(u=>u.id===id);}
@@ -2449,17 +2480,31 @@ const APRI_SECTIONS=[
   {id:'arma',icon:'⚔',title:'Aprimoramentos para Armas',sub:'Armas corpo a corpo, distância, Luvas, Escudos',upgrades:UPGRADES_ARMA},
   {id:'item',icon:'🧪',title:'Aprimoramentos para Itens',sub:'Utilitários e equipamentos gerais',upgrades:UPGRADES_ITEM},
 ];
+const APRI_SEC_COLORS={
+  protecao:{border:'#38bdf8',bg:'rgba(14,165,233,0.08)',text:'#7dd3fc'},
+  arma:    {border:'#fb923c',bg:'rgba(249,115,22,0.08)', text:'#fdba74'},
+  item:    {border:'#a78bfa',bg:'rgba(139,92,246,0.08)', text:'#c4b5fd'},
+};
 function buildLojaAprimoramentos(){
   const cont=document.getElementById('loja-aprimoramentos-content');if(!cont)return;
   cont.innerHTML='';
   APRI_SECTIONS.forEach(function(sec){
-    const wrap=document.createElement('div');wrap.style.marginBottom='6px';
-    wrap.innerHTML='<div id="apri-'+sec.id+'-btn" onclick="toggleApriSec(\''+sec.id+'\')" style="display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 14px;cursor:pointer;user-select:none">'+
-      '<div style="display:flex;align-items:center;gap:8px">'+
-      '<span style="font-size:18px">'+sec.icon+'</span>'+
-      '<div><div style="font-size:13px;font-weight:700;color:var(--txt)">'+sec.title+'</div><div style="font-size:10px;color:var(--txt3)">'+sec.sub+'</div></div>'+
-      '</div><span id="apri-'+sec.id+'-arrow" style="font-size:12px;color:var(--txt3);transition:transform .2s">▼</span></div>'+
-      '<div id="apri-'+sec.id+'-body" style="display:none;padding-top:4px"></div>';
+    const clr=APRI_SEC_COLORS[sec.id]||{border:'var(--border)',bg:'var(--bg3)',text:'var(--txt)'};
+    const wrap=document.createElement('div');wrap.style.marginBottom='10px';
+    wrap.innerHTML=
+      '<div id="apri-'+sec.id+'-btn" onclick="toggleApriSec(\''+sec.id+'\')" style="'+
+        'display:flex;align-items:center;justify-content:space-between;'+
+        'background:'+clr.bg+';border:1px solid '+clr.border+';border-left:4px solid '+clr.border+';'+
+        'border-radius:8px;padding:12px 14px;cursor:pointer;user-select:none">'+
+      '<div style="display:flex;align-items:center;gap:10px">'+
+      '<span style="font-size:20px">'+sec.icon+'</span>'+
+      '<div>'+
+        '<div style="font-size:13px;font-weight:800;color:'+clr.text+';letter-spacing:.3px">'+sec.title+'</div>'+
+        '<div style="font-size:10px;color:var(--txt3);margin-top:1px">'+sec.sub+'</div>'+
+      '</div></div>'+
+      '<span id="apri-'+sec.id+'-arrow" style="font-size:11px;color:'+clr.text+';transition:transform .2s">▼</span>'+
+      '</div>'+
+      '<div id="apri-'+sec.id+'-body" style="display:none;margin-top:4px;padding-left:12px;border-left:3px solid '+clr.border+';margin-left:4px"></div>';
     cont.appendChild(wrap);
   });
 }
@@ -2471,29 +2516,54 @@ function toggleApriSec(id){
   const open=body.style.display==='none';
   body.style.display=open?'block':'none';
   if(arrow)arrow.style.transform=open?'rotate(180deg)':'';
-  if(btn)btn.style.borderColor=open?'var(--red)':'var(--border)';
+  // Border color stays as category color, no override needed
   if(open&&body.innerHTML==='')buildApriList(id,body);
 }
 function buildApriList(secId,body){
   const sec=APRI_SECTIONS.find(s=>s.id===secId);
-  if(!sec||sec.upgrades.length===0){body.innerHTML='<div style="font-size:11px;color:var(--txt3);padding:14px;text-align:center">Nenhum aprimoramento disponível</div>';return;}
+  if(!sec||sec.upgrades.length===0){
+    body.innerHTML='<div style="font-size:11px;color:var(--txt3);padding:14px;text-align:center">Nenhum aprimoramento disponível</div>';
+    return;
+  }
   let html='';
-  sec.upgrades.forEach(function(upg){
-    html+='<div style="background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:12px;margin-bottom:8px">';
-    html+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">';
-    html+='<span style="font-size:20px">'+upg.icon+'</span>';
-    html+='<div><div style="font-size:13px;font-weight:700;color:var(--txt)">'+upg.name+'</div>';
-    html+='<div style="font-size:11px;color:var(--txt2);margin-top:2px">'+upg.desc+'</div></div></div>';
+  sec.upgrades.forEach(function(upg,ui){
+    const rowId='apri-row-'+secId+'-'+ui;
+    const detId='apri-det-'+secId+'-'+ui;
+    html+='<div style="border:1px solid var(--border2);border-radius:8px;margin-bottom:6px;overflow:hidden">';
+    html+='<div id="'+rowId+'" onclick="toggleApriRow(\''+detId+'\',\''+rowId+'\')" style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--bg3);cursor:pointer;user-select:none">';
+    html+='<span style="font-size:16px;flex-shrink:0">'+upg.icon+'</span>';
+    html+='<div style="flex:1;min-width:0">';
+    html+='<div style="font-size:12px;font-weight:700;color:var(--txt)">'+upg.name+'</div>';
+    html+='<div style="font-size:10px;color:var(--txt3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+upg.desc+'</div>';
+    html+='</div>';
+    html+='<div style="display:flex;gap:3px;flex-shrink:0">';
+    upg.qualidades.forEach(function(q){html+='<span style="font-size:9px;font-weight:700;color:var(--gold);background:#2a2010;border:1px solid var(--gold);border-radius:3px;padding:1px 4px">Q'+q.q+'</span>';});
+    html+='</div>';
+    html+='<span style="font-size:10px;color:var(--txt3);margin-left:6px;transition:transform .2s">▼</span>';
+    html+='</div>';
+    html+='<div id="'+detId+'" style="display:none;padding:10px 12px;background:var(--bg4);border-top:1px solid var(--border2)">';
     upg.qualidades.forEach(function(qObj){
-      html+='<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 8px;background:var(--bg4);border-radius:5px;margin-bottom:4px;gap:8px;flex-wrap:wrap">';
-      html+='<div style="display:flex;align-items:center;gap:6px"><span style="font-size:10px;font-weight:700;color:var(--gold);background:#2a2010;border:1px solid var(--gold);border-radius:3px;padding:1px 5px">Q'+qObj.q+'</span>';
-      html+='<span style="font-size:11px;color:var(--txt)">'+qObj.desc+'</span></div>';
-      html+='<button class="buy-btn" style="font-size:11px;padding:4px 10px" onclick="openApriItemPicker(\''+upg.id+'\','+qObj.q+',\''+secId+'\')">Aplicar</button>';
+      html+='<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 8px;background:var(--bg3);border-radius:5px;margin-bottom:4px;gap:8px;flex-wrap:wrap">';
+      html+='<div style="display:flex;align-items:center;gap:6px;flex:1;min-width:0">';
+      html+='<span style="font-size:10px;font-weight:700;color:var(--gold);background:#2a2010;border:1px solid var(--gold);border-radius:3px;padding:1px 5px;flex-shrink:0">Q'+qObj.q+'</span>';
+      html+='<span style="font-size:11px;color:var(--txt)">'+qObj.desc+'</span>';
+      html+='</div>';
+      html+='<button class="buy-btn" style="font-size:11px;padding:4px 10px;flex-shrink:0" onclick="openApriItemPicker(\''+upg.id+'\','+qObj.q+',\''+secId+'\')">'+'Comprar'+'</button>';
       html+='</div>';
     });
-    html+='</div>';
+    html+='</div></div>';
   });
   body.innerHTML=html;
+}
+function toggleApriRow(detId,rowId){
+  const det=document.getElementById(detId);const row=document.getElementById(rowId);if(!det)return;
+  const open=det.style.display==='none';
+  det.style.display=open?'block':'none';
+  if(row){
+    const arr=row.querySelectorAll('span');const last=arr[arr.length-1];
+    if(last)last.style.transform=open?'rotate(180deg)':'';
+    row.style.background=open?'var(--bg4)':'var(--bg3)';
+  }
 }
 function getApriTargetItems(secId){
   const items=[];
@@ -2533,17 +2603,18 @@ function openApriItemPicker(upgradeId,qualidade,secId){
   let html='<div style="text-align:left">';
   html+='<div style="font-size:11px;font-weight:700;color:var(--txt);margin-bottom:6px">Escolha o item para aplicar:</div>';
   html+='<div style="font-size:11px;color:var(--txt2);margin-bottom:2px"><b>'+upg.name+'</b> — Q'+qualidade+': '+qObj.desc+'</div>';
-  html+='<div style="font-size:10px;color:var(--txt3);margin-bottom:10px">Preço = '+UPGRADE_QUAL_MULT[qualidade]+'x o preço do item</div>';
+  const pMult=(UPGRADE_PRICE_OVERRIDE[upgradeId]||{})[qualidade]||UPGRADE_QUAL_MULT[qualidade];
+  html+='<div style="font-size:10px;color:var(--txt3);margin-bottom:10px">Preço = '+pMult+'x o preço do item</div>';
   html+='<div style="display:flex;flex-direction:column;gap:5px;max-height:240px;overflow-y:auto">';
   items.forEach(function(it){
-    const cost=Math.round(it.itemPrice*UPGRADE_QUAL_MULT[qualidade]);
+    const cost=getUpgradeCost(upgradeId,qualidade,it.itemPrice);
     const canAfford=money>=cost;
     const hasUpg=getItemUpgrades(it.key).some(u=>u.id===upgradeId);
     html+='<div style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;background:var(--bg4);border:1px solid var(--border);border-radius:6px;gap:8px;flex-wrap:wrap">';
     html+='<div><div style="font-size:12px;font-weight:600;color:var(--txt)">'+it.label+'</div>';
     if(it.existing)html+='<div style="font-size:9px;color:var(--txt3)">Atuais: '+it.existing+'</div>';
     html+='<div style="font-size:10px;color:'+(canAfford?'var(--green2)':'var(--red3)')+'">🪙 '+cost+(canAfford?'':' ⚠ insuficiente')+'</div></div>';
-    const prevQ=qualidade-1;const needsPrev=qualidade>2;const hasPrev=!needsPrev||getItemUpgrades(it.key).some(u=>u.id===upgradeId&&u.qualidade===prevQ);
+    const prevQ=qualidade-1;const needsPrev=qualidade>1;const hasPrev=!needsPrev||getItemUpgrades(it.key).some(u=>u.id===upgradeId&&u.qualidade===prevQ);
     if(hasPrev){html+='<button class="buy-btn" style="font-size:11px" onclick="confirmApriUpgrade(\''+it.key+'\',\''+upgradeId+'\','+qualidade+','+cost+')">'+( hasUpg?'Atualizar':'Aplicar')+'</button>';}
     else{html+='<button class="buy-btn" style="font-size:11px;opacity:.4;cursor:not-allowed" title="Requer Q'+(prevQ)+' primeiro" disabled>Q'+prevQ+' necessário</button>';}
     html+='</div>';
@@ -2555,7 +2626,7 @@ function openApriItemPicker(upgradeId,qualidade,secId){
 function confirmApriUpgrade(itemKey,upgradeId,qualidade,cost){
   const money=parseInt(document.getElementById('f-money').value)||0;
   if(money<cost){showToast('Dinheiro insuficiente!');return;}
-  const prevQ=qualidade-1;if(qualidade>2&&!getItemUpgrades(itemKey).some(u=>u.id===upgradeId&&u.qualidade===prevQ)){showToast('Requer Q'+prevQ+' primeiro!');return;}
+  const prevQ=qualidade-1;if(qualidade>1&&!getItemUpgrades(itemKey).some(u=>u.id===upgradeId&&u.qualidade===prevQ)){showToast('Requer Q'+prevQ+' primeiro!');return;}
   addItemUpgrade(itemKey,upgradeId,qualidade);
   document.getElementById('f-money').value=money-cost;
   closeModal();
@@ -2563,6 +2634,11 @@ function confirmApriUpgrade(itemKey,upgradeId,qualidade,cost){
   autoSave();
   const upg=getUpgradeById(upgradeId);
   showToast('💞 '+(upg?upg.name:'Aprimoramento')+' Q'+qualidade+' aplicado!');
+}
+function getMacicaBonus(itemKey){
+  const ups=getItemUpgrades(itemKey);
+  const u=ups.find(u=>u.id==='macica');
+  return u?u.qualidade:0;
 }
 function getItemUpgradeHtml(itemKey){
   const ups=getItemUpgrades(itemKey);
