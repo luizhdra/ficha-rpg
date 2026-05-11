@@ -2891,7 +2891,6 @@ function buildSkillTree(){
           '<div class="tree-path-name" style="color:#34d399">'+p.name+' 🩺</div>'+
           '<div style="font-size:10px;color:var(--txt3);margin-top:2px">Clique para ver a árvore</div>'+
           '<div style="margin-top:8px;display:flex;align-items:center;gap:6px"><span style="font-size:10px;color:var(--txt3)">XP Investido:</span><input type="number" style="width:60px;font-size:12px;padding:3px 5px;text-align:center" value="'+xp+'" min="0" onclick="event.stopPropagation()" onchange="setPathXP(\''+cls.id+'\',\''+p.name+'\',this.value)"></div></div>';
-      } else if(p.hasARTree){
       } else if(p.hasATTree){
         pathsHtml+='<div class="tree-path-card" onclick="openATOverlay()" style="border-color:#38bdf8">'+
           '<div class="tree-path-name" style="color:#7dd3fc">'+p.name+' 🏹</div>'+
