@@ -484,6 +484,23 @@ input[type=file]{display:none}
     </div>
   </div>
 </div>
+<!-- RASTROS DO DESTRUIDOR (RD) OVERLAY -->
+<div class="fc-overlay" id="rd-overlay" onclick="closeRDOverlay(event)">
+  <div class="fc-modal">
+    <div class="fc-modal-inner">
+      <button class="fc-close" onclick="closeRDOverlayDirect()">✕</button>
+      <div class="fc-modal-title">Rastros do Destruidor</div>
+      <div class="fc-modal-sub">Árvore de Habilidades — O Batedor</div>
+      <div class="fc-sp-bar" id="rd-sp-bar"></div>
+      <div id="rd-tree-container"></div>
+      <div class="fc-desc-card" id="rd-desc-card">
+        <div class="fc-desc-title" id="rd-desc-title"></div>
+        <div class="fc-desc-grade" id="rd-desc-grade"></div>
+        <div id="rd-desc-levels"></div>
+      </div>
+    </div>
+  </div>
+</div>
 <!-- MÓDULO DO ATIRADOR (AT) OVERLAY -->
 <div class="fc-overlay" id="at-overlay" onclick="closeATOverlay(event)">
   <div class="fc-modal">
@@ -1037,7 +1054,7 @@ const SHIELD_EMP=[
   {id:'aderencia', name:'Aderência (não derruba, +0.08)', priceMod: 0.08},
 ];
 const SKILL_TREE=[
-  {id:'batedor',name:'O Batedor',paths:[{name:'Caminho da Mão Nua',hasMNTree:true},{name:'Trilha do Armado',hasARTree:true},{name:'Módulo do Atirador',hasATTree:true},{name:'Passo do Assassino',hasPATree:true},{name:'Técnicas de Suporte'},{name:'Fúria'}]},
+  {id:'batedor',name:'O Batedor',paths:[{name:'Caminho da Mão Nua',hasMNTree:true},{name:'Trilha do Armado',hasARTree:true},{name:'Módulo do Atirador',hasATTree:true},{name:'Passo do Assassino',hasPATree:true},{name:'Rastros do Destruidor',hasRDTree:true},{name:'Técnicas de Suporte'},{name:'Fúria'}]},
   {id:'especialista',name:'O Especialista',paths:[{name:'Fomento Corporal',hasFCTree:true},{name:'Acrobata',hasACTree:true},{name:'Medicina',hasMedTree:true}]},
   {id:'arcanista',name:'O Arcanista',paths:[{name:'Círculo do Espírito',hasCETree:true},{name:'Círculo dos Elementos'},{name:'Círculo do Corpo',hasCCTree:true}]}
 ];
@@ -1101,7 +1118,12 @@ const AT_NODES=[
   {id:'atirador',name:'Módulo do Atirador',grade:1,maxLevels:1,stars:false,isRoot:true,levels:[{n:1,txt:'Você ganha Maestria em Perícia: Pontaria ou Perícia: Atletismo.',hasChoice:true,choiceSkills:[{attr:'intelecto',name:'Pontaria'},{attr:'fisico',name:'Atletismo'}]}]},
   {id:'mirar',name:'Mirar',grade:2,maxLevels:1,stars:true,levels:[{n:1,txt:'Gaste uma Ação de Movimento para mirar. Se fizer isso, ganha um bônus de acerto equivalente ao seu Atributo: Intelecto em ataques à distância até o fim do seu próximo turno.'}]},
   {id:'artilhariaPesada',name:'Artilharia Pesada',grade:2,maxLevels:2,stars:true,levels:[{n:1,txt:'Ao realizar um ataque bem-sucedido contra um alvo com a Condição: Desprevenido, o dano causado é maximizado.'},{n:2,txt:'Toda vez que você possuir vantagem num ataque, pode escolher entre manter a vantagem ou ganhar um bônus equivalente ao seu Atributo: Intelecto no acerto.'}]},
-  {id:'sentinela',name:'Sentinela',grade:2,maxLevels:2,stars:true,levels:[{n:1,txt:'Caso você seja o primeiro em ordem de iniciativa, seu primeiro ataque no combate receberá vantagem.'},{n:2,txt:'Ao realizar um ataque crítico, você pode fazer uma ação de recarga de arma como uma ação adicional, independente do tempo de recarga.'}]}
+  {id:'sentinela',name:'Sentinela',grade:2,maxLevels:2,stars:true,levels:[{n:1,txt:'Caso você seja o primeiro em ordem de iniciativa, seu primeiro ataque no combate receberá vantagem.'},{n:2,txt:'Ao realizar um ataque crítico, você pode fazer uma ação de recarga de arma como uma ação adicional, independente do tempo de recarga.'}]},
+  {id:'acertoCerteiro',name:'Acerto Certeiro',grade:3,maxLevels:1,stars:true,levels:[{n:1,txt:'Ao reduzir uma criatura a 0 PV com uma arma de longo alcance ou arremesso, sua margem de crítico diminui em 1 ponto até o resto do combate.'}]},
+  {id:'alcanceSupremo',name:'Alcance Supremo',grade:4,maxLevels:2,stars:true,levels:[{n:1,txt:'O limite máximo de alcance da sua arma aumenta em +1 metro para cada ponto de Atributo: Intelecto.'},{n:2,txt:'A distância de qualquer arma que você utiliza é dobrada.'}]},
+  {id:'recarregar',name:'Recarregar',grade:3,maxLevels:1,stars:true,levels:[{n:1,txt:'Escolha um efeito: (A) Escolha uma arma com Recarga — o tempo de recarga diminui uma categoria. (B) Escolha uma arma com Arremesso — após arremessá-la, saque outra do inventário de forma gratuita.'}]},
+  {id:'momentoPerfeito',name:'Momento Perfeito',grade:3,maxLevels:1,stars:true,levels:[{n:1,txt:'Escolha uma Condição Mental. Após mirar e atacar uma criatura com essa condição, o ataque se torna automaticamente um ataque crítico.'}]},
+  {id:'tiroMultiplos',name:'Tiros Múltiplos',grade:4,maxLevels:1,stars:true,levels:[{n:1,txt:'Com uma arma com Recarga ou Arremesso, gaste uma Ação Principal e Secundária para realizar uma quantidade de ataques igual ao restante de munição. A partir do segundo tiro, penalidade acumulativa de -2.'}]}
 ];
 const AR_NODES=[
   {id:'armado',name:'Trilha do Armado',grade:2,maxLevels:1,stars:false,isRoot:true,levels:[{n:1,txt:'Você ganha Maestria em Perícia: Armas Brancas ou Perícia: Pontaria.',hasChoice:true,choiceSkills:[{attr:'fisico',name:'Armas Brancas'},{attr:'intelecto',name:'Pontaria'}]}]},
@@ -1118,6 +1140,19 @@ const AR_NODES=[
   {id:'umaMao',name:'Uma Mão',grade:3,maxLevels:1,stars:true,levels:[{n:1,txt:'Quando estiver usando uma arma de empunhadura Singular, você ganha +3 em seu dano.'}]},
   {id:'saqueRapido',name:'Saque Rápido',grade:4,maxLevels:1,stars:true,levels:[{n:1,txt:'Gaste 9 PE para sacar ou guardar itens de forma gratuita (em vez de Ação Secundária). Ações para sabotar um mecanismo têm -3 turnos (ou -1 cena) de redução de tempo.'}]},
   {id:'duasArmas',name:'Duas Armas',grade:5,maxLevels:2,stars:true,levels:[{n:1,txt:'Se estiver com duas armas e fizer uma ação de ataque, pode fazer dois ataques com uma Ação Principal, um com cada arma.'},{n:2,txt:'Ao sofrer um ataque e reagir com bloqueio, pode gastar 9 PE para adicionar seu bônus de acerto (da arma com maior valor) em sua resistência.'}]}
+];
+const RD_NODES=[
+  {id:'destruidor',name:'Rastros do Destruidor',grade:1,maxLevels:1,stars:false,isRoot:true,levels:[{n:1,txt:'Escolha uma categoria de armas para adicionar a Propriedade: Arma de Devastação. Caso ela já tenha as propriedades de outras trilhas, ela é automaticamente substituída para a propriedade atual.',hasArmaDevastaChoice:true}]},
+  {id:'quebrarObjetos',name:'Quebrar Objetos',grade:2,maxLevels:1,stars:true,levels:[{n:1,txt:'Você ganha um bônus de +1 em testes com a Perícia: Destruir e, além disso, armas com a Propriedade: Arma de Devastação ganham o Efeito Crítico: Destruir.'}]},
+  {id:'ataqueArea',name:'Ataque Em Área',grade:2,maxLevels:2,stars:true,levels:[{n:1,txt:'Ataques mágicos e armas com a Propriedade: Arma de Devastação, ao realizar um ataque, atingem uma área de 1 metro (1 quadrante) em todas as direções.'},{n:2,txt:'Atacando com uma arma com Propriedade: Arma de Devastação, você ganha +2 ponto de dano extra para cada +1 criatura atingida pelo seu raio de ataque.'}]},
+  {id:'armasDevastacao',name:'Armas de Devastação',grade:2,maxLevels:1,stars:true,levels:[{n:1,txt:'Armas com a Propriedade: Arma de Devastação ganham +1d12 pontos de dano adicionais e explosivos deixados por você possuem o raio de efeito dobrado.'}]},
+  {id:'mundaneidades',name:'Mundaneidades',grade:3,maxLevels:1,stars:true,levels:[{n:1,txt:'Escolha um efeito crítico; para você, todas as armas improvisadas irão possuir apenas este efeito independente do material. Você pode trocar os efeitos críticos delas, mas não durante um combate.'}]},
+  {id:'alcanceTotal',name:'Alcance Total',grade:3,maxLevels:2,stars:true,levels:[{n:1,txt:'A área de ataque de uma arma com a Propriedade: Arma de Devastação aumenta para 2 metros (2 quadrantes).'},{n:2,txt:'Para você, a Manobra: Avaliar é ativada automaticamente quando uma criatura inimiga entra no seu alcance de ataque.'}]},
+  {id:'ataquePoderoso',name:'Ataque Poderoso',grade:3,maxLevels:2,stars:true,levels:[{n:1,txt:'Ao ferir com sucesso uma criatura, você ignora metade de seus pontos de defesa. O efeito dura até o final do ataque e não pode ser estendido.'},{n:2,txt:'Atacando com uma arma com Propriedade: Arma de Devastação, você ganha +5 ponto de dano extra para cada condição ou efeito negativo que as criaturas da sua área de ataque possuem.'}]},
+  {id:'fogoAmigo',name:'Fogo Amigo',grade:3,maxLevels:1,stars:true,levels:[{n:1,txt:'Enquanto estiver usando uma arma com a Propriedade: Arma de Devastação, todos seus dados d6 que compõem o seu dano são transformados permanentemente para d8. Em contrapartida, você passa a incluir em seu ataque os aliados que entrarem no seu raio de ataque. Eles ainda podem reagir ao seu ataque.'}]},
+  {id:'devastar',name:'Devastar',grade:4,maxLevels:2,stars:true,levels:[{n:1,txt:'Ao ferir com sucesso uma criatura com resistência ao tipo de dano da sua arma, você reduz seus R em 1 (indo de R2 para R1 e R1 para R0). O efeito dura até o final do ataque e não pode ser estendido.'},{n:2,txt:'Ao realizar a Habilidade: Ataque Especial utilizando uma arma com a Propriedade: Arma de Devastação, você naturalmente ganha o efeito Amplo. Para você, ele não custa na sua lista de efeitos e não pode ser retirado ou substituído.'}]},
+  {id:'destruir',name:'Destruir',grade:3,maxLevels:2,stars:true,levels:[{n:1,txt:'Ao destruir um obstáculo ou objeto de cenário, você ganha o direito a mais uma Ação de Movimento caso não tenha usado anteriormente no mesmo turno; além disso, você deixa uma área de 3×3 ao redor de você se tornar terreno difícil.'},{n:2,txt:'Ao atacar com uma arma com Propriedade: Arma de Devastação, você pode gastar o equivalente a 7 PE por criatura no seu raio de ataque para causar 1 ponto de destruição (2 em caso de um crítico) num equipamento a sua escolha que as criaturas estiverem carregando.'}]},
+  {id:'bombardeiroRapido',name:'Bombardeiro Rápido',grade:4,maxLevels:1,stars:true,levels:[{n:1,txt:'Para você, explosivos são considerados armas e você ganha os seguintes benefícios: Explosivos ganham automaticamente a Propriedade: Arma de Devastação. Você ganha +1d8 pontos de dano a cada 1 metro acima a partir do raio de efeito padrão de 10 metros (por exemplo, um explosivo com 12 metros de alcance ganha +2d8 de dano adicional, enquanto um explosivo de 9 metros não). Você ganha Resistência (R1) a Explosões — esse efeito não é alterado caso seja uma explosão de um elemento que você possua resistência ou vulnerabilidade.'}]}
 ];
 const CE_NODES=[
   {id:'circulo_espirito',name:'Círculo do Espírito',grade:2,maxLevels:1,stars:false,isRoot:true,levels:[{n:1,txt:'Você se torna capaz de usar o Círculo do Espírito.'}]}
@@ -1188,6 +1223,10 @@ let acMaestriaChoice=null; // skill choice for Acrobacia root
 let paOwned={}; // {nodeId: levelsOwned}
 let paActiveNode=null;
 let paArmaChoice=null; // arma choice for Passo root
+// RD (Rastros do Destruidor) state
+let rdOwned={};
+let rdActiveNode=null;
+let rdArmaDevastaChoice=null;
 
 // MN (Mão Nua) state
 let mnOwned={}; // {nodeId: levelsOwned}
@@ -1222,7 +1261,7 @@ let ccAdaptations=[]; // [{id,evoLevel}] list of learned adaptations and their e
 
 // ── SP ──
 function spBudget(){const lvl=Math.max(1,parseInt(document.getElementById('f-nivel').value)||1);return 8+(lvl-1);}
-function spUsed(){let u=0;Object.values(fcOwned).forEach(v=>u+=v);Object.values(acOwned).forEach(v=>u+=v);Object.values(paOwned).forEach(v=>u+=v);Object.values(arOwned).forEach(v=>u+=v);Object.values(atOwned).forEach(v=>u+=v);Object.values(mnOwned).forEach(v=>u+=v);Object.values(medOwned).forEach(v=>u+=v);Object.values(ceOwned).forEach(v=>u+=v);Object.values(ccOwned).forEach(v=>u+=v);return u;}
+function spUsed(){let u=0;Object.values(fcOwned).forEach(v=>u+=v);Object.values(acOwned).forEach(v=>u+=v);Object.values(paOwned).forEach(v=>u+=v);Object.values(rdOwned).forEach(v=>u+=v);Object.values(arOwned).forEach(v=>u+=v);Object.values(atOwned).forEach(v=>u+=v);Object.values(mnOwned).forEach(v=>u+=v);Object.values(medOwned).forEach(v=>u+=v);Object.values(ceOwned).forEach(v=>u+=v);Object.values(ccOwned).forEach(v=>u+=v);return u;}
 function spLeft(){return spBudget()-spUsed();}
 function updateSPBadge(){
   const el=document.getElementById('sp-badge');
@@ -2881,6 +2920,11 @@ function buildSkillTree(){
           '<div class="tree-path-name" style="color:var(--red3)">'+p.name+' 🗡</div>'+
           '<div style="font-size:10px;color:var(--txt3);margin-top:2px">Clique para ver a árvore</div>'+
           '<div style="margin-top:8px;display:flex;align-items:center;gap:6px"><span style="font-size:10px;color:var(--txt3)">XP Investido:</span><input type="number" style="width:60px;font-size:12px;padding:3px 5px;text-align:center" value="'+xp+'" min="0" onclick="event.stopPropagation()" onchange="setPathXP(\''+cls.id+'\',\''+p.name+'\',this.value)"></div></div>';
+      } else if(p.hasRDTree){
+        pathsHtml+='<div class="tree-path-card" onclick="openRDOverlay()" style="border-color:#f59e0b">'+
+          '<div class="tree-path-name" style="color:#fbbf24">'+p.name+' 💥</div>'+
+          '<div style="font-size:10px;color:var(--txt3);margin-top:2px">Clique para ver a árvore</div>'+
+          '<div style="margin-top:8px;display:flex;align-items:center;gap:6px"><span style="font-size:10px;color:var(--txt3)">XP Investido:</span><input type="number" style="width:60px;font-size:12px;padding:3px 5px;text-align:center" value="'+xp+'" min="0" onclick="event.stopPropagation()" onchange="setPathXP(\''+cls.id+'\',\''+p.name+'\',this.value)"></div></div>';
       } else if(p.hasMNTree){
         pathsHtml+='<div class="tree-path-card" onclick="openMNOverlay()" style="border-color:#c084fc">'+
           '<div class="tree-path-name" style="color:#c084fc">'+p.name+' 🥊</div>'+
@@ -2931,12 +2975,13 @@ function renderPlayerTree(){
   const allFC=Object.entries(fcOwned).filter(([,v])=>v>0);
   const allAC=Object.entries(acOwned).filter(([,v])=>v>0);
   const allPA=Object.entries(paOwned).filter(([,v])=>v>0);
+  const allRD=Object.entries(rdOwned).filter(([,v])=>v>0);
   const allMN=Object.entries(mnOwned).filter(([,v])=>v>0);
   const allMed=Object.entries(medOwned).filter(([,v])=>v>0);
   const allAR=Object.entries(arOwned).filter(([,v])=>v>0);
   const allCE=Object.entries(ceOwned).filter(([,v])=>v>0);
   const allCC=Object.entries(ccOwned).filter(([,v])=>v>0);
-  const anyOwned=allFC.length>0||allAC.length>0||allPA.length>0||allMN.length>0||allMed.length>0||allAR.length>0||allCE.length>0||allCC.length>0;
+  const anyOwned=allFC.length>0||allAC.length>0||allPA.length>0||allRD.length>0||allMN.length>0||allMed.length>0||allAR.length>0||allCE.length>0||allCC.length>0;
   const section=document.getElementById('player-tree-section');
   const list=document.getElementById('player-tree-list');
   const spInfo=document.getElementById('pt-sp-info');
@@ -2974,6 +3019,17 @@ function renderPlayerTree(){
       let extra='<span style="font-size:9px;color:var(--red3);margin-left:4px">[Assassino]</span>';
       if(id==='passo'&&paArmaChoice)extra+=' <span style="font-size:9px;color:var(--green2)">→ Arma: '+paArmaChoice+'</span>';
       div.innerHTML='<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><span class="pt-node-name">'+node.name+'<span class="pt-node-lv">Nv'+lv+'</span></span>'+extra+'</div>'+'<button class="pt-sell-btn" onclick="sellPALevel(\''+id+'\','+lv+')">↩ Vender (+1pt)</button>';
+      list.appendChild(div);
+    }
+  });
+  // RD nodes
+  allRD.forEach(([id,lvls])=>{
+    const node=RD_NODES.find(n=>n.id===id);if(!node)return;
+    for(let lv=1;lv<=lvls;lv++){
+      const div=document.createElement('div');div.className='pt-node';
+      let extra='<span style="font-size:9px;color:#fbbf24;margin-left:4px">[Destruidor]</span>';
+      if(id==='destruidor'&&rdArmaDevastaChoice)extra+=' <span style="font-size:9px;color:var(--green2)">→ Devastação: '+rdArmaDevastaChoice+'</span>';
+      div.innerHTML='<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><span class="pt-node-name">'+node.name+'<span class="pt-node-lv">Nv'+lv+'</span></span>'+extra+'</div>'+'<button class="pt-sell-btn" onclick="sellRDLevel(\''+id+'\','+lv+')">↩ Vender (+1pt)</button>';
       list.appendChild(div);
     }
   });
@@ -3043,68 +3099,259 @@ function renderPlayerTree(){
   });
 }
 
+function _spBar(barId){
+  const spEl=document.getElementById(barId);
+  if(isOfficial()){const left=spLeft();const total=spBudget();const used=spUsed();spEl.innerHTML='<span style="font-size:12px;font-weight:600;color:'+(left<0?'var(--red3)':'var(--green2)')+'">\u2726 '+left+' pts dispon\xedveis</span><span style="font-size:10px;color:var(--txt3);margin-left:10px">'+used+' usados / '+total+' total</span>';}
+  else{spEl.innerHTML='<span style="font-size:10px;color:var(--txt3)">Ative "Vers\xe3o Oficial" para comprar habilidades com pontos</span>';}
+}
+// ── SHARED SVG TREE BUILDER ──
+// nodes: [{id, col, row, isRoot, sm}]
+// edges: [[fromCol,fromRow, toCol,toRow], ...]
+// nodeHtmlFn: function(id, isRoot, sm) → html string
+// colW, rowH, colGap, rowGap: dimensions
+function buildSVGTree(containerEl, nodes, edges, nodeHtmlFn, colW, rowH, colGap, rowGap){
+  colW=colW||130; rowH=rowH||90; colGap=colGap||10; rowGap=rowGap||48;
+  const maxCol=Math.max(...nodes.map(n=>n.col));
+  const maxRow=Math.max(...nodes.map(n=>n.row));
+  const W=(maxCol+1)*colW+maxCol*colGap;
+  const H=(maxRow+1)*rowH+maxRow*rowGap;
+  const cx=c=>c*(colW+colGap)+colW/2;
+  const rowTop=r=>r*(rowH+rowGap);
+  const rowBot=r=>rowTop(r)+rowH;
+  let svgLines='';
+  edges.forEach(function(e){
+    const x1=cx(e[0]),y1=rowBot(e[1]),x2=cx(e[2]),y2=rowTop(e[3]);
+    const my=(y1+y2)/2;
+    svgLines+=x1===x2
+      ?'<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="var(--border2)" stroke-width="2"/>'
+      :'<path d="M'+x1+' '+y1+' C'+x1+' '+my+' '+x2+' '+my+' '+x2+' '+y2+'" fill="none" stroke="var(--border2)" stroke-width="2"/>';
+  });
+  let nodesHtml='';
+  nodes.forEach(function(n){
+    const x=n.col*(colW+colGap);
+    const y=rowTop(n.row);
+    nodesHtml+='<div style="position:absolute;left:'+x+'px;top:'+y+'px;width:'+colW+'px;height:'+rowH+'px;display:flex;align-items:center;justify-content:center">'+nodeHtmlFn(n.id,!!n.isRoot,!!n.sm)+'</div>';
+  });
+  containerEl.innerHTML=
+    '<div style="position:relative;width:'+W+'px;height:'+H+'px;margin:0 auto;overflow:visible">'+
+    '<svg style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:visible" viewBox="0 0 '+W+' '+H+'">'+svgLines+'</svg>'+
+    nodesHtml+'</div>';
+}
+
+// ── RD OVERLAY ──
+function openRDOverlay(){document.getElementById('rd-overlay').classList.add('open');buildRDTree();document.getElementById('rd-desc-card').classList.remove('show');}
+function closeRDOverlay(e){if(e.target===document.getElementById('rd-overlay'))closeRDOverlayDirect();}
+function closeRDOverlayDirect(){document.getElementById('rd-overlay').classList.remove('open');}
+
+function buildRDTree(){
+  _spBar('rd-sp-bar');
+  const container=document.getElementById('rd-tree-container');
+  // Grid de 5 colunas x 4 linhas. Cada célula = 140px wide, 90px high. Gap vertical = 48px (espaço para conectores).
+  // Mapa de posição: [col 0-4, row 0-3]
+  // row0: col2 = destruidor (raiz)
+  // row1: col0 = quebrarObjetos | col2 = ataqueArea | col4 = armasDevastacao
+  // row2: col0 = mundaneidades | col1 = alcanceTotal | col2 = ataquePoderoso | col3 = fogoAmigo | col4 = destruir
+  // row3: col2 = devastar | col4 = bombardeiroRapido
+  const COLS=5, COL_W=140, COL_GAP=8;
+  const ROW_H=96, ROW_GAP=48;
+  const W=COLS*COL_W+(COLS-1)*COL_GAP;
+  const H=4*ROW_H+3*ROW_GAP;
+  // centro x de cada coluna
+  const cx=c=>c*(COL_W+COL_GAP)+COL_W/2;
+  // centro y topo e fundo de cada linha
+  const rowTop=r=>r*(ROW_H+ROW_GAP);
+  const rowMid=r=>rowTop(r)+ROW_H/2;
+  const rowBot=r=>rowTop(r)+ROW_H;
+  // Conexões: [de_col, de_row, para_col, para_row]
+  const edges=[
+    [2,0, 0,1],[2,0, 2,1],[2,0, 4,1], // raiz → grau2
+    [0,1, 0,2],                         // quebrarObjetos → mundaneidades
+    [2,1, 1,2],[2,1, 2,2],              // ataqueArea → alcanceTotal, ataquePoderoso
+    [4,1, 3,2],[4,1, 4,2],              // armasDevastacao → fogoAmigo, destruir
+    [2,2, 2,3],                         // ataquePoderoso → devastar
+    [4,2, 4,3],                         // destruir → bombardeiroRapido
+  ];
+  // SVG de conectores
+  let svgLines='';
+  edges.forEach(([c1,r1,c2,r2])=>{
+    const x1=cx(c1),y1=rowBot(r1);
+    const x2=cx(c2),y2=rowTop(r2);
+    const my=(y1+y2)/2;
+    svgLines+=x1===x2
+      ? '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="var(--border2)" stroke-width="2"/>'
+      : '<path d="M'+x1+' '+y1+' C'+x1+' '+my+' '+x2+' '+my+' '+x2+' '+y2+'" fill="none" stroke="var(--border2)" stroke-width="2"/>';
+  });
+  // Nós posicionados absolutamente
+  const nodes=[
+    {id:'destruidor',  col:2,row:0,isRoot:true},
+    {id:'quebrarObjetos',col:0,row:1},{id:'ataqueArea',col:2,row:1},{id:'armasDevastacao',col:4,row:1},
+    {id:'mundaneidades',col:0,row:2},{id:'alcanceTotal',col:1,row:2},{id:'ataquePoderoso',col:2,row:2},{id:'fogoAmigo',col:3,row:2},{id:'destruir',col:4,row:2},
+    {id:'devastar',col:2,row:3},{id:'bombardeiroRapido',col:4,row:3},
+  ];
+  let nodesHtml='';
+  nodes.forEach(({id,col,row,isRoot})=>{
+    const x=col*(COL_W+COL_GAP);
+    const y=rowTop(row);
+    nodesHtml+='<div style="position:absolute;left:'+x+'px;top:'+y+'px;width:'+COL_W+'px;height:'+ROW_H+'px;display:flex;align-items:center;justify-content:center">'+buildRDNodeHTML(id,!!isRoot)+'</div>';
+  });
+  const html=
+    '<div style="position:relative;width:'+W+'px;height:'+H+'px;margin:0 auto">'+
+    '<svg style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none" viewBox="0 0 '+W+' '+H+'">'+svgLines+'</svg>'+
+    nodesHtml+
+    '</div>';
+  container.innerHTML=html;
+}
+function buildRDNodeHTML(id,isRoot){
+  const node=RD_NODES.find(n=>n.id===id);if(!node)return '';
+  const owned=rdOwned[id]||0;
+  let starsHtml='';
+  if(node.stars){starsHtml='<div class="fc-stars">';for(let i=0;i<node.maxLevels;i++)starsHtml+='<span class="fc-star'+(i<owned?' lit':'')+'">★</span>';starsHtml+='</div>';}
+  const badge=owned>0?'<div class="fc-owned-badge">✓ Nv'+owned+'/'+node.maxLevels+'</div>':'';
+  return '<div class="fc-node'+(isRoot?' root-node':'')+(owned>0?' owned':'')+'" onclick="rdShowDesc(\''+id+'\')" id="rdn-'+id+'" style="width:100%;box-sizing:border-box;cursor:pointer">'+
+    '<div class="fc-node-name" style="font-size:11px;line-height:1.3">'+node.name+'</div>'+
+    '<div class="fc-node-grade" style="font-size:9px">Grau '+node.grade+(isRoot?' · Raiz':'')+'</div>'+
+    starsHtml+badge+'</div>';
+}
+function rdShowDesc(id){
+  const node=RD_NODES.find(n=>n.id===id);if(!node)return;
+  rdActiveNode=id;
+  document.getElementById('rd-desc-title').textContent=node.name;
+  document.getElementById('rd-desc-grade').textContent='Habilidade de Grau '+node.grade+(node.isRoot?' (Raiz)':'');
+  const owned=rdOwned[id]||0;
+  let html='';
+  node.levels.forEach(lv=>{
+    const isOwned=lv.n<=owned;const isBuyable=lv.n===owned+1;
+    let cls='fc-desc-lv';if(isOwned)cls+=' owned-lv';else if(isBuyable)cls+=' buyable-lv';
+    html+='<div class="'+cls+'"><div class="fc-desc-lv-num">'+(isOwned?'✓ ':'')+'Nível '+lv.n+'</div><div class="fc-desc-lv-txt">'+lv.txt+'</div>';
+    if(isBuyable){
+      const prereqOk=rdCheckPrereq(id,lv.n);const spOk=spLeft()>0||!isOfficial();const canBuy=prereqOk&&spOk;
+      if(lv.hasArmaDevastaChoice&&!rdArmaDevastaChoice){
+        html+='<div class="fc-res-picker"><label>Escolha a categoria de arma:</label><select id="rd-arma-sel">';
+        PA_WEAPON_CATS.forEach(cat=>{html+='<option value="'+cat+'">'+cat+'</option>';});
+        html+='</select><button class="fc-buy-btn" '+(canBuy?'':'disabled')+' onclick="rdBuyLevel(\'destruidor\',1)">'+(canBuy?'Comprar Nv1 (1pt)':(!prereqOk?'Pré-requisito não atendido':'Sem pts disponíveis'))+'</button></div>';
+      } else {
+        if(id==='destruidor'&&rdArmaDevastaChoice){html+='<div style="font-size:10px;color:var(--green2);margin:4px 0">✓ Arma de Devastação: '+rdArmaDevastaChoice+'</div>';}
+        html+='<button class="fc-buy-btn" '+(canBuy?'':'disabled')+' onclick="rdBuyLevel(\''+id+'\','+lv.n+')">'+(canBuy?'Comprar Nv'+lv.n+' (1pt)':(!prereqOk?'Pré-requisito não atendido':'Sem pts disponíveis'))+'</button>';
+      }
+    } else if(isOwned&&id==='destruidor'){
+      html+='<div style="font-size:10px;color:var(--green2);margin:4px 0">✓ Arma de Devastação: '+(rdArmaDevastaChoice||'—')+'</div>';
+    }
+    if(isOwned){html+='<button class="fc-sell-btn" onclick="sellRDLevel(\''+id+'\','+lv.n+')">↩ Vender (+1pt)</button>';}
+    html+='</div>';
+  });
+  document.getElementById('rd-desc-levels').innerHTML=html;
+  document.getElementById('rd-desc-card').classList.add('show');
+}
+function rdCheckPrereq(id,lv){
+  if(id==='destruidor')return true;
+  // Grau 2 — requer raiz
+  if(['quebrarObjetos','ataqueArea','armasDevastacao'].includes(id)){
+    if((rdOwned['destruidor']||0)<1)return false;
+    if(lv>1&&(rdOwned[id]||0)<lv-1)return false;
+    return true;
+  }
+  // Grau 3 — mundaneidades requer quebrarObjetos
+  if(id==='mundaneidades'){
+    if((rdOwned['quebrarObjetos']||0)<1)return false;
+    return true;
+  }
+  // Grau 3 — alcanceTotal e ataquePoderoso requerem ataqueArea
+  if(id==='alcanceTotal'||id==='ataquePoderoso'){
+    if((rdOwned['ataqueArea']||0)<1)return false;
+    if(lv>1&&(rdOwned[id]||0)<lv-1)return false;
+    return true;
+  }
+  // Grau 3 — fogoAmigo requer armasDevastacao
+  if(id==='fogoAmigo'){
+    if((rdOwned['armasDevastacao']||0)<1)return false;
+    return true;
+  }
+  // Grau 3 — destruir requer armasDevastacao
+  if(id==='destruir'){
+    if((rdOwned['armasDevastacao']||0)<1)return false;
+    if(lv>1&&(rdOwned[id]||0)<lv-1)return false;
+    return true;
+  }
+  // Grau 4 — devastar requer ataquePoderoso
+  if(id==='devastar'){
+    if((rdOwned['ataquePoderoso']||0)<1)return false;
+    if(lv>1&&(rdOwned[id]||0)<lv-1)return false;
+    return true;
+  }
+  // Grau 4 — bombardeiroRapido requer destruir
+  if(id==='bombardeiroRapido'){
+    if((rdOwned['destruir']||0)<1)return false;
+    return true;
+  }
+  if(lv>1&&(rdOwned[id]||0)<lv-1)return false;
+  return true;
+}
+function rdBuyLevel(id,lv){
+  if(!rdCheckPrereq(id,lv)){showToast('Pré-requisito não atendido!');return;}
+  if(isOfficial()&&spLeft()<1){showToast('Sem pontos de habilidade!');return;}
+  if(id==='destruidor'&&lv===1&&!rdArmaDevastaChoice){
+    const sel=document.getElementById('rd-arma-sel');
+    if(sel)rdArmaDevastaChoice=sel.value;
+    else{showToast('Selecione uma categoria de arma!');return;}
+  }
+  rdOwned[id]=(rdOwned[id]||0)+1;
+  updateSPBadge();buildRDTree();rdShowDesc(id);renderPlayerTree();autoSave();
+  showToast('✓ Habilidade comprada!');
+}
+function sellRDLevel(id,lv){
+  const owned=rdOwned[id]||0;
+  if(lv!==owned){showToast('Só pode vender o nível mais alto!');return;}
+  // Verificar dependentes
+  if(id==='destruidor'&&lv===1){
+    const deps=['quebrarObjetos','ataqueArea','armasDevastacao','mundaneidades','alcanceTotal','ataquePoderoso','fogoAmigo','devastar','destruir','bombardeiroRapido'];
+    if(deps.some(d=>(rdOwned[d]||0)>0)){showToast('Venda os nós dependentes primeiro!');return;}
+    rdArmaDevastaChoice=null;
+  }
+  if(id==='quebrarObjetos'&&lv===1&&(rdOwned['mundaneidades']||0)>0){showToast('Venda Mundaneidades primeiro!');return;}
+  if(id==='ataqueArea'){
+    if(lv===1&&((rdOwned['alcanceTotal']||0)>0||(rdOwned['ataquePoderoso']||0)>0)){showToast('Venda os nós dependentes primeiro!');return;}
+  }
+  if(id==='ataquePoderoso'){
+    if(lv===1&&(rdOwned['devastar']||0)>0){showToast('Venda Devastar primeiro!');return;}
+    if(lv>1&&(rdOwned['devastar']||0)>0){/* devastar requer Nv1, ok vender Nv2 */}
+  }
+  if(id==='armasDevastacao'&&lv===1){
+    if((rdOwned['fogoAmigo']||0)>0){showToast('Venda Fogo Amigo primeiro!');return;}
+    if((rdOwned['destruir']||0)>0){showToast('Venda Destruir primeiro!');return;}
+  }
+  if(id==='destruir'){
+    if(lv===1&&(rdOwned['bombardeiroRapido']||0)>0){showToast('Venda Bombardeiro Rápido primeiro!');return;}
+  }
+  rdOwned[id]=Math.max(0,owned-1);
+  updateSPBadge();buildRDTree();
+  if(rdActiveNode===id)rdShowDesc(id);
+  renderPlayerTree();autoSave();
+  showToast('↩ Habilidade vendida (+1pt)');
+}
+
 // ── FC OVERLAY ──
 function openFCOverlay(){document.getElementById('fc-overlay').classList.add('open');buildFCTree();document.getElementById('fc-desc-card').classList.remove('show');}
 function closeFCOverlay(e){if(e.target===document.getElementById('fc-overlay'))closeFCOverlayDirect();}
 function closeFCOverlayDirect(){document.getElementById('fc-overlay').classList.remove('open');}
 
 function buildFCTree(){
-  const spEl=document.getElementById('fc-sp-bar');
-  if(isOfficial()){
-    const left=spLeft();const total=spBudget();const used=spUsed();
-    spEl.innerHTML='<span style="font-size:12px;font-weight:600;color:'+(left<0?'var(--red3)':'var(--green2)')+'">✦ '+left+' pts disponíveis</span><span style="font-size:10px;color:var(--txt3);margin-left:10px">'+used+' usados / '+total+' total</span>';
-  } else {
-    spEl.innerHTML='<span style="font-size:10px;color:var(--txt3)">Ative "Versão Oficial" para comprar habilidades com pontos</span>';
-  }
-  const container=document.getElementById('fc-tree-container');
-  // Layout: 4 colunas
-  // Col0: Vitalidade -> CascaGrossa | Atletico
-  // Col1: Determinacao -> EspiritoImortal
-  // Col2: Resistencia
-  // Col3: Carregar (raiz)
-  let html='<div class="fc-tree">';
-  html+=buildFCNodeHTML('fomento',true);
-  html+='<div style="display:flex;justify-content:center"><div class="fc-cv"></div></div>';
-  html+='<div style="display:flex;align-items:flex-start;width:100%;gap:4px">';
-  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-  html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
-  html+='<div class="fc-cv" style="height:16px"></div>';
-  html+=buildFCNodeHTML('vitalidade',false);
-  html+='<div style="display:flex;align-items:flex-start;width:95%;gap:2px">';
-  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-  html+='<div class="fc-cv" style="height:8px"></div>';
-  html+='<div style="height:2px;background:var(--border2);width:100%"></div>';
-  html+='<div class="fc-cv" style="height:6px"></div>';
-  html+=buildFCNodeHTML('cascagrossa',false);
-  html+='</div>';
-  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-  html+='<div class="fc-cv" style="height:8px"></div>';
-  html+='<div style="height:2px;background:var(--border2);width:100%"></div>';
-  html+='<div class="fc-cv" style="height:6px"></div>';
-  html+=buildFCNodeHTML('atletico',false);
-  html+='</div>';
-  html+='</div>';
-  html+='</div>';
-  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-  html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
-  html+='<div class="fc-cv" style="height:16px"></div>';
-  html+=buildFCNodeHTML('determinacao',false);
-  html+='<div class="fc-cv" style="height:10px"></div>';
-  html+=buildFCNodeHTML('espiritoImortal',false);
-  html+='</div>';
-  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-  html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
-  html+='<div class="fc-cv" style="height:16px"></div>';
-  html+=buildFCNodeHTML('resistencia',false);
-  html+='</div>';
-  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-  html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
-  html+='<div class="fc-cv" style="height:16px"></div>';
-  html+=buildFCNodeHTML('carregar',false);
-  html+='</div>';
-  html+='</div>';
-  html+='</div>';
-  container.innerHTML=html;
+  _spBar('fc-sp-bar');
+  // row0 c1: raiz | row1: c0(vitalidade) c1(determinacao) c2(resistencia) c3(carregar)
+  // row2: c0a(cascaGrossa) c0b(atletico, via col=0 offset trick) handled as c0,c1 under vitalidade
+  // We map: vitalidade=c0r1, determinacao=c1r1, resistencia=c2r1, carregar=c3r1
+  //         cascagrossa=c0r2, atletico=c1r2 (both from vitalidade)
+  //         espiritoImortal=c1r2 — conflict: use c1r2 for espiritoImortal, atletico=c0r2, cascagrossa=c1r2?
+  // Actual structure: vitalidade->cascaGrossa+atletico; determinacao->espiritoImortal
+  // Use 4 cols: c0=vitalidade branch, c1=cascaGrossa, c2=atletico; c3=determinacao; c4=espiritoImortal; c5=resistencia; c6=carregar
+  buildSVGTree(document.getElementById('fc-tree-container'),[
+    {id:'fomento',col:3,row:0,isRoot:true},
+    {id:'vitalidade',col:1,row:1},{id:'determinacao',col:3,row:1},{id:'resistencia',col:5,row:1},{id:'carregar',col:6,row:1},
+    {id:'cascagrossa',col:0,row:2},{id:'atletico',col:2,row:2},{id:'espiritoImortal',col:3,row:2}
+  ],[
+    [3,0,1,1],[3,0,3,1],[3,0,5,1],[3,0,6,1],
+    [1,1,0,2],[1,1,2,2],
+    [3,1,3,2]
+  ],buildFCNodeHTML,120,90,8,48);
 }
 function buildFCNodeHTML(id,isRoot){
   const node=FC_NODES.find(n=>n.id===id);if(!node)return '';
@@ -3116,7 +3363,7 @@ function buildFCNodeHTML(id,isRoot){
     starsHtml+='</div>';
   }
   const badge=owned>0?'<div class="fc-owned-badge">✓ Nv'+owned+'/'+node.maxLevels+'</div>':'';
-  return '<div class="fc-node'+(isRoot?' root-node':'')+(owned>0?' owned':'')+'" onclick="fcShowDesc(\''+id+'\')" id="fcn-'+id+'">'+
+  return '<div class="fc-node'+(isRoot?' root-node':'')+(owned>0?' owned':'')+'" style=\\"width:100%;box-sizing:border-box;cursor:pointer\\" onclick="fcShowDesc(\''+id+'\')" id="fcn-'+id+'">'+
     '<div class="fc-node-name">'+node.name+'</div>'+
     '<div class="fc-node-grade">Grau '+node.grade+(isRoot?' · Raiz':'')+'</div>'+
     starsHtml+badge+'</div>';
@@ -3249,70 +3496,23 @@ function closeACOverlay(e){if(e.target===document.getElementById('ac-overlay'))c
 function closeACOverlayDirect(){document.getElementById('ac-overlay').classList.remove('open');}
 
 function buildACTree(){
-  const spEl=document.getElementById('ac-sp-bar');
-  if(isOfficial()){const left=spLeft();const total=spBudget();const used=spUsed();spEl.innerHTML='<span style="font-size:12px;font-weight:600;color:'+(left<0?'var(--red3)':'var(--green2)')+'">✦ '+left+' pts disponíveis</span><span style="font-size:10px;color:var(--txt3);margin-left:10px">'+used+' usados / '+total+' total</span>';}
-  else{spEl.innerHTML='<span style="font-size:10px;color:var(--txt3)">Ative "Versão Oficial" para comprar habilidades com pontos</span>';}
-  const container=document.getElementById('ac-tree-container');
-  // Layout: 4 colunas
-  // Col0: Agilidade -> IniciativaAprimorada | ReflexosAumentados->Cambalhota
-  // Col1: MaosLeves -> ERapidas
-  // Col2: Despistar -> Camuflagem | Emboscar -> Sorrateiro
-  let html='<div class="fc-tree">';
-  html+=buildACNodeHTML('acrobacia',true);
-  html+='<div style="display:flex;justify-content:center"><div class="fc-cv"></div></div>';
-  html+='<div style="display:flex;align-items:flex-start;width:100%;gap:4px">';
-  html+='<div style="flex:2;display:flex;flex-direction:column;align-items:center">';
-  html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
-  html+='<div class="fc-cv" style="height:16px"></div>';
-  html+=buildACNodeHTML('agilidade',false);
-  html+='<div style="display:flex;align-items:flex-start;width:95%;gap:2px">';
-  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-  html+='<div class="fc-cv" style="height:8px"></div>';
-  html+='<div style="height:2px;background:var(--border2);width:100%"></div>';
-  html+='<div class="fc-cv" style="height:6px"></div>';
-  html+=buildACNodeHTML('iniciativaAprimorada',false);
-  html+='</div>';
-  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-  html+='<div class="fc-cv" style="height:8px"></div>';
-  html+='<div style="height:2px;background:var(--border2);width:100%"></div>';
-  html+='<div class="fc-cv" style="height:6px"></div>';
-  html+=buildACNodeHTML('reflexosAumentados',false);
-  html+='<div class="fc-cv" style="height:8px"></div>';
-  html+=buildACNodeHTML('cambalhota',false);
-  html+='</div>';
-  html+='</div>';
-  html+='</div>';
-  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-  html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
-  html+='<div class="fc-cv" style="height:16px"></div>';
-  html+=buildACNodeHTML('maosLeves',false);
-  html+='<div class="fc-cv" style="height:10px"></div>';
-  html+=buildACNodeHTML('eRapidas',false);
-  html+='</div>';
-  html+='<div style="flex:2;display:flex;flex-direction:column;align-items:center">';
-  html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
-  html+='<div class="fc-cv" style="height:16px"></div>';
-  html+=buildACNodeHTML('despistar',false);
-  html+='<div style="display:flex;align-items:flex-start;width:95%;gap:2px">';
-  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-  html+='<div class="fc-cv" style="height:8px"></div>';
-  html+='<div style="height:2px;background:var(--border2);width:100%"></div>';
-  html+='<div class="fc-cv" style="height:6px"></div>';
-  html+=buildACNodeHTML('camuflagem',false);
-  html+='</div>';
-  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-  html+='<div class="fc-cv" style="height:8px"></div>';
-  html+='<div style="height:2px;background:var(--border2);width:100%"></div>';
-  html+='<div class="fc-cv" style="height:6px"></div>';
-  html+=buildACNodeHTML('emboscar',false);
-  html+='<div class="fc-cv" style="height:8px"></div>';
-  html+=buildACNodeHTML('sorrateiro',false);
-  html+='</div>';
-  html+='</div>';
-  html+='</div>';
-  html+='</div>';
-  html+='</div>';
-  container.innerHTML=html;
+  _spBar('ac-sp-bar');
+  // raiz=c2r0 | row1: agilidade=c0 maosLeves=c2 despistar=c4
+  // row2: iniciativaAprimorada=c0 reflexosAumentados=c1 eRapidas=c2 camuflagem=c3 emboscar=c4
+  // row3: cambalhota=c1 sorrateiro=c4
+  buildSVGTree(document.getElementById('ac-tree-container'),[
+    {id:'acrobacia',col:2,row:0,isRoot:true},
+    {id:'agilidade',col:0,row:1},{id:'maosLeves',col:2,row:1},{id:'despistar',col:4,row:1},
+    {id:'iniciativaAprimorada',col:0,row:2},{id:'reflexosAumentados',col:1,row:2},{id:'eRapidas',col:2,row:2},{id:'camuflagem',col:3,row:2},{id:'emboscar',col:4,row:2},
+    {id:'cambalhota',col:1,row:3},{id:'sorrateiro',col:4,row:3}
+  ],[
+    [2,0,0,1],[2,0,2,1],[2,0,4,1],
+    [0,1,0,2],[0,1,1,2],
+    [2,1,2,2],
+    [4,1,3,2],[4,1,4,2],
+    [1,2,1,3],
+    [4,2,4,3]
+  ],buildACNodeHTML,120,90,8,48);
 }
 function buildACNodeHTML(id,isRoot){
   const node=AC_NODES.find(n=>n.id===id);if(!node)return '';
@@ -3320,7 +3520,7 @@ function buildACNodeHTML(id,isRoot){
   let starsHtml='';
   if(node.stars){starsHtml='<div class="fc-stars">';for(let i=0;i<node.maxLevels;i++)starsHtml+='<span class="fc-star'+(i<owned?' lit':'')+'">★</span>';starsHtml+='</div>';}
   const badge=owned>0?'<div class="fc-owned-badge">✓ Nv'+owned+'/'+node.maxLevels+'</div>':'';
-  return '<div class="fc-node'+(isRoot?' root-node':'')+(owned>0?' owned':'')+'" onclick="acShowDesc(\''+id+'\')" id="acn-'+id+'">'+
+  return '<div class="fc-node'+(isRoot?' root-node':'')+(owned>0?' owned':'')+'" style=\\"width:100%;box-sizing:border-box;cursor:pointer\\" onclick="acShowDesc(\''+id+'\')" id="acn-'+id+'">'+
     '<div class="fc-node-name">'+node.name+'</div>'+
     '<div class="fc-node-grade">Grau '+node.grade+(isRoot?' · Raiz':'')+'</div>'+
     starsHtml+badge+'</div>';
@@ -3411,75 +3611,23 @@ function closePAOverlay(e){if(e.target===document.getElementById('pa-overlay'))c
 function closePAOverlayDirect(){document.getElementById('pa-overlay').classList.remove('open');}
 
 function buildPATree(){
-  const spEl=document.getElementById('pa-sp-bar');
-  if(isOfficial()){const left=spLeft();const total=spBudget();const used=spUsed();spEl.innerHTML='<span style="font-size:12px;font-weight:600;color:'+(left<0?'var(--red3)':'var(--green2)')+'">✦ '+left+' pts disponíveis</span><span style="font-size:10px;color:var(--txt3);margin-left:10px">'+used+' usados / '+total+' total</span>';}
-  else{spEl.innerHTML='<span style="font-size:10px;color:var(--txt3)">Ative "Versão Oficial" para comprar habilidades com pontos</span>';}
-  const container=document.getElementById('pa-tree-container');
-  // Layout PA: 4 colunas
-  // Col0: AtaqueFurtivo -> Distracao | MaisUm
-  // Col1: Apunhalar -> GolpeDesequilibrante
-  // Col2: AtaqueDuplo (raiz) -> FintaDupla
-  // Col3: CacadorCriaturas (raiz)
-  // (AtaqdupLO da versao antiga) -> descontinuado, trocado por AtaqueDuplo novo
-  let html='<div class="fc-tree">';
-  html+=buildPANodeHTML('passo',true);
-  html+='<div style="display:flex;justify-content:center"><div class="fc-cv"></div></div>';
-  html+='<div style="display:flex;align-items:flex-start;width:100%;gap:4px">';
-  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-  html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
-  html+='<div class="fc-cv" style="height:16px"></div>';
-  html+=buildPANodeHTML('ataquefurtivo',false);
-  html+='<div style="display:flex;align-items:flex-start;width:95%;gap:2px">';
-  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-  html+='<div class="fc-cv" style="height:8px"></div>';
-  html+='<div style="height:2px;background:var(--border2);width:100%"></div>';
-  html+='<div class="fc-cv" style="height:6px"></div>';
-  html+=buildPANodeHTML('distracao',false);
-  html+='</div>';
-  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-  html+='<div class="fc-cv" style="height:8px"></div>';
-  html+='<div style="height:2px;background:var(--border2);width:100%"></div>';
-  html+='<div class="fc-cv" style="height:6px"></div>';
-  html+=buildPANodeHTML('maisUm',false);
-  html+='</div>';
-  html+='</div>';
-  html+='</div>';
-  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-  html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
-  html+='<div class="fc-cv" style="height:16px"></div>';
-  html+=buildPANodeHTML('apunhalar',false);
-  html+='<div class="fc-cv" style="height:10px"></div>';
-  html+=buildPANodeHTML('golpeDesequilibrante',false);
-  html+='</div>';
-  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-  html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
-  html+='<div class="fc-cv" style="height:16px"></div>';
-  html+=buildPANodeHTML('ataqueDuplo',false);
-  html+='<div class="fc-cv" style="height:10px"></div>';
-  html+=buildPANodeHTML('fintaDupla',false);
-  html+='</div>';
-  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-  html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
-  html+='<div class="fc-cv" style="height:16px"></div>';
-  html+=buildPANodeHTML('cacadorCriaturas',false);
-  html+='<div style="display:flex;align-items:flex-start;width:95%;gap:2px">';
-  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-  html+='<div class="fc-cv" style="height:8px"></div>';
-  html+='<div style="height:2px;background:var(--border2);width:100%"></div>';
-  html+='<div class="fc-cv" style="height:6px"></div>';
-  html+=buildPANodeHTML('vantagemBatalha',false);
-  html+='</div>';
-  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-  html+='<div class="fc-cv" style="height:8px"></div>';
-  html+='<div style="height:2px;background:var(--border2);width:100%"></div>';
-  html+='<div class="fc-cv" style="height:6px"></div>';
-  html+=buildPANodeHTML('voceEhOProximo',false);
-  html+='</div>';
-  html+='</div>';
-  html+='</div>';
-  html+='</div>';
-  html+='</div>';
-  container.innerHTML=html;
+  _spBar('pa-sp-bar');
+  // raiz=c2r0
+  // row1: ataquefurtivo=c0 ataqueDuplo=c3 cacadorCriaturas=c4
+  // row2: distracao=c0 maisUm=c1 apunhalar=c2 fintaDupla=c3 vantagemBatalha=c4 voceEhOProximo=c5
+  // row3: golpeDesequilibrante=c2
+  buildSVGTree(document.getElementById('pa-tree-container'),[
+    {id:'passo',col:2,row:0,isRoot:true},
+    {id:'ataquefurtivo',col:0,row:1},{id:'ataqueDuplo',col:3,row:1},{id:'cacadorCriaturas',col:4,row:1},
+    {id:'distracao',col:0,row:2},{id:'maisUm',col:1,row:2},{id:'apunhalar',col:2,row:2},{id:'fintaDupla',col:3,row:2},{id:'vantagemBatalha',col:4,row:2},{id:'voceEhOProximo',col:5,row:2},
+    {id:'golpeDesequilibrante',col:2,row:3}
+  ],[
+    [2,0,0,1],[2,0,3,1],[2,0,4,1],
+    [0,1,0,2],[0,1,1,2],[0,1,2,2],
+    [3,1,3,2],
+    [4,1,4,2],[4,1,5,2],
+    [2,2,2,3]
+  ],buildPANodeHTML,120,90,8,48);
 }
 function buildPANodeHTML(id,isRoot){
   const node=PA_NODES.find(n=>n.id===id);if(!node)return '';
@@ -3487,7 +3635,7 @@ function buildPANodeHTML(id,isRoot){
   let starsHtml='';
   if(node.stars){starsHtml='<div class="fc-stars">';for(let i=0;i<node.maxLevels;i++)starsHtml+='<span class="fc-star'+(i<owned?' lit':'')+'">★</span>';starsHtml+='</div>';}
   const badge=owned>0?'<div class="fc-owned-badge">✓ Nv'+owned+'/'+node.maxLevels+'</div>':'';
-  return '<div class="fc-node'+(isRoot?' root-node':'')+(owned>0?' owned':'')+'" onclick="paShowDesc(\''+id+'\')" id="pan-'+id+'">'+
+  return '<div class="fc-node'+(isRoot?' root-node':'')+(owned>0?' owned':'')+'" style=\\"width:100%;box-sizing:border-box;cursor:pointer\\" onclick="paShowDesc(\''+id+'\')" id="pan-'+id+'">'+
     '<div class="fc-node-name">'+node.name+'</div>'+
     '<div class="fc-node-grade">Grau '+node.grade+(isRoot?' · Raiz':'')+'</div>'+
     starsHtml+badge+'</div>';
@@ -3566,67 +3714,24 @@ function closeMNOverlay(e){if(e.target===document.getElementById('mn-overlay'))c
 function closeMNOverlayDirect(){document.getElementById('mn-overlay').classList.remove('open');}
 
 function buildMNTree(){
-  const spEl=document.getElementById('mn-sp-bar');
-  if(isOfficial()){const left=spLeft();const total=spBudget();const used=spUsed();spEl.innerHTML='<span style="font-size:12px;font-weight:600;color:'+(left<0?'var(--red3)':'var(--green2)')+'">✦ '+left+' pts disponíveis</span><span style="font-size:10px;color:var(--txt3);margin-left:10px">'+used+' usados / '+total+' total</span>';}
-  else{spEl.innerHTML='<span style="font-size:10px;color:var(--txt3)">Ative "Versão Oficial" para comprar habilidades com pontos</span>';}
-  const container=document.getElementById('mn-tree-container');
-  // Layout: Raiz no topo, 2 colunas: Esquerda (Pose+derivados), Direita (ArmaNatural+derivados)
-  // Linha extra abaixo: Sequencia+ChuvaGolpes na esquerda
-  let html='<div class="fc-tree">';
-  // Raiz centralizada
-  html+=buildMNNodeHTML('maonua',true);
-  html+='<div style="display:flex;justify-content:center"><div class="fc-cv"></div></div>';
-  // Linha 1: PoseCombate | ArmaNatural | SequenciaGolpes
-  html+='<div style="display:flex;align-items:flex-start;width:100%;gap:4px">';
-  // Col Esquerda: Pose + posturas pequenas
-  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-  html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
-  html+='<div class="fc-cv" style="height:16px"></div>';
-  html+=buildMNNodeHTML('poseCombate',false);
-  html+='<div class="fc-cv" style="height:10px"></div>';
-  // Posturas pequenas em 2x2 sob Pose
-  html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;width:100%">';
-  ['posturaMamifero','posturaAve','posturaReptil','posturaPeixe'].forEach(function(pid){
-    html+='<div style="display:flex;flex-direction:column;align-items:center">';
-    html+='<div class="fc-cv" style="height:10px"></div>';
-    html+=buildMNNodeHTML(pid,false,true);
-    html+='</div>';
-  });
-  html+='</div>';
-  html+='</div>';
-  // Col Centro: SequenciaGolpes + ChuvaGolpes
-  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-  html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
-  html+='<div class="fc-cv" style="height:16px"></div>';
-  html+=buildMNNodeHTML('sequenciaGolpes',false);
-  html+='<div class="fc-cv" style="height:10px"></div>';
-  html+=buildMNNodeHTML('chuvaGolpes',false);
-  html+='</div>';
-  // Col Direita: ArmaNatural -> dois galhos: GolpeAvassalador e Defletir->Refletir
-  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-  html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
-  html+='<div class="fc-cv" style="height:16px"></div>';
-  html+=buildMNNodeHTML('armaNatural',false);
-  html+='<div style="display:flex;align-items:flex-start;width:90%;margin-top:0">';
-  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-  html+='<div class="fc-cv" style="height:12px"></div>';
-  html+='<div style="height:2px;background:var(--border2);width:100%"></div>';
-  html+='<div class="fc-cv" style="height:8px"></div>';
-  html+=buildMNNodeHTML('golpeAvassalador',false);
-  html+='</div>';
-  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-  html+='<div class="fc-cv" style="height:12px"></div>';
-  html+='<div style="height:2px;background:var(--border2);width:100%"></div>';
-  html+='<div class="fc-cv" style="height:8px"></div>';
-  html+=buildMNNodeHTML('defletir',false);
-  html+='<div class="fc-cv" style="height:10px"></div>';
-  html+=buildMNNodeHTML('refletirProjetil',false);
-  html+='</div>';
-  html+='</div>';
-  html+='</div>';
-  html+='</div>';
-  html+='</div>';
-  container.innerHTML=html;
+  _spBar('mn-sp-bar');
+  // raiz=c2r0
+  // row1: poseCombate=c0 sequenciaGolpes=c2 armaNatural=c4
+  // row2: posturaMamifero=c0 posturaAve=c1 posturaReptil=c0r3(abaixo)? chuvaGolpes=c2 golpeAvassalador=c3 defletir=c4
+  // posturas ficam todas em row2 sob poseCombate: mm=c0 ave=c1 reptil=c0r3 peixe=c1r3
+  // refletirProjetil=c4r3
+  buildSVGTree(document.getElementById('mn-tree-container'),[
+    {id:'maonua',col:2,row:0,isRoot:true},
+    {id:'poseCombate',col:0,row:1},{id:'sequenciaGolpes',col:2,row:1},{id:'armaNatural',col:4,row:1},
+    {id:'posturaMamifero',col:0,row:2,sm:true},{id:'posturaAve',col:1,row:2,sm:true},{id:'chuvaGolpes',col:2,row:2},{id:'golpeAvassalador',col:3,row:2},{id:'defletir',col:4,row:2},
+    {id:'posturaReptil',col:0,row:3,sm:true},{id:'posturaPeixe',col:1,row:3,sm:true},{id:'refletirProjetil',col:4,row:3}
+  ],[
+    [2,0,0,1],[2,0,2,1],[2,0,4,1],
+    [0,1,0,2],[0,1,1,2],[0,1,0,3],[0,1,1,3],
+    [2,1,2,2],
+    [4,1,3,2],[4,1,4,2],
+    [4,2,4,3]
+  ],buildMNNodeHTML,120,90,8,48);
 }
 function buildMNNodeHTML(id,isRoot,sm){
   const node=MN_NODES.find(n=>n.id===id);if(!node)return '';
@@ -3634,7 +3739,7 @@ function buildMNNodeHTML(id,isRoot,sm){
   let starsHtml='';
   if(node.stars){starsHtml='<div class="fc-stars">';for(let i=0;i<node.maxLevels;i++)starsHtml+='<span class="fc-star'+(i<owned?' lit':'')+'">★</span>';starsHtml+='</div>';}
   const badge=owned>0?'<div class="fc-owned-badge">✓ Nv'+owned+'/'+node.maxLevels+'</div>':'';
-  return '<div class="fc-node'+(isRoot?' root-node':'')+(owned>0?' owned':'')+(sm?' fc-node-sm':'')+'" onclick="mnShowDesc(\''+id+'\')" id="mnn-'+id+'">'+
+  return '<div class="fc-node'+(isRoot?' root-node':'')+(owned>0?' owned':'')+(sm?' fc-node-sm':'')+'" style=\\"width:100%;box-sizing:border-box;cursor:pointer\\" onclick="mnShowDesc(\''+id+'\')" id="mnn-'+id+'">'+
     '<div class="fc-node-name">'+node.name+'</div>'+
     '<div class="fc-node-grade">Grau '+node.grade+(isRoot?' · Raiz':'')+'</div>'+
     starsHtml+badge+'</div>';
@@ -3758,9 +3863,7 @@ function closeMedOverlay(e){if(e.target===document.getElementById('med-overlay')
 function closeMedOverlayDirect(){document.getElementById('med-overlay').classList.remove('open');}
 
 function buildMedTree(){
-  const spEl=document.getElementById('med-sp-bar');
-  if(isOfficial()){const left=spLeft();const total=spBudget();const used=spUsed();spEl.innerHTML='<span style="font-size:12px;font-weight:600;color:'+(left<0?'var(--red3)':'var(--green2)')+'">✦ '+left+' pts disponíveis</span><span style="font-size:10px;color:var(--txt3);margin-left:10px">'+used+' usados / '+total+' total</span>';}
-  else{spEl.innerHTML='<span style="font-size:10px;color:var(--txt3)">Ative "Versão Oficial" para comprar habilidades com pontos</span>';}
+  _spBar('med-sp-bar');
   const container=document.getElementById('med-tree-container');
   let html='<div class="fc-tree">';
   html+=buildMedNodeHTML('medicina',true);
@@ -3788,7 +3891,7 @@ function buildMedNodeHTML(id,isRoot){
   let starsHtml='';
   if(node.stars){starsHtml='<div class="fc-stars">';for(let i=0;i<node.maxLevels;i++)starsHtml+='<span class="fc-star'+(i<owned?' lit':'')+'">★</span>';starsHtml+='</div>';}
   const badge=owned>0?'<div class="fc-owned-badge">✓ Nv'+owned+'/'+node.maxLevels+'</div>':'';
-  return '<div class="fc-node'+(isRoot?' root-node':'')+(owned>0?' owned':'')+'" onclick="medShowDesc(\''+id+'\')" id="medn-'+id+'">'+
+  return '<div class="fc-node'+(isRoot?' root-node':'')+(owned>0?' owned':'')+'" style=\\"width:100%;box-sizing:border-box;cursor:pointer\\" onclick="medShowDesc(\''+id+'\')" id="medn-'+id+'">'+
     '<div class="fc-node-name">'+node.name+'</div>'+
     '<div class="fc-node-grade">Grau '+node.grade+(isRoot?' · Raiz':'')+'</div>'+
     starsHtml+badge+'</div>';
@@ -3871,6 +3974,11 @@ function closeAROverlayDirect(){document.getElementById('ar-overlay').classList.
 function atCheckPrereq(id,lv){
   if(id==='atirador')return true;
   if((atOwned['atirador']||0)<1)return false;
+  if(id==='acertoCerteiro'&&(atOwned['artilhariaPesada']||0)<1)return false;
+  if(id==='alcanceSupremo'&&(atOwned['acertoCerteiro']||0)<1)return false;
+  if(id==='recarregar'&&(atOwned['mirar']||0)<1)return false;
+  if(id==='momentoPerfeito'&&(atOwned['mirar']||0)<1)return false;
+  if(id==='tiroMultiplos'&&(atOwned['momentoPerfeito']||0)<1)return false;
   if(lv>1&&(atOwned[id]||0)<lv-1)return false;
   return true;
 }
@@ -3939,104 +4047,57 @@ function buildATNodeHTML(id,isRoot){
   let starsHtml='';
   if(node.stars){starsHtml='<div class="fc-stars">';for(let i=0;i<node.maxLevels;i++)starsHtml+='<span class="fc-star'+(i<owned?' lit':'')+'">\u2605</span>';starsHtml+='</div>';}
   const badge=owned>0?'<div class="fc-owned-badge">\u2713 Nv'+owned+'/'+node.maxLevels+'</div>':'';
-  return '<div class="fc-node'+(isRoot?' root-node':'')+(owned>0?' owned':'')+'" onclick="atShowDesc(\''+id+'\')" id="atn-'+id+'">'+
+  return '<div class="fc-node'+(isRoot?' root-node':'')+(owned>0?' owned':'')+'" style=\\"width:100%;box-sizing:border-box;cursor:pointer\\" onclick="atShowDesc(\''+id+'\')" id="atn-'+id+'">'+
     '<div class="fc-node-name">'+node.name+'</div>'+
     '<div class="fc-node-grade">Grau '+node.grade+(isRoot?' \xb7 Raiz':'')+'</div>'+
     starsHtml+badge+'</div>';
 }
 function buildATTree(){
-  const spEl=document.getElementById('at-sp-bar');
-  if(isOfficial()){const left=spLeft();const total=spBudget();const used=spUsed();spEl.innerHTML='<span style="font-size:12px;font-weight:600;color:'+(left<0?'var(--red3)':'var(--green2)') +'">'+'\u2726 '+left+' pts dispon\xedveis</span><span style="font-size:10px;color:var(--txt3);margin-left:10px">'+used+' usados / '+total+' total</span>';}
-  else{spEl.innerHTML='<span style="font-size:10px;color:var(--txt3)">Ative "Vers\xe3o Oficial" para comprar habilidades com pontos</span>';}
-  const container=document.getElementById('at-tree-container');
-  let html='<div class="fc-tree">';
-  html+=buildATNodeHTML('atirador',true);
-  html+='<div style="display:flex;justify-content:center"><div class="fc-cv"></div></div>';
-  html+='<div style="display:flex;align-items:flex-start;width:100%;gap:4px">';
-  ['mirar','artilhariaPesada','sentinela'].forEach(function(nid){
-    html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-    html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
-    html+='<div class="fc-cv" style="height:16px"></div>';
-    html+=buildATNodeHTML(nid,false);
-    html+='</div>';
-  });
-  html+='</div></div>';
-  container.innerHTML=html;
+  _spBar('at-sp-bar');
+  // raiz=c2r0 | row1: mirar=c0 artilhariaPesada=c2 sentinela=c4
+  // row2: recarregar=c0 momentoPerfeito=c1 acertoCerteiro=c2
+  // row3: tiroMultiplos=c1 alcanceSupremo=c2
+  buildSVGTree(document.getElementById('at-tree-container'),[
+    {id:'atirador',col:2,row:0,isRoot:true},
+    {id:'mirar',col:0,row:1},{id:'artilhariaPesada',col:2,row:1},{id:'sentinela',col:4,row:1},
+    {id:'recarregar',col:0,row:2},{id:'momentoPerfeito',col:1,row:2},{id:'acertoCerteiro',col:2,row:2},
+    {id:'tiroMultiplos',col:1,row:3},{id:'alcanceSupremo',col:2,row:3}
+  ],[
+    [2,0,0,1],[2,0,2,1],[2,0,4,1],
+    [0,1,0,2],[0,1,1,2],
+    [2,1,2,2],
+    [1,2,1,3],
+    [2,2,2,3]
+  ],buildATNodeHTML,120,90,8,48);
 }
 function openATOverlay(){document.getElementById('at-overlay').classList.add('open');buildATTree();document.getElementById('at-desc-card').classList.remove('show');}
 function closeATOverlay(e){if(e.target===document.getElementById('at-overlay'))closeATOverlayDirect();}
 function closeATOverlayDirect(){document.getElementById('at-overlay').classList.remove('open');}
 
 function buildARTree(){
-  const spEl=document.getElementById('ar-sp-bar');
-  if(isOfficial()){const left=spLeft();const total=spBudget();const used=spUsed();spEl.innerHTML='<span style="font-size:12px;font-weight:600;color:'+(left<0?'var(--red3)':'var(--green2)')+'">✦ '+left+' pts disponíveis</span><span style="font-size:10px;color:var(--txt3);margin-left:10px">'+used+' usados / '+total+' total</span>';}
-  else{spEl.innerHTML='<span style="font-size:10px;color:var(--txt3)">Ative "Versão Oficial" para comprar habilidades com pontos</span>';}
-  const container=document.getElementById('ar-tree-container');
-  // Layout:
-  //        [armado - raiz]
-  //   [focoArmas] [combateDefensivo] [segurarEscudo] [treinoManuseio]
-  //   [especializacao]                               [duasMaos]
-  //   [ultraMaestria]
-  // Layout: 3 colunas principais
-  // Col0: FocoArmas -> Espec -> Ultra
-  // Col1: TreinoManuseio -> 3 galhos: DuasMaos/Versatil/UmaMao
-  // Col2: CombateDefensivo -> SegurarEscudo
-  let html='<div class="fc-tree">';
-  html+=buildARNodeHTML('armado',true);
-  html+='<div style="display:flex;justify-content:center"><div class="fc-cv"></div></div>';
-  html+='<div style="display:flex;align-items:flex-start;width:100%;gap:6px">';
-  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-  html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
-  html+='<div class="fc-cv" style="height:16px"></div>';
-  html+=buildARNodeHTML('focoArmas',false);
-  html+='<div class="fc-cv" style="height:10px"></div>';
-  html+=buildARNodeHTML('especializacao',false);
-  html+='<div class="fc-cv" style="height:10px"></div>';
-  html+=buildARNodeHTML('ultraMaestria',false);
-  html+='</div>';
-  html+='<div style="flex:2;display:flex;flex-direction:column;align-items:center">';
-  html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
-  html+='<div class="fc-cv" style="height:16px"></div>';
-  html+=buildARNodeHTML('treinoManuseio',false);
-  html+='<div style="display:flex;align-items:flex-start;width:100%;gap:2px">';
-  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-  html+='<div class="fc-cv" style="height:8px"></div>';
-  html+='<div style="height:2px;background:var(--border2);width:100%"></div>';
-  html+='<div class="fc-cv" style="height:6px"></div>';
-  html+=buildARNodeHTML('duasMaos',false);
-  html+='<div class="fc-cv" style="height:8px"></div>';
-  html+=buildARNodeHTML('armasPesadas',false);
-  html+='</div>';
-  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-  html+='<div class="fc-cv" style="height:8px"></div>';
-  html+='<div style="height:2px;background:var(--border2);width:100%"></div>';
-  html+='<div class="fc-cv" style="height:6px"></div>';
-  html+=buildARNodeHTML('versatil',false);
-  html+='<div class="fc-cv" style="height:8px"></div>';
-  html+=buildARNodeHTML('ripostar',false);
-  html+='</div>';
-  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-  html+='<div class="fc-cv" style="height:8px"></div>';
-  html+='<div style="height:2px;background:var(--border2);width:100%"></div>';
-  html+='<div class="fc-cv" style="height:6px"></div>';
-  html+=buildARNodeHTML('umaMao',false);
-  html+='<div class="fc-cv" style="height:8px"></div>';
-  html+=buildARNodeHTML('saqueRapido',false);
-  html+='<div class="fc-cv" style="height:8px"></div>';
-  html+=buildARNodeHTML('duasArmas',false);
-  html+='</div>';
-  html+='</div>';
-  html+='</div>';
-  html+='<div style="flex:1;display:flex;flex-direction:column;align-items:center">';
-  html+='<div style="height:1px;background:var(--border2);width:100%"></div>';
-  html+='<div class="fc-cv" style="height:16px"></div>';
-  html+=buildARNodeHTML('combateDefensivo',false);
-  html+='<div class="fc-cv" style="height:10px"></div>';
-  html+=buildARNodeHTML('segurarEscudo',false);
-  html+='</div>';
-  html+='</div>';
-  html+='</div>';
-  container.innerHTML=html;
+  _spBar('ar-sp-bar');
+  // raiz=c3r0
+  // row1: focoArmas=c0 treinoManuseio=c2 combateDefensivo=c5
+  // row2: especializacao=c0 duasMaos=c1 versatil=c2 umaMao=c3 segurarEscudo=c5
+  // row3: ultraMaestria=c0 armasPesadas=c1 ripostar=c2 saqueRapido=c3
+  // row4: duasArmas=c3
+  buildSVGTree(document.getElementById('ar-tree-container'),[
+    {id:'armado',col:3,row:0,isRoot:true},
+    {id:'focoArmas',col:0,row:1},{id:'treinoManuseio',col:2,row:1},{id:'combateDefensivo',col:5,row:1},
+    {id:'especializacao',col:0,row:2},{id:'duasMaos',col:1,row:2},{id:'versatil',col:2,row:2},{id:'umaMao',col:3,row:2},{id:'segurarEscudo',col:5,row:2},
+    {id:'ultraMaestria',col:0,row:3},{id:'armasPesadas',col:1,row:3},{id:'ripostar',col:2,row:3},{id:'saqueRapido',col:3,row:3},
+    {id:'duasArmas',col:3,row:4}
+  ],[
+    [3,0,0,1],[3,0,2,1],[3,0,5,1],
+    [0,1,0,2],
+    [2,1,1,2],[2,1,2,2],[2,1,3,2],
+    [5,1,5,2],
+    [0,2,0,3],
+    [1,2,1,3],
+    [2,2,2,3],
+    [3,2,3,3],
+    [3,3,3,4]
+  ],buildARNodeHTML,120,90,8,48);
 }
 
 function buildARNodeHTML(id,isRoot){
@@ -4045,7 +4106,7 @@ function buildARNodeHTML(id,isRoot){
   let starsHtml='';
   if(node.stars){starsHtml='<div class="fc-stars">';for(let i=0;i<node.maxLevels;i++)starsHtml+='<span class="fc-star'+(i<owned?' lit':'')+'">★</span>';starsHtml+='</div>';}
   const badge=owned>0?'<div class="fc-owned-badge">✓ Nv'+owned+'/'+node.maxLevels+'</div>':'';
-  return '<div class="fc-node'+(isRoot?' root-node':'')+(owned>0?' owned':'')+'" onclick="arShowDesc(\''+id+'\')" id="arn-'+id+'">'+
+  return '<div class="fc-node'+(isRoot?' root-node':'')+(owned>0?' owned':'')+'" style=\\"width:100%;box-sizing:border-box;cursor:pointer\\" onclick="arShowDesc(\''+id+'\')" id="arn-'+id+'">'+
     '<div class="fc-node-name">'+node.name+'</div>'+
     '<div class="fc-node-grade">Grau '+node.grade+(isRoot?' · Raiz':'')+'</div>'+
     starsHtml+badge+'</div>';
@@ -4222,20 +4283,16 @@ function closeCEOverlay(e){if(e.target===document.getElementById('ce-overlay'))c
 function closeCEOverlayDirect(){document.getElementById('ce-overlay').classList.remove('open');}
 
 function buildCETree(){
-  const spEl=document.getElementById('ce-sp-bar');
-  if(isOfficial()){const left=spLeft();const total=spBudget();const used=spUsed();spEl.innerHTML='<span style="font-size:12px;font-weight:600;color:'+(left<0?'var(--red3)':'var(--green2)')+'">✦ '+left+' pts disponíveis</span><span style="font-size:10px;color:var(--txt3);margin-left:10px">'+used+' usados / '+total+' total</span>';}
-  else{spEl.innerHTML='<span style="font-size:10px;color:var(--txt3)">Ative "Versão Oficial" para comprar habilidades com pontos</span>';}
-  const container=document.getElementById('ce-tree-container');
-  let html='<div class="fc-tree">';
-  html+=buildCENodeHTML('circulo_espirito',true);
-  html+='</div>';
-  container.innerHTML=html;
+  _spBar('ce-sp-bar');
+  buildSVGTree(document.getElementById('ce-tree-container'),[
+    {id:'circulo_espirito',col:0,row:0,isRoot:true}
+  ],[],buildCENodeHTML,200,90,8,48);
 }
 function buildCENodeHTML(id,isRoot){
   const node=CE_NODES.find(n=>n.id===id);if(!node)return '';
   const owned=ceOwned[id]||0;
   const badge=owned>0?'<div class="fc-owned-badge">✓ Nv'+owned+'/'+node.maxLevels+'</div>':'';
-  return '<div class="fc-node'+(isRoot?' root-node':'')+(owned>0?' owned':'')+'" onclick="ceShowDesc(\''+id+'\')" id="cen-'+id+'">'+
+  return '<div class="fc-node'+(isRoot?' root-node':'')+(owned>0?' owned':'')+'" style=\\"width:100%;box-sizing:border-box;cursor:pointer\\" onclick="ceShowDesc(\''+id+'\')" id="cen-'+id+'">'+
     '<div class="fc-node-name">'+node.name+'</div>'+
     '<div class="fc-node-grade">Grau '+node.grade+(isRoot?' · Raiz':'')+'</div>'+
     badge+'</div>';
@@ -4282,9 +4339,7 @@ function closeCCOverlay(e){if(e.target===document.getElementById('cc-overlay'))c
 function closeCCOverlayDirect(){document.getElementById('cc-overlay').classList.remove('open');}
 
 function buildCCTree(){
-  const spEl=document.getElementById('cc-sp-bar');
-  if(isOfficial()){const left=spLeft();const total=spBudget();const used=spUsed();spEl.innerHTML='<span style="font-size:12px;font-weight:600;color:'+(left<0?'var(--red3)':'var(--green2)')+'">✦ '+left+' pts disponíveis</span><span style="font-size:10px;color:var(--txt3);margin-left:10px">'+used+' usados / '+total+' total</span>';}
-  else{spEl.innerHTML='<span style="font-size:10px;color:var(--txt3)">Ative "Versão Oficial" para comprar habilidades com pontos</span>';}
+  _spBar('cc-sp-bar');
   const container=document.getElementById('cc-tree-container');
   let html='<div class="fc-tree">';
   html+=buildCCNodeHTML('circulo_corpo',true);
@@ -4303,7 +4358,7 @@ function buildCCNodeHTML(id,isRoot){
   let starsHtml='';
   if(node.stars){starsHtml='<div class="fc-stars">';for(let i=0;i<node.maxLevels;i++)starsHtml+='<span class="fc-star'+(i<owned?' lit':'')+'">\u2605</span>';starsHtml+='</div>';}
   const badge=owned>0?'<div class="fc-owned-badge">✓ Nv'+owned+'/'+node.maxLevels+'</div>':'';
-  return '<div class="fc-node'+(isRoot?' root-node':'')+(owned>0?' owned':'')+'" onclick="ccShowDesc(\''+id+'\')" id="ccn-'+id+'">'+
+  return '<div class="fc-node'+(isRoot?' root-node':'')+(owned>0?' owned':'')+'" style=\\"width:100%;box-sizing:border-box;cursor:pointer\\" onclick="ccShowDesc(\''+id+'\')" id="ccn-'+id+'">'+
     '<div class="fc-node-name">'+node.name+'</div>'+
     '<div class="fc-node-grade">Grau '+node.grade+(isRoot?' · Raiz':'')+'</div>'+
     starsHtml+badge+'</div>';
@@ -4936,6 +4991,7 @@ function gatherData(){
   d._fcRes=JSON.stringify(fcResChoices);d._resRows=JSON.stringify(resRows);d._vulnRows=JSON.stringify(vulnRows);
   d._acOwned=JSON.stringify(acOwned);d._acMC=acMaestriaChoice?JSON.stringify(acMaestriaChoice):null;
   d._paOwned=JSON.stringify(paOwned);d._paAC=paArmaChoice||null;
+  d._rdOwned=JSON.stringify(rdOwned);d._rdADC=rdArmaDevastaChoice||null;
   d._arOwned=JSON.stringify(arOwned);d._atOwned=JSON.stringify(atOwned);d._atMC=atMaestriaChoice?JSON.stringify(atMaestriaChoice):null;d._arMC=arMaestriaChoice?JSON.stringify(arMaestriaChoice):null;d._arFoco=JSON.stringify(arFocoArmas);d._arEmp=arEmpunhaduraChoice||null;
   d._arEC=arEspecChoice||null;d._arUC=arUltraChoice||null;
   d._mnOwned=JSON.stringify(mnOwned);d._mnMC=mnMaestriaChoice?JSON.stringify(mnMaestriaChoice):null;
@@ -4965,8 +5021,8 @@ function doResetFicha(){
   equippedWeapons={slot1:null,slot2:null};wepAmmo={};
   itemDamage={};resRows=[];vulnRows=[];
   poseActive=false;calcSavedSpells=[];calcEditingIdx=-1;
-  fcOwned={};acOwned={};paOwned={};arOwned={};atOwned={};mnOwned={};medOwned={};ceOwned={};ccOwned={};ccAdaptations=[];
-  fcMaestriaChoice=null;acMaestriaChoice=null;paAcrobaticaChoice=null;
+  fcOwned={};acOwned={};paOwned={};rdOwned={};arOwned={};atOwned={};mnOwned={};medOwned={};ceOwned={};ccOwned={};ccAdaptations=[];
+  fcMaestriaChoice=null;acMaestriaChoice=null;paAcrobaticaChoice=null;rdArmaDevastaChoice=null;
   arMaestriaChoice=null;arFocoArmas=[];arEmpunhaduraChoice=null;arEspecChoice=null;arUltraChoice=null;
   mnMaestriaChoice=null;medMaestriaChoice=null;shopWepCustom={};shopArmorCustom={};shopShieldCustom={};
   // Clear all inputs
@@ -5033,7 +5089,7 @@ function loadSheet(){
     if(raw){
       const d=JSON.parse(raw);
       if(d['chk-official']!==undefined)document.getElementById('chk-official').checked=d['chk-official'];
-      const SKIP=['chk-official','_inv','_eq','_eqw','_dmg','_tree','_fcOwned','_fcVital','_fcDet','_fcRes','_resRows','_vulnRows','_acOwned','_acMC','_paOwned','_paAC','_arOwned','_arMC','_arFoco','_arEmp','_arEC','_arUC','_mnOwned','_mnMC','_medOwned','_medMC','_fcMC','_ceOwned','_ccOwned','_ccAdapts','dado-cura-val'];
+      const SKIP=['chk-official','_inv','_eq','_eqw','_dmg','_tree','_fcOwned','_fcVital','_fcDet','_fcRes','_resRows','_vulnRows','_acOwned','_acMC','_paOwned','_paAC','_rdOwned','_rdADC','_arOwned','_arMC','_arFoco','_arEmp','_arEC','_arUC','_mnOwned','_mnMC','_medOwned','_medMC','_fcMC','_ceOwned','_ccOwned','_ccAdapts','dado-cura-val'];
       Object.entries(d).forEach(([id,val])=>{
         if(SKIP.includes(id))return;
         const el=document.getElementById(id);if(!el||el.readOnly)return;
@@ -5059,6 +5115,8 @@ function loadSheet(){
       if(d._acMC)try{acMaestriaChoice=JSON.parse(d._acMC);}catch(_){}
       if(d._paOwned)try{Object.assign(paOwned,JSON.parse(d._paOwned));}catch(_){}
       if(d._paAC)paArmaChoice=d._paAC;
+      if(d._rdOwned)try{Object.assign(rdOwned,JSON.parse(d._rdOwned));}catch(_){}
+      if(d._rdADC)rdArmaDevastaChoice=d._rdADC;
       if(d._arOwned)try{Object.assign(arOwned,JSON.parse(d._arOwned));}catch(_){}
       if(d._atOwned)try{Object.assign(atOwned,JSON.parse(d._atOwned));}catch(_){}
       if(d._atMC)try{atMaestriaChoice=JSON.parse(d._atMC);}catch(_){}
