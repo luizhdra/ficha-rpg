@@ -264,9 +264,9 @@ input[type=file]{display:none}
 .calc-roll-box b{color:#c4b5fd}
 .calc-copy-btn{margin-top:6px;width:100%;padding:6px;background:#2e1065;border:1px solid #7c3aed;color:#c4b5fd;border-radius:5px;font-size:11px;cursor:pointer;font-weight:600}
 .calc-copy-btn:hover{background:#4c1d95}
-.fc-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:2000;padding:16px}
+.fc-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:2000;padding:12px}
 .fc-overlay.open{display:flex}
-.fc-modal{background:var(--bg2);border:1px solid var(--border2);border-radius:12px;width:100%;max-width:820px;max-height:90vh;overflow-y:auto;padding:20px;box-sizing:border-box}
+.fc-modal{background:var(--bg2);border:1px solid var(--border2);border-radius:12px;width:100%;max-width:960px;max-height:92vh;overflow-y:auto;padding:20px;box-sizing:border-box}
 .fc-modal-title{font-family:'Cinzel',serif;font-size:16px;font-weight:700;color:var(--gold);text-align:center;margin-bottom:4px;letter-spacing:2px}
 .fc-modal-sub{font-size:10px;color:var(--txt3);text-align:center;margin-bottom:6px;letter-spacing:1px;text-transform:uppercase}
 .fc-sp-bar{text-align:center;margin-bottom:14px;padding:8px;background:var(--bg3);border-radius:6px}
@@ -274,10 +274,12 @@ input[type=file]{display:none}
 .fc-close:hover{background:var(--red2);border-color:var(--red);color:#fff}
 .fc-modal-inner{position:relative}
 .fc-tree{display:flex;flex-direction:column;align-items:center}
+.fc-tree-scroll{width:100%;overflow-x:auto;overflow-y:visible;-webkit-overflow-scrolling:touch;padding-bottom:12px}
+.fc-tree-scroll::-webkit-scrollbar{height:4px}.fc-tree-scroll::-webkit-scrollbar-track{background:var(--bg3);border-radius:2px}.fc-tree-scroll::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
 .fc-cv{width:2px;height:22px;background:var(--border2);margin:0 auto}
-.fc-node{background:var(--bg3);border:2px solid var(--border);border-radius:8px;padding:9px 12px;cursor:pointer;transition:all .2s;min-width:130px;max-width:185px;text-align:center}.fc-node.fc-node-sm{padding:5px 8px;min-width:80px;max-width:120px;border-radius:6px}.fc-node.fc-node-sm .fc-node-name{font-size:10px}.fc-node.fc-node-sm .fc-node-grade{font-size:8px}.fc-node.fc-node-sm .fc-stars{font-size:8px;margin-top:1px}
+.fc-node{background:var(--bg3);border:2px solid var(--border);border-radius:8px;padding:9px 12px;cursor:pointer;transition:all .2s;min-width:100px;max-width:175px;text-align:center}.fc-node.fc-node-sm{padding:5px 8px;min-width:70px;max-width:110px;border-radius:6px}.fc-node.fc-node-sm .fc-node-name{font-size:10px}.fc-node.fc-node-sm .fc-node-grade{font-size:8px}.fc-node.fc-node-sm .fc-stars{font-size:8px;margin-top:1px}
 .fc-node:hover{border-color:var(--gold);background:var(--bg4)}
-.fc-node.root-node{border-color:var(--red);background:#2a1a1a;min-width:170px}
+.fc-node.root-node{border-color:var(--red);background:#2a1a1a;min-width:150px}
 .fc-node.root-node:hover{border-color:var(--red3)}
 .fc-node.owned{border-color:var(--green)!important;background:#0e2010!important}
 .fc-node-name{font-size:12px;font-weight:600;color:var(--txt);line-height:1.3}
@@ -361,20 +363,30 @@ input[type=file]{display:none}
   .loja-tbl td:first-child::before{display:none}
   .loja-tbl tr:last-child td:last-child{border-bottom:none}
   .tree-paths{grid-template-columns:1fr 1fr}
-  .fc-modal{padding:12px;border-radius:8px}
-  .fc-node{min-width:70px;max-width:120px;padding:6px 8px}
+  .fc-modal{padding:12px;border-radius:8px;max-height:95vh}
+  .fc-node{min-width:72px;max-width:108px;padding:5px 7px}
   .fc-node-name{font-size:10px}
   .fc-node-grade{font-size:8px}
   .fc-stars{font-size:9px}
-  .fc-tree{overflow-x:auto;padding-bottom:8px}
+  .fc-tree-scroll{padding-bottom:10px}
   .fc-desc-card{font-size:11px}
   .calc-layout{flex-direction:column}
   .calc-left,.calc-right{width:100%!important;min-width:unset!important}
 }
+@media(max-width:400px){
+  .fc-modal{padding:8px}
+  .fc-node{min-width:60px;max-width:90px;padding:4px 5px}
+  .fc-node-name{font-size:9px}
+  .fc-node-grade{font-size:7px}
+  .fc-stars{font-size:8px}
+  .fc-modal-title{font-size:13px}
+}
 @media(min-width:601px) and (max-width:850px){
   .attrs-row{grid-template-columns:1fr 1fr}
   .combat-row{grid-template-columns:1fr 1fr}
-  .fc-node{min-width:100px;max-width:150px}
+  .fc-modal{max-width:98vw;padding:14px}
+  .fc-node{min-width:90px;max-width:135px;padding:7px 9px}
+  .fc-node-name{font-size:11px}
 }
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:3px}
 </style>
@@ -497,6 +509,23 @@ input[type=file]{display:none}
         <div class="fc-desc-title" id="rd-desc-title"></div>
         <div class="fc-desc-grade" id="rd-desc-grade"></div>
         <div id="rd-desc-levels"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- PLANO DO ESTRATEGISTA (PS) OVERLAY -->
+<div class="fc-overlay" id="ps-overlay" onclick="closePSOverlay(event)">
+  <div class="fc-modal">
+    <div class="fc-modal-inner">
+      <button class="fc-close" onclick="closePSOverlayDirect()">✕</button>
+      <div class="fc-modal-title">Plano do Estrategista</div>
+      <div class="fc-modal-sub">Árvore de Habilidades — O Batedor</div>
+      <div class="fc-sp-bar" id="ps-sp-bar"></div>
+      <div id="ps-tree-container"></div>
+      <div class="fc-desc-card" id="ps-desc-card">
+        <div class="fc-desc-title" id="ps-desc-title"></div>
+        <div class="fc-desc-grade" id="ps-desc-grade"></div>
+        <div id="ps-desc-levels"></div>
       </div>
     </div>
   </div>
@@ -1054,7 +1083,7 @@ const SHIELD_EMP=[
   {id:'aderencia', name:'Aderência (não derruba, +0.08)', priceMod: 0.08},
 ];
 const SKILL_TREE=[
-  {id:'batedor',name:'O Batedor',paths:[{name:'Caminho da Mão Nua',hasMNTree:true},{name:'Trilha do Armado',hasARTree:true},{name:'Módulo do Atirador',hasATTree:true},{name:'Passo do Assassino',hasPATree:true},{name:'Rastros do Destruidor',hasRDTree:true},{name:'Técnicas de Suporte'},{name:'Fúria'}]},
+  {id:'batedor',name:'O Batedor',paths:[{name:'Caminho da Mão Nua',hasMNTree:true},{name:'Trilha do Armado',hasARTree:true},{name:'Módulo do Atirador',hasATTree:true},{name:'Passo do Assassino',hasPATree:true},{name:'Rastros do Destruidor',hasRDTree:true},{name:'Plano do Estrategista',hasPSTree:true},{name:'Técnicas de Suporte'},{name:'Fúria'}]},
   {id:'especialista',name:'O Especialista',paths:[{name:'Fomento Corporal',hasFCTree:true},{name:'Acrobata',hasACTree:true},{name:'Medicina',hasMedTree:true}]},
   {id:'arcanista',name:'O Arcanista',paths:[{name:'Círculo do Espírito',hasCETree:true},{name:'Círculo dos Elementos'},{name:'Círculo do Corpo',hasCCTree:true}]}
 ];
@@ -1154,6 +1183,19 @@ const RD_NODES=[
   {id:'destruir',name:'Destruir',grade:3,maxLevels:2,stars:true,levels:[{n:1,txt:'Ao destruir um obstáculo ou objeto de cenário, você ganha o direito a mais uma Ação de Movimento caso não tenha usado anteriormente no mesmo turno; além disso, você deixa uma área de 3×3 ao redor de você se tornar terreno difícil.'},{n:2,txt:'Ao atacar com uma arma com Propriedade: Arma de Devastação, você pode gastar o equivalente a 7 PE por criatura no seu raio de ataque para causar 1 ponto de destruição (2 em caso de um crítico) num equipamento a sua escolha que as criaturas estiverem carregando.'}]},
   {id:'bombardeiroRapido',name:'Bombardeiro Rápido',grade:4,maxLevels:1,stars:true,levels:[{n:1,txt:'Para você, explosivos são considerados armas e você ganha os seguintes benefícios: Explosivos ganham automaticamente a Propriedade: Arma de Devastação. Você ganha +1d8 pontos de dano a cada 1 metro acima a partir do raio de efeito padrão de 10 metros (por exemplo, um explosivo com 12 metros de alcance ganha +2d8 de dano adicional, enquanto um explosivo de 9 metros não). Você ganha Resistência (R1) a Explosões — esse efeito não é alterado caso seja uma explosão de um elemento que você possua resistência ou vulnerabilidade.'}]}
 ];
+const PS_NODES=[
+  {id:'estrategista',name:'Plano do Estrategista',grade:1,maxLevels:1,stars:false,isRoot:true,levels:[{n:1,txt:'Escolha uma categoria de armas para adicionar a Propriedade: Utensílio de Estratégia. Caso ela já tenha as propriedades de outras trilhas, ela é automaticamente substituída para a propriedade atual.',hasArmaEstrategiaChoice:true}]},
+  {id:'manobrasAvancadas',name:'Manobras Avançadas',grade:3,maxLevels:2,stars:true,levels:[{n:1,txt:'Escolha 3 manobras a sua escolha da lista de manobras. Você recebe os seguintes benefícios: você adiciona o seu bônus de maestria nas rolagens dessas manobras; gastando 7 PE, você pode fazer uma dessas manobras a sua escolha e a categoria de ação que elas usam diminui em 1 (Principal > Movimento > Secundária).'},{n:2,txt:'Seguindo o efeito anterior, caso você possua uma arma com a Propriedade: Utensílio de Estratégia, você recebe os seguintes benefícios adicionais: vantagem ao realizar as manobras escolhidas; para você, as manobras que você escolheu posteriormente têm a margem de crítico de 18-20.'}]},
+  {id:'lutaOuFuga',name:'Luta ou Fuga',grade:2,maxLevels:2,stars:true,levels:[{n:1,txt:'Ao ficar com menos da metade de vida, você deve escolher um dos seguintes bônus: +1 ponto de dano e +1 ponto de acerto; ou +2 metros de movimento.'},{n:2,txt:'Caso esteja empunhando uma arma com Propriedade: Utensílio do Estrategista, os efeitos anteriores são ampliados para: +2 pontos de dano, +2 pontos de acerto e +1 reação por rodada; ou +4 metros de movimento.'}]},
+  {id:'disparada',name:'Disparada',grade:3,maxLevels:1,stars:true,levels:[{n:1,txt:'Enquanto estiver segurando uma arma com Propriedade: Utensílio do Estrategista, você pode, com uma ação de movimento, gastar 9 PE para ordenar que seus aliados mudem sua posição para até 4 metros de distância de sua posição original.'}]},
+  {id:'adrenalina',name:'Adrenalina',grade:3,maxLevels:1,stars:true,levels:[{n:1,txt:'Consumindo uma Ação Secundária e 7 PE, você pode conceder para si mesmo vantagem em todas as ações até o final do seu turno atual. Além disso, recupera pontos de vida equivalente ao seu Atributo: Físico.'}]},
+  {id:'tecnicasCombate',name:'Técnicas de Combate',grade:2,maxLevels:2,stars:true,levels:[{n:1,txt:'Ao realizar um ataque com uma arma com Propriedade: Utensílio do Estrategista e falhar, você pode gastar 7 PE e re-rolar o dado de acerto.'},{n:2,txt:'Seguindo o efeito anterior, você também pode re-rolar o dado de dano, mas só se estiver segurando uma arma com Propriedade: Utensílio do Estrategista.'}]},
+  {id:'observacaoCampo',name:'Observação de Campo',grade:4,maxLevels:1,stars:true,levels:[{n:1,txt:'A cada 5 turnos durante um combate, você ganha o direito de saber 1 característica de um inimigo (3 com Utensílio de Estrategista), entre elas: valor em determinado atributo, pontos de vida atuais, pontos de esforço atuais, valor de defesa, vulnerabilidade, resistências ou funcionamento de uma habilidade.'}]},
+  {id:'prioridade',name:'Prioridade',grade:4,maxLevels:1,stars:true,levels:[{n:1,txt:'Só pode ser utilizada enfrentando mais de uma criatura. Você escolhe um alvo visível e foca todos os seus esforços nele. Você ganha: +3 acerto (+5 com Utensílio de Estrategista), +1d6 dano (+2d6 com Utensílio de Estrategista), +3 metros de movimento (+5 m com Utensílio de Estrategista) e +3 defesa (+5 com Utensílio de Estrategista).'}]},
+  {id:'ataqueEspecial',name:'Ataque Especial',grade:3,maxLevels:1,stars:true,levels:[{n:1,txt:'Você aprende um movimento único com efeitos determinados por você. Você constrói o seu Ataque Especial escolhendo efeitos da lista na página 167. Cada efeito possui um custo; a soma deles será o custo do Ataque Especial. Você pode ter mais de um Ataque Especial na sua ficha.'}]},
+  {id:'motivar',name:'Motivar',grade:3,maxLevels:1,stars:true,levels:[{n:1,txt:'Enquanto carrega uma arma com Propriedade: Utensílio do Estrategista, você pode gastar sua Ação Secundária para motivar 1 ou mais aliados (limitado pela quantidade de seu Bônus de Maestria). Você rola um teste de Perícia: Diplomacia e adiciona +1 defesa nos seus aliados a cada 2 pontos que cair do resultado. (Por exemplo: resultado 12 → +6 defesa; resultado 11 → +5 defesa.)'}]},
+  {id:'lutarAsCegas',name:'Lutar às Cegas',grade:3,maxLevels:1,stars:true,levels:[{n:1,txt:'Num raio de uma aura, você consegue sentir todas as coisas que estiverem se mexendo ou não. Você não recebe penalidades se for cegado, mas recebe penalidade de -7 para se defender ou esquivar de ataques à longa distância.'}]}
+];
 const CE_NODES=[
   {id:'circulo_espirito',name:'Círculo do Espírito',grade:2,maxLevels:1,stars:false,isRoot:true,levels:[{n:1,txt:'Você se torna capaz de usar o Círculo do Espírito.'}]}
 ];
@@ -1223,6 +1265,10 @@ let acMaestriaChoice=null; // skill choice for Acrobacia root
 let paOwned={}; // {nodeId: levelsOwned}
 let paActiveNode=null;
 let paArmaChoice=null; // arma choice for Passo root
+// PS (Plano do Estrategista) state
+let psOwned={};
+let psActiveNode=null;
+let psArmaEstrategiaChoice=null;
 // RD (Rastros do Destruidor) state
 let rdOwned={};
 let rdActiveNode=null;
@@ -1261,7 +1307,7 @@ let ccAdaptations=[]; // [{id,evoLevel}] list of learned adaptations and their e
 
 // ── SP ──
 function spBudget(){const lvl=Math.max(1,parseInt(document.getElementById('f-nivel').value)||1);return 8+(lvl-1);}
-function spUsed(){let u=0;Object.values(fcOwned).forEach(v=>u+=v);Object.values(acOwned).forEach(v=>u+=v);Object.values(paOwned).forEach(v=>u+=v);Object.values(rdOwned).forEach(v=>u+=v);Object.values(arOwned).forEach(v=>u+=v);Object.values(atOwned).forEach(v=>u+=v);Object.values(mnOwned).forEach(v=>u+=v);Object.values(medOwned).forEach(v=>u+=v);Object.values(ceOwned).forEach(v=>u+=v);Object.values(ccOwned).forEach(v=>u+=v);return u;}
+function spUsed(){let u=0;Object.values(fcOwned).forEach(v=>u+=v);Object.values(acOwned).forEach(v=>u+=v);Object.values(paOwned).forEach(v=>u+=v);Object.values(psOwned).forEach(v=>u+=v);Object.values(rdOwned).forEach(v=>u+=v);Object.values(arOwned).forEach(v=>u+=v);Object.values(atOwned).forEach(v=>u+=v);Object.values(mnOwned).forEach(v=>u+=v);Object.values(medOwned).forEach(v=>u+=v);Object.values(ceOwned).forEach(v=>u+=v);Object.values(ccOwned).forEach(v=>u+=v);return u;}
 function spLeft(){return spBudget()-spUsed();}
 function updateSPBadge(){
   const el=document.getElementById('sp-badge');
@@ -2920,6 +2966,11 @@ function buildSkillTree(){
           '<div class="tree-path-name" style="color:var(--red3)">'+p.name+' 🗡</div>'+
           '<div style="font-size:10px;color:var(--txt3);margin-top:2px">Clique para ver a árvore</div>'+
           '<div style="margin-top:8px;display:flex;align-items:center;gap:6px"><span style="font-size:10px;color:var(--txt3)">XP Investido:</span><input type="number" style="width:60px;font-size:12px;padding:3px 5px;text-align:center" value="'+xp+'" min="0" onclick="event.stopPropagation()" onchange="setPathXP(\''+cls.id+'\',\''+p.name+'\',this.value)"></div></div>';
+      } else if(p.hasPSTree){
+        pathsHtml+='<div class="tree-path-card" onclick="openPSOverlay()" style="border-color:#818cf8">'+
+          '<div class="tree-path-name" style="color:#a5b4fc">'+p.name+' ♟</div>'+
+          '<div style="font-size:10px;color:var(--txt3);margin-top:2px">Clique para ver a árvore</div>'+
+          '<div style="margin-top:8px;display:flex;align-items:center;gap:6px"><span style="font-size:10px;color:var(--txt3)">XP Investido:</span><input type="number" style="width:60px;font-size:12px;padding:3px 5px;text-align:center" value="'+xp+'" min="0" onclick="event.stopPropagation()" onchange="setPathXP(\''+cls.id+'\',\''+p.name+'\',this.value)"></div></div>';
       } else if(p.hasRDTree){
         pathsHtml+='<div class="tree-path-card" onclick="openRDOverlay()" style="border-color:#f59e0b">'+
           '<div class="tree-path-name" style="color:#fbbf24">'+p.name+' 💥</div>'+
@@ -2975,13 +3026,14 @@ function renderPlayerTree(){
   const allFC=Object.entries(fcOwned).filter(([,v])=>v>0);
   const allAC=Object.entries(acOwned).filter(([,v])=>v>0);
   const allPA=Object.entries(paOwned).filter(([,v])=>v>0);
+  const allPS=Object.entries(psOwned).filter(([,v])=>v>0);
   const allRD=Object.entries(rdOwned).filter(([,v])=>v>0);
   const allMN=Object.entries(mnOwned).filter(([,v])=>v>0);
   const allMed=Object.entries(medOwned).filter(([,v])=>v>0);
   const allAR=Object.entries(arOwned).filter(([,v])=>v>0);
   const allCE=Object.entries(ceOwned).filter(([,v])=>v>0);
   const allCC=Object.entries(ccOwned).filter(([,v])=>v>0);
-  const anyOwned=allFC.length>0||allAC.length>0||allPA.length>0||allRD.length>0||allMN.length>0||allMed.length>0||allAR.length>0||allCE.length>0||allCC.length>0;
+  const anyOwned=allFC.length>0||allAC.length>0||allPA.length>0||allPS.length>0||allRD.length>0||allMN.length>0||allMed.length>0||allAR.length>0||allCE.length>0||allCC.length>0;
   const section=document.getElementById('player-tree-section');
   const list=document.getElementById('player-tree-list');
   const spInfo=document.getElementById('pt-sp-info');
@@ -3019,6 +3071,17 @@ function renderPlayerTree(){
       let extra='<span style="font-size:9px;color:var(--red3);margin-left:4px">[Assassino]</span>';
       if(id==='passo'&&paArmaChoice)extra+=' <span style="font-size:9px;color:var(--green2)">→ Arma: '+paArmaChoice+'</span>';
       div.innerHTML='<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><span class="pt-node-name">'+node.name+'<span class="pt-node-lv">Nv'+lv+'</span></span>'+extra+'</div>'+'<button class="pt-sell-btn" onclick="sellPALevel(\''+id+'\','+lv+')">↩ Vender (+1pt)</button>';
+      list.appendChild(div);
+    }
+  });
+  // PS nodes
+  allPS.forEach(([id,lvls])=>{
+    const node=PS_NODES.find(n=>n.id===id);if(!node)return;
+    for(let lv=1;lv<=lvls;lv++){
+      const div=document.createElement('div');div.className='pt-node';
+      let extra='<span style="font-size:9px;color:#a5b4fc;margin-left:4px">[Estrategista]</span>';
+      if(id==='estrategista'&&psArmaEstrategiaChoice)extra+=' <span style="font-size:9px;color:var(--green2)">→ Estratégia: '+psArmaEstrategiaChoice+'</span>';
+      div.innerHTML='<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><span class="pt-node-name">'+node.name+'<span class="pt-node-lv">Nv'+lv+'</span></span>'+extra+'</div>'+'<button class="pt-sell-btn" onclick="sellPSLevel(\''+id+'\','+lv+')">↩ Vender (+1pt)</button>';
       list.appendChild(div);
     }
   });
@@ -3133,9 +3196,132 @@ function buildSVGTree(containerEl, nodes, edges, nodeHtmlFn, colW, rowH, colGap,
     nodesHtml+='<div style="position:absolute;left:'+x+'px;top:'+y+'px;width:'+colW+'px;height:'+rowH+'px;display:flex;align-items:center;justify-content:center">'+nodeHtmlFn(n.id,!!n.isRoot,!!n.sm)+'</div>';
   });
   containerEl.innerHTML=
+    '<div class="fc-tree-scroll">'+
     '<div style="position:relative;width:'+W+'px;height:'+H+'px;margin:0 auto;overflow:visible">'+
     '<svg style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:visible" viewBox="0 0 '+W+' '+H+'">'+svgLines+'</svg>'+
-    nodesHtml+'</div>';
+    nodesHtml+'</div></div>';
+}
+
+// ── PS OVERLAY ──
+function openPSOverlay(){document.getElementById('ps-overlay').classList.add('open');buildPSTree();document.getElementById('ps-desc-card').classList.remove('show');}
+function closePSOverlay(e){if(e.target===document.getElementById('ps-overlay'))closePSOverlayDirect();}
+function closePSOverlayDirect(){document.getElementById('ps-overlay').classList.remove('open');}
+
+function buildPSTree(){
+  _spBar('ps-sp-bar');
+  // row0 c3: raiz
+  // row1: c0=lutaOuFuga c3=manobrasAvancadas c6=tecnicasCombate
+  // row2: c0=disparada c1=adrenalina | c2=ataqueEspecial c3=motivar c4=lutarAsCegas | c5=observacaoCampo c6=prioridade
+  buildSVGTree(document.getElementById('ps-tree-container'),[
+    {id:'estrategista',col:3,row:0,isRoot:true},
+    {id:'lutaOuFuga',col:0,row:1},{id:'manobrasAvancadas',col:3,row:1},{id:'tecnicasCombate',col:6,row:1},
+    {id:'disparada',col:0,row:2},{id:'adrenalina',col:1,row:2},
+    {id:'ataqueEspecial',col:2,row:2},{id:'motivar',col:3,row:2},{id:'lutarAsCegas',col:4,row:2},
+    {id:'observacaoCampo',col:5,row:2},{id:'prioridade',col:6,row:2}
+  ],[[3,0,0,1],[3,0,3,1],[3,0,6,1],
+     [0,1,0,2],[0,1,1,2],
+     [3,1,2,2],[3,1,3,2],[3,1,4,2],
+     [6,1,5,2],[6,1,6,2]
+  ],buildPSNodeHTML,120,90,8,48);
+}
+function buildPSNodeHTML(id,isRoot){
+  const node=PS_NODES.find(n=>n.id===id);if(!node)return '';
+  const owned=psOwned[id]||0;
+  let starsHtml='';
+  if(node.stars){starsHtml='<div class="fc-stars">';for(let i=0;i<node.maxLevels;i++)starsHtml+='<span class="fc-star'+(i<owned?' lit':'')+'">★</span>';starsHtml+='</div>';}
+  const badge=owned>0?'<div class="fc-owned-badge">✓ Nv'+owned+'/'+node.maxLevels+'</div>':'';
+  return '<div class="fc-node'+(isRoot?' root-node':'')+(owned>0?' owned':'')+'" style="width:100%;box-sizing:border-box;cursor:pointer" onclick="psShowDesc(\''+id+'\')" id="psn-'+id+'">'+
+    '<div class="fc-node-name" style="font-size:11px;line-height:1.3">'+node.name+'</div>'+
+    '<div class="fc-node-grade" style="font-size:9px">Grau '+node.grade+(isRoot?' · Raiz':'')+'</div>'+
+    starsHtml+badge+'</div>';
+}
+function psShowDesc(id){
+  const node=PS_NODES.find(n=>n.id===id);if(!node)return;
+  psActiveNode=id;
+  document.getElementById('ps-desc-title').textContent=node.name;
+  document.getElementById('ps-desc-grade').textContent='Habilidade de Grau '+node.grade+(node.isRoot?' (Raiz)':'');
+  const owned=psOwned[id]||0;
+  let html='';
+  node.levels.forEach(lv=>{
+    const isOwned=lv.n<=owned;const isBuyable=lv.n===owned+1;
+    let cls='fc-desc-lv';if(isOwned)cls+=' owned-lv';else if(isBuyable)cls+=' buyable-lv';
+    html+='<div class="'+cls+'"><div class="fc-desc-lv-num">'+(isOwned?'✓ ':'')+'Nível '+lv.n+'</div><div class="fc-desc-lv-txt">'+lv.txt+'</div>';
+    if(isBuyable){
+      const prereqOk=psCheckPrereq(id,lv.n);const spOk=spLeft()>0||!isOfficial();const canBuy=prereqOk&&spOk;
+      if(lv.hasArmaEstrategiaChoice&&!psArmaEstrategiaChoice){
+        html+='<div class="fc-res-picker"><label>Escolha a categoria de arma:</label><select id="ps-arma-sel">';
+        PA_WEAPON_CATS.forEach(cat=>{html+='<option value="'+cat+'">'+cat+'</option>';});
+        html+='</select><button class="fc-buy-btn" '+(canBuy?'':'disabled')+' onclick="psBuyLevel(\'estrategista\',1)">'+(canBuy?'Comprar Nv1 (1pt)':(!prereqOk?'Pré-requisito não atendido':'Sem pts disponíveis'))+'</button></div>';
+      } else {
+        if(id==='estrategista'&&psArmaEstrategiaChoice){html+='<div style="font-size:10px;color:var(--green2);margin:4px 0">✓ Utensílio de Estratégia: '+psArmaEstrategiaChoice+'</div>';}
+        html+='<button class="fc-buy-btn" '+(canBuy?'':'disabled')+' onclick="psBuyLevel(\''+id+'\','+lv.n+')">'+(canBuy?'Comprar Nv'+lv.n+' (1pt)':(!prereqOk?'Pré-requisito não atendido':'Sem pts disponíveis'))+'</button>';
+      }
+    } else if(isOwned&&id==='estrategista'){
+      html+='<div style="font-size:10px;color:var(--green2);margin:4px 0">✓ Utensílio de Estratégia: '+(psArmaEstrategiaChoice||'—')+'</div>';
+    }
+    if(isOwned){html+='<button class="fc-sell-btn" onclick="sellPSLevel(\''+id+'\','+lv.n+')">↩ Vender (+1pt)</button>';}
+    html+='</div>';
+  });
+  document.getElementById('ps-desc-levels').innerHTML=html;
+  document.getElementById('ps-desc-card').classList.add('show');
+}
+function psCheckPrereq(id,lv){
+  if(id==='estrategista')return true;
+  if(['lutaOuFuga','tecnicasCombate','manobrasAvancadas'].includes(id)){
+    if((psOwned['estrategista']||0)<1)return false;
+    if(lv>1&&(psOwned[id]||0)<lv-1)return false;
+    return true;
+  }
+  if(['ataqueEspecial','motivar','lutarAsCegas'].includes(id)){
+    if((psOwned['manobrasAvancadas']||0)<1)return false;
+    return true;
+  }
+  if(['disparada','adrenalina'].includes(id)){
+    if((psOwned['lutaOuFuga']||0)<1)return false;
+    return true;
+  }
+  if(['observacaoCampo','prioridade'].includes(id)){
+    if((psOwned['tecnicasCombate']||0)<1)return false;
+    return true;
+  }
+  if(lv>1&&(psOwned[id]||0)<lv-1)return false;
+  return true;
+}
+function psBuyLevel(id,lv){
+  if(!psCheckPrereq(id,lv)){showToast('Pré-requisito não atendido!');return;}
+  if(isOfficial()&&spLeft()<1){showToast('Sem pontos de habilidade!');return;}
+  if(id==='estrategista'&&lv===1&&!psArmaEstrategiaChoice){
+    const sel=document.getElementById('ps-arma-sel');
+    if(sel)psArmaEstrategiaChoice=sel.value;
+    else{showToast('Selecione uma categoria de arma!');return;}
+  }
+  psOwned[id]=(psOwned[id]||0)+1;
+  updateSPBadge();buildPSTree();psShowDesc(id);renderPlayerTree();autoSave();
+  showToast('✓ Habilidade comprada!');
+}
+function sellPSLevel(id,lv){
+  const owned=psOwned[id]||0;
+  if(lv!==owned){showToast('Só pode vender o nível mais alto!');return;}
+  if(id==='estrategista'&&lv===1){
+    const deps=['lutaOuFuga','tecnicasCombate','manobrasAvancadas','ataqueEspecial','motivar','lutarAsCegas','disparada','adrenalina','observacaoCampo','prioridade'];
+    if(deps.some(d=>(psOwned[d]||0)>0)){showToast('Venda os nós dependentes primeiro!');return;}
+    psArmaEstrategiaChoice=null;
+  }
+  if(id==='lutaOuFuga'&&lv===1){
+    if((psOwned['disparada']||0)>0||(psOwned['adrenalina']||0)>0){showToast('Venda Disparada e Adrenalina primeiro!');return;}
+  }
+  if(id==='tecnicasCombate'&&lv===1){
+    if((psOwned['observacaoCampo']||0)>0||(psOwned['prioridade']||0)>0){showToast('Venda Observação de Campo e Prioridade primeiro!');return;}
+  }
+  if(id==='manobrasAvancadas'&&lv===1){
+    const deps=['ataqueEspecial','motivar','lutarAsCegas'];
+    if(deps.some(d=>(psOwned[d]||0)>0)){showToast('Venda os nós dependentes primeiro!');return;}
+  }
+  psOwned[id]=Math.max(0,owned-1);
+  updateSPBadge();buildPSTree();
+  if(psActiveNode===id)psShowDesc(id);
+  renderPlayerTree();autoSave();
+  showToast('↩ Habilidade vendida (+1pt)');
 }
 
 // ── RD OVERLAY ──
@@ -4991,6 +5177,7 @@ function gatherData(){
   d._fcRes=JSON.stringify(fcResChoices);d._resRows=JSON.stringify(resRows);d._vulnRows=JSON.stringify(vulnRows);
   d._acOwned=JSON.stringify(acOwned);d._acMC=acMaestriaChoice?JSON.stringify(acMaestriaChoice):null;
   d._paOwned=JSON.stringify(paOwned);d._paAC=paArmaChoice||null;
+  d._psOwned=JSON.stringify(psOwned);d._psAEC=psArmaEstrategiaChoice||null;
   d._rdOwned=JSON.stringify(rdOwned);d._rdADC=rdArmaDevastaChoice||null;
   d._arOwned=JSON.stringify(arOwned);d._atOwned=JSON.stringify(atOwned);d._atMC=atMaestriaChoice?JSON.stringify(atMaestriaChoice):null;d._arMC=arMaestriaChoice?JSON.stringify(arMaestriaChoice):null;d._arFoco=JSON.stringify(arFocoArmas);d._arEmp=arEmpunhaduraChoice||null;
   d._arEC=arEspecChoice||null;d._arUC=arUltraChoice||null;
@@ -5021,8 +5208,8 @@ function doResetFicha(){
   equippedWeapons={slot1:null,slot2:null};wepAmmo={};
   itemDamage={};resRows=[];vulnRows=[];
   poseActive=false;calcSavedSpells=[];calcEditingIdx=-1;
-  fcOwned={};acOwned={};paOwned={};rdOwned={};arOwned={};atOwned={};mnOwned={};medOwned={};ceOwned={};ccOwned={};ccAdaptations=[];
-  fcMaestriaChoice=null;acMaestriaChoice=null;paAcrobaticaChoice=null;rdArmaDevastaChoice=null;
+  fcOwned={};acOwned={};paOwned={};psOwned={};rdOwned={};arOwned={};atOwned={};mnOwned={};medOwned={};ceOwned={};ccOwned={};ccAdaptations=[];
+  fcMaestriaChoice=null;acMaestriaChoice=null;paAcrobaticaChoice=null;psArmaEstrategiaChoice=null;rdArmaDevastaChoice=null;
   arMaestriaChoice=null;arFocoArmas=[];arEmpunhaduraChoice=null;arEspecChoice=null;arUltraChoice=null;
   mnMaestriaChoice=null;medMaestriaChoice=null;shopWepCustom={};shopArmorCustom={};shopShieldCustom={};
   // Clear all inputs
@@ -5089,7 +5276,7 @@ function loadSheet(){
     if(raw){
       const d=JSON.parse(raw);
       if(d['chk-official']!==undefined)document.getElementById('chk-official').checked=d['chk-official'];
-      const SKIP=['chk-official','_inv','_eq','_eqw','_dmg','_tree','_fcOwned','_fcVital','_fcDet','_fcRes','_resRows','_vulnRows','_acOwned','_acMC','_paOwned','_paAC','_rdOwned','_rdADC','_arOwned','_arMC','_arFoco','_arEmp','_arEC','_arUC','_mnOwned','_mnMC','_medOwned','_medMC','_fcMC','_ceOwned','_ccOwned','_ccAdapts','dado-cura-val'];
+      const SKIP=['chk-official','_inv','_eq','_eqw','_dmg','_tree','_fcOwned','_fcVital','_fcDet','_fcRes','_resRows','_vulnRows','_acOwned','_acMC','_paOwned','_paAC','_psOwned','_psAEC','_rdOwned','_rdADC','_arOwned','_arMC','_arFoco','_arEmp','_arEC','_arUC','_mnOwned','_mnMC','_medOwned','_medMC','_fcMC','_ceOwned','_ccOwned','_ccAdapts','dado-cura-val'];
       Object.entries(d).forEach(([id,val])=>{
         if(SKIP.includes(id))return;
         const el=document.getElementById(id);if(!el||el.readOnly)return;
@@ -5115,6 +5302,8 @@ function loadSheet(){
       if(d._acMC)try{acMaestriaChoice=JSON.parse(d._acMC);}catch(_){}
       if(d._paOwned)try{Object.assign(paOwned,JSON.parse(d._paOwned));}catch(_){}
       if(d._paAC)paArmaChoice=d._paAC;
+      if(d._psOwned)try{Object.assign(psOwned,JSON.parse(d._psOwned));}catch(_){}
+      if(d._psAEC)psArmaEstrategiaChoice=d._psAEC;
       if(d._rdOwned)try{Object.assign(rdOwned,JSON.parse(d._rdOwned));}catch(_){}
       if(d._rdADC)rdArmaDevastaChoice=d._rdADC;
       if(d._arOwned)try{Object.assign(arOwned,JSON.parse(d._arOwned));}catch(_){}
