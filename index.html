@@ -264,6 +264,35 @@ input[type=file]{display:none}
 .calc-roll-box b{color:#c4b5fd}
 .calc-copy-btn{margin-top:6px;width:100%;padding:6px;background:#2e1065;border:1px solid #7c3aed;color:#c4b5fd;border-radius:5px;font-size:11px;cursor:pointer;font-weight:600}
 .calc-copy-btn:hover{background:#4c1d95}
+/* Cards clicáveis da calculadora */
+.calc-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.calc-card-grid.triple{grid-template-columns:1fr 1fr 1fr}
+.calc-card{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:8px 6px;border-radius:8px;border:2px solid var(--border);background:var(--bg4);cursor:pointer;transition:all .15s;text-align:center;position:relative}
+.calc-card:hover{border-color:#7c3aed;background:#1e1035}
+.calc-card.selected{border-color:#a78bfa;background:#2e1065;box-shadow:0 0 0 1px #a78bfa44}
+.calc-card .cc-icon{font-size:20px;line-height:1}
+.calc-card .cc-label{font-size:11px;font-weight:600;color:var(--txt2);line-height:1.2}
+.calc-card.selected .cc-label{color:#e9d5ff}
+.calc-card .cc-cost{font-size:9px;color:var(--txt3);margin-top:1px}
+.calc-card.selected .cc-cost{color:#a78bfa}
+.calc-card input[type=radio],.calc-card input[type=checkbox]{position:absolute;opacity:0;pointer-events:none}
+/* Buff cards com checkbox */
+.calc-buff-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.calc-buff-card{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 6px;border-radius:8px;border:2px solid var(--border);background:var(--bg4);cursor:pointer;transition:all .15s;text-align:center;position:relative}
+.calc-buff-card:hover{border-color:#4ade80;background:#0f2e1a}
+.calc-buff-card.selected{border-color:#4ade80;background:#14532d44;box-shadow:0 0 0 1px #4ade8044}
+.calc-buff-card .cc-icon{font-size:18px;line-height:1}
+.calc-buff-card .cc-label{font-size:10px;font-weight:600;color:var(--txt2);line-height:1.2}
+.calc-buff-card.selected .cc-label{color:#4ade80}
+.calc-buff-card .cc-val{font-size:9px;color:var(--txt3);margin-top:1px}
+.calc-buff-card.selected .cc-val{color:#86efac}
+.calc-buff-card input[type=checkbox]{position:absolute;opacity:0;pointer-events:none}
+/* Stepper compacto */
+.calc-stepper-compact{display:flex;align-items:center;justify-content:space-between;background:var(--bg4);border:1px solid var(--border);border-radius:8px;padding:8px 10px}
+.calc-stepper-compact .csc-label{font-size:11px;font-weight:600;color:var(--txt2);flex:1}
+.calc-stepper-compact .csc-cost{font-size:9px;color:var(--txt3);margin-right:8px}
+.calc-stepper-compact .csc-ctrl{display:flex;align-items:center;gap:6px}
+.calc-stepper-compact .csc-val{font-size:14px;font-weight:700;color:var(--txt);min-width:20px;text-align:center}
 .fc-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:2000;padding:12px}
 .fc-overlay.open{display:flex}
 .fc-modal{background:var(--bg2);border:1px solid var(--border2);border-radius:12px;width:100%;max-width:960px;max-height:92vh;overflow-y:auto;padding:20px;box-sizing:border-box}
@@ -670,165 +699,378 @@ input[type=file]{display:none}
       <!-- Resto aparece apenas após círculo + tipo serem selecionados -->
       <div id="calc-fields-hidden" style="display:none;display:flex;flex-direction:column;gap:10px">
 
-      <!-- Criar primeiro efeito -->
-      <div class="calc-section" style="background:var(--bg4);border:1px solid #7c3aed;border-radius:8px;padding:10px">
-        <div style="font-size:11px;font-weight:700;color:#c4b5fd;margin-bottom:8px">✨ Criar Primeiro Efeito</div>
+      <!-- Tipo de Feitiço -->
+      <div class="calc-section">
+        <div class="calc-section-title">Tipo de Feitiço</div>
+        <div class="calc-card-grid" style="grid-template-columns:1fr 1fr 1fr">
+          <label class="calc-card" onclick="calcCardSelect(this,'calc-tipo','dano')">
+            <input type="radio" name="calc-tipo" value="dano" onchange="calcUpdate()">
+            <span class="cc-icon">⚔️</span>
+            <span class="cc-label">Dano</span>
+          </label>
+          <label class="calc-card" onclick="calcCardSelect(this,'calc-tipo','adaptar')">
+            <input type="radio" name="calc-tipo" value="adaptar" onchange="calcUpdate()">
+            <span class="cc-icon">🔀</span>
+            <span class="cc-label">Adaptar</span>
+          </label>
+          <label class="calc-card" onclick="calcCardSelect(this,'calc-tipo','defender')">
+            <input type="radio" name="calc-tipo" value="defender" onchange="calcUpdate()">
+            <span class="cc-icon">🛡️</span>
+            <span class="cc-label">Defender</span>
+          </label>
+          <label class="calc-card" onclick="calcCardSelect(this,'calc-tipo','rastrear')">
+            <input type="radio" name="calc-tipo" value="rastrear" onchange="calcUpdate()">
+            <span class="cc-icon">🔍</span>
+            <span class="cc-label">Rastrear</span>
+          </label>
+          <label class="calc-card" onclick="calcCardSelect(this,'calc-tipo','restaurar')">
+            <input type="radio" name="calc-tipo" value="restaurar" onchange="calcUpdate()">
+            <span class="cc-icon">💚</span>
+            <span class="cc-label">Restaurar</span>
+          </label>
+        </div>
+      </div>
 
-        <!-- Tipo -->
-        <div style="margin-bottom:10px">
-          <div class="calc-section-title">Tipo de Feitiço</div>
-          <div class="calc-radio-grid" id="calc-tipo-grid">
-            <label class="calc-radio"><input type="radio" name="calc-tipo" value="dano" onchange="calcUpdate()"> Dano</label>
-            <label class="calc-radio"><input type="radio" name="calc-tipo" value="adaptar" onchange="calcUpdate()"> Adaptar <span style="font-size:9px;color:var(--txt3)">(buff, nerf, variáveis)</span></label>
-            <label class="calc-radio"><input type="radio" name="calc-tipo" value="defender" onchange="calcUpdate()"> Defender</label>
-            <label class="calc-radio"><input type="radio" name="calc-tipo" value="rastrear" onchange="calcUpdate()"> Rastrear</label>
-            <label class="calc-radio"><input type="radio" name="calc-tipo" value="restaurar" onchange="calcUpdate()"> Restaurar (Cura)</label>
+      <!-- Sub-tipo Adaptar -->
+      <div id="calc-adaptar-subtipo-section" style="display:none">
+        <div class="calc-section">
+          <div class="calc-section-title">Tipo de Adaptação</div>
+          <div class="calc-card-grid triple">
+            <label class="calc-card" onclick="calcCardSelect(this,'calc-adaptar-sub','buff')">
+              <input type="radio" name="calc-adaptar-sub" value="buff" onchange="calcUpdate()">
+              <span class="cc-icon">⬆️</span>
+              <span class="cc-label">Buff</span>
+              <span class="cc-cost">Aliado</span>
+            </label>
+            <label class="calc-card" onclick="calcCardSelect(this,'calc-adaptar-sub','nerf')">
+              <input type="radio" name="calc-adaptar-sub" value="nerf" onchange="calcUpdate()">
+              <span class="cc-icon">⬇️</span>
+              <span class="cc-label">Nerf</span>
+              <span class="cc-cost">Inimigo</span>
+            </label>
+            <label class="calc-card" onclick="calcCardSelect(this,'calc-adaptar-sub','variavel')">
+              <input type="radio" name="calc-adaptar-sub" value="variavel" onchange="calcUpdate()">
+              <span class="cc-icon">🎲</span>
+              <span class="cc-label">Variável</span>
+              <span class="cc-cost">Condicional</span>
+            </label>
           </div>
         </div>
+      </div>
 
-        <!-- Tipo de Ação -->
-        <div style="margin-bottom:10px">
-          <div class="calc-section-title">Tipo de Ação</div>
-          <div class="calc-radio-grid">
-            <label class="calc-radio"><input type="radio" name="calc-acao" value="1" checked onchange="calcUpdate()"> Simples (1 PE)</label>
-            <label class="calc-radio"><input type="radio" name="calc-acao" value="3" onchange="calcUpdate()"> Complexo (3 PE)</label>
+      <!-- Efeitos de Buff -->
+      <div id="calc-buff-opcoes-section" style="display:none">
+        <div class="calc-section">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+            <div class="calc-section-title" style="margin-bottom:0">Efeitos do Buff</div>
+            <span id="calc-buff-custo-extra" style="font-size:10px;color:#a78bfa;font-weight:600;display:none"></span>
+          </div>
+          <div class="calc-buff-grid" id="calc-buff-grid">
+            <label class="calc-buff-card" onclick="calcBuffCardToggle(this,'calc-buff-acerto')">
+              <input type="checkbox" id="calc-buff-acerto" onchange="calcUpdate()">
+              <span class="cc-icon">🎯</span>
+              <span class="cc-label">Aumento de Acerto</span>
+              <span class="cc-val" id="calc-buff-acerto-val">—</span>
+            </label>
+            <label class="calc-buff-card" onclick="calcBuffCardToggle(this,'calc-buff-dano')">
+              <input type="checkbox" id="calc-buff-dano" onchange="calcUpdate()">
+              <span class="cc-icon">💥</span>
+              <span class="cc-label">Aumento de Dano</span>
+              <span class="cc-val" id="calc-buff-dano-val">—</span>
+            </label>
+            <label class="calc-buff-card" onclick="calcBuffCardToggle(this,'calc-buff-defesa')">
+              <input type="checkbox" id="calc-buff-defesa" onchange="calcUpdate()">
+              <span class="cc-icon">🛡️</span>
+              <span class="cc-label">Aumento de Defesa</span>
+              <span class="cc-val" id="calc-buff-defesa-val">—</span>
+            </label>
+            <label class="calc-buff-card" onclick="calcBuffCardToggle(this,'calc-buff-movimento')">
+              <input type="checkbox" id="calc-buff-movimento" onchange="calcUpdate()">
+              <span class="cc-icon">💨</span>
+              <span class="cc-label">Aumento de Movimento</span>
+              <span class="cc-val" id="calc-buff-movimento-val">—</span>
+            </label>
+            <label class="calc-buff-card" onclick="calcBuffCardToggle(this,'calc-buff-alcance-m')">
+              <input type="checkbox" id="calc-buff-alcance-m" onchange="calcUpdate()">
+              <span class="cc-icon">📏</span>
+              <span class="cc-label">Aumento de Alcance</span>
+              <span class="cc-val" id="calc-buff-alcance-m-val">—</span>
+            </label>
+            <label class="calc-buff-card" onclick="calcBuffCardToggle(this,'calc-buff-pvtemp')">
+              <input type="checkbox" id="calc-buff-pvtemp" onchange="calcUpdate()">
+              <span class="cc-icon">❤️</span>
+              <span class="cc-label">PV Temporários</span>
+              <span class="cc-val" id="calc-buff-pvtemp-val">—</span>
+            </label>
+            <label class="calc-buff-card" onclick="calcBuffCardToggle(this,'calc-buff-petemp')">
+              <input type="checkbox" id="calc-buff-petemp" onchange="calcUpdate()">
+              <span class="cc-icon">💙</span>
+              <span class="cc-label">PE Temporários</span>
+              <span class="cc-val" id="calc-buff-petemp-val">—</span>
+            </label>
+            <label class="calc-buff-card" onclick="calcBuffCardToggle(this,'calc-buff-sanidade')">
+              <input type="checkbox" id="calc-buff-sanidade" onchange="calcUpdate()">
+              <span class="cc-icon">🧠</span>
+              <span class="cc-label">Aumento de Sanidade</span>
+              <span class="cc-val" id="calc-buff-sanidade-val">—</span>
+            </label>
           </div>
         </div>
+      </div>
 
-        <!-- Tempo de Conjuração -->
-        <div style="margin-bottom:10px">
-          <div class="calc-section-title">Tempo de Conjuração</div>
-          <div class="calc-radio-grid">
-            <label class="calc-radio"><input type="radio" name="calc-tempo" value="0" checked onchange="calcUpdate()"> Ação Principal (0 PE)</label>
-            <label class="calc-radio"><input type="radio" name="calc-tempo" value="3" onchange="calcUpdate()"> Ação Secundária (3 PE)</label>
-            <label class="calc-radio"><input type="radio" name="calc-tempo" value="5" onchange="calcUpdate()"> Reação (5 PE)</label>
-            <label class="calc-radio"><input type="radio" name="calc-tempo" value="-half" onchange="calcUpdate()"> Turno Inteiro (−½ PE no final)</label>
-          </div>
+      <!-- Tipo de Ação -->
+      <div class="calc-section">
+        <div class="calc-section-title">Tipo de Ação</div>
+        <div class="calc-card-grid">
+          <label class="calc-card" onclick="calcCardSelect(this,'calc-acao','1')">
+            <input type="radio" name="calc-acao" value="1" checked onchange="calcUpdate()">
+            <span class="cc-icon">⚡</span>
+            <span class="cc-label">Simples</span>
+            <span class="cc-cost">1 PE</span>
+          </label>
+          <label class="calc-card" onclick="calcCardSelect(this,'calc-acao','3')">
+            <input type="radio" name="calc-acao" value="3" onchange="calcUpdate()">
+            <span class="cc-icon">⏳</span>
+            <span class="cc-label">Complexo</span>
+            <span class="cc-cost">3 PE</span>
+          </label>
         </div>
+      </div>
 
-        <!-- Alcance -->
-        <div style="margin-bottom:10px">
-          <div class="calc-section-title">Alcance</div>
-          <div class="calc-radio-grid">
-            <label class="calc-radio"><input type="radio" name="calc-alcance" value="0" checked onchange="calcUpdate()"> Toque (0 PE)</label>
-            <label class="calc-radio"><input type="radio" name="calc-alcance" value="2" onchange="calcUpdate()"> Aura 6m (2 PE)</label>
-          </div>
+      <!-- Tempo de Conjuração -->
+      <div class="calc-section">
+        <div class="calc-section-title">Tempo de Conjuração</div>
+        <div class="calc-card-grid" style="grid-template-columns:1fr 1fr">
+          <label class="calc-card" onclick="calcCardSelect(this,'calc-tempo','0')">
+            <input type="radio" name="calc-tempo" value="0" checked onchange="calcUpdate()">
+            <span class="cc-icon">▶️</span>
+            <span class="cc-label">Ação Principal</span>
+            <span class="cc-cost">0 PE</span>
+          </label>
+          <label class="calc-card" onclick="calcCardSelect(this,'calc-tempo','3')">
+            <input type="radio" name="calc-tempo" value="3" onchange="calcUpdate()">
+            <span class="cc-icon">➕</span>
+            <span class="cc-label">Ação Secundária</span>
+            <span class="cc-cost">3 PE</span>
+          </label>
+          <label class="calc-card" onclick="calcCardSelect(this,'calc-tempo','5')">
+            <input type="radio" name="calc-tempo" value="5" onchange="calcUpdate()">
+            <span class="cc-icon">⚡</span>
+            <span class="cc-label">Reação</span>
+            <span class="cc-cost">5 PE</span>
+          </label>
+          <label class="calc-card" onclick="calcCardSelect(this,'calc-tempo','-half')">
+            <input type="radio" name="calc-tempo" value="-half" onchange="calcUpdate()">
+            <span class="cc-icon">🔄</span>
+            <span class="cc-label">Turno Inteiro</span>
+            <span class="cc-cost">−½ PE</span>
+          </label>
         </div>
+      </div>
 
+      <!-- Alcance -->
+      <div class="calc-section">
+        <div class="calc-section-title">Alcance</div>
+        <div class="calc-card-grid">
+          <label class="calc-card" onclick="calcCardSelect(this,'calc-alcance','0')">
+            <input type="radio" name="calc-alcance" value="0" checked onchange="calcUpdate()">
+            <span class="cc-icon">👆</span>
+            <span class="cc-label">Toque</span>
+            <span class="cc-cost">0 PE</span>
+          </label>
+          <label class="calc-card" onclick="calcCardSelect(this,'calc-alcance','2')">
+            <input type="radio" name="calc-alcance" value="2" onchange="calcUpdate()">
+            <span class="cc-icon">🌐</span>
+            <span class="cc-label">Aura 6m</span>
+            <span class="cc-cost">2 PE</span>
+          </label>
+        </div>
         <!-- Aumento de Alcance (oculto quando Toque) -->
-        <div id="calc-alcance-extra-section" style="margin-bottom:10px;display:none">
-          <div class="calc-section-title">Aumento de Alcance <span style="font-size:9px;color:var(--txt3)">(3 PE/metro)</span></div>
-          <div class="calc-stepper-row">
-            <button class="calc-step-btn" onclick="calcStep('alcance_extra',-1)">−</button>
-            <span id="calc-alcance-extra-val">0</span>m
-            <button class="calc-step-btn" onclick="calcStep('alcance_extra',1)">+</button>
-            <span style="font-size:10px;color:var(--txt3);margin-left:6px">= <span id="calc-alcance-extra-pe">0</span> PE</span>
-          </div>
-        </div>
-
-        <!-- Duração -->
-        <div style="margin-bottom:10px">
-          <div class="calc-section-title">Duração</div>
-          <div class="calc-radio-grid">
-            <label class="calc-radio"><input type="radio" name="calc-duracao" value="0" checked onchange="calcUpdate()"> Instantâneo ou Prolongando (0 PE)</label>
-            <label class="calc-radio"><input type="radio" name="calc-duracao" value="3" onchange="calcUpdate()"> Prolongando com Ação Secundária (3 PE)</label>
-          </div>
-        </div>
-
-        <!-- Prolongamento de Efeito (aparece quando Instantâneo ou Prolongando) -->
-        <div id="calc-prolongamento-section" style="margin-bottom:10px;display:none">
-          <div class="calc-section-title" style="color:#c4b5fd">Prolongamento de Efeito</div>
-          <div style="display:flex;flex-direction:column;gap:5px;background:var(--bg3);padding:8px;border-radius:6px;border:1px solid #4c1d95">
-            <label class="calc-check"><input type="checkbox" id="calc-prol-turno" onchange="calcUpdate()"> +5 PE por turno adicional</label>
-            <div class="calc-stepper-row" id="calc-prol-turno-row" style="display:none;margin-left:16px">
-              <button class="calc-step-btn" onclick="calcStep('prol_turno',-1)">−</button>
-              <span id="calc-prol-turno-val">1</span> turno(s)
-              <button class="calc-step-btn" onclick="calcStep('prol_turno',1)">+</button>
-              <span style="font-size:10px;color:var(--txt3);margin-left:6px">= <span id="calc-prol-turno-pe">5</span> PE</span>
+        <div id="calc-alcance-extra-section" style="margin-top:8px;display:none">
+          <div class="calc-stepper-compact">
+            <span class="csc-label">📐 Aumento de Alcance</span>
+            <span class="csc-cost" id="calc-alcance-extra-pe">0 PE</span>
+            <div class="csc-ctrl">
+              <button class="calc-step-btn" onclick="calcStep('alcance_extra',-1)">−</button>
+              <span class="csc-val" id="calc-alcance-extra-val">0</span><span style="font-size:11px;color:var(--txt3)">m</span>
+              <button class="calc-step-btn" onclick="calcStep('alcance_extra',1)">+</button>
             </div>
-            <label class="calc-check"><input type="checkbox" id="calc-prol-dobrar" onchange="calcUpdate()"> +15 PE — Dobrar duração</label>
-            <label class="calc-check"><input type="checkbox" id="calc-prol-triplicar" onchange="calcUpdate()"> +30 PE — Triplicar duração</label>
           </div>
         </div>
+      </div>
 
-        <!-- Alvos -->
-        <div style="margin-bottom:10px">
-          <div class="calc-section-title">Alvos</div>
-          <div class="calc-radio-grid">
-            <label class="calc-radio"><input type="radio" name="calc-alvo" value="0" checked onchange="calcUpdate()"> Singular (0 PE)</label>
-            <label class="calc-radio"><input type="radio" name="calc-alvo" value="5" onchange="calcUpdate()"> Área de Efeito (5 PE)</label>
+      <!-- Duração -->
+      <div class="calc-section">
+        <div class="calc-section-title">Duração</div>
+        <div class="calc-card-grid">
+          <label class="calc-card" onclick="calcCardSelect(this,'calc-duracao','0')">
+            <input type="radio" name="calc-duracao" value="0" checked onchange="calcUpdate()">
+            <span class="cc-icon">⚡</span>
+            <span class="cc-label">Instantâneo / Prolongado</span>
+            <span class="cc-cost">0 PE</span>
+          </label>
+          <label class="calc-card" onclick="calcCardSelect(this,'calc-duracao','3')">
+            <input type="radio" name="calc-duracao" value="3" onchange="calcUpdate()">
+            <span class="cc-icon">🔁</span>
+            <span class="cc-label">Prolongado c/ Ação Sec.</span>
+            <span class="cc-cost">3 PE</span>
+          </label>
+        </div>
+        <!-- Prolongamento -->
+        <div id="calc-prolongamento-section" style="margin-top:8px;display:none">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div class="calc-stepper-compact" id="calc-prol-turno-wrap">
+              <label style="display:flex;align-items:center;gap:6px;cursor:pointer;flex:1">
+                <input type="checkbox" id="calc-prol-turno" onchange="calcUpdate()" style="accent-color:#a78bfa">
+                <span class="csc-label" style="margin:0">+5 PE/turno adicional</span>
+              </label>
+              <div class="csc-ctrl" id="calc-prol-turno-row" style="display:none">
+                <button class="calc-step-btn" onclick="calcStep('prol_turno',-1)">−</button>
+                <span class="csc-val" id="calc-prol-turno-val">1</span><span style="font-size:10px;color:var(--txt3)">t</span>
+                <button class="calc-step-btn" onclick="calcStep('prol_turno',1)">+</button>
+                <span style="font-size:9px;color:#a78bfa;margin-left:4px" id="calc-prol-turno-pe">5 PE</span>
+              </div>
+            </div>
+            <div class="calc-stepper-compact">
+              <label style="display:flex;align-items:center;gap:6px;cursor:pointer;flex:1">
+                <input type="checkbox" id="calc-prol-dobrar" onchange="calcUpdate()" style="accent-color:#a78bfa">
+                <span class="csc-label" style="margin:0">Dobrar duração</span>
+              </label>
+              <span style="font-size:10px;color:#a78bfa;font-weight:600">+15 PE</span>
+            </div>
+            <div class="calc-stepper-compact">
+              <label style="display:flex;align-items:center;gap:6px;cursor:pointer;flex:1">
+                <input type="checkbox" id="calc-prol-triplicar" onchange="calcUpdate()" style="accent-color:#a78bfa">
+                <span class="csc-label" style="margin:0">Triplicar duração</span>
+              </label>
+              <span style="font-size:10px;color:#a78bfa;font-weight:600">+30 PE</span>
+            </div>
           </div>
         </div>
+      </div>
 
+      <!-- Alvos -->
+      <div class="calc-section">
+        <div class="calc-section-title">Alvos</div>
+        <div class="calc-card-grid">
+          <label class="calc-card" onclick="calcCardSelect(this,'calc-alvo','0')">
+            <input type="radio" name="calc-alvo" value="0" checked onchange="calcUpdate()">
+            <span class="cc-icon">👤</span>
+            <span class="cc-label">Singular</span>
+            <span class="cc-cost">0 PE</span>
+          </label>
+          <label class="calc-card" onclick="calcCardSelect(this,'calc-alvo','5')">
+            <input type="radio" name="calc-alvo" value="5" onchange="calcUpdate()">
+            <span class="cc-icon">💥</span>
+            <span class="cc-label">Área de Efeito</span>
+            <span class="cc-cost">5 PE</span>
+          </label>
+        </div>
         <!-- Múltiplos Alvos -->
-        <div style="margin-bottom:10px">
-          <div class="calc-section-title">Múltiplos Alvos <span style="font-size:9px;color:var(--txt3)">(4 PE / alvo adicional)</span></div>
-          <div class="calc-stepper-row">
-            <button class="calc-step-btn" onclick="calcStep('multi_alvo',-1)">−</button>
-            <span id="calc-multi-alvo-val">0</span> alvo(s)
-            <button class="calc-step-btn" onclick="calcStep('multi_alvo',1)">+</button>
-            <span style="font-size:10px;color:var(--txt3);margin-left:6px">= <span id="calc-multi-alvo-pe">0</span> PE</span>
+        <div style="margin-top:8px">
+          <div class="calc-stepper-compact">
+            <span class="csc-label">👥 Alvos Adicionais</span>
+            <span class="csc-cost" id="calc-multi-alvo-pe">0 PE</span>
+            <div class="csc-ctrl">
+              <button class="calc-step-btn" onclick="calcStep('multi_alvo',-1)">−</button>
+              <span class="csc-val" id="calc-multi-alvo-val">0</span>
+              <button class="calc-step-btn" onclick="calcStep('multi_alvo',1)">+</button>
+            </div>
           </div>
         </div>
+      </div>
 
-        <!-- Teste de Resistência -->
-        <div style="margin-bottom:10px">
-          <div class="calc-section-title">Teste de Resistência</div>
-          <div class="calc-radio-grid">
-            <label class="calc-radio"><input type="radio" name="calc-resist" value="0" checked onchange="calcUpdate()"> CD</label>
-            <label class="calc-radio"><input type="radio" name="calc-resist" value="-half" onchange="calcUpdate()"> Requer Reação (−½ PE no final)</label>
+      <!-- Teste de Resistência (oculto para Buff) -->
+      <div class="calc-section" id="calc-resist-section">
+        <div class="calc-section-title">Teste de Resistência</div>
+        <div class="calc-card-grid">
+          <label class="calc-card" onclick="calcCardSelect(this,'calc-resist','0')">
+            <input type="radio" name="calc-resist" value="0" checked onchange="calcUpdate()">
+            <span class="cc-icon">🎲</span>
+            <span class="cc-label">CD</span>
+            <span class="cc-cost">Base CD 20</span>
+          </label>
+          <label class="calc-card" onclick="calcCardSelect(this,'calc-resist','-half')">
+            <input type="radio" name="calc-resist" value="-half" onchange="calcUpdate()">
+            <span class="cc-icon">⚡</span>
+            <span class="cc-label">Requer Reação</span>
+            <span class="cc-cost">−½ PE</span>
+          </label>
+        </div>
+        <!-- CD -->
+        <div id="calc-cd-section" style="margin-top:8px">
+          <div style="font-size:10px;color:var(--txt3);margin-bottom:6px">Base: <b style="color:#c4b5fd">CD 20</b></div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div class="calc-stepper-compact">
+              <span class="csc-label">+1 CD</span>
+              <span class="csc-cost" id="calc-cd-plus3-pe">0 PE</span>
+              <div class="csc-ctrl">
+                <button class="calc-step-btn" onclick="calcStep('cd_plus3',-1)">−</button>
+                <span class="csc-val" id="calc-cd-plus3-val">0</span>
+                <button class="calc-step-btn" onclick="calcStep('cd_plus3',1)">+</button>
+              </div>
+            </div>
+            <div class="calc-stepper-compact">
+              <span class="csc-label">+5 CD</span>
+              <span class="csc-cost" id="calc-cd-plus12-pe">0 PE</span>
+              <div class="csc-ctrl">
+                <button class="calc-step-btn" onclick="calcStep('cd_plus12',-1)">−</button>
+                <span class="csc-val" id="calc-cd-plus12-val">0</span>
+                <button class="calc-step-btn" onclick="calcStep('cd_plus12',1)">+</button>
+              </div>
+            </div>
           </div>
         </div>
-
-        <!-- CD base + aumentar CD (visível quando CD) -->
-        <div id="calc-cd-section" style="margin-bottom:10px">
-          <div style="font-size:11px;color:var(--txt2);margin-bottom:6px">Base: <b style="color:#c4b5fd">CD 20</b></div>
-          <div class="calc-section-title">Aumentar CD</div>
-          <div class="calc-stepper-row" style="margin-bottom:4px">
-            <button class="calc-step-btn" onclick="calcStep('cd_plus3',-1)">−</button>
-            <span id="calc-cd-plus3-val">0</span>×
-            <button class="calc-step-btn" onclick="calcStep('cd_plus3',1)">+</button>
-            <span style="font-size:10px;color:var(--txt3);margin-left:6px">3 PE = +1 CD &nbsp;(= <span id="calc-cd-plus3-pe">0</span> PE / +<span id="calc-cd-plus3-bonus">0</span> CD)</span>
-          </div>
-          <div class="calc-stepper-row">
-            <button class="calc-step-btn" onclick="calcStep('cd_plus12',-1)">−</button>
-            <span id="calc-cd-plus12-val">0</span>×
-            <button class="calc-step-btn" onclick="calcStep('cd_plus12',1)">+</button>
-            <span style="font-size:10px;color:var(--txt3);margin-left:6px">12 PE = +5 CD &nbsp;(= <span id="calc-cd-plus12-pe">0</span> PE / +<span id="calc-cd-plus12-bonus">0</span> CD)</span>
+        <!-- Acerto -->
+        <div class="calc-section" id="calc-acerto-section" style="display:none;margin-top:8px;padding:8px">
+          <div class="calc-stepper-compact" style="background:transparent;border:none;padding:0">
+            <span class="csc-label">🎯 Aumentar Acerto</span>
+            <span class="csc-cost" id="calc-acerto-pe">0 PE</span>
+            <div class="csc-ctrl">
+              <button class="calc-step-btn" onclick="calcStep('acerto',-1)">−</button>
+              <span class="csc-val" id="calc-acerto-val">0</span>
+              <button class="calc-step-btn" onclick="calcStep('acerto',1)">+</button>
+            </div>
           </div>
         </div>
+      </div>
 
-        <!-- Aumentar Acerto (oculto quando CD) -->
-        <div class="calc-section" id="calc-acerto-section" style="display:none">
-          <div class="calc-section-title">Aumentar Acerto <span style="font-size:9px;color:var(--txt3)">(bônus na rolagem de ataque)</span></div>
-          <div class="calc-stepper-row">
-            <button class="calc-step-btn" onclick="calcStep('acerto',-1)">−</button>
-            <span id="calc-acerto-val">0</span>
-            <button class="calc-step-btn" onclick="calcStep('acerto',1)">+</button>
-            <span style="font-size:10px;color:var(--txt3);margin-left:6px">= <span id="calc-acerto-pe">0</span> PE &nbsp;/&nbsp; +<span id="calc-acerto-bonus">0</span> na rolagem</span>
-          </div>
-        </div>
-
-        <!-- Crítico Melhorado (oculto quando CD ou Restaurar) -->
-        <div class="calc-section" id="calc-crit-section" style="display:none">
-          <div class="calc-section-title">Crítico Melhorado <span style="font-size:9px;color:var(--txt3)">(12 PE / +1 multiplicador)</span></div>
-          <div class="calc-stepper-row">
+      <!-- Crítico Melhorado -->
+      <div class="calc-section" id="calc-crit-section" style="display:none">
+        <div class="calc-stepper-compact" style="background:transparent;border:none;padding:0">
+          <span class="csc-label">💀 Crítico Melhorado <span style="font-size:9px;color:var(--txt3)">+1 mult</span></span>
+          <span class="csc-cost" id="calc-crit-pe">0 PE</span>
+          <div class="csc-ctrl">
             <button class="calc-step-btn" onclick="calcStep('crit',-1)">−</button>
-            <span id="calc-crit-val">0</span>
+            <span class="csc-val" id="calc-crit-val">0</span>
             <button class="calc-step-btn" onclick="calcStep('crit',1)">+</button>
-            <span style="font-size:10px;color:var(--txt3);margin-left:6px">= <span id="calc-crit-pe">0</span> PE</span>
           </div>
         </div>
+      </div>
 
-        <!-- Potencialização (oculto para Dano) -->
-        <div class="calc-section" id="calc-pot-section" style="display:none">
-          <div class="calc-section-title">Potencialização</div>
-          <div class="calc-radio-grid">
-            <label class="calc-radio"><input type="radio" name="calc-pot" value="0" checked onchange="calcUpdate()"> Nenhuma</label>
-            <label class="calc-radio"><input type="radio" name="calc-pot" value="15" onchange="calcUpdate()"> 15 PE — Eficiência ×1.5</label>
-            <label class="calc-radio"><input type="radio" name="calc-pot" value="30" onchange="calcUpdate()"> 30 PE — Eficiência ×2.0</label>
-          </div>
+      <!-- Potencialização -->
+      <div class="calc-section" id="calc-pot-section" style="display:none">
+        <div class="calc-section-title">Potencialização</div>
+        <div class="calc-card-grid triple">
+          <label class="calc-card" onclick="calcCardSelect(this,'calc-pot','0')">
+            <input type="radio" name="calc-pot" value="0" checked onchange="calcUpdate()">
+            <span class="cc-icon">—</span>
+            <span class="cc-label">Nenhuma</span>
+          </label>
+          <label class="calc-card" onclick="calcCardSelect(this,'calc-pot','15')">
+            <input type="radio" name="calc-pot" value="15" onchange="calcUpdate()">
+            <span class="cc-icon">⬆</span>
+            <span class="cc-label">Efic. ×1.5</span>
+            <span class="cc-cost">15 PE</span>
+          </label>
+          <label class="calc-card" onclick="calcCardSelect(this,'calc-pot','30')">
+            <input type="radio" name="calc-pot" value="30" onchange="calcUpdate()">
+            <span class="cc-icon">⬆⬆</span>
+            <span class="cc-label">Efic. ×2.0</span>
+            <span class="cc-cost">30 PE</span>
+          </label>
         </div>
+      </div>
 
       </div><!-- /calc-fields-hidden -->
     </div><!-- /left -->
@@ -4862,6 +5104,68 @@ const CALC_STEPS={acerto:0,alcance_extra:0,crit:0,prol_turno:1,multi_alvo:0,cd_p
 let calcSavedSpells=[];
 let calcEditingIdx=-1;
 
+function calcCardSelect(labelEl,radioName,value){
+  // Marcar o radio dentro do label
+  const radio=labelEl.querySelector('input[type=radio]');
+  if(radio){radio.checked=true;}
+  // Atualizar visual dos cards do mesmo grupo
+  document.querySelectorAll('input[name="'+radioName+'"]').forEach(function(r){
+    const card=r.closest('.calc-card');
+    if(card)card.classList.toggle('selected',r.checked);
+  });
+  calcUpdate();
+}
+function calcBuffCardToggle(labelEl,checkId){
+  const cb=document.getElementById(checkId);
+  if(!cb)return;
+  cb.checked=!cb.checked;
+  labelEl.classList.toggle('selected',cb.checked);
+  calcUpdate();
+}
+function calcSyncCardStates(){
+  // Sync all radio-based card groups
+  ['calc-tipo','calc-adaptar-sub','calc-acao','calc-tempo','calc-alcance','calc-duracao','calc-alvo','calc-resist','calc-pot'].forEach(function(name){
+    document.querySelectorAll('input[name="'+name+'"]').forEach(function(r){
+      const card=r.closest('.calc-card');
+      if(card)card.classList.toggle('selected',r.checked);
+    });
+  });
+  // Sync buff checkboxes
+  ['acerto','dano','defesa','movimento','alcance-m','pvtemp','petemp','sanidade'].forEach(function(k){
+    const cb=document.getElementById('calc-buff-'+k);
+    const card=cb?cb.closest('.calc-buff-card'):null;
+    if(card)card.classList.toggle('selected',cb.checked);
+  });
+}
+function calcUpdateBuffVals(){
+  const adaptar=parseInt(document.getElementById(skId('poder','Adaptar'))?.value)||0;
+  const bloquearMagico=parseInt(document.getElementById(skId('poder','Bloquear Mágico'))?.value)||0;
+  const restaurar=parseInt(document.getElementById(skId('poder','Restaurar'))?.value)||0;
+  const poder=parseInt(document.getElementById('atr-poder')?.value)||0;
+  const lvl=Math.max(1,parseInt(document.getElementById('f-nivel')?.value)||1);
+  const numDano=(typeof formaDaMenteChoices!=='undefined'?formaDaMenteChoices:[]).filter(function(c){return c==='dano';}).length;
+  const danoArcanoStr=numDano>0?(numDano+'d6+'+(numDano*2)):'0';
+  const vals={
+    'acerto': 'Adaptar ('+adaptar+')',
+    'dano': 'D. Arcano ('+danoArcanoStr+')',
+    'defesa': 'Bl. Mágico ('+bloquearMagico+')',
+    'movimento': '½ Adaptar ('+Math.floor(adaptar/2)+'m)',
+    'alcance-m': 'Adaptar ('+adaptar+'m)',
+    'pvtemp': lvl+'d4+Adaptar('+adaptar+')',
+    'petemp': 'Restaurar ('+restaurar+')',
+    'sanidade': 'Poder ('+poder+')'
+  };
+  Object.keys(vals).forEach(function(k){
+    const el=document.getElementById('calc-buff-'+k+'-val');
+    if(el)el.textContent=vals[k];
+  });
+}
+function calcGetBuffCount(){
+  return ['acerto','dano','defesa','movimento','alcance-m','pvtemp','petemp','sanidade'].filter(function(k){
+    const cb=document.getElementById('calc-buff-'+k);
+    return cb&&cb.checked;
+  }).length;
+}
 function calcInit(){
   const sel=document.getElementById('calc-circulo');
   const prev=sel.value;
@@ -4892,7 +5196,21 @@ function calcGetRadio(name){const r=document.querySelector('input[name="'+name+'
 
 function calcUpdate(){
   const tipo=calcGetTipo();
-  const resist=calcGetRadio('calc-resist');
+  const adaptarSub=calcGetRadio('calc-adaptar-sub');
+  const isBuff=(tipo==='adaptar'&&adaptarSub==='buff');
+
+  // Buff não usa teste de resistência — forçar Reação e ocultar seção
+  const resistSec=document.getElementById('calc-resist-section');
+  if(isBuff){
+    // Forçar "Requer Reação" quando buff (sem custo de resistência no buff)
+    const rr=document.querySelector('input[name="calc-resist"][value="-half"]');
+    if(rr&&!rr.checked){rr.checked=true;}
+    if(resistSec)resistSec.style.display='none';
+  } else {
+    if(resistSec)resistSec.style.display='block';
+  }
+
+  const resist=isBuff?'-half':calcGetRadio('calc-resist');
   const isCD=resist==='0';
   const hasResist=resist==='-half';
   const alcance=calcGetRadio('calc-alcance');
@@ -4905,7 +5223,7 @@ function calcUpdate(){
   const fieldsDiv=document.getElementById('calc-fields-hidden');
   if(fieldsDiv)fieldsDiv.style.display=circulo?'flex':'none';
 
-  // Alcance extra: visible only when Aura; hidden when Toque
+  // Alcance extra: visible only when Aura
   const alcanceExtraSec=document.getElementById('calc-alcance-extra-section');
   if(alcanceExtraSec)alcanceExtraSec.style.display=isAura?'block':'none';
   if(!isAura)CALC_STEPS.alcance_extra=0;
@@ -4918,21 +5236,23 @@ function calcUpdate(){
   const prolCheck=document.getElementById('calc-prol-turno');
   const prolRow=document.getElementById('calc-prol-turno-row');
   if(prolCheck&&prolRow)prolRow.style.display=prolCheck.checked?'flex':'none';
+  // Update prol-turno PE display
+  const prolPeEl=document.getElementById('calc-prol-turno-pe');
+  if(prolPeEl)prolPeEl.textContent=(prolCheck?.checked?((CALC_STEPS.prol_turno||1)*5):0)+' PE';
 
-  // Acerto: visible only when NOT CD (i.e. Requer Reação) — actually rules say CD blocks acerto
-  // Rules: "caso jogador escolha CD, ele não pode aumentar o Acerto"
+  // Acerto: visible only when Requer Reação (not CD)
   const acSec=document.getElementById('calc-acerto-section');
-  if(acSec)acSec.style.display=isCD?'none':'block';
+  if(acSec)acSec.style.display=isCD?'none':'flex';
   if(isCD)CALC_STEPS.acerto=0;
 
-  // CD section: visible only when CD
+  // CD section: visible only when CD (and not buff)
   const cdSec=document.getElementById('calc-cd-section');
-  if(cdSec)cdSec.style.display=isCD?'block':'none';
-  if(!isCD){CALC_STEPS.cd_plus3=0;CALC_STEPS.cd_plus12=0;}
+  if(cdSec)cdSec.style.display=(isCD&&!isBuff)?'block':'none';
+  if(!isCD||isBuff){CALC_STEPS.cd_plus3=0;CALC_STEPS.cd_plus12=0;}
 
-  // Crítico: hidden when CD or Restaurar
+  // Crítico: hidden when CD or Restaurar or Buff
   const critSec=document.getElementById('calc-crit-section');
-  const hideCrit=isCD||(tipo==='restaurar');
+  const hideCrit=isCD||(tipo==='restaurar')||isBuff;
   if(critSec)critSec.style.display=hideCrit?'none':'block';
   if(hideCrit)CALC_STEPS.crit=0;
 
@@ -4940,8 +5260,27 @@ function calcUpdate(){
   const potSec=document.getElementById('calc-pot-section');
   if(potSec)potSec.style.display=(tipo==='dano')?'none':'block';
 
-  // Update all stepper displays
-  ['acerto','alcance_extra','crit','prol_turno','multi_alvo','cd_plus3','cd_plus12'].forEach(k=>{
+  // Sub-tipo Adaptar
+  const adaptarSubSec=document.getElementById('calc-adaptar-subtipo-section');
+  if(adaptarSubSec)adaptarSubSec.style.display=(tipo==='adaptar')?'block':'none';
+
+  // Opções de Buff
+  const buffOpcoesSec=document.getElementById('calc-buff-opcoes-section');
+  if(buffOpcoesSec)buffOpcoesSec.style.display=isBuff?'block':'none';
+  if(isBuff){
+    calcUpdateBuffVals();
+    // Mostrar custo extra de efeitos adicionais
+    const buffCount=calcGetBuffCount();
+    const extraCost=Math.max(0,buffCount-1)*3;
+    const custoEl=document.getElementById('calc-buff-custo-extra');
+    if(custoEl){
+      if(extraCost>0){custoEl.textContent='+'+extraCost+' PE ('+buffCount+' efeitos)';custoEl.style.display='block';}
+      else{custoEl.style.display='none';}
+    }
+  }
+
+  // Update stepper displays
+  ['acerto','alcance_extra','crit','prol_turno','multi_alvo','cd_plus3','cd_plus12'].forEach(function(k){
     const v=CALC_STEPS[k]||0;
     const el=document.getElementById('calc-'+k.replace(/_/g,'-')+'-val');if(el)el.textContent=v;
     const peEl=document.getElementById('calc-'+k.replace(/_/g,'-')+'-pe');
@@ -4949,19 +5288,22 @@ function calcUpdate(){
       let pe=0;
       if(k==='acerto')pe=isCD?0:v;
       if(k==='alcance_extra')pe=v*3;
-      if(k==='crit')pe=(isCD||tipo==='restaurar')?0:v*12;
+      if(k==='crit')pe=(isCD||tipo==='restaurar'||isBuff)?0:v*12;
       if(k==='prol_turno')pe=prolCheck?.checked?(v*5):0;
       if(k==='multi_alvo')pe=v*4;
       if(k==='cd_plus3')pe=v*3;
       if(k==='cd_plus12')pe=v*12;
-      peEl.textContent=pe;
+      // Para stepper-compact, formato "N PE"
+      if(peEl.closest('.calc-stepper-compact')){peEl.textContent=pe+' PE';}
+      else{peEl.textContent=pe;}
     }
-    // CD bonus display
     if(k==='cd_plus3'){const b=document.getElementById('calc-cd-plus3-bonus');if(b)b.textContent=v;}
     if(k==='cd_plus12'){const b=document.getElementById('calc-cd-plus12-bonus');if(b)b.textContent=v*5;}
   });
   const acBonusEl=document.getElementById('calc-acerto-bonus');
   if(acBonusEl)acBonusEl.textContent=isCD?0:(CALC_STEPS.acerto||0);
+  // Sync visual dos cards
+  calcSyncCardStates();
   calcRender();
 }
 
@@ -5036,6 +5378,46 @@ function calcRender(){
   const circ=CALC_CIRCULOS.find(c=>c.id===circulo);
   if(circ)html+='<div class="calc-out-row"><span class="calc-out-label">Círculo</span><span class="calc-out-val">'+circ.name+'</span></div>';
   html+='<div class="calc-out-row"><span class="calc-out-label">Tipo</span><span class="calc-out-val">'+tipo.charAt(0).toUpperCase()+tipo.slice(1)+'</span></div>';
+  // Sub-tipo Adaptar
+  if(tipo==='adaptar'){
+    const adaptarSub=calcGetRadio('calc-adaptar-sub');
+    if(adaptarSub){
+      const subLabels={buff:'Buff',nerf:'Nerf',variavel:'Variável'};
+      html+='<div class="calc-out-row"><span class="calc-out-label">Tipo de Adaptação</span><span class="calc-out-val" style="color:#c4b5fd">'+subLabels[adaptarSub]+'</span></div>';
+    }
+    if(adaptarSub==='buff'){
+      // Coletar valores da ficha para cada efeito de buff
+      const adaptar=parseInt(document.getElementById(skId('poder','Adaptar'))?.value)||0;
+      const bloquearMagico=parseInt(document.getElementById(skId('poder','Bloquear Mágico'))?.value)||0;
+      const restaurar=parseInt(document.getElementById(skId('poder','Restaurar'))?.value)||0;
+      const poder=parseInt(document.getElementById('atr-poder')?.value)||0;
+      const lvl=Math.max(1,parseInt(document.getElementById('f-nivel')?.value)||1);
+      // Dano Arcano: conta escolhas 'dano' em formaDaMenteChoices
+      const numDano=(typeof formaDaMenteChoices!=='undefined'?formaDaMenteChoices:[]).filter(c=>c==='dano').length;
+      const danoArcanoStr=numDano>0?(numDano+'d6+'+(numDano*2)):'0';
+      // Dado de cura arcana: nível + adaptar (mesma fórmula de updateDadoCuraField)
+      const dadoCuraStr=lvl+'d4 + Adaptar ('+adaptar+')';
+      const buffDefs=[
+        {id:'calc-buff-acerto',   label:'Aumento de Acerto',         val:'Adaptar ('+adaptar+')'},
+        {id:'calc-buff-dano',     label:'Aumento de Dano',           val:'Dano Arcano ('+danoArcanoStr+')'},
+        {id:'calc-buff-defesa',   label:'Aumento de Defesa',         val:'Bloquear Mágico ('+bloquearMagico+')'},
+        {id:'calc-buff-movimento',label:'Aumento de Movimento',      val:'½ Adaptar ('+Math.floor(adaptar/2)+'m)'},
+        {id:'calc-buff-alcance-m',label:'Aumento de Alcance',        val:'Adaptar ('+adaptar+'m)'},
+        {id:'calc-buff-pvtemp',   label:'Bônus de PV Temporários',   val:dadoCuraStr},
+        {id:'calc-buff-petemp',   label:'Bônus de PE Temporários',   val:'Restaurar ('+restaurar+')'},
+        {id:'calc-buff-sanidade', label:'Aumento de Sanidade',       val:'Atributo: Poder ('+poder+')'},
+      ];
+      let anyBuff=false;
+      buffDefs.forEach(function(b){
+        const el=document.getElementById(b.id);
+        if(el&&el.checked){
+          anyBuff=true;
+          html+='<div class="calc-out-row"><span class="calc-out-label" style="color:#a78bfa">▸ '+b.label+'</span><span class="calc-out-val" style="color:#4ade80">'+b.val+'</span></div>';
+        }
+      });
+      if(!anyBuff)html+='<div class="calc-out-row"><span class="calc-out-label" style="color:var(--txt3);font-style:italic">Nenhum efeito selecionado</span></div>';
+    }
+  }
   if(isCD){
     html+='<div class="calc-out-row"><span class="calc-out-label">CD</span><span class="calc-out-val" style="color:#c4b5fd;font-weight:700">'+cdFinal+'</span></div>';
   } else {
@@ -5060,7 +5442,7 @@ function calcCopyRoll(roll){
 }
 
 function calcGetSnapshot(){
-  return{circulo:document.getElementById('calc-circulo').value,tipo:calcGetTipo(),acao:calcGetRadio('calc-acao'),tempo:calcGetRadio('calc-tempo'),alcance:calcGetRadio('calc-alcance'),duracao:calcGetRadio('calc-duracao'),alvo:calcGetRadio('calc-alvo'),resist:calcGetRadio('calc-resist'),pot:calcGetRadio('calc-pot'),steps:{...CALC_STEPS},prolTurno:document.getElementById('calc-prol-turno')?.checked||false,prolDobrar:document.getElementById('calc-prol-dobrar')?.checked||false,prolTrip:document.getElementById('calc-prol-triplicar')?.checked||false};
+  return{circulo:document.getElementById('calc-circulo').value,tipo:calcGetTipo(),acao:calcGetRadio('calc-acao'),tempo:calcGetRadio('calc-tempo'),alcance:calcGetRadio('calc-alcance'),duracao:calcGetRadio('calc-duracao'),alvo:calcGetRadio('calc-alvo'),resist:calcGetRadio('calc-resist'),pot:calcGetRadio('calc-pot'),steps:{...CALC_STEPS},prolTurno:document.getElementById('calc-prol-turno')?.checked||false,prolDobrar:document.getElementById('calc-prol-dobrar')?.checked||false,prolTrip:document.getElementById('calc-prol-triplicar')?.checked||false,adaptarSub:calcGetRadio('calc-adaptar-sub'),buffOpcoes:['acerto','dano','defesa','movimento','alcance-m','pvtemp','petemp','sanidade'].reduce(function(o,k){o[k]=document.getElementById('calc-buff-'+k)?.checked||false;return o;},{})};
 }
 function calcSaveSpell(){
   const nome=(document.getElementById('calc-nome')?.value||'').trim();
@@ -5088,6 +5470,8 @@ function calcEditSpell(idx){
   if(s.prolTurno!==undefined){const el=document.getElementById('calc-prol-turno');if(el)el.checked=s.prolTurno;}
   if(s.prolDobrar!==undefined){const el=document.getElementById('calc-prol-dobrar');if(el)el.checked=s.prolDobrar;}
   if(s.prolTrip!==undefined){const el=document.getElementById('calc-prol-triplicar');if(el)el.checked=s.prolTrip;}
+  if(s.adaptarSub){const r=document.querySelector('input[name="calc-adaptar-sub"][value="'+s.adaptarSub+'"]');if(r)r.checked=true;}
+  if(s.buffOpcoes){['acerto','dano','defesa','movimento','alcance-m','pvtemp','petemp','sanidade'].forEach(function(k){const el=document.getElementById('calc-buff-'+k);if(el)el.checked=!!(s.buffOpcoes[k]);});}
   calcUpdate();calcUpdateEditButtons();calcRenderSavedList();
   showToast('✏️ Editando: '+sp.nome);
 }
@@ -5100,6 +5484,8 @@ function calcNewSpell(){
   document.getElementById('calc-icon-btn').textContent='🔮';
   [['calc-acao','1'],['calc-tempo','0'],['calc-alcance','0'],['calc-duracao','0'],['calc-alvo','0'],['calc-resist','0'],['calc-pot','0']].forEach(([n,v])=>{const r=document.querySelector('input[name="'+n+'"][value="'+v+'"]');if(r)r.checked=true;});
   document.querySelectorAll('input[name="calc-tipo"]').forEach(r=>r.checked=false);
+  document.querySelectorAll('input[name="calc-adaptar-sub"]').forEach(r=>r.checked=false);
+  ['acerto','dano','defesa','movimento','alcance-m','pvtemp','petemp','sanidade'].forEach(function(k){const el=document.getElementById('calc-buff-'+k);if(el)el.checked=false;});
   ['calc-prol-turno','calc-prol-dobrar','calc-prol-triplicar'].forEach(id=>{const el=document.getElementById(id);if(el)el.checked=false;});
   Object.keys(CALC_STEPS).forEach(k=>{CALC_STEPS[k]=k==='prol_turno'?1:0;});
   calcUpdateEditButtons();calcUpdate();
@@ -5124,6 +5510,8 @@ function calcEditSpell(idx){
   if(s.prolTurno!==undefined){const el=document.getElementById('calc-prol-turno');if(el)el.checked=s.prolTurno;}
   if(s.prolDobrar!==undefined){const el=document.getElementById('calc-prol-dobrar');if(el)el.checked=s.prolDobrar;}
   if(s.prolTrip!==undefined){const el=document.getElementById('calc-prol-triplicar');if(el)el.checked=s.prolTrip;}
+  if(s.adaptarSub){const r=document.querySelector('input[name="calc-adaptar-sub"][value="'+s.adaptarSub+'"]');if(r)r.checked=true;}
+  if(s.buffOpcoes){['acerto','dano','defesa','movimento','alcance-m','pvtemp','petemp','sanidade'].forEach(function(k){const el=document.getElementById('calc-buff-'+k);if(el)el.checked=!!(s.buffOpcoes[k]);});}
   calcUpdate();
   // Update save/cancel buttons
   calcUpdateEditButtons();
