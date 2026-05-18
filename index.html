@@ -1081,7 +1081,6 @@ input[type=file]{display:none}
             <input type="radio" name="calc-resist" value="-half" onchange="calcUpdate()">
             <span class="cc-icon">⚡</span>
             <span class="cc-label">Requer Reação</span>
-            <span class="cc-cost">−½ PE</span>
           </label>
         </div>
         <!-- CD -->
@@ -5332,10 +5331,11 @@ function calcUpdate(){
   const isBuff=(tipo==='adaptar'&&adaptarSub==='buff');
   const isNerf=(tipo==='adaptar'&&adaptarSub==='nerf');
   const isRestore=(tipo==='restaurar');
+  const noResistTipo=isBuff||isNerf||isRestore||(tipo==='rastrear')||(tipo==='defender');
 
-  // Buff, Nerf e Restaurar não usam teste de resistência
+  // Buff, Nerf, Restaurar, Rastrear e Defender não usam teste de resistência
   const resistSec=document.getElementById('calc-resist-section');
-  if(isBuff||isNerf||isRestore){
+  if(noResistTipo){
     const rr=document.querySelector('input[name="calc-resist"][value="-half"]');
     if(rr&&!rr.checked){rr.checked=true;}
     if(resistSec)resistSec.style.display='none';
@@ -5343,7 +5343,7 @@ function calcUpdate(){
     if(resistSec)resistSec.style.display='block';
   }
 
-  const resist=(isBuff||isNerf||isRestore)?'none':calcGetRadio('calc-resist');
+  const resist=noResistTipo?'none':calcGetRadio('calc-resist');
   const isCD=resist==='0';
   const hasResist=resist==='-half';
   const alcance=calcGetRadio('calc-alcance');
@@ -5385,7 +5385,7 @@ function calcUpdate(){
 
   // Crítico: hidden when CD or Restaurar or Buff
   const critSec=document.getElementById('calc-crit-section');
-  const hideCrit=isCD||(tipo==='restaurar')||isBuff;
+  const hideCrit=isCD||noResistTipo;
   if(critSec)critSec.style.display=hideCrit?'none':'block';
   if(hideCrit)CALC_STEPS.crit=0;
 
@@ -5428,7 +5428,7 @@ function calcUpdate(){
       let pe=0;
       if(k==='acerto')pe=isCD?0:v;
       if(k==='alcance_extra')pe=v*3;
-      if(k==='crit')pe=(isCD||tipo==='restaurar'||isBuff)?0:v*12;
+      if(k==='crit')pe=(isCD||noResistTipo)?0:v*12;
       if(k==='prol_turno')pe=prolCheck?.checked?(v*5):0;
       if(k==='multi_alvo')pe=v*4;
       if(k==='cd_plus3')pe=v*3;
@@ -5454,7 +5454,7 @@ function calcRender(){
   const isBuff=(tipo==='adaptar'&&adaptarSub==='buff');
   const isNerf=(tipo==='adaptar'&&adaptarSub==='nerf');
   const isRestore=(tipo==='restaurar');
-  const noResist=isBuff||isNerf||isRestore;
+  const noResist=isBuff||isNerf||isRestore||(tipo==='rastrear')||(tipo==='defender');
   const circulo=document.getElementById('calc-circulo').value;
   const acao=parseInt(calcGetRadio('calc-acao'))||1;
   const tempo=calcGetRadio('calc-tempo');
