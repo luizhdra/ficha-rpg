@@ -240,6 +240,16 @@ input[type=file]{display:none}
 .pt-node-lv{font-size:10px;color:var(--gold);margin-left:6px;font-weight:600}
 .pt-sell-btn{background:#2a1010;border:1px solid var(--red2);color:var(--red3);border-radius:4px;cursor:pointer;padding:3px 8px;font-size:10px;font-weight:500;transition:all .15s}
 .pt-sell-btn:hover{background:var(--red2);color:#fff}
+/* Árvore unificada do jogador */
+.pt-unode{position:absolute;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border-radius:10px;border:2px solid var(--border2);background:var(--bg3);cursor:pointer;transition:all .15s;padding:6px 4px;text-align:center;box-sizing:border-box}
+.pt-unode:hover{filter:brightness(1.2);transform:scale(1.04)}
+.pt-unode.active{border-color:#facc15;box-shadow:0 0 0 2px #facc1544}
+.pt-unode-name{font-size:9px;font-weight:700;color:var(--txt);line-height:1.2}
+.pt-unode-trail{font-size:8px;color:var(--txt3);margin-top:1px}
+.pt-unode-lv{font-size:8px;font-weight:700;color:var(--gold)}
+.pt-desc-lv-box{background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:10px 12px}
+.pt-desc-lv-num{font-size:10px;font-weight:700;color:var(--gold);margin-bottom:4px}
+.pt-desc-lv-txt{font-size:12px;color:var(--txt2);line-height:1.5}
 /* FC OVERLAY */
 .calc-section{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 12px}
 .calc-section-title{font-size:11px;font-weight:700;color:#c4b5fd;text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px}
@@ -287,6 +297,11 @@ input[type=file]{display:none}
 .calc-buff-card .cc-val{font-size:9px;color:var(--txt3);margin-top:1px}
 .calc-buff-card.selected .cc-val{color:#86efac}
 .calc-buff-card input[type=checkbox]{position:absolute;opacity:0;pointer-events:none}
+/* Nerf cards — variante vermelha */
+#calc-nerf-grid .calc-buff-card:hover{border-color:#f87171;background:#2d0a0a}
+#calc-nerf-grid .calc-buff-card.selected{border-color:#f87171;background:#2d1b1b44;box-shadow:0 0 0 1px #f8717144}
+#calc-nerf-grid .calc-buff-card.selected .cc-label{color:#f87171}
+#calc-nerf-grid .calc-buff-card.selected .cc-val{color:#fca5a5}
 /* Stepper compacto */
 .calc-stepper-compact{display:flex;align-items:center;justify-content:space-between;background:var(--bg4);border:1px solid var(--border);border-radius:8px;padding:8px 10px}
 .calc-stepper-compact .csc-label{font-size:11px;font-weight:600;color:var(--txt2);flex:1}
@@ -652,7 +667,19 @@ input[type=file]{display:none}
       <span>⚔ Árvore do Jogador</span>
       <span style="font-size:10px;color:var(--txt3);font-family:'Inter',sans-serif;font-weight:400" id="pt-sp-info"></span>
     </div>
-    <div id="player-tree-list"></div>
+    <div id="player-tree-list">
+      <div id="pt-tree-wrap" style="overflow-x:auto;padding:8px 0"></div>
+      <div id="pt-desc-panel" style="display:none;margin-top:12px;background:var(--bg4);border:1px solid var(--border2);border-radius:10px;padding:14px">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px">
+          <div>
+            <span id="pt-desc-name" style="font-size:14px;font-weight:700;color:var(--txt)"></span>
+            <span id="pt-desc-trail" style="font-size:10px;font-weight:600;margin-left:8px;padding:2px 7px;border-radius:10px;vertical-align:middle"></span>
+          </div>
+          <button onclick="document.getElementById('pt-desc-panel').style.display='none'" style="background:none;border:none;color:var(--txt3);font-size:16px;cursor:pointer;line-height:1;padding:0">✕</button>
+        </div>
+        <div id="pt-desc-levels" style="display:flex;flex-direction:column;gap:8px"></div>
+      </div>
+    </div>
   </div>
   <div class="save-bar"><button class="save-btn" onclick="saveSheet()">💾 Salvar</button><span class="save-msg" id="save-msg4">✓ Salvo</span></div>
 </div>
@@ -813,6 +840,66 @@ input[type=file]{display:none}
               <span class="cc-icon">🧠</span>
               <span class="cc-label">Aumento de Sanidade</span>
               <span class="cc-val" id="calc-buff-sanidade-val">—</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Efeitos de Nerf -->
+      <div id="calc-nerf-opcoes-section" style="display:none">
+        <div class="calc-section">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+            <div class="calc-section-title" style="margin-bottom:0">Enfraquecimentos</div>
+            <span id="calc-nerf-custo-extra" style="font-size:10px;color:#f87171;font-weight:600;display:none"></span>
+          </div>
+          <div class="calc-buff-grid" id="calc-nerf-grid">
+            <label class="calc-buff-card" style="--buff-sel:#f87171;--buff-bg:#2d0a0a" onclick="calcNerfCardToggle(this,'calc-nerf-acerto')">
+              <input type="checkbox" id="calc-nerf-acerto" onchange="calcUpdate()">
+              <span class="cc-icon">🎯</span>
+              <span class="cc-label">Redução de Acerto</span>
+              <span class="cc-val" id="calc-nerf-acerto-val">—</span>
+            </label>
+            <label class="calc-buff-card" style="--buff-sel:#f87171;--buff-bg:#2d0a0a" onclick="calcNerfCardToggle(this,'calc-nerf-dano')">
+              <input type="checkbox" id="calc-nerf-dano" onchange="calcUpdate()">
+              <span class="cc-icon">💥</span>
+              <span class="cc-label">Redução de Dano</span>
+              <span class="cc-val" id="calc-nerf-dano-val">—</span>
+            </label>
+            <label class="calc-buff-card" style="--buff-sel:#f87171;--buff-bg:#2d0a0a" onclick="calcNerfCardToggle(this,'calc-nerf-defesa')">
+              <input type="checkbox" id="calc-nerf-defesa" onchange="calcUpdate()">
+              <span class="cc-icon">🛡️</span>
+              <span class="cc-label">Redução de Defesa</span>
+              <span class="cc-val" id="calc-nerf-defesa-val">—</span>
+            </label>
+            <label class="calc-buff-card" style="--buff-sel:#f87171;--buff-bg:#2d0a0a" onclick="calcNerfCardToggle(this,'calc-nerf-movimento')">
+              <input type="checkbox" id="calc-nerf-movimento" onchange="calcUpdate()">
+              <span class="cc-icon">💨</span>
+              <span class="cc-label">Redução de Movimento</span>
+              <span class="cc-val" id="calc-nerf-movimento-val">—</span>
+            </label>
+            <label class="calc-buff-card" style="--buff-sel:#f87171;--buff-bg:#2d0a0a" onclick="calcNerfCardToggle(this,'calc-nerf-alcance-m')">
+              <input type="checkbox" id="calc-nerf-alcance-m" onchange="calcUpdate()">
+              <span class="cc-icon">📏</span>
+              <span class="cc-label">Redução de Alcance</span>
+              <span class="cc-val" id="calc-nerf-alcance-m-val">—</span>
+            </label>
+            <label class="calc-buff-card" style="--buff-sel:#f87171;--buff-bg:#2d0a0a" onclick="calcNerfCardToggle(this,'calc-nerf-pvtemp')">
+              <input type="checkbox" id="calc-nerf-pvtemp" onchange="calcUpdate()">
+              <span class="cc-icon">❤️</span>
+              <span class="cc-label">Redução de PV Temp.</span>
+              <span class="cc-val" id="calc-nerf-pvtemp-val">—</span>
+            </label>
+            <label class="calc-buff-card" style="--buff-sel:#f87171;--buff-bg:#2d0a0a" onclick="calcNerfCardToggle(this,'calc-nerf-petemp')">
+              <input type="checkbox" id="calc-nerf-petemp" onchange="calcUpdate()">
+              <span class="cc-icon">💙</span>
+              <span class="cc-label">Redução de PE Temp.</span>
+              <span class="cc-val" id="calc-nerf-petemp-val">—</span>
+            </label>
+            <label class="calc-buff-card" style="--buff-sel:#f87171;--buff-bg:#2d0a0a" onclick="calcNerfCardToggle(this,'calc-nerf-sanidade')">
+              <input type="checkbox" id="calc-nerf-sanidade" onchange="calcUpdate()">
+              <span class="cc-icon">🧠</span>
+              <span class="cc-label">Redução de Sanidade</span>
+              <span class="cc-val" id="calc-nerf-sanidade-val">—</span>
             </label>
           </div>
         </div>
@@ -988,7 +1075,7 @@ input[type=file]{display:none}
             <input type="radio" name="calc-resist" value="0" checked onchange="calcUpdate()">
             <span class="cc-icon">🎲</span>
             <span class="cc-label">CD</span>
-            <span class="cc-cost">Base CD 20</span>
+            <span class="cc-cost">Base CD 20 · −½ PE</span>
           </label>
           <label class="calc-card" onclick="calcCardSelect(this,'calc-resist','-half')">
             <input type="radio" name="calc-resist" value="-half" onchange="calcUpdate()">
@@ -1727,21 +1814,6 @@ function getDuasMaosBonus(w){
 }
 
 // Bump all dice counts by 1: d4→2d4, 2d6→3d6, etc. Also bumps foco d4 added to string.
-function bumpDie(dStr){
-  if(!dStr||dStr==='—')return dStr;
-  return dStr.replace(/(\d*)d(\d+)/g,(match,count,sides)=>{
-    const n=parseInt(count||'1');
-    return (n+1)+'d'+sides;
-  });
-}
-
-function applyUltraMaestria(w){
-  if(!(arOwned['ultraMaestria']>=1)||!arUltraChoice)return{danoDP:w.danoDP,applied:false};
-  const cat=wepGetCat(w);
-  if(cat!==arUltraChoice)return{danoDP:w.danoDP,applied:false};
-  return{danoDP:bumpDie(w.danoDP),applied:true};
-}
-
 // ── WEAPON DAMAGE DISPLAY ──
 // Returns damage info for a weapon. Duas Mãos weapons have no Dano S.
 // Returns {dpNormal, dpVsUma, hasDual, bonuses}
@@ -2992,155 +3064,177 @@ function setPathXP(classId,pathName,val){if(!treeData[classId])treeData[classId]
 
 // ── PLAYER TREE ──
 function renderPlayerTree(){
-  const allFC=Object.entries(fcOwned).filter(([,v])=>v>0);
-  const allAC=Object.entries(acOwned).filter(([,v])=>v>0);
-  const allPA=Object.entries(paOwned).filter(([,v])=>v>0);
-  const allTS=Object.entries(tsOwned).filter(([,v])=>v>0);
-  const allPS=Object.entries(psOwned).filter(([,v])=>v>0);
-  const allRD=Object.entries(rdOwned).filter(([,v])=>v>0);
-  const allMN=Object.entries(mnOwned).filter(([,v])=>v>0);
-  const allMed=Object.entries(medOwned).filter(([,v])=>v>0);
-  const allAR=Object.entries(arOwned).filter(([,v])=>v>0);
-  const allCE=Object.entries(ceOwned).filter(([,v])=>v>0);
-  const allCC=Object.entries(ccOwned).filter(([,v])=>v>0);
-  const anyOwned=allFC.length>0||allAC.length>0||allPA.length>0||allTS.length>0||allPS.length>0||allRD.length>0||allMN.length>0||allMed.length>0||allAR.length>0||allCE.length>0||allCC.length>0;
-  const section=document.getElementById('player-tree-section');
-  const list=document.getElementById('player-tree-list');
-  const spInfo=document.getElementById('pt-sp-info');
-  if(!anyOwned){section.classList.remove('show');return;}
+  // Coleta todos os nós comprados de todas as trilhas
+  var TRAIL_DEFS=[
+    {key:'fc',nodes:FC_NODES,owned:fcOwned,color:'#6ee7b7',label:'Fomento'},
+    {key:'ac',nodes:AC_NODES,owned:acOwned,color:'#7dd3fc',label:'Acrobata'},
+    {key:'pa',nodes:PA_NODES,owned:paOwned,color:'#f87171',label:'Assassino'},
+    {key:'ts',nodes:TS_NODES,owned:tsOwned,color:'#6ee7b7',label:'Suporte'},
+    {key:'ps',nodes:PS_NODES,owned:psOwned,color:'#a5b4fc',label:'Estrategista'},
+    {key:'rd',nodes:RD_NODES,owned:rdOwned,color:'#fbbf24',label:'Destruidor'},
+    {key:'mn',nodes:MN_NODES,owned:mnOwned,color:'#c084fc',label:'Mão Nua'},
+    {key:'med',nodes:typeof MED_NODES!=='undefined'?MED_NODES:[],owned:typeof medOwned!=='undefined'?medOwned:{},color:'#34d399',label:'Medicina'},
+    {key:'ar',nodes:AR_NODES,owned:arOwned,color:'#4ade80',label:'Armado'},
+    {key:'at',nodes:AT_NODES,owned:typeof atOwned!=='undefined'?atOwned:{},color:'#93c5fd',label:'Atirador'},
+    {key:'fr',nodes:FR_NODES,owned:typeof frOwned!=='undefined'?frOwned:{},color:'#fb923c',label:'Fúria'},
+    {key:'nat',nodes:NAT_NODES,owned:typeof natOwned!=='undefined'?natOwned:{},color:'#86efac',label:'Natureza'},
+    {key:'art',nodes:ART_NODES,owned:typeof artOwned!=='undefined'?artOwned:{},color:'#fde68a',label:'Artesanato'},
+    {key:'est',nodes:EST_NODES,owned:typeof estOwned!=='undefined'?estOwned:{},color:'#d8b4fe',label:'Estudioso'},
+    {key:'ars',nodes:ARS_NODES,owned:typeof arsOwned!=='undefined'?arsOwned:{},color:'#f9a8d4',label:'Artista'},
+    {key:'inv',nodes:INV_NODES,owned:typeof invOwned!=='undefined'?invOwned:{},color:'#fcd34d',label:'Investigador'},
+    {key:'ce',nodes:CE_NODES,owned:ceOwned,color:'#c4b5fd',label:'C. Espírito'},
+    {key:'cc',nodes:CC_NODES,owned:ccOwned,color:'#fb923c',label:'C. Corpo'},
+  ];
+
+  // Coletar todos os nós comprados com metadados
+  var bought=[]; // {id, trailKey, trailLabel, trailColor, node, lvls}
+  TRAIL_DEFS.forEach(function(t){
+    Object.entries(t.owned).forEach(function(entry){
+      var id=entry[0],lvls=entry[1];
+      if(lvls<=0)return;
+      var node=t.nodes.find(function(n){return n.id===id;});
+      if(!node)return;
+      bought.push({id:id,trailKey:t.key,trailLabel:t.label,trailColor:t.color,node:node,lvls:lvls});
+    });
+  });
+
+  var section=document.getElementById('player-tree-section');
+  var spInfo=document.getElementById('pt-sp-info');
+  if(bought.length===0){section.classList.remove('show');return;}
   section.classList.add('show');
-  const budget=spBudget();const used=spUsed();
+  var budget=spBudget(),used=spUsed();
   spInfo.textContent='— '+used+' usados / '+budget+' total';
-  list.innerHTML='';
-  allFC.forEach(([id,lvls])=>{
-    const node=FC_NODES.find(n=>n.id===id);if(!node)return;
-    for(let lv=1;lv<=lvls;lv++){
-      const div=document.createElement('div');div.className='pt-node';
-      let extra='';
-      if(id==='vitalidade'&&lv===1&&fcVitalLvlBought)extra='<span style="font-size:9px;color:var(--txt3)">adquirida no Nv'+fcVitalLvlBought+'</span>';
-      if(id==='determinacao'&&lv===1&&fcDetLvlBought)extra='<span style="font-size:9px;color:var(--txt3)">adquirida no Nv'+fcDetLvlBought+'</span>';
-      if(id==='resistencia'){const ch=fcResChoices.find(c=>c.level===lv);if(ch)extra='<span style="font-size:9px;color:var(--green2)">→ '+ch.tipo+' '+ch.pct+'%</span>';}
-      div.innerHTML='<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><span class="pt-node-name">'+node.name+'<span class="pt-node-lv">Nv'+lv+'</span></span>'+extra+'</div>'+'<button class="pt-sell-btn" onclick="sellFCLevel(\''+id+'\','+lv+')">↩ Vender (+1pt)</button>';
-      list.appendChild(div);
+
+  // Ordenar: raízes primeiro, depois por grade
+  bought.sort(function(a,b){
+    var ar=a.node.isRoot?0:1, br=b.node.isRoot?0:1;
+    if(ar!==br)return ar-br;
+    return (a.node.grade||0)-(b.node.grade||0);
+  });
+
+  // Layout: distribuir em grade por trilha, depois por grade
+  // Agrupar por trilha
+  var trailGroups={};
+  bought.forEach(function(b){
+    if(!trailGroups[b.trailKey])trailGroups[b.trailKey]=[];
+    trailGroups[b.trailKey].push(b);
+  });
+
+  // Construir posições: trilhas em colunas, nós em linhas dentro de cada coluna
+  var NODE_W=110, NODE_H=72, COL_GAP=18, ROW_GAP=16;
+  var trailKeys=Object.keys(trailGroups);
+  var positions={}; // id → {col, row, colIdx, rowIdx}
+  var colX=0;
+  var colStarts=[]; // x start de cada coluna
+  var colWidths=[];
+
+  trailKeys.forEach(function(tk,ci){
+    var group=trailGroups[tk];
+    colStarts.push(colX);
+    colWidths.push(NODE_W);
+    group.forEach(function(b,ri){
+      positions[b.id]={x:colX,y:ri*(NODE_H+ROW_GAP),ci:ci,ri:ri};
+    });
+    colX+=NODE_W+COL_GAP;
+  });
+
+  // Calcular arestas: dentro de cada trilha, ligar nós consecutivos (por grade)
+  var edges=[];
+  trailKeys.forEach(function(tk){
+    var group=trailGroups[tk];
+    // Ordenar por grade
+    var sorted=group.slice().sort(function(a,b){return (a.node.grade||0)-(b.node.grade||0);});
+    for(var i=1;i<sorted.length;i++){
+      var from=positions[sorted[i-1].id];
+      var to=positions[sorted[i].id];
+      if(from&&to)edges.push({x1:from.x+NODE_W/2,y1:from.y+NODE_H,x2:to.x+NODE_W/2,y2:to.y});
     }
   });
-  allAC.forEach(([id,lvls])=>{
-    const node=AC_NODES.find(n=>n.id===id);if(!node)return;
-    for(let lv=1;lv<=lvls;lv++){
-      const div=document.createElement('div');div.className='pt-node';
-      let extra='<span style="font-size:9px;color:var(--blue2);margin-left:4px">[Acrobata]</span>';
-      if(id==='acrobacia'&&acMaestriaChoice)extra+=' <span style="font-size:9px;color:var(--green2)">→ Maestria: '+acMaestriaChoice.name+'</span>';
-      div.innerHTML='<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><span class="pt-node-name">'+node.name+'<span class="pt-node-lv">Nv'+lv+'</span></span>'+extra+'</div>'+'<button class="pt-sell-btn" onclick="sellACLevel(\''+id+'\','+lv+')">↩ Vender (+1pt)</button>';
-      list.appendChild(div);
-    }
+
+  // Calcular dimensões totais
+  var totalW=colX-COL_GAP;
+  var totalH=0;
+  bought.forEach(function(b){
+    var p=positions[b.id];
+    if(p)totalH=Math.max(totalH,p.y+NODE_H);
   });
-  allPA.forEach(([id,lvls])=>{
-    const node=PA_NODES.find(n=>n.id===id);if(!node)return;
-    for(let lv=1;lv<=lvls;lv++){
-      const div=document.createElement('div');div.className='pt-node';
-      let extra='<span style="font-size:9px;color:var(--red3);margin-left:4px">[Assassino]</span>';
-      if(id==='passo'&&paArmaChoice)extra+=' <span style="font-size:9px;color:var(--green2)">→ Arma: '+paArmaChoice+'</span>';
-      div.innerHTML='<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><span class="pt-node-name">'+node.name+'<span class="pt-node-lv">Nv'+lv+'</span></span>'+extra+'</div>'+'<button class="pt-sell-btn" onclick="sellPALevel(\''+id+'\','+lv+')">↩ Vender (+1pt)</button>';
-      list.appendChild(div);
-    }
+
+  // Gerar SVG de arestas
+  var svgLines='';
+  edges.forEach(function(e){
+    var my=(e.y1+e.y2)/2;
+    svgLines+='<path d="M'+e.x1+' '+e.y1+' C'+e.x1+' '+my+' '+e.x2+' '+my+' '+e.x2+' '+e.y2+'" fill="none" stroke="var(--border2)" stroke-width="2" stroke-dasharray="4 3"/>';
   });
-  // TS nodes
-  allTS.forEach(([id,lvls])=>{
-    const node=TS_NODES.find(n=>n.id===id);if(!node)return;
-    for(let lv=1;lv<=lvls;lv++){
-      const div=document.createElement('div');div.className='pt-node';
-      let extra='<span style="font-size:9px;color:#6ee7b7;margin-left:4px">[Suporte]</span>';
-      if(id==='suporte'&&tsArmaSuporteChoice)extra+=' <span style="font-size:9px;color:var(--green2)">→ Suporte: '+tsArmaSuporteChoice+'</span>';
-      div.innerHTML='<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><span class="pt-node-name">'+node.name+'<span class="pt-node-lv">Nv'+lv+'</span></span>'+extra+'</div>'+'<button class="pt-sell-btn" onclick="sellTSLevel(\''+id+'\','+lv+')">↩ Vender (+1pt)</button>';
-      list.appendChild(div);
-    }
+
+  // Gerar HTML dos nós
+  var nodesHtml='';
+  bought.forEach(function(b){
+    var p=positions[b.id];if(!p)return;
+    var col=b.trailColor;
+    var isRoot=b.node.isRoot;
+    var borderCol=isRoot?col:'var(--border2)';
+    var bg=isRoot?'rgba('+hexToRgb(col)+',0.13)':'var(--bg3)';
+    nodesHtml+='<div class="pt-unode" id="ptnode-'+b.id+'" '
+      +'style="left:'+p.x+'px;top:'+p.y+'px;width:'+NODE_W+'px;height:'+NODE_H+'px;border-color:'+borderCol+';background:'+bg+'"'
+      +' onclick="ptShowDesc(\''+b.id+'\',\''+b.trailKey+'\')">'
+      +'<div class="pt-unode-name">'+b.node.name+'</div>'
+      +'<div class="pt-unode-trail" style="color:'+col+'">'+b.trailLabel+'</div>'
+      +(b.lvls>1?'<div class="pt-unode-lv">Nv '+b.lvls+'</div>':'')
+      +'</div>';
   });
-  // PS nodes
-  allPS.forEach(([id,lvls])=>{
-    const node=PS_NODES.find(n=>n.id===id);if(!node)return;
-    for(let lv=1;lv<=lvls;lv++){
-      const div=document.createElement('div');div.className='pt-node';
-      let extra='<span style="font-size:9px;color:#a5b4fc;margin-left:4px">[Estrategista]</span>';
-      if(id==='estrategista'&&psArmaEstrategiaChoice)extra+=' <span style="font-size:9px;color:var(--green2)">→ Estratégia: '+psArmaEstrategiaChoice+'</span>';
-      div.innerHTML='<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><span class="pt-node-name">'+node.name+'<span class="pt-node-lv">Nv'+lv+'</span></span>'+extra+'</div>'+'<button class="pt-sell-btn" onclick="sellPSLevel(\''+id+'\','+lv+')">↩ Vender (+1pt)</button>';
-      list.appendChild(div);
-    }
+
+  var wrap=document.getElementById('pt-tree-wrap');
+  wrap.innerHTML='<div style="position:relative;width:'+totalW+'px;height:'+totalH+'px;min-width:100%">'
+    +'<svg style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:visible" viewBox="0 0 '+totalW+' '+totalH+'">'+svgLines+'</svg>'
+    +nodesHtml+'</div>';
+
+  // Guardar bought para o painel de descrição
+  window._ptBought=bought;
+}
+
+function hexToRgb(hex){
+  var r=0,g=0,b=0;
+  hex=hex.replace('#','');
+  if(hex.length===3){hex=hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];}
+  r=parseInt(hex.substring(0,2),16);g=parseInt(hex.substring(2,4),16);b=parseInt(hex.substring(4,6),16);
+  return r+','+g+','+b;
+}
+
+function ptShowDesc(id,trailKey){
+  var bought=window._ptBought||[];
+  var entry=bought.find(function(b){return b.id===id;});
+  if(!entry)return;
+
+  // Destacar nó ativo
+  document.querySelectorAll('.pt-unode').forEach(function(el){el.classList.remove('active');});
+  var el=document.getElementById('ptnode-'+id);
+  if(el)el.classList.add('active');
+
+  var panel=document.getElementById('pt-desc-panel');
+  var nameEl=document.getElementById('pt-desc-name');
+  var trailEl=document.getElementById('pt-desc-trail');
+  var levelsEl=document.getElementById('pt-desc-levels');
+
+  nameEl.textContent=entry.node.name;
+  trailEl.textContent=entry.trailLabel;
+  trailEl.style.background='rgba('+hexToRgb(entry.trailColor)+',0.2)';
+  trailEl.style.color=entry.trailColor;
+  trailEl.style.border='1px solid '+entry.trailColor;
+
+  // Renderizar apenas os níveis comprados
+  levelsEl.innerHTML='';
+  var lvlsBought=entry.lvls;
+  entry.node.levels.forEach(function(lv){
+    if(lv.n>lvlsBought)return;
+    var box=document.createElement('div');
+    box.className='pt-desc-lv-box';
+    box.innerHTML='<div class="pt-desc-lv-num">Nível '+lv.n+(entry.node.maxLevels>1?' / '+entry.node.maxLevels:'')+'</div>'
+      +'<div class="pt-desc-lv-txt">'+lv.txt+'</div>';
+    levelsEl.appendChild(box);
   });
-  // RD nodes
-  allRD.forEach(([id,lvls])=>{
-    const node=RD_NODES.find(n=>n.id===id);if(!node)return;
-    for(let lv=1;lv<=lvls;lv++){
-      const div=document.createElement('div');div.className='pt-node';
-      let extra='<span style="font-size:9px;color:#fbbf24;margin-left:4px">[Destruidor]</span>';
-      if(id==='destruidor'&&rdArmaDevastaChoice)extra+=' <span style="font-size:9px;color:var(--green2)">→ Devastação: '+rdArmaDevastaChoice+'</span>';
-      div.innerHTML='<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><span class="pt-node-name">'+node.name+'<span class="pt-node-lv">Nv'+lv+'</span></span>'+extra+'</div>'+'<button class="pt-sell-btn" onclick="sellRDLevel(\''+id+'\','+lv+')">↩ Vender (+1pt)</button>';
-      list.appendChild(div);
-    }
-  });
-  // MN nodes
-  allMN.forEach(([id,lvls])=>{
-    const node=MN_NODES.find(n=>n.id===id);if(!node)return;
-    for(let lv=1;lv<=lvls;lv++){
-      const div=document.createElement('div');div.className='pt-node';
-      let extra='<span style="font-size:9px;color:#c084fc;margin-left:4px">[Mão Nua]</span>';
-      if(id==='maonua'&&mnMaestriaChoice)extra+=' <span style="font-size:9px;color:var(--green2)">→ Maestria: '+mnMaestriaChoice.name+'</span>';
-      div.innerHTML='<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><span class="pt-node-name">'+node.name+'<span class="pt-node-lv">Nv'+lv+'</span></span>'+extra+'</div>'+'<button class="pt-sell-btn" onclick="sellMNLevel(\''+id+'\','+lv+')">↩ Vender (+1pt)</button>';
-      list.appendChild(div);
-    }
-  });
-  // MED nodes
-  allMed.forEach(([id,lvls])=>{
-    const node=MED_NODES.find(n=>n.id===id);if(!node)return;
-    for(let lv=1;lv<=lvls;lv++){
-      const div=document.createElement('div');div.className='pt-node';
-      let extra='<span style="font-size:9px;color:#34d399;margin-left:4px">[Medicina]</span>';
-      if(id==='medicina'&&medMaestriaChoice)extra+=' <span style="font-size:9px;color:var(--green2)">→ Maestria: '+medMaestriaChoice.name+'</span>';
-      div.innerHTML='<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><span class="pt-node-name">'+node.name+'<span class="pt-node-lv">Nv'+lv+'</span></span>'+extra+'</div>'+'<button class="pt-sell-btn" onclick="sellMedLevel(\''+id+'\','+lv+')">↩ Vender (+1pt)</button>';
-      list.appendChild(div);
-    }
-  });
-  // AR nodes
-  allAR.forEach(([id,lvls])=>{
-    const node=AR_NODES.find(n=>n.id===id);if(!node)return;
-    for(let lv=1;lv<=lvls;lv++){
-      const div=document.createElement('div');div.className='pt-node';
-      let extra='<span style="font-size:9px;color:var(--green2);margin-left:4px">[Armado]</span>';
-      if(id==='armado'&&arMaestriaChoice)extra+=' <span style="font-size:9px;color:var(--green2)">→ Maestria: '+arMaestriaChoice.name+'</span>';
-      if(id==='focoArmas'&&arFocoArmas.length>0)extra+=' <span style="font-size:9px;color:var(--green2)">→ '+arFocoArmas.join(', ')+'</span>';
-      if(id==='treinoManuseio'&&arEmpunhaduraChoice)extra+=' <span style="font-size:9px;color:var(--green2)">→ '+arEmpunhaduraChoice+'</span>';
-      div.innerHTML='<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><span class="pt-node-name">'+node.name+'<span class="pt-node-lv">Nv'+lv+'</span></span>'+extra+'</div>'+'<button class="pt-sell-btn" onclick="sellARLevel(\''+id+'\','+lv+')">↩ Vender (+1pt)</button>';
-      list.appendChild(div);
-    }
-  });
-  // CE nodes
-  allCE.forEach(([id,lvls])=>{
-    const node=CE_NODES.find(n=>n.id===id);if(!node)return;
-    for(let lv=1;lv<=lvls;lv++){
-      const div=document.createElement('div');div.className='pt-node';
-      let extra='<span style="font-size:9px;color:#c4b5fd;margin-left:4px">[Círculo do Espírito]</span>';
-      div.innerHTML='<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><span class="pt-node-name">'+node.name+'<span class="pt-node-lv">Nv'+lv+'</span></span>'+extra+'</div>'+'<button class="pt-sell-btn" onclick="sellCELevel(\''+id+'\','+lv+')">↩ Vender (+1pt)</button>';
-      list.appendChild(div);
-    }
-  });
-  // CC nodes
-  allCC.forEach(([id,lvls])=>{
-    const node=CC_NODES.find(n=>n.id===id);if(!node)return;
-    for(let lv=1;lv<=lvls;lv++){
-      const div=document.createElement('div');div.className='pt-node';
-      let extra='<span style="font-size:9px;color:#fb923c;margin-left:4px">[Círculo do Corpo]</span>';
-      if(id==='adaptacoes'){
-        const learned=ccAdaptations.map(a=>{
-          const base=CC_ADAPTATIONS.find(x=>x.id===a.id);if(!base)return '';
-          let nm=base.name;
-          if(a.evoLevel>0){let ev=base.evolucao;for(let i=1;i<a.evoLevel;i++){ev=ev?.evolucao;}nm+=' \u2192 '+(ev?.name||'');}
-          return nm;
-        }).filter(Boolean).join(', ');
-        if(learned)extra+=' <span style="font-size:9px;color:var(--green2)">'+learned+'</span>';
-      }
-      div.innerHTML='<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><span class="pt-node-name">'+node.name+'<span class="pt-node-lv">Nv'+lv+'</span></span>'+extra+'</div>'+'<button class="pt-sell-btn" onclick="sellCCLevel(\''+id+'\','+lv+')">↩ Vender (+1pt)</button>';
-      list.appendChild(div);
-    }
-  });
+
+  panel.style.display='block';
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 
 function _spBar(barId){
@@ -5135,6 +5229,9 @@ function calcSyncCardStates(){
     const cb=document.getElementById('calc-buff-'+k);
     const card=cb?cb.closest('.calc-buff-card'):null;
     if(card)card.classList.toggle('selected',cb.checked);
+    const ncb=document.getElementById('calc-nerf-'+k);
+    const ncard=ncb?ncb.closest('.calc-buff-card'):null;
+    if(ncard)ncard.classList.toggle('selected',ncb.checked);
   });
 }
 function calcUpdateBuffVals(){
@@ -5157,6 +5254,41 @@ function calcUpdateBuffVals(){
   };
   Object.keys(vals).forEach(function(k){
     const el=document.getElementById('calc-buff-'+k+'-val');
+    if(el)el.textContent=vals[k];
+  });
+}
+function calcNerfCardToggle(labelEl,checkId){
+  const cb=document.getElementById(checkId);
+  if(!cb)return;
+  cb.checked=!cb.checked;
+  labelEl.classList.toggle('selected',cb.checked);
+  calcUpdate();
+}
+function calcGetNerfCount(){
+  return['acerto','dano','defesa','movimento','alcance-m','pvtemp','petemp','sanidade'].filter(function(k){
+    const cb=document.getElementById('calc-nerf-'+k);return cb&&cb.checked;
+  }).length;
+}
+function calcUpdateNerfVals(){
+  const adaptar=parseInt(document.getElementById(skId('poder','Adaptar'))?.value)||0;
+  const bloquearMagico=parseInt(document.getElementById(skId('poder','Bloquear Mágico'))?.value)||0;
+  const restaurar=parseInt(document.getElementById(skId('poder','Restaurar'))?.value)||0;
+  const poder=parseInt(document.getElementById('atr-poder')?.value)||0;
+  const lvl=Math.max(1,parseInt(document.getElementById('f-nivel')?.value)||1);
+  const numDano=(typeof formaDaMenteChoices!=='undefined'?formaDaMenteChoices:[]).filter(function(c){return c==='dano';}).length;
+  const danoArcanoStr=numDano>0?('-'+numDano+'d6-'+(numDano*2)):'0';
+  const vals={
+    'acerto': 'Adaptar ('+adaptar+')',
+    'dano': 'D. Arcano ('+danoArcanoStr+')',
+    'defesa': 'Bl. Mágico ('+bloquearMagico+')',
+    'movimento': '½ Adaptar ('+Math.floor(adaptar/2)+'m)',
+    'alcance-m': 'Adaptar ('+adaptar+'m)',
+    'pvtemp': lvl+'d4+Adaptar('+adaptar+')',
+    'petemp': 'Restaurar ('+restaurar+')',
+    'sanidade': 'Poder ('+poder+')'
+  };
+  Object.keys(vals).forEach(function(k){
+    const el=document.getElementById('calc-nerf-'+k+'-val');
     if(el)el.textContent=vals[k];
   });
 }
@@ -5198,11 +5330,12 @@ function calcUpdate(){
   const tipo=calcGetTipo();
   const adaptarSub=calcGetRadio('calc-adaptar-sub');
   const isBuff=(tipo==='adaptar'&&adaptarSub==='buff');
+  const isNerf=(tipo==='adaptar'&&adaptarSub==='nerf');
+  const isRestore=(tipo==='restaurar');
 
-  // Buff não usa teste de resistência — forçar Reação e ocultar seção
+  // Buff, Nerf e Restaurar não usam teste de resistência
   const resistSec=document.getElementById('calc-resist-section');
-  if(isBuff){
-    // Forçar "Requer Reação" quando buff (sem custo de resistência no buff)
+  if(isBuff||isNerf||isRestore){
     const rr=document.querySelector('input[name="calc-resist"][value="-half"]');
     if(rr&&!rr.checked){rr.checked=true;}
     if(resistSec)resistSec.style.display='none';
@@ -5210,7 +5343,7 @@ function calcUpdate(){
     if(resistSec)resistSec.style.display='block';
   }
 
-  const resist=isBuff?'-half':calcGetRadio('calc-resist');
+  const resist=(isBuff||isNerf||isRestore)?'none':calcGetRadio('calc-resist');
   const isCD=resist==='0';
   const hasResist=resist==='-half';
   const alcance=calcGetRadio('calc-alcance');
@@ -5269,14 +5402,21 @@ function calcUpdate(){
   if(buffOpcoesSec)buffOpcoesSec.style.display=isBuff?'block':'none';
   if(isBuff){
     calcUpdateBuffVals();
-    // Mostrar custo extra de efeitos adicionais
     const buffCount=calcGetBuffCount();
     const extraCost=Math.max(0,buffCount-1)*3;
     const custoEl=document.getElementById('calc-buff-custo-extra');
-    if(custoEl){
-      if(extraCost>0){custoEl.textContent='+'+extraCost+' PE ('+buffCount+' efeitos)';custoEl.style.display='block';}
-      else{custoEl.style.display='none';}
-    }
+    if(custoEl){if(extraCost>0){custoEl.textContent='+'+extraCost+' PE ('+buffCount+' efeitos)';custoEl.style.display='block';}else{custoEl.style.display='none';}}
+  }
+
+  // Opções de Nerf
+  const nerfOpcoesSec=document.getElementById('calc-nerf-opcoes-section');
+  if(nerfOpcoesSec)nerfOpcoesSec.style.display=isNerf?'block':'none';
+  if(isNerf){
+    calcUpdateNerfVals();
+    const nerfCount=calcGetNerfCount();
+    const nerfExtra=Math.max(0,nerfCount-1)*3;
+    const nerfCustoEl=document.getElementById('calc-nerf-custo-extra');
+    if(nerfCustoEl){if(nerfExtra>0){nerfCustoEl.textContent='+'+nerfExtra+' PE ('+nerfCount+' efeitos)';nerfCustoEl.style.display='block';}else{nerfCustoEl.style.display='none';}}
   }
 
   // Update stepper displays
@@ -5310,6 +5450,11 @@ function calcUpdate(){
 function calcRender(){
   const tipo=calcGetTipo();
   if(!tipo){document.getElementById('calc-output').innerHTML='<div style="color:var(--txt3);font-style:italic;font-size:12px">Selecione o tipo de feitiço...</div>';return;}
+  const adaptarSub=calcGetRadio('calc-adaptar-sub');
+  const isBuff=(tipo==='adaptar'&&adaptarSub==='buff');
+  const isNerf=(tipo==='adaptar'&&adaptarSub==='nerf');
+  const isRestore=(tipo==='restaurar');
+  const noResist=isBuff||isNerf||isRestore;
   const circulo=document.getElementById('calc-circulo').value;
   const acao=parseInt(calcGetRadio('calc-acao'))||1;
   const tempo=calcGetRadio('calc-tempo');
@@ -5317,13 +5462,14 @@ function calcRender(){
   const isAura=alcanceBase===2;
   const duracao=parseInt(calcGetRadio('calc-duracao'))||0;
   const alvo=parseInt(calcGetRadio('calc-alvo'))||0;
-  const resist=calcGetRadio('calc-resist');
+  // Buff, Nerf e Restaurar não têm teste de resistência
+  const resist=noResist?'none':calcGetRadio('calc-resist');
   const isCD=resist==='0';
   const hasResist=resist==='-half';
   const pot=parseInt(calcGetRadio('calc-pot'))||0;
   const acerto=isCD?0:(CALC_STEPS.acerto||0);
   const alcanceExtra=isAura?(CALC_STEPS.alcance_extra||0):0;
-  const crit=(isCD||tipo==='restaurar')?0:(CALC_STEPS.crit||0);
+  const crit=(isCD||isRestore||isBuff||isNerf)?0:(CALC_STEPS.crit||0);
   const multiAlvo=CALC_STEPS.multi_alvo||0;
   const cdPlus3=isCD?(CALC_STEPS.cd_plus3||0):0;
   const cdPlus12=isCD?(CALC_STEPS.cd_plus12||0):0;
@@ -5331,6 +5477,11 @@ function calcRender(){
   const prolTurno=prolTurnoChecked?(CALC_STEPS.prol_turno||1):0;
   const prolDobrar=document.getElementById('calc-prol-dobrar')?.checked;
   const prolTrip=document.getElementById('calc-prol-triplicar')?.checked;
+  // Custo extra de efeitos de buff/nerf adicionais (+3 PE por efeito além do 1º)
+  const buffCount=isBuff?calcGetBuffCount():0;
+  const buffExtra=Math.max(0,buffCount-1)*3;
+  const nerfCount=isNerf?calcGetNerfCount():0;
+  const nerfExtra=Math.max(0,nerfCount-1)*3;
   let peSum=0;const rows=[];
   const add=(label,val,note='')=>{if(val!==0){rows.push({label,val,note});peSum+=val;}};
   add('Tipo de Ação',acao,acao===1?'Simples':'Complexo');
@@ -5349,11 +5500,14 @@ function calcRender(){
   if(cdPlus3>0)add('CD +'+cdPlus3,cdPlus3*3,cdPlus3+'× a 3 PE = +'+cdPlus3+' CD');
   if(cdPlus12>0)add('CD +'+cdPlus12*5,cdPlus12*12,cdPlus12+'× a 12 PE = +'+(cdPlus12*5)+' CD');
   if(tipo!=='dano'&&pot>0)add('Potencialização',pot,pot===15?'Efic. ×1.5':'Efic. ×2.0');
+  if(buffExtra>0)add('Efeitos Adicionais (Buff)',buffExtra,(buffCount-1)+' efeito(s) × 3 PE');
+  if(nerfExtra>0)add('Enfraquecimentos Adicionais',nerfExtra,(nerfCount-1)+' efeito(s) × 3 PE');
+  // ÷2: apenas CD e Turno Inteiro dividem o custo — Requer Reação NÃO divide
   let halfReductions=[];
   if(tempo==='-half')halfReductions.push('Turno Inteiro');
-  if(hasResist)halfReductions.push('Requer Reação');
+  if(isCD)halfReductions.push('CD');
   let finalPE=peSum;
-  halfReductions.forEach(()=>{finalPE=Math.ceil(finalPE/2);});
+  halfReductions.forEach(function(){finalPE=Math.ceil(finalPE/2);});
   const cdFinal=20+cdPlus3+(cdPlus12*5);
   const poder=parseInt(document.getElementById('atr-poder')?.value)||0;
   const tipoRollMap={dano:'Atacar',adaptar:'Adaptar',defender:'Defender',rastrear:'Rastrear',restaurar:'Restaurar'};
@@ -5368,72 +5522,107 @@ function calcRender(){
   if(totalBonus>0)cleanParts.push(String(totalBonus));
   const cleanRoll='/r '+cleanParts.join(' + ');
   let html='<div style="display:flex;flex-direction:column;gap:3px">';
-  rows.forEach(r=>{html+='<div class="calc-out-row"><span class="calc-out-label">'+r.label+(r.note?' <span style="font-size:9px;color:var(--txt3)">('+r.note+')</span>':'')+'</span><span class="calc-out-val">+'+r.val+' PE</span></div>';});
+  rows.forEach(function(r){html+='<div class="calc-out-row"><span class="calc-out-label">'+r.label+(r.note?' <span style="font-size:9px;color:var(--txt3)">('+r.note+')</span>':'')+'</span><span class="calc-out-val">+'+r.val+' PE</span></div>';});
   if(halfReductions.length>0)html+='<div class="calc-out-row" style="color:#f97316"><span class="calc-out-label">⟨ ÷2: '+halfReductions.join(' + ')+'</span><span class="calc-out-val" style="color:#f97316">÷2</span></div>';
   html+='</div>';
   html+='<div class="calc-out-total"><span class="lbl">⚡ Custo Total</span><span class="val">'+finalPE+' PE</span></div>';
   html+='<div class="calc-roll-box" style="margin-top:10px">';
   if(nome)html+='<div style="font-size:13px;font-weight:700;color:#e9d5ff;margin-bottom:6px">'+nome+'</div>';
   html+='<div style="font-size:12px;font-weight:700;color:#c4b5fd;margin-bottom:6px">📋 Resumo Técnico</div>';
-  const circ=CALC_CIRCULOS.find(c=>c.id===circulo);
+  const circ=CALC_CIRCULOS.find(function(c){return c.id===circulo;});
   if(circ)html+='<div class="calc-out-row"><span class="calc-out-label">Círculo</span><span class="calc-out-val">'+circ.name+'</span></div>';
   html+='<div class="calc-out-row"><span class="calc-out-label">Tipo</span><span class="calc-out-val">'+tipo.charAt(0).toUpperCase()+tipo.slice(1)+'</span></div>';
   // Sub-tipo Adaptar
   if(tipo==='adaptar'){
-    const adaptarSub=calcGetRadio('calc-adaptar-sub');
     if(adaptarSub){
       const subLabels={buff:'Buff',nerf:'Nerf',variavel:'Variável'};
       html+='<div class="calc-out-row"><span class="calc-out-label">Tipo de Adaptação</span><span class="calc-out-val" style="color:#c4b5fd">'+subLabels[adaptarSub]+'</span></div>';
     }
-    if(adaptarSub==='buff'){
-      // Coletar valores da ficha para cada efeito de buff
+    if(isBuff){
       const adaptar=parseInt(document.getElementById(skId('poder','Adaptar'))?.value)||0;
       const bloquearMagico=parseInt(document.getElementById(skId('poder','Bloquear Mágico'))?.value)||0;
       const restaurar=parseInt(document.getElementById(skId('poder','Restaurar'))?.value)||0;
-      const poder=parseInt(document.getElementById('atr-poder')?.value)||0;
+      const poderVal=parseInt(document.getElementById('atr-poder')?.value)||0;
       const lvl=Math.max(1,parseInt(document.getElementById('f-nivel')?.value)||1);
-      // Dano Arcano: conta escolhas 'dano' em formaDaMenteChoices
-      const numDano=(typeof formaDaMenteChoices!=='undefined'?formaDaMenteChoices:[]).filter(c=>c==='dano').length;
+      const numDano=(typeof formaDaMenteChoices!=='undefined'?formaDaMenteChoices:[]).filter(function(c){return c==='dano';}).length;
       const danoArcanoStr=numDano>0?(numDano+'d6+'+(numDano*2)):'0';
-      // Dado de cura arcana: nível + adaptar (mesma fórmula de updateDadoCuraField)
       const dadoCuraStr=lvl+'d4 + Adaptar ('+adaptar+')';
       const buffDefs=[
-        {id:'calc-buff-acerto',   label:'Aumento de Acerto',         val:'Adaptar ('+adaptar+')'},
-        {id:'calc-buff-dano',     label:'Aumento de Dano',           val:'Dano Arcano ('+danoArcanoStr+')'},
-        {id:'calc-buff-defesa',   label:'Aumento de Defesa',         val:'Bloquear Mágico ('+bloquearMagico+')'},
-        {id:'calc-buff-movimento',label:'Aumento de Movimento',      val:'½ Adaptar ('+Math.floor(adaptar/2)+'m)'},
-        {id:'calc-buff-alcance-m',label:'Aumento de Alcance',        val:'Adaptar ('+adaptar+'m)'},
-        {id:'calc-buff-pvtemp',   label:'Bônus de PV Temporários',   val:dadoCuraStr},
-        {id:'calc-buff-petemp',   label:'Bônus de PE Temporários',   val:'Restaurar ('+restaurar+')'},
-        {id:'calc-buff-sanidade', label:'Aumento de Sanidade',       val:'Atributo: Poder ('+poder+')'},
+        {id:'calc-buff-acerto',   label:'Aumento de Acerto',    val:'Adaptar ('+adaptar+')'},
+        {id:'calc-buff-dano',     label:'Aumento de Dano',      val:'Dano Arcano ('+danoArcanoStr+')'},
+        {id:'calc-buff-defesa',   label:'Aumento de Defesa',    val:'Bloquear Mágico ('+bloquearMagico+')'},
+        {id:'calc-buff-movimento',label:'Aumento de Movimento', val:'½ Adaptar ('+Math.floor(adaptar/2)+'m)'},
+        {id:'calc-buff-alcance-m',label:'Aumento de Alcance',   val:'Adaptar ('+adaptar+'m)'},
+        {id:'calc-buff-pvtemp',   label:'PV Temporários',       val:dadoCuraStr},
+        {id:'calc-buff-petemp',   label:'PE Temporários',       val:'Restaurar ('+restaurar+')'},
+        {id:'calc-buff-sanidade', label:'Aumento de Sanidade',  val:'Poder ('+poderVal+')'},
       ];
       let anyBuff=false;
       buffDefs.forEach(function(b){
         const el=document.getElementById(b.id);
-        if(el&&el.checked){
-          anyBuff=true;
-          html+='<div class="calc-out-row"><span class="calc-out-label" style="color:#a78bfa">▸ '+b.label+'</span><span class="calc-out-val" style="color:#4ade80">'+b.val+'</span></div>';
-        }
+        if(el&&el.checked){anyBuff=true;html+='<div class="calc-out-row"><span class="calc-out-label" style="color:#a78bfa">▸ '+b.label+'</span><span class="calc-out-val" style="color:#4ade80">'+b.val+'</span></div>';}
       });
       if(!anyBuff)html+='<div class="calc-out-row"><span class="calc-out-label" style="color:var(--txt3);font-style:italic">Nenhum efeito selecionado</span></div>';
+      html+='<div class="calc-out-row"><span class="calc-out-label">Resistência</span><span class="calc-out-val" style="color:#4ade80">Nenhuma (Buff)</span></div>';
+    }
+    if(isNerf){
+      const adaptar=parseInt(document.getElementById(skId('poder','Adaptar'))?.value)||0;
+      const bloquearMagicoN=parseInt(document.getElementById(skId('poder','Bloquear Mágico'))?.value)||0;
+      const restaurarN=parseInt(document.getElementById(skId('poder','Restaurar'))?.value)||0;
+      const poderVal=parseInt(document.getElementById('atr-poder')?.value)||0;
+      const lvl=Math.max(1,parseInt(document.getElementById('f-nivel')?.value)||1);
+      const numDano=(typeof formaDaMenteChoices!=='undefined'?formaDaMenteChoices:[]).filter(function(c){return c==='dano';}).length;
+      const danoArcanoStr=numDano>0?('-'+numDano+'d6-'+(numDano*2)):'0';
+      const dadoCuraStr=lvl+'d4 + Adaptar ('+adaptar+')';
+      const nerfDefs=[
+        {id:'calc-nerf-acerto',   label:'Redução de Acerto',    val:'Adaptar ('+adaptar+')'},
+        {id:'calc-nerf-dano',     label:'Redução de Dano',      val:'Dano Arcano ('+danoArcanoStr+')'},
+        {id:'calc-nerf-defesa',   label:'Redução de Defesa',    val:'Bloquear Mágico ('+bloquearMagicoN+')'},
+        {id:'calc-nerf-movimento',label:'Redução de Movimento', val:'½ Adaptar ('+Math.floor(adaptar/2)+'m)'},
+        {id:'calc-nerf-alcance-m',label:'Redução de Alcance',   val:'Adaptar ('+adaptar+'m)'},
+        {id:'calc-nerf-pvtemp',   label:'Redução de PV Temp.',  val:dadoCuraStr},
+        {id:'calc-nerf-petemp',   label:'Redução de PE Temp.',  val:'Restaurar ('+restaurarN+')'},
+        {id:'calc-nerf-sanidade', label:'Redução de Sanidade',  val:'Poder ('+poderVal+')'},
+      ];
+      let anyNerf=false;
+      nerfDefs.forEach(function(b){
+        const el=document.getElementById(b.id);
+        if(el&&el.checked){anyNerf=true;html+='<div class="calc-out-row"><span class="calc-out-label" style="color:#f87171">▸ '+b.label+'</span><span class="calc-out-val" style="color:#fca5a5">'+b.val+'</span></div>';}
+      });
+      if(!anyNerf)html+='<div class="calc-out-row"><span class="calc-out-label" style="color:var(--txt3);font-style:italic">Nenhum enfraquecimento selecionado</span></div>';
+      html+='<div class="calc-out-row"><span class="calc-out-label">Resistência</span><span class="calc-out-val" style="color:#4ade80">Nenhuma (Nerf)</span></div>';
     }
   }
-  if(isCD){
-    html+='<div class="calc-out-row"><span class="calc-out-label">CD</span><span class="calc-out-val" style="color:#c4b5fd;font-weight:700">'+cdFinal+'</span></div>';
-  } else {
-    let rollDisplay='d20';
-    if(rollSkillVal>0)rollDisplay+=' + '+rollSkillName+' ('+rollSkillVal+')';
-    if(acerto>0)rollDisplay+=' + '+acerto+' (Acerto)';
-    html+='<div class="calc-out-row"><span class="calc-out-label">Rolagem de Ataque</span><span class="calc-out-val">'+rollDisplay+'</span></div>';
-    html+='<div class="calc-out-row"><span class="calc-out-label">Resistência</span><span class="calc-out-val" style="color:#f97316">Requer Reação</span></div>';
-    if(tipo==='dano')html+='<div class="calc-out-row"><span class="calc-out-label">Crítico</span><span class="calc-out-val">20 × '+critMulFinal+'</span></div>';
+  if(isRestore){
+    const restaurarVal=parseInt(document.getElementById(skId('poder','Restaurar'))?.value)||0;
+    const lvlR=Math.max(1,parseInt(document.getElementById('f-nivel')?.value)||1);
+    // Maestria em Restaurar: checar se medOwned tem 'maestria' comprado
+    const temMaestria=(typeof medOwned!=='undefined')&&medOwned['maestria']>0;
+    const dadoCuraRestore=temMaestria?(lvlR+'d4 + Restaurar ('+restaurarVal+')'):(lvlR+'d4');
+    html+='<div class="calc-out-row"><span class="calc-out-label">CD</span><span class="calc-out-val" style="color:#c4b5fd;font-weight:700">10</span></div>';
+    html+='<div class="calc-out-row"><span class="calc-out-label">Rolagem</span><span class="calc-out-val">d20 + Restaurar ('+restaurarVal+')</span></div>';
+    html+='<div class="calc-out-row"><span class="calc-out-label">Dado de Cura</span><span class="calc-out-val" style="color:#4ade80">'+dadoCuraRestore+'</span></div>';
+    html+='<div class="calc-out-row"><span class="calc-out-label">Resistência</span><span class="calc-out-val" style="color:#4ade80">Nenhuma</span></div>';
+  }
+  if(!noResist){
+    if(isCD){
+      html+='<div class="calc-out-row"><span class="calc-out-label">CD</span><span class="calc-out-val" style="color:#c4b5fd;font-weight:700">'+cdFinal+'</span></div>';
+      html+='<div class="calc-out-row"><span class="calc-out-label" style="color:#f97316">Custo com CD</span><span class="calc-out-val" style="color:#f97316">÷2 = '+finalPE+' PE</span></div>';
+    } else {
+      let rollDisplay='d20';
+      if(rollSkillVal>0)rollDisplay+=' + '+rollSkillName+' ('+rollSkillVal+')';
+      if(acerto>0)rollDisplay+=' + '+acerto+' (Acerto)';
+      html+='<div class="calc-out-row"><span class="calc-out-label">Rolagem de Ataque</span><span class="calc-out-val">'+rollDisplay+'</span></div>';
+      html+='<div class="calc-out-row"><span class="calc-out-label">Resistência</span><span class="calc-out-val" style="color:#f97316">Requer Reação</span></div>';
+      if(tipo==='dano')html+='<div class="calc-out-row"><span class="calc-out-label">Crítico</span><span class="calc-out-val">20 × '+critMulFinal+'</span></div>';
+    }
   }
   if(danoStr)html+='<div class="calc-out-row"><span class="calc-out-label">Dano Base</span><span class="calc-out-val">'+danoStr+'</span></div>';
   html+='<div class="calc-out-row"><span class="calc-out-label">Alcance</span><span class="calc-out-val">'+(alcanceFinalM>0?alcanceFinalM+'m':'Toque')+'</span></div>';
   if(tipo!=='dano'&&pot>0)html+='<div class="calc-out-row"><span class="calc-out-label">Potencialização</span><span class="calc-out-val" style="color:#4ade80">'+(pot===15?'×1.5':'×2.0')+'</span></div>';
   html+='<div class="calc-out-total" style="margin-top:6px"><span class="lbl">⚡ PE Total</span><span class="val">'+finalPE+' PE</span></div>';
   html+='</div>';
-  if(!isCD)html+='<button class="calc-copy-btn" onclick="calcCopyRoll(\''+cleanRoll.replace(/'/g,"\\'")+'\')" style="margin-top:6px">📋 Copiar Rolagem (/r)</button>';
+  if(!isCD&&!noResist)html+='<button class="calc-copy-btn" onclick="calcCopyRoll(\''+cleanRoll.replace(/'/g,"\\'")+'\')" style="margin-top:6px">📋 Copiar Rolagem (/r)</button>';
   document.getElementById('calc-output').innerHTML=html;
 }
 
@@ -5442,7 +5631,7 @@ function calcCopyRoll(roll){
 }
 
 function calcGetSnapshot(){
-  return{circulo:document.getElementById('calc-circulo').value,tipo:calcGetTipo(),acao:calcGetRadio('calc-acao'),tempo:calcGetRadio('calc-tempo'),alcance:calcGetRadio('calc-alcance'),duracao:calcGetRadio('calc-duracao'),alvo:calcGetRadio('calc-alvo'),resist:calcGetRadio('calc-resist'),pot:calcGetRadio('calc-pot'),steps:{...CALC_STEPS},prolTurno:document.getElementById('calc-prol-turno')?.checked||false,prolDobrar:document.getElementById('calc-prol-dobrar')?.checked||false,prolTrip:document.getElementById('calc-prol-triplicar')?.checked||false,adaptarSub:calcGetRadio('calc-adaptar-sub'),buffOpcoes:['acerto','dano','defesa','movimento','alcance-m','pvtemp','petemp','sanidade'].reduce(function(o,k){o[k]=document.getElementById('calc-buff-'+k)?.checked||false;return o;},{})};
+  return{circulo:document.getElementById('calc-circulo').value,tipo:calcGetTipo(),acao:calcGetRadio('calc-acao'),tempo:calcGetRadio('calc-tempo'),alcance:calcGetRadio('calc-alcance'),duracao:calcGetRadio('calc-duracao'),alvo:calcGetRadio('calc-alvo'),resist:calcGetRadio('calc-resist'),pot:calcGetRadio('calc-pot'),steps:{...CALC_STEPS},prolTurno:document.getElementById('calc-prol-turno')?.checked||false,prolDobrar:document.getElementById('calc-prol-dobrar')?.checked||false,prolTrip:document.getElementById('calc-prol-triplicar')?.checked||false,adaptarSub:calcGetRadio('calc-adaptar-sub'),buffOpcoes:['acerto','dano','defesa','movimento','alcance-m','pvtemp','petemp','sanidade'].reduce(function(o,k){o[k]=document.getElementById('calc-buff-'+k)?.checked||false;return o;},{}),nerfOpcoes:['acerto','dano','defesa','movimento','alcance-m','pvtemp','petemp','sanidade'].reduce(function(o,k){o[k]=document.getElementById('calc-nerf-'+k)?.checked||false;return o;},{})};
 }
 function calcSaveSpell(){
   const nome=(document.getElementById('calc-nome')?.value||'').trim();
@@ -5472,6 +5661,7 @@ function calcEditSpell(idx){
   if(s.prolTrip!==undefined){const el=document.getElementById('calc-prol-triplicar');if(el)el.checked=s.prolTrip;}
   if(s.adaptarSub){const r=document.querySelector('input[name="calc-adaptar-sub"][value="'+s.adaptarSub+'"]');if(r)r.checked=true;}
   if(s.buffOpcoes){['acerto','dano','defesa','movimento','alcance-m','pvtemp','petemp','sanidade'].forEach(function(k){const el=document.getElementById('calc-buff-'+k);if(el)el.checked=!!(s.buffOpcoes[k]);});}
+  if(s.nerfOpcoes){['acerto','dano','defesa','movimento','alcance-m','pvtemp','petemp','sanidade'].forEach(function(k){const el=document.getElementById('calc-nerf-'+k);if(el)el.checked=!!(s.nerfOpcoes[k]);});}
   calcUpdate();calcUpdateEditButtons();calcRenderSavedList();
   showToast('✏️ Editando: '+sp.nome);
 }
@@ -5485,7 +5675,10 @@ function calcNewSpell(){
   [['calc-acao','1'],['calc-tempo','0'],['calc-alcance','0'],['calc-duracao','0'],['calc-alvo','0'],['calc-resist','0'],['calc-pot','0']].forEach(([n,v])=>{const r=document.querySelector('input[name="'+n+'"][value="'+v+'"]');if(r)r.checked=true;});
   document.querySelectorAll('input[name="calc-tipo"]').forEach(r=>r.checked=false);
   document.querySelectorAll('input[name="calc-adaptar-sub"]').forEach(r=>r.checked=false);
-  ['acerto','dano','defesa','movimento','alcance-m','pvtemp','petemp','sanidade'].forEach(function(k){const el=document.getElementById('calc-buff-'+k);if(el)el.checked=false;});
+  ['acerto','dano','defesa','movimento','alcance-m','pvtemp','petemp','sanidade'].forEach(function(k){
+    const b=document.getElementById('calc-buff-'+k);if(b)b.checked=false;
+    const n=document.getElementById('calc-nerf-'+k);if(n)n.checked=false;
+  });
   ['calc-prol-turno','calc-prol-dobrar','calc-prol-triplicar'].forEach(id=>{const el=document.getElementById(id);if(el)el.checked=false;});
   Object.keys(CALC_STEPS).forEach(k=>{CALC_STEPS[k]=k==='prol_turno'?1:0;});
   calcUpdateEditButtons();calcUpdate();
@@ -5495,28 +5688,6 @@ let calcViewingIdx=-1; // which spell's ficha is expanded
 function calcViewSpell(idx){
   calcViewingIdx=(calcViewingIdx===idx)?-1:idx; // toggle
   calcRenderSavedList();
-}
-
-function calcEditSpell(idx){
-  calcEditingIdx=idx;
-  const sp=calcSavedSpells[idx];
-  document.getElementById('calc-nome').value=sp.nome;
-  document.getElementById('calc-descricao').value=sp.descricao||'';
-  const s=sp.snap;
-  document.getElementById('calc-circulo').value=s.circulo||'';
-  if(s.tipo){const r=document.querySelector('input[name="calc-tipo"][value="'+s.tipo+'"]');if(r)r.checked=true;}
-  ['acao','tempo','alcance','duracao','alvo','resist','pot'].forEach(k=>{const r=document.querySelector('input[name="calc-'+k+'"][value="'+s[k]+'"]');if(r)r.checked=true;});
-  Object.assign(CALC_STEPS,s.steps||{});
-  if(s.prolTurno!==undefined){const el=document.getElementById('calc-prol-turno');if(el)el.checked=s.prolTurno;}
-  if(s.prolDobrar!==undefined){const el=document.getElementById('calc-prol-dobrar');if(el)el.checked=s.prolDobrar;}
-  if(s.prolTrip!==undefined){const el=document.getElementById('calc-prol-triplicar');if(el)el.checked=s.prolTrip;}
-  if(s.adaptarSub){const r=document.querySelector('input[name="calc-adaptar-sub"][value="'+s.adaptarSub+'"]');if(r)r.checked=true;}
-  if(s.buffOpcoes){['acerto','dano','defesa','movimento','alcance-m','pvtemp','petemp','sanidade'].forEach(function(k){const el=document.getElementById('calc-buff-'+k);if(el)el.checked=!!(s.buffOpcoes[k]);});}
-  calcUpdate();
-  // Update save/cancel buttons
-  calcUpdateEditButtons();
-  calcRenderSavedList();
-  showToast('✏️ Editando: '+sp.nome);
 }
 
 function calcCancelEdit(){
