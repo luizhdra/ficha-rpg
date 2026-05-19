@@ -1992,7 +1992,7 @@ function renderFichaWeapons(){
     const _wIdx=slotLabel==='slot1'?equippedWeapons.slot1:equippedWeapons.slot2;
     const _macicaB=_wIdx!==null&&_wIdx!==undefined?getMacicaBonus('weapon_'+_wIdx):0;
     const finalCritMul=(w.critMul||2)+critMulBonus+_macicaB;
-    html+='<div class="eq-wep-name">'+w.displayName+'</div>';
+    html+='<div class="eq-wep-name">'+itemDisplayLabel(w)+'</div>';
 
     // Build damage stats block
     let statsHtml='';
@@ -2111,6 +2111,25 @@ function copyRoll(slotLabel,asRoll){
 }
 function switchEquipTab(tab,btn){document.querySelectorAll('.equip-tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.equip-panel').forEach(p=>p.classList.remove('active'));btn.classList.add('active');document.getElementById('equip-panel-'+tab).classList.add('active');if(tab==='armas')renderWeaponInvPanel();if(tab==='armadura')renderSlotsPanel();if(tab==='util')renderUtilInvPanel();}
 function dKey(slot,name){return slot+'__'+name.replace(/\s/g,'_');}
+function setCustomName(type,key,val){
+  val=val.trim();
+  if(type==='weapon'){
+    if(inventory.weapon[key])inventory.weapon[key].customName=val||'';
+    renderWeaponInvPanel();renderFichaWeapons();
+  } else if(type==='util'){
+    if(inventory.util&&inventory.util[key])inventory.util[key].customName=val||'';
+    renderUtilInvPanel();
+  } else {
+    // armor: key = 'slot__idx'
+    const parts=key.split('__');const slot=parts[0];const idx=parseInt(parts[1]);
+    if(inventory[slot]&&inventory[slot][idx])inventory[slot][idx].customName=val||'';
+    if(equipped[slot]&&equipped[slot].name===inventory[slot][idx].name)equipped[slot].customName=val||'';
+    renderSlotsPanel();
+  }
+  autoSave();
+}
+function itemDisplayLabel(item){return item.customName||(item.displayName||item.name);}
+
 function renderUtilInvPanel(){
   const panel=document.getElementById('util-inv-panel');if(!panel)return;
   if(!inventory.util||inventory.util.length===0){
@@ -2124,7 +2143,8 @@ function renderUtilInvPanel(){
   html+='<th style="text-align:left;padding:4px 6px">Item</th><th style="text-align:center;padding:4px 6px">Qtd</th><th style="text-align:center;padding:4px 6px">Peso</th><th style="text-align:center;padding:4px 6px">Ação</th></tr></thead><tbody>';
   inventory.util.forEach(function(item,idx){
     html+='<tr style="border-top:1px solid var(--border)">';
-    html+='<td style="padding:5px 6px;font-size:12px;font-weight:600;color:var(--txt)">'+item.name+(item.preco?'<div style="font-size:9px;color:var(--txt3)">🪙'+item.preco+' cada</div>':'')+'</td>';
+    html+='<td style="padding:5px 6px"><div style="font-size:12px;font-weight:600;color:var(--txt)">'+(item.customName||item.name)+(item.preco?'<div style="font-size:9px;color:var(--txt3)">🪙'+item.preco+' cada</div>':'')+'</div>'
+      +'<input type="text" value="'+((item.customName||'')).replace(/"/g,'&quot;')+'" placeholder="Apelido..." onchange="setCustomName(\'util\','+idx+',this.value)" style="font-size:10px;padding:2px 6px;background:var(--bg4);border:1px solid var(--border2);border-radius:4px;color:var(--txt2);width:100%;max-width:160px;margin-top:2px"></td>';
     html+='<td style="text-align:center;padding:5px 6px"><div style="display:flex;align-items:center;justify-content:center;gap:4px">';
     html+='<button onclick="utilQtyChange('+idx+',-1)" style="width:20px;height:20px;border-radius:4px;background:var(--bg4);border:1px solid var(--border);color:var(--txt);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center">-</button>';
     html+='<span id="util-qty-'+idx+'" style="min-width:22px;text-align:center;font-size:12px;font-weight:700;color:var(--gold)">'+item.qty+'</span>';
@@ -2160,7 +2180,7 @@ function renderSlotsPanel(){
     const eq=equipped[slot];const inv=inventory[slot]||[];
     const card=document.createElement('div');card.className='slot-card';card.id='slot-card-'+slot;
     let html='<div class="slot-card-hdr"><span class="slot-card-name">'+SLOT_ICONS[slot]+' '+SLOT_NAMES[slot]+'</span>'+(eq?'<span style="font-size:10px;color:var(--gold);font-weight:600">+'+eq.defesa+'DEF'+(eq.pen>0?' −'+eq.pen+'PEN':'')+'</span>':'')+'</div>';
-    html+='<div class="slot-eq-info'+(eq?' has-item':'')+'>'+(eq?eq.displayName||eq.name:'Nenhum item equipado')+'</div>';
+    html+='<div class="slot-eq-info'+(eq?' has-item':'')+'>'+(eq?(eq.customName||(eq.displayName||eq.name)):'Nenhum item equipado')+'</div>';
     if(eq){
       const dk=dKey(slot,eq.name);const dmg=itemDamage[dk]||0;const maxDur=eq.dur||1;const broken=dmg>=maxDur;
       let dots='';for(let i=0;i<maxDur;i++)dots+='<div class="dur-dot'+(i<dmg?' dmg':'')+'"></div>';
@@ -2174,7 +2194,8 @@ function renderSlotsPanel(){
       html+='<div style="margin-top:6px;font-size:9px;color:var(--txt3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Inventário</div>';
       inv.forEach((item,idx)=>{
         const isEq=eq&&eq.name===item.name;const dk=dKey(slot,item.name);const dmg=itemDamage[dk]||0;const broken=dmg>=(item.dur||1);
-        html+='<div class="inv-item-row'+(isEq?' eq-row':'')+'"><span class="inv-item-name" style="color:'+(broken?'var(--txt3)':isEq?'var(--gold)':'var(--txt)')+'">'+((item.displayName||item.name)+(isEq?' ✓':'')+(broken?' 💔':''))+'</span>'+(item.paidPrice?'<span style="font-size:9px;color:var(--txt3);margin-left:4px">🪙'+item.paidPrice+'</span>':'');
+        html+='<div class="inv-item-row'+(isEq?' eq-row':'')+'"><div style="flex:1;display:flex;flex-direction:column;gap:2px"><span class="inv-item-name" style="color:'+(broken?'var(--txt3)':isEq?'var(--gold)':'var(--txt)')+'">'+((item.customName||(item.displayName||item.name))+(isEq?' ✓':'')+(broken?' 💔':''))+'</span>'
+          +'<input type="text" value="'+((item.customName||'')).replace(/"/g,'&quot;')+'" placeholder="Apelido..." onchange="setCustomName(\'armor\',\''+slot+'__'+idx+'\',this.value)" style="font-size:10px;padding:2px 6px;background:var(--bg4);border:1px solid var(--border2);border-radius:4px;color:var(--txt2);max-width:160px"></div>'+(item.paidPrice?'<span style="font-size:9px;color:var(--txt3);margin-left:4px">🪙'+item.paidPrice+'</span>':'');
         if(!broken&&!isEq)html+='<button class="btn btn-gold" onclick="equipItem(\''+slot+'\','+idx+')">Vestir</button>';
         if(broken)html+='<button class="btn btn-green" onclick="repairArmor(\''+slot+'\',\''+item.name+'\','+item.price+')">🔧 '+Math.ceil(item.price/2)+'🪙</button>';
         html+='<button class="btn btn-delete" onclick="deleteArmorItem(\''+slot+'\','+idx+')">🗑</button></div>';html+=getItemUpgradeHtml('armor_'+slot+'_'+item.name);
@@ -2202,7 +2223,8 @@ function renderWeaponInvPanel(){
     const manuseio=w.manuseio||'Versátil';
     let dots='';for(let i=0;i<(w.dur||1);i++)dots+='<span style="display:inline-block;width:9px;height:9px;border-radius:2px;background:'+(i<dmg?'var(--red)':'var(--green)')+';margin-right:2px"></span>';
     html+='<div class="weapon-inv-card">';
-    html+='<div class="weapon-inv-name"><span>'+w.displayName+(broken?' <span style="color:var(--red);font-size:10px">💔 DESTRUÍDA</span>':'')+'</span><div>'+dots+'</div></div>';
+    html+='<div class="weapon-inv-name"><div style="display:flex;flex-direction:column;gap:3px;flex:1"><span style="font-weight:700;color:var(--gold)">'+(w.customName||w.displayName)+(broken?' <span style="color:var(--red);font-size:10px">💔 DESTRUÍDA</span>':'')+'</span>'
+      +'<input type="text" value="'+((w.customName||'')).replace(/"/g,'&quot;')+'" placeholder="Apelido da arma..." onchange="setCustomName(\'weapon\','+idx+',this.value)" style="font-size:10px;padding:2px 6px;background:var(--bg4);border:1px solid var(--border2);border-radius:4px;color:var(--txt2);width:100%;max-width:200px"></div><div>'+dots+'</div></div>';
     const macicaB=getMacicaBonus('weapon_'+idx);
     const dispCritMul=w.critMul+macicaB;
     html+='<div class="weapon-inv-stats">Dano S: <b>'+w.danoS+'</b> &nbsp;DP: <b>'+w.danoDP+'</b> &nbsp;Crit: <b>'+w.crit+'x'+dispCritMul+'</b>'+(macicaB>0?' <span style="font-size:9px;color:var(--gold)">[+'+macicaB+' Maciça]</span>':'')+' ('+w.critEff+')<br>Alcance: <b>'+w.alcance+'m</b> &nbsp;Tipo: <b>'+w.tipo+'</b> &nbsp;Manuseio: <b>'+manuseio+'</b>'+(w.customTags&&w.customTags.length?'<br>Propriedades: <b>'+w.customTags.join(', ')+'</b>':'')+(w.paidPrice?'<br><span style="color:var(--txt3);font-size:10px">🪙 Comprado por '+w.paidPrice+'</span>':'')+'</div>';
@@ -5331,7 +5353,7 @@ function calcUpdate(){
   const isBuff=(tipo==='adaptar'&&adaptarSub==='buff');
   const isNerf=(tipo==='adaptar'&&adaptarSub==='nerf');
   const isRestore=(tipo==='restaurar');
-  const noResistTipo=isBuff||isNerf||isRestore||(tipo==='rastrear')||(tipo==='defender');
+  const noResistTipo=isBuff||isRestore||(tipo==='rastrear')||(tipo==='defender');
 
   // Buff, Nerf, Restaurar, Rastrear e Defender não usam teste de resistência
   const resistSec=document.getElementById('calc-resist-section');
@@ -5454,7 +5476,7 @@ function calcRender(){
   const isBuff=(tipo==='adaptar'&&adaptarSub==='buff');
   const isNerf=(tipo==='adaptar'&&adaptarSub==='nerf');
   const isRestore=(tipo==='restaurar');
-  const noResist=isBuff||isNerf||isRestore||(tipo==='rastrear')||(tipo==='defender');
+  const noResist=isBuff||isRestore||(tipo==='rastrear')||(tipo==='defender');
   const circulo=document.getElementById('calc-circulo').value;
   const acao=parseInt(calcGetRadio('calc-acao'))||1;
   const tempo=calcGetRadio('calc-tempo');
@@ -5590,7 +5612,6 @@ function calcRender(){
         if(el&&el.checked){anyNerf=true;html+='<div class="calc-out-row"><span class="calc-out-label" style="color:#f87171">▸ '+b.label+'</span><span class="calc-out-val" style="color:#fca5a5">'+b.val+'</span></div>';}
       });
       if(!anyNerf)html+='<div class="calc-out-row"><span class="calc-out-label" style="color:var(--txt3);font-style:italic">Nenhum enfraquecimento selecionado</span></div>';
-      html+='<div class="calc-out-row"><span class="calc-out-label">Resistência</span><span class="calc-out-val" style="color:#4ade80">Nenhuma (Nerf)</span></div>';
     }
   }
   if(isRestore){
@@ -5895,21 +5916,41 @@ function doResetFicha(){
   lojaBuilt={protecoes:false,armas:false,utilitarios:false,aprimoramentos:false};
   showToast('✓ Ficha formatada do zero!');
 }
+// ── PLATFORM BRIDGE (Firebase postMessage) ──
+window.addEventListener('message',function(evt){
+  if(!evt.data||!evt.data.type)return;
+  if(evt.data.type==='LOAD_DATA'){
+    try{
+      if(evt.data.data)loadSheet(evt.data.data);
+      if(evt.data.readOnly){
+        setTimeout(function(){
+          document.querySelectorAll('input,select,textarea').forEach(function(el){el.disabled=true;});
+          document.querySelectorAll('.save-bar,.pt-sell-btn,.btn-gold,.btn-red,.btn-delete').forEach(function(el){el.style.display='none';});
+        },400);
+      }
+    }catch(e){console.error('LOAD_DATA error:',e);}
+  }
+});
+
 function saveSheet(){
   try{
     const data=gatherData();
-    // Strip photo from main save to save space (photo saved separately)
     delete data._photo;
     const json=JSON.stringify(data);
     const kb=Math.round(json.length/1024);
     localStorage.setItem('rpg-sheet',json);
+    // Enviar para plataforma se estiver dentro de iframe
+    if(window.parent!==window){
+      const charName=document.getElementById('f-nome')?.value||'';
+      window.parent.postMessage({type:'SAVE_DATA',data:data,charName:charName},'*');
+    }
     document.querySelectorAll('.save-msg').forEach(m=>{
       m.textContent='💾 Salvo ('+(kb)+'kb)';
       m.style.opacity='1';
       m.style.color='var(--green2)';
       setTimeout(()=>m.style.opacity='0',2000);
     });
-  } catch(e){
+  }catch(e){
     console.error('Save error:',e);
     const isQuota=e&&e.name==='QuotaExceededError';
     document.querySelectorAll('.save-msg').forEach(m=>{
